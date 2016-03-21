@@ -6,18 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>使用DNSpod做域名解析问题 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="只记录关键处。">
+  <meta name="description" content="上GoDaddy买的域名，使用DNSpod做解析，按网上教程配置DNSpod出错，SO在此记录。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用DNSpod做域名解析问题">
 <meta property="og:url" content="http://avalonlz.github.io/2016/03/20/use-dnspod/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="只记录关键处。">
+<meta property="og:description" content="上GoDaddy买的域名，使用DNSpod做解析，按网上教程配置DNSpod出错，SO在此记录。">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135431.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135331.png">
-<meta property="og:updated_time" content="2016-03-21T16:11:06.135Z">
+<meta property="og:updated_time" content="2016-03-21T16:18:11.156Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用DNSpod做域名解析问题">
-<meta name="twitter:description" content="只记录关键处。">
+<meta name="twitter:description" content="上GoDaddy买的域名，使用DNSpod做解析，按网上教程配置DNSpod出错，SO在此记录。">
 <meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135431.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
@@ -208,11 +208,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>只记录关键处。<a id="more"></a>  </p>
-<p>首先在GoDaddy上买完域名，进入域名管理（域名详细信息），部分显示信息如下图<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135431.png" alt=""><br>GoDaddy上的配置主要是更改域名服务器，即借用DNSpod的免费域名解析服务器。  </p>
-<p>进入DNSpod开启域名解析服务，添加需要解析的域名。之后点击刚才添加的域名进入域名解析配置，复制灰色的“记录值”即免费的域名解析服务器（F1G1NS1.DNSPOD.NET和F1G1NS2.DNSPOD.NET），填入GoDaddy上域名管理的“域名服务器处”，GoDaddy配置完成。  </p>
-<p>回到DNSpod的域名解析配置，此处添加两个A记录即可，无需再添加CNAME（别名记录），两个A记录都指向需要访问的主机IP<img src="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135331.png" alt="">  </p>
-<p>配置完成，如果添加CNAME记录域名依然可以Ping通，但是正常访问时可能会报unknow domain错误。</p>
+        <p>上GoDaddy买的域名，使用DNSpod做解析，按网上教程配置DNSpod出错，SO在此记录。<a id="more"></a>  </p>
+<ul>
+<li><p>首先在GoDaddy上买完域名，进入域名管理（域名详细信息），部分显示信息如下图<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135431.png" alt=""><br>GoDaddy上的配置主要是更改域名服务器，即借用DNSpod的免费域名解析服务器。  </p>
+</li>
+<li><p>进入DNSpod开启域名解析服务，添加需要解析的域名。之后点击刚才添加的域名进入域名解析配置，复制灰色的“记录值”即免费的域名解析服务器（F1G1NS1.DNSPOD.NET和F1G1NS2.DNSPOD.NET），填入GoDaddy上域名管理的“域名服务器处”，GoDaddy配置完成。  </p>
+</li>
+<li><p>回到DNSpod的域名解析配置，此处添加两个A记录即可，无需再添加CNAME（别名记录），两个A记录都指向需要访问的主机IP<img src="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135331.png" alt="">  </p>
+</li>
+<li><p>配置完成。<br>如果按网上某些教程添加CNAME记录，依然是可以Ping通，但是正常访问时可能会报unknow domain错误。</p>
+</li>
+</ul>
 
       
     </div>

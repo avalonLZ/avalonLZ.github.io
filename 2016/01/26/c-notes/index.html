@@ -4,18 +4,25 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>C语言notes（易遗忘知识点，不定期更新） | 李人人人&#39;s Blog</title>
+  <title>C语言notes | 李人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##指针数组与数组指针">
+  <meta name="description" content="C语言中易遗忘的知识点，不定期更新。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言notes（易遗忘知识点，不定期更新）">
+<meta property="og:title" content="C语言notes">
 <meta property="og:url" content="http://avalonlz.github.io/2016/01/26/c-notes/index.html">
 <meta property="og:site_name" content="李人人人's Blog">
-<meta property="og:description" content="##指针数组与数组指针">
-<meta property="og:updated_time" content="2016-03-21T12:52:56.576Z">
+<meta property="og:description" content="C语言中易遗忘的知识点，不定期更新。">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notes09C0E21F4D2542E5AFE997D0C5250E40.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notesCD2FAD54EEEC4D9E924F0A2C507269F0.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notesB19B419ABB56461191E5AB60AF1019B9.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notes0BC4A0D7547742B7A468F2188D0D6DB7.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notesFB279ED4F2524358AD91BC04D1AAC6A8.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notes5E11CEF9C6924591A4C271F5A3018067.jpg">
+<meta property="og:updated_time" content="2016-03-21T14:30:08.242Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C语言notes（易遗忘知识点，不定期更新）">
-<meta name="twitter:description" content="##指针数组与数组指针">
+<meta name="twitter:title" content="C语言notes">
+<meta name="twitter:description" content="C语言中易遗忘的知识点，不定期更新。">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notes09C0E21F4D2542E5AFE997D0C5250E40.jpg">
   
     <link rel="alternative" href="/atom.xml" title="李人人人&#39;s Blog" type="application/atom+xml">
   
@@ -189,7 +196,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      C语言notes（易遗忘知识点，不定期更新）
+      C语言notes
     </h1>
   
 
@@ -209,7 +216,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##指针数组与数组指针  </p>
+        <p>C语言中易遗忘的知识点，不定期更新。<a id="more"></a>  </p>
+<h1 id="指针数组与数组指针"><a href="#指针数组与数组指针" class="headerlink" title="指针数组与数组指针"></a><strong>指针数组与数组指针</strong></h1><p>  <img src="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notes09C0E21F4D2542E5AFE997D0C5250E40.jpg" alt="">    </p>
+<ul>
+<li><p>指针数组：存放指针的数组，即数组内存放的都是地址。常用于将两个一维数组组成一个二维数组：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notesCD2FAD54EEEC4D9E924F0A2C507269F0.jpg" alt="">  </p>
+</li>
+<li><p>数组指针：指向一个数组的指针，即定义一个指针并且将它指向了一个相同类型的数组，该指针就叫数组指针。若要直接指向一个二维数组则需采用数组指针或数组：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notesB19B419ABB56461191E5AB60AF1019B9.jpg" alt=""></p>
+</li>
+</ul>
+<h1 id="给已知地址赋值"><a href="#给已知地址赋值" class="headerlink" title="给已知地址赋值"></a><strong>给已知地址赋值</strong></h1><pre><code>int32_t *addressone=(int32_t*)0xAAAAAAAA; 
+*addressone=99;  
+</code></pre><h1 id="指向函数的指针"><a href="#指向函数的指针" class="headerlink" title="指向函数的指针"></a><strong>指向函数的指针</strong></h1><p>在C语言中函数名就是函数所在地址跟数组名一样<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notes0BC4A0D7547742B7A468F2188D0D6DB7.jpg" alt="">  </p>
+<h1 id="const常量声明关键字"><a href="#const常量声明关键字" class="headerlink" title="const常量声明关键字"></a><strong>const常量声明关键字</strong></h1><ul>
+<li>作用域随变量声明处变化，并不跟static一样放在静态存储区</li>
+<li>const int k=10;等价于int const k=10;：k初始化后值将不可再改变</li>
+<li>const int *k;：表示指向地址的内容不可改变</li>
+<li>int *const k=&a;：表示k所指向的地址不可再发生改变，但是该地址的内容可以改变（初始化时必须有指向）  </li>
+</ul>
+<h1 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a><strong>宏定义</strong></h1><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notesFB279ED4F2524358AD91BC04D1AAC6A8.jpg" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/c%20notes5E11CEF9C6924591A4C271F5A3018067.jpg" alt=""></p>
 
       
     </div>
@@ -260,7 +284,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="c-notes" data-title="C语言notes（易遗忘知识点，不定期更新）" data-url="http://avalonlz.github.io/2016/01/26/c-notes/"></div>
+	<div class="ds-thread" data-thread-key="c-notes" data-title="C语言notes" data-url="http://avalonlz.github.io/2016/01/26/c-notes/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

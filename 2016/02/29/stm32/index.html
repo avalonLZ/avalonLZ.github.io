@@ -19,7 +19,8 @@
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg">
-<meta property="og:updated_time" content="2016-03-22T04:44:37.122Z">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32ccc.jpg">
+<meta property="og:updated_time" content="2016-03-22T07:54:20.899Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stm32">
 <meta name="twitter:description" content="主要记录把玩stm32F103zet6时所遇问题及解决。不定期更新。">
@@ -214,10 +215,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>主要记录把玩stm32F103zet6时所遇问题及解决。不定期更新。<a id="more"></a>  </p>
-<h1 id="引脚定义"><a href="#引脚定义" class="headerlink" title="引脚定义"></a><strong>引脚定义</strong></h1><p>位与stm32f103zet6 datasheet中<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png" alt="">   </p>
+<h1 id="引脚定义"><a href="#引脚定义" class="headerlink" title="引脚定义"></a><strong>引脚定义</strong></h1><p>位于stm32f103zet6 datasheet中<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png" alt=""><br>配置stm32的事件输出/外部中断/重映射端口复用，必须开启AFIO时钟。使用管脚的Default(默认)外设功能并不需要开AFIO时钟，只需要配置相应的功能时钟。</p>
 <h1 id="总线结构"><a href="#总线结构" class="headerlink" title="总线结构"></a><strong>总线结构</strong></h1><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg" alt="">  </p>
-<h1 id="嘀嗒定时器（SysTick）"><a href="#嘀嗒定时器（SysTick）" class="headerlink" title="嘀嗒定时器（SysTick）"></a><strong>嘀嗒定时器（SysTick）</strong></h1><p>心血来潮，在中断里使用滴答定时器延时（理论上中断里不可以延时，此处只做研究嘀嗒的工作方式用）,直接调用void SysTick_Init(void)函数后在中断中延时发现不起作用后，找SysTick_Init、SysTick_Config、NVIC_SetPriority函数，最后在NVIC_SetPriority函数中发现写了SCB系统控制寄存器组中的SHP系统操作优先级寄存器的第11位（SHP[11]），后来在SysTick_Init中有将SCB-&gt;SHP[11]=0;注释掉，开启后即把嘀嗒的优先级调到了0，默认初始化是7。开启后可行。网上评论说M3的权威指南中有SCB寄存器的详细说明，但未找到。</p>
-
+<h1 id="嘀嗒定时器（SysTick）"><a href="#嘀嗒定时器（SysTick）" class="headerlink" title="嘀嗒定时器（SysTick）"></a><strong>嘀嗒定时器（SysTick）</strong></h1><p>在外部中断里使用滴答定时器延时（理论上中断里不可以延时，此处只做研究嘀嗒的工作方式用）,直接调用void SysTick_Init(void)函数后在中断中使用延时发现不起作用。（中断配置为只有抢占优先级模式，并且外部中断优先级设为1）<br>后找到SysTick_Init、SysTick_Config、NVIC_SetPriority函数，最后在NVIC_SetPriority函数中发现写了SCB系统控制寄存器组中SHP系统操作优先级寄存器的第11位（SHP[11]），默认SysTick初始化后是7。之后将该位写0（SCB-&gt;SHP[11]=0;），即把嘀嗒的优先级调到了0（最高）。开启后可行。<br>通过查看NVIC_SetPriority函数发现，配置32的中断优先级有两个寄存器，分别是配置配置系统中断和外设中断的，这二者的中断关系通过查看M3的权威手册<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32ccc.jpg" alt=""><br>发现是同级的关系，SO在有理论依据的基础上就可以大胆配置了。  </p>
+<h1 id="UART-DMA配置"><a href="#UART-DMA配置" class="headerlink" title="UART+DMA配置"></a><strong>UART+DMA配置</strong></h1>
       
     </div>
     

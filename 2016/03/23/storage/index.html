@@ -4,17 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Tag: DNSpod | 木子人人人&#39;s Blog</title>
+  <title>关于存储设备 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="木子人人人's Blog">
-<meta property="og:url" content="http://avalonlz.github.io/tags/DNSpod/index.html">
+  <meta name="description" content="简要说明内存：RAM、PROM、OTP ROM，以及外存：nor flash、nand flash、硬盘、EEPROM等存储类设备。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于存储设备">
+<meta property="og:url" content="http://avalonlz.github.io/2016/03/23/storage/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description">
+<meta property="og:description" content="简要说明内存：RAM、PROM、OTP ROM，以及外存：nor flash、nand flash、硬盘、EEPROM等存储类设备。">
+<meta property="og:updated_time" content="2016-03-23T07:38:03.313Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="木子人人人's Blog">
-<meta name="twitter:description">
+<meta name="twitter:title" content="关于存储设备">
+<meta name="twitter:description" content="简要说明内存：RAM、PROM、OTP ROM，以及外存：nor flash、nand flash、硬盘、EEPROM等存储类设备。">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -166,53 +167,130 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-storage" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/03/20/use-dnspod/" class="archive-article-date">
-  	<time datetime="2016-03-20T07:28:27.000Z" itemprop="datePublished">Mar 20</time>
+    <div class="article-meta">
+      <a href="/2016/03/23/storage/" class="article-date">
+  	<time datetime="2016-03-23T06:29:34.000Z" itemprop="datePublished">2016-03-23</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/20/use-dnspod/">使用DNSpod做域名解析问题</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      关于存储设备
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DNSpod/">DNSpod</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/嵌入式/">嵌入式</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+      </div>
+      
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>简要说明内存：RAM、PROM、OTP ROM，以及外存：nor flash、nand flash、硬盘、EEPROM等存储类设备。<a id="more"></a><br>查阅很多资料都不知道该把以上两种flash归到内存还是外存中……好吧，它就是闪存，姑且先归为外存吧，如果有people知道还请告知一二。</p>
+<h1 id="1-内存"><a href="#1-内存" class="headerlink" title="1.内存"></a>1.内存</h1><ul>
+<li><p>RAM<br>RAM分为两种，SDRAM（同步动态随机存储器）以及SRAM(静态随机存储器).<br>SDRAM：存储阵列会不断刷新数据。一般来说电脑内存、手机的运行内存这类存储器都是SDRAM    。<br>SRAM：存储阵列不会一直刷新数据，读写速度飞快，价格昂贵。一般只用于电脑CPU的一二级缓存中。  </p>
+</li>
+<li><p>PROM<br>PROM只读存储器，ROM的一种，具有一次写入，不可更改的特性，一般在生产小东西（生日贺卡）时将代码固化到PROM中。  </p>
+</li>
+<li><p>OTP ROM<br>和PROM一样，一次写入，不可更改。区别在于OTP ROM是生产完后再写入程序。  </p>
+</li>
+</ul>
+<h1 id="2-外存"><a href="#2-外存" class="headerlink" title="2.外存"></a>2.外存</h1><ul>
+<li><p>nor flash<br>nar flash闪存的一种，一般单片机中的flash就是指nor flash。程序可掉电保存，并行口的nor flash可不经过RAM直接运行程序，也有SPI、I2C等串行口的nor flash，单片机内集成一般是并行口的。  </p>
+</li>
+<li><p>nand flash<br>nand flash也是闪存的一种，只能以块为单位进行读取，但写入速度比nor flash快很多，所以一般nand flash做mp3、U盘、固态硬盘、SD卡、数码相机等产品的集成存储设备。  </p>
+</li>
+</ul>
+<p><strong> nor flash和nand flash的主要区别可以看作：nor flash写入前需要将所要操作目标块的所有位都写0，且并行口的nor flash可以不需要驱动程序，而nand flash一定需要驱动程序</strong>  </p>
+<ul>
+<li><p>硬盘<br>很常见的直观的存储设备  </p>
+</li>
+<li><p>EEPROM<br>ROM的一种，可以进行多次读写，一般用在机器锁这方面，需要利用电压来擦除程序。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/03/20/use-dnspod/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用DNSpod做域名解析问题</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="storage" data-title="关于存储设备" data-url="http://avalonlz.github.io/2016/03/23/storage/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lizhong"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
 
 </div>
       <footer id="footer">
@@ -238,9 +316,9 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false
 	}

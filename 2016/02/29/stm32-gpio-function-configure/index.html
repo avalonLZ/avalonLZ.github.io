@@ -4,29 +4,30 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>stm32 | 木子人人人&#39;s Blog</title>
+  <title>stm32总线结构、引脚功能及其配置 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="主要记录把玩stm32F103zet6时所遇问题及解决。不定期更新。">
+  <meta name="description" content="stm32F103zet6的总线结构、引脚功能，以及使用各个功能该如何配置GPIO引脚。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="stm32">
-<meta property="og:url" content="http://avalonlz.github.io/2016/02/29/stm32/index.html">
+<meta property="og:title" content="stm32总线结构、引脚功能及其配置">
+<meta property="og:url" content="http://avalonlz.github.io/2016/02/29/stm32-gpio-function-configure/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="主要记录把玩stm32F103zet6时所遇问题及解决。不定期更新。">
+<meta property="og:description" content="stm32F103zet6的总线结构、引脚功能，以及使用各个功能该如何配置GPIO引脚。">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32ccc.jpg">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png">
-<meta property="og:updated_time" content="2016-03-23T06:29:48.749Z">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212024.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212040.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212049.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212100.png">
+<meta property="og:updated_time" content="2016-03-24T14:00:47.502Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="stm32">
-<meta name="twitter:description" content="主要记录把玩stm32F103zet6时所遇问题及解决。不定期更新。">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png">
+<meta name="twitter:title" content="stm32总线结构、引脚功能及其配置">
+<meta name="twitter:description" content="stm32F103zet6的总线结构、引脚功能，以及使用各个功能该如何配置GPIO引脚。">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -178,11 +179,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-stm32" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-stm32-gpio-function-configure" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/02/29/stm32/" class="article-date">
-  	<time datetime="2016-02-29T03:16:51.000Z" itemprop="datePublished">2016-02-29</time>
+      <a href="/2016/02/29/stm32-gpio-function-configure/" class="article-date">
+  	<time datetime="2016-02-29T13:29:23.000Z" itemprop="datePublished">2016-02-29</time>
 </a>
     </div>
   
@@ -195,7 +196,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      stm32
+      stm32总线结构、引脚功能及其配置
     </h1>
   
 
@@ -216,61 +217,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>主要记录把玩stm32F103zet6时所遇问题及解决。不定期更新。<a id="more"></a>  </p>
-<h1 id="引脚定义"><a href="#引脚定义" class="headerlink" title="引脚定义"></a><strong>引脚定义</strong></h1><p>位于stm32f103zet6 datasheet中<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png" alt=""><br>在配置stm32的事件输出/外部中断/重映射端口复用时，必须开启AFIO时钟。使用管脚的Default(默认)功能并不需要开AFIO时钟，只需要配置相应的功能时钟。</p>
-<h1 id="总线结构"><a href="#总线结构" class="headerlink" title="总线结构"></a><strong>总线结构</strong></h1><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg" alt="">  </p>
-<h1 id="嘀嗒定时器（SysTick）"><a href="#嘀嗒定时器（SysTick）" class="headerlink" title="嘀嗒定时器（SysTick）"></a><strong>嘀嗒定时器（SysTick）</strong></h1><p>在外部中断里使用滴答定时器延时（理论上中断里不可以延时，此处只做研究嘀嗒的工作方式用）,直接调用void SysTick_Init(void)函数后在中断中使用延时发现不起作用。（中断配置为只有抢占优先级模式，并且外部中断优先级设为1）<br>后找到SysTick_Init、SysTick_Config、NVIC_SetPriority函数，最后在NVIC_SetPriority函数中发现写了SCB系统控制寄存器组中SHP系统操作优先级寄存器的第11位（SHP[11]），默认SysTick初始化后是7。之后将该位写0（SCB-&gt;SHP[11]=0;），即把嘀嗒的优先级调到了0（最高）。开启后可行。<br>通过查看NVIC_SetPriority函数发现，配置32的中断优先级有两个寄存器，分别是配置配置系统中断和外设中断的，这二者的中断关系通过查看M3的权威手册<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32ccc.jpg" alt=""><br>发现是同级的关系，SO在有理论依据的基础上就可以大胆配置了。  </p>
-<h1 id="UART-DMA配置"><a href="#UART-DMA配置" class="headerlink" title="UART+DMA配置"></a><strong>UART+DMA配置</strong></h1><p>各功能所对应的DMA通道<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png" alt="">  </p>
-<p>main函数，采用寄存器方式配置DMA：</p>
-<pre><code>int main(void)
-{
-    uint8_t tx[10]={0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x10};
-    SysTick_Init();
-    UART_Initone();
-//////////////////////////////////////////DMA
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE); 
-    DMA1_Channel7-&gt;CNDTR=sizeof(tx);
-    DMA1_Channel7-&gt;CPAR=(uint32_t)(&amp;USART2-&gt;DR);//目的地址
-    DMA1_Channel7-&gt;CMAR=(uint32_t)tx;
-    DMA1_Channel7-&gt;CCR=(uint32_t)0x1090;//对CCR寄存器配置为非存储器到存储器模式等其他
-    DMA1_Channel7-&gt;CCR|=(uint32_t)0x0001;
-//////////////////////////////////////////
-    LED2_ON;
-    LED3_ON;
-while(1)
- {
-
- } 
-}
-</code></pre><p>USART2初始化函数UART_Initone:</p>
-<pre><code>void UART_Initone(void)
-{
-    GPIO_InitTypeDef GPIO_InitStructureuart;
-    USART_InitTypeDef usartone;
-
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-    //TX_GPIO
-    GPIO_InitStructureuart.GPIO_Pin = GPIO_Pin_2;
-    GPIO_InitStructureuart.GPIO_Mode=GPIO_Mode_AF_PP;
-    GPIO_InitStructureuart.GPIO_Speed=GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &amp;GPIO_InitStructureuart);
-    //RX_GPIO
-    GPIO_InitStructureuart.GPIO_Pin = GPIO_Pin_3;
-    GPIO_InitStructureuart.GPIO_Mode=GPIO_Mode_IN_FLOATING;
-    GPIO_Init(GPIOA, &amp;GPIO_InitStructureuart);
-
-    usartone.USART_BaudRate=9600;
-    usartone.USART_WordLength=USART_WordLength_8b;
-    usartone.USART_StopBits=USART_StopBits_1;
-    usartone.USART_Parity=USART_Parity_No;
-    usartone.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
-    usartone.USART_Mode=USART_Mode_Rx | USART_Mode_Tx;
-    USART_Init(USART2, &amp;usartone);
-    USART_DMACmd( USART2, USART_DMAReq_Tx, ENABLE);/////使能USART2的DMA请求
-    USART_Cmd(USART2, ENABLE);//使能USART
-}  
-</code></pre><p>不开中断的话不需要配置NVIC。</p>
+        <p>stm32F103zet6的总线结构、引脚功能，以及使用各个功能该如何配置GPIO引脚。<a id="more"></a>  </p>
+<h1 id="总线结构"><a href="#总线结构" class="headerlink" title="总线结构"></a><strong>总线结构</strong></h1><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg" alt="">   </p>
+<h1 id="引脚定义（功能）"><a href="#引脚定义（功能）" class="headerlink" title="引脚定义（功能）"></a><strong>引脚定义（功能）</strong></h1><p>位于stm32f103zet6 datasheet中<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png" alt="">   </p>
+<p><strong><font color="red">在配置stm32的事件输出/外部中断/重映射端口复用时，必须开启AFIO时钟。使用管脚的Default(默认)功能并不需要开AFIO时钟，只需要配置相应的功能时钟。</font></strong>  </p>
+<h1 id="不同功能的引脚配置"><a href="#不同功能的引脚配置" class="headerlink" title="不同功能的引脚配置"></a><strong>不同功能的引脚配置</strong></h1><p>位于stm32f103zet6参考守则中<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212024.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212040.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212049.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212100.png" alt=""></p>
 
       
     </div>
@@ -280,18 +231,18 @@ while(1)
     
 <nav id="article-nav">
   
-    <a href="/2016/03/20/use-dnspod/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/02/29/stm32-SysTick/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          使用DNSpod做域名解析问题
+          stm32嘀嗒定时器
         
       </div>
     </a>
   
   
-    <a href="/2016/01/31/two-system/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Win7下安装Linux双系统</div>
+    <a href="/2016/02/29/stm32-UART_DMA/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">stm32UART+DMA配置</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -326,7 +277,7 @@ while(1)
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="stm32" data-title="stm32" data-url="http://avalonlz.github.io/2016/02/29/stm32/"></div>
+	<div class="ds-thread" data-thread-key="stm32-gpio-function-configure" data-title="stm32总线结构、引脚功能及其配置" data-url="http://avalonlz.github.io/2016/02/29/stm32-gpio-function-configure/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

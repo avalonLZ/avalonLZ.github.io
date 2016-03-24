@@ -4,21 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Win7下安装Linux双系统 | 木子人人人&#39;s Blog</title>
+  <title>stm32UART+DMA配置 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Win7系统下安装Fedora/Centos。">
+  <meta name="description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Win7下安装Linux双系统">
-<meta property="og:url" content="http://avalonlz.github.io/2016/01/31/two-system/index.html">
+<meta property="og:title" content="stm32UART+DMA配置">
+<meta property="og:url" content="http://avalonlz.github.io/2016/02/29/stm32-UART_DMA/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="Win7系统下安装Fedora/Centos。">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/two%20system70442F4A65504CDF8329268CDDFFD022.jpg">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/two%20system02E5FCFEB6D643FEBD31EBDA146F3696.jpg">
-<meta property="og:updated_time" content="2016-03-21T16:18:14.956Z">
+<meta property="og:description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png">
+<meta property="og:updated_time" content="2016-03-24T14:00:47.499Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Win7下安装Linux双系统">
-<meta name="twitter:description" content="Win7系统下安装Fedora/Centos。">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/two%20system70442F4A65504CDF8329268CDDFFD022.jpg">
+<meta name="twitter:title" content="stm32UART+DMA配置">
+<meta name="twitter:description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -170,11 +170,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-two-system" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-stm32-UART_DMA" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/31/two-system/" class="article-date">
-  	<time datetime="2016-01-31T15:14:50.000Z" itemprop="datePublished">2016-01-31</time>
+      <a href="/2016/02/29/stm32-UART_DMA/" class="article-date">
+  	<time datetime="2016-02-29T03:16:51.000Z" itemprop="datePublished">2016-02-29</time>
 </a>
     </div>
   
@@ -187,7 +187,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Win7下安装Linux双系统
+      stm32UART+DMA配置
     </h1>
   
 
@@ -196,7 +196,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/嵌入式/">嵌入式</a></li></ul>
 	</div>
 
         
@@ -208,30 +208,58 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Win7系统下安装Fedora/Centos。<a id="more"></a>  </p>
-<p><strong> 一、</strong>用磁碟通将Linux镜像写入U盘，使用USB-HDD+即可：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/two%20system70442F4A65504CDF8329268CDDFFD022.jpg" alt="">  </p>
-<p><strong> 二、</strong>U盘引导启动，按e进入路径编辑界面，修改：hd:/dev/sdc4(U盘路径，根据硬盘数和gurb中cat命令的自动补全获得hd号和mosed号)quiet(redhat类的Linux的都是在:后进行修改，修改到or前为止)  </p>
-<p><strong> 三、</strong>之后会引导入安装界面：  </p>
-<ul>
-<li>语言选择可汉语，可以选择多种语言支持。  </li>
-<li>软件选择可以选择需要安装的桌面，常见有GNOME和KDE。  </li>
-<li>分区使用标准分区，分/swap（2G）和/（剩余空间）两个区，并且选择无需添加引导。（一定要记下/分区获得的sdb9此类设备名称，稍后配置引导要用）  </li>
-</ul>
-<p><strong> 四、</strong><br>进入windows使用easyBCD添加GRUB2启动项<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/two%20system02E5FCFEB6D643FEBD31EBDA146F3696.jpg" alt=""><br>重启进入GRUB2中输入命令cat（hd1（第二块硬盘），按次tab找到/分区所在位置并记入。<br>再输入：</p>
-<ul>
-<li>kernel (hd1,8)  （hd1,8 cat命令查出的路径）/boot/vm …….按tab查找…… root=/dev/sdb9 (boot所在处因为此处未单独创建/boot分区所以使用/分区的路径) quiet vga=791//引导启动Linux内核</li>
-<li>initrd (hd1,8)/boot/ini…..按tab……. .img  //引导启动图像界面</li>
-<li>boot   //开始引导<br>之后进入Linux，可在linux中再次找到两个引导文件的所在路径并记录下来稍后要用（因为有tab可以补全路径）</li>
-</ul>
-<p><strong> 五、</strong>再次进入windows使用easyBCD添加新条目，创建NeoGrub引导并做如下配置：  </p>
-<ul>
-<li>default 0//默认第一个引导启动，也可不写</li>
-<li>timeout 3//等待3秒</li>
-<li>title fedora </li>
-<li>kernel (hd1,8)/boot/vmlinuz-4.2.3-300.fc23.x86_64 root=/dev/sdb9 quiet （vga=791可以不加）</li>
-<li>initrd (hd1,8)/boot/initramfs-4.2.3-300.fc23.x86_64.img<br>boot<br>第五步和第四步中的kernel和initrd命令之后的路径都相同    </li>
-</ul>
-<p>完成双系统安装</p>
+        <p>介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。<a id="more"></a>  </p>
+<h1 id="DMA通道"><a href="#DMA通道" class="headerlink" title="DMA通道"></a><strong>DMA通道</strong></h1><p>各功能可以请求的DMA通道<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png" alt="">    </p>
+<h1 id="UART-DMA配置"><a href="#UART-DMA配置" class="headerlink" title="UART+DMA配置"></a><strong>UART+DMA配置</strong></h1><p>main函数，采用寄存器方式配置DMA：</p>
+<pre><code>int main(void)
+{
+    uint8_t tx[10]={0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x10};
+    SysTick_Init();
+    UART_Initone();
+//////////////////////////////////////////DMA
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE); 
+    DMA1_Channel7-&gt;CNDTR=sizeof(tx);
+    DMA1_Channel7-&gt;CPAR=(uint32_t)(&amp;USART2-&gt;DR);//目的地址
+    DMA1_Channel7-&gt;CMAR=(uint32_t)tx;
+    DMA1_Channel7-&gt;CCR=(uint32_t)0x1090;//对CCR寄存器配置为非存储器到存储器模式等其他
+    DMA1_Channel7-&gt;CCR|=(uint32_t)0x0001;
+//////////////////////////////////////////
+    LED2_ON;
+    LED3_ON;
+while(1)
+ {
+
+ } 
+}
+</code></pre><p>USART2初始化函数UART_Initone:</p>
+<pre><code>void UART_Initone(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructureuart;
+    USART_InitTypeDef usartone;
+
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+    //TX_GPIO
+    GPIO_InitStructureuart.GPIO_Pin = GPIO_Pin_2;
+    GPIO_InitStructureuart.GPIO_Mode=GPIO_Mode_AF_PP;
+    GPIO_InitStructureuart.GPIO_Speed=GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &amp;GPIO_InitStructureuart);
+    //RX_GPIO
+    GPIO_InitStructureuart.GPIO_Pin = GPIO_Pin_3;
+    GPIO_InitStructureuart.GPIO_Mode=GPIO_Mode_IN_FLOATING;
+    GPIO_Init(GPIOA, &amp;GPIO_InitStructureuart);
+
+    usartone.USART_BaudRate=9600;
+    usartone.USART_WordLength=USART_WordLength_8b;
+    usartone.USART_StopBits=USART_StopBits_1;
+    usartone.USART_Parity=USART_Parity_No;
+    usartone.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
+    usartone.USART_Mode=USART_Mode_Rx | USART_Mode_Tx;
+    USART_Init(USART2, &amp;usartone);
+    USART_DMACmd( USART2, USART_DMAReq_Tx, ENABLE);/////使能USART2的DMA请求
+    USART_Cmd(USART2, ENABLE);//使能USART
+}  
+</code></pre><p>不开中断的话不需要配置NVIC。</p>
 
       
     </div>
@@ -241,18 +269,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/02/29/stm32-UART_DMA/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/02/29/stm32-gpio-function-configure/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          stm32UART+DMA配置
+          stm32总线结构、引脚功能及其配置
         
       </div>
     </a>
   
   
-    <a href="/2016/01/27/C-notes-0/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">C++notes</div>
+    <a href="/2016/01/31/two-system/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Win7下安装Linux双系统</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -287,7 +315,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="two-system" data-title="Win7下安装Linux双系统" data-url="http://avalonlz.github.io/2016/01/31/two-system/"></div>
+	<div class="ds-thread" data-thread-key="stm32-UART_DMA" data-title="stm32UART+DMA配置" data-url="http://avalonlz.github.io/2016/02/29/stm32-UART_DMA/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

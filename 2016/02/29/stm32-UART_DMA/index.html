@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>stm32UART+DMA配置 | 木子人人人&#39;s Blog</title>
+  <title>stm32USART+DMA配置 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="stm32UART+DMA配置">
+<meta property="og:title" content="stm32USART+DMA配置">
 <meta property="og:url" content="http://avalonlz.github.io/2016/02/29/stm32-UART_DMA/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png">
-<meta property="og:updated_time" content="2016-03-24T14:00:47.499Z">
+<meta property="og:updated_time" content="2016-03-24T14:38:29.750Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="stm32UART+DMA配置">
+<meta name="twitter:title" content="stm32USART+DMA配置">
 <meta name="twitter:description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
 <meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
   
@@ -187,7 +187,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      stm32UART+DMA配置
+      stm32USART+DMA配置
     </h1>
   
 
@@ -210,7 +210,7 @@
       
         <p>介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。<a id="more"></a>  </p>
 <h1 id="DMA通道"><a href="#DMA通道" class="headerlink" title="DMA通道"></a><strong>DMA通道</strong></h1><p>各功能可以请求的DMA通道<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png" alt="">    </p>
-<h1 id="UART-DMA配置"><a href="#UART-DMA配置" class="headerlink" title="UART+DMA配置"></a><strong>UART+DMA配置</strong></h1><p>main函数，采用寄存器方式配置DMA：</p>
+<h1 id="USART-DMA配置"><a href="#USART-DMA配置" class="headerlink" title="USART+DMA配置"></a><strong>USART+DMA配置</strong></h1><p>main函数，采用寄存器方式配置DMA：</p>
 <pre><code>int main(void)
 {
     uint8_t tx[10]={0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x10};
@@ -259,7 +259,7 @@ while(1)
     USART_DMACmd( USART2, USART_DMAReq_Tx, ENABLE);/////使能USART2的DMA请求
     USART_Cmd(USART2, ENABLE);//使能USART
 }  
-</code></pre><p>不开中断的话不需要配置NVIC。</p>
+</code></pre><p>不开中断就不需要配置NVIC。</p>
 
       
     </div>
@@ -315,7 +315,7 @@ while(1)
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="stm32-UART_DMA" data-title="stm32UART+DMA配置" data-url="http://avalonlz.github.io/2016/02/29/stm32-UART_DMA/"></div>
+	<div class="ds-thread" data-thread-key="stm32-UART_DMA" data-title="stm32USART+DMA配置" data-url="http://avalonlz.github.io/2016/02/29/stm32-UART_DMA/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

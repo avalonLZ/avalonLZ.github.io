@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212040.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212049.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212100.png">
-<meta property="og:updated_time" content="2016-03-24T14:00:47.502Z">
+<meta property="og:updated_time" content="2016-03-24T14:37:36.845Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stm32总线结构、引脚功能及其配置">
 <meta name="twitter:description" content="stm32F103zet6的总线结构、引脚功能，以及使用各个功能该如何配置GPIO引脚。">
@@ -218,9 +218,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>stm32F103zet6的总线结构、引脚功能，以及使用各个功能该如何配置GPIO引脚。<a id="more"></a>  </p>
-<h1 id="总线结构"><a href="#总线结构" class="headerlink" title="总线结构"></a><strong>总线结构</strong></h1><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg" alt="">   </p>
-<h1 id="引脚定义（功能）"><a href="#引脚定义（功能）" class="headerlink" title="引脚定义（功能）"></a><strong>引脚定义（功能）</strong></h1><p>位于stm32f103zet6 datasheet中<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png" alt="">   </p>
-<p><strong><font color="red">在配置stm32的事件输出/外部中断/重映射端口复用时，必须开启AFIO时钟。使用管脚的Default(默认)功能并不需要开AFIO时钟，只需要配置相应的功能时钟。</font></strong>  </p>
+<h1 id="总线结构"><a href="#总线结构" class="headerlink" title="总线结构"></a><strong>总线结构</strong></h1><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg" alt=""><br><strong><font color="red">在配置stm32的事件输出/外部中断/重映射端口复用时，必须开启AFIO时钟。使用管脚的Default(默认)功能并不需要开AFIO时钟，只需要配置相应的功能时钟。</font></strong>     </p>
+<h1 id="引脚定义（功能）"><a href="#引脚定义（功能）" class="headerlink" title="引脚定义（功能）"></a><strong>引脚定义（功能）</strong></h1><p>位于stm32f103zet6 datasheet中<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png" alt="">  </p>
 <h1 id="不同功能的引脚配置"><a href="#不同功能的引脚配置" class="headerlink" title="不同功能的引脚配置"></a><strong>不同功能的引脚配置</strong></h1><p>位于stm32f103zet6参考守则中<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212024.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212040.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212049.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212100.png" alt=""></p>
 
       
@@ -242,7 +241,7 @@
   
   
     <a href="/2016/02/29/stm32-UART_DMA/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">stm32UART+DMA配置</div>
+      <div class="article-nav-title">stm32USART+DMA配置</div>
       <strong class="article-nav-caption">></strong>
     </a>
   

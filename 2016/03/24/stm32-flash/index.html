@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>stm32-flash | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
+  <meta name="description" content="关于stm32写片内Flash操作的记录">
 <meta property="og:type" content="article">
 <meta property="og:title" content="stm32-flash">
 <meta property="og:url" content="http://avalonlz.github.io/2016/03/24/stm32-flash/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description">
-<meta property="og:updated_time" content="2016-03-24T14:11:06.224Z">
+<meta property="og:description" content="关于stm32写片内Flash操作的记录">
+<meta property="og:updated_time" content="2016-03-25T09:54:45.477Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stm32-flash">
-<meta name="twitter:description">
+<meta name="twitter:description" content="关于stm32写片内Flash操作的记录">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -192,6 +192,10 @@
       
       <div class="article-info article-info-post">
         
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/嵌入式/">嵌入式</a></li></ul>
+	</div>
+
         
 
         <div class="clearfix"></div>
@@ -201,7 +205,43 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>关于stm32写片内Flash操作的记录<a id="more"></a>  </p>
+<h1 id="标准编程"><a href="#标准编程" class="headerlink" title="标准编程"></a><strong>标准编程</strong></h1><p>在对Flash进行写入操作前，都必须先解锁Flash再擦除操作目的地址所在页。之后再写入  </p>
+<ol>
+<li>对FLASH_KEYR寄存器分别依次写入0x45670123和0xCDEF89AB  </li>
+<li>检查FLASH_SR寄存器的BSY位，为0才可操作  </li>
+<li>将FLASH_CR的第2位置一，配置为页擦除  </li>
+<li>将需要擦除的地址填入FLASH_AR寄存器  </li>
+<li>FLASH_CR寄存器第6位置一，开始擦除  </li>
+<li>检测FLASH_SR的EOP位，完成后硬件会置1，再将其写入1清零  </li>
+<li>将FLASH_CR的第2位置零  </li>
+<li>检测BSY位，判断是否繁忙准备写入数据  </li>
+<li>将FLASH_CR第一位写1  </li>
+<li>将数据写入地址  </li>
+<li>检测FLASH_SR的EOP位判断是否完成  </li>
+</ol>
+<p>寄存器和库函数版本：  </p>
+<pre><code>  ////////////////////////////////////寄存器
+  FLASH-&gt;KEYR=(uint32_t)0x45670123;
+  FLASH-&gt;KEYR=(uint32_t)0xCDEF89AB;
+  while((FLASH-&gt;SR &amp; 0x00000001)!=0);
+  FLASH-&gt;CR|=0x00000002;
+  FLASH-&gt;AR=0x0807FFFe;
+  FLASH-&gt;CR|=0x00000040;    
+  while(0==(FLASH-&gt;SR &amp; 0x00000020));
+  FLASH-&gt;SR |= 0x00000020;    
+  FLASH-&gt;CR&amp;=0x00001FFD;
+  while(0!=(FLASH-&gt;SR &amp; 0x00000001));
+  FLASH-&gt;CR|=0x00000001;
+*(__IO uint16_t*)writeone=(uint16_t)0x8765;
+  while(0==(FLASH-&gt;SR &amp; 0x00000020));
+  FLASH-&gt;SR |= 0x00000020;
+
+////////////////////////////////////库函数    
+  FLASH_Unlock();
+  status1=FLASH_ErasePage(writeone);
+  status2=FLASH_ProgramHalfWord(writeone, 0x1234);
+</code></pre>
       
     </div>
     

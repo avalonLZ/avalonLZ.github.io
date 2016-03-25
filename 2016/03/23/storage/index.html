@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2016/03/23/storage/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="简要说明内存：RAM、PROM、OTP ROM，以及外存：nor flash、nand flash、硬盘、EEPROM等存储类设备。">
-<meta property="og:updated_time" content="2016-03-23T07:41:59.681Z">
+<meta property="og:updated_time" content="2016-03-25T02:45:55.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于存储设备">
 <meta name="twitter:description" content="简要说明内存：RAM、PROM、OTP ROM，以及外存：nor flash、nand flash、硬盘、EEPROM等存储类设备。">
@@ -207,7 +207,7 @@
       
         <p>简要说明内存：RAM、PROM、OTP ROM，以及外存：nor flash、nand flash、硬盘、EEPROM等存储类设备。<a id="more"></a><br>查阅很多资料都不知道该把以上两种flash归到内存还是外存中……好吧，它就是闪存，姑且先归为外存吧，如果有people知道还请告知一二。</p>
 <h1 id="1-内存"><a href="#1-内存" class="headerlink" title="1.内存"></a>1.内存</h1><ul>
-<li><p>RAM<br>RAM分为两种，SDRAM（同步动态随机存储器）以及SRAM(静态随机存储器).<br>SDRAM：存储阵列会不断刷新数据。一般来说电脑内存、手机的运行内存这类存储器都是SDRAM    。<br>SRAM：存储阵列不会一直刷新数据，读写速度飞快，价格昂贵。一般只用于电脑CPU的一二级缓存中。  </p>
+<li><p>RAM<br>RAM分为两种，SDRAM（同步动态随机存储器）以及SRAM(静态随机存储器).<br>SDRAM：存储阵列会不断刷新数据。一般来说电脑内存、手机的运行内存这类存储器都是SDRAM    。<br>SRAM：存储阵列不会一直刷新数据，读写速度飞快，价格昂贵。一般只用作电脑CPU的一二级缓存和单片机存放数据的片上内存（RAM）  。</p>
 </li>
 <li><p>PROM<br>PROM只读存储器，ROM的一种，具有一次写入，不可更改的特性，一般在生产小东西（生日贺卡）时将代码固化到PROM中。  </p>
 </li>
@@ -215,7 +215,7 @@
 </li>
 </ul>
 <h1 id="2-外存"><a href="#2-外存" class="headerlink" title="2.外存"></a>2.外存</h1><ul>
-<li><p>nor flash<br>nar flash闪存的一种，一般单片机中的flash就是指nor flash。程序可掉电保存，并行口的nor flash可不经过RAM直接运行程序，也有SPI、I2C等串行口的nor flash，单片机内集成一般是并行口的。  </p>
+<li><p>nor flash<br>nar flash闪存的一种，一般单片机中的flash就是指nor flash。用于存储程序，掉电保存。并行口的nor flash可不经过RAM直接运行程序，也有SPI、I2C等串行口的nor flash，单片机内集成一般是并行口的。  </p>
 </li>
 <li><p>nand flash<br>nand flash也是闪存的一种，只能以块为单位进行读取，但写入速度比nor flash快很多，所以一般nand flash做mp3、U盘、固态硬盘、SD卡、数码相机等产品的集成存储设备。  </p>
 </li>

@@ -6,18 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>stm32-硬件I2C | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="看寄存器文档写了一天，发现寄存器文档说的好乱，最后选择还是用库吧。。。。。。。。">
+  <meta name="description" content="看寄存器文档写了一天，写了好几遍都不对，最后还是用库了。。。。。。。。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="stm32-硬件I2C">
 <meta property="og:url" content="http://avalonlz.github.io/2016/03/26/stm32-I2C/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="看寄存器文档写了一天，发现寄存器文档说的好乱，最后选择还是用库吧。。。。。。。。">
+<meta property="og:description" content="看寄存器文档写了一天，写了好几遍都不对，最后还是用库了。。。。。。。。">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115610.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115813.png">
-<meta property="og:updated_time" content="2016-03-27T04:55:24.680Z">
+<meta property="og:updated_time" content="2016-03-27T13:47:27.754Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stm32-硬件I2C">
-<meta name="twitter:description" content="看寄存器文档写了一天，发现寄存器文档说的好乱，最后选择还是用库吧。。。。。。。。">
+<meta name="twitter:description" content="看寄存器文档写了一天，写了好几遍都不对，最后还是用库了。。。。。。。。">
 <meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115610.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
@@ -36,7 +36,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageprofile%20imageQQ%E6%88%AA%E5%9B%BE20160326161515.png" class="js-avatar">
+			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -138,7 +138,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageprofile%20imageQQ%E6%88%AA%E5%9B%BE20160326161515.png" class="js-avatar">
+				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -208,7 +208,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>看寄存器文档写了一天，发现寄存器文档说的好乱，最后选择还是用库吧。。。。。。。。<a id="more"></a>看了下火哥的代码，发现其实stm32固件库已经把每一步需要检测的标志位封装好了，我们要做的只是根据文档来检测这些标志，并采取下一步动作。下面是STM32和AT24C02的硬件I2C分析  </p>
+        <p>看寄存器文档写了一天，写了好几遍都不对，最后还是用库了。。。。。。。。<a id="more"></a>看了下火哥的代码，发现其实stm32固件库已经把每一步需要检测的标志位封装好了，我们要做的只是根据文档来检测这些标志，并采取下一步动作。下面是STM32和AT24C02的硬件I2C分析  </p>
 <h1 id="主发送"><a href="#主发送" class="headerlink" title="主发送"></a><strong>主发送</strong></h1><p>下图是stm32主发送时序图，其中EV5、EV6、EV8_1、EV8、EV8_2、EV9这些事件标志在stm32的官方固件库都有详细编写出来（stm32f10x_i2c.h），我们只需调用检测即可。野火的硬件I2C也就是在这个图和官方固件库的基础上编写的。<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115610.png" alt=""><br>有详细的英文注释，很好理解  </p>
 <pre><code>void I2C_EE_ByteWrite(u8* pBuffer, u8 WriteAddr)//将pBuffer地址内的数据写入AT24C02的指定地址中
 {

@@ -4,21 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>木子人人人&#39;s Blog</title>
+  <title>stm32-SPI | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="title: stm32-硬件SPI与模拟SPIdate: 2016-03-28 17:36:13
-tags: 嵌入式记录STM32硬件SPI的关键处，及模拟SPI和硬件SPI差别。若有不同见解还望可以留言交流。">
+  <meta name="description" content="记录STM32硬件SPI关键处，及模拟SPI和硬件SPI的不同之处。若有不同见解，还望留言一同交流学习。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="木子人人人's Blog">
-<meta property="og:url" content="http://avalonlz.github.io/2016/03/28/stm32-spi/index.html">
+<meta property="og:title" content="stm32-SPI">
+<meta property="og:url" content="http://avalonlz.github.io/2016/03/30/stm32-spi/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="title: stm32-硬件SPI与模拟SPIdate: 2016-03-28 17:36:13
-tags: 嵌入式记录STM32硬件SPI的关键处，及模拟SPI和硬件SPI差别。若有不同见解还望可以留言交流。">
-<meta property="og:updated_time" content="2016-03-30T14:38:08.298Z">
+<meta property="og:description" content="记录STM32硬件SPI关键处，及模拟SPI和硬件SPI的不同之处。若有不同见解，还望留言一同交流学习。">
+<meta property="og:updated_time" content="2016-03-30T15:40:48.495Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="木子人人人's Blog">
-<meta name="twitter:description" content="title: stm32-硬件SPI与模拟SPIdate: 2016-03-28 17:36:13
-tags: 嵌入式记录STM32硬件SPI的关键处，及模拟SPI和硬件SPI差别。若有不同见解还望可以留言交流。">
+<meta name="twitter:title" content="stm32-SPI">
+<meta name="twitter:description" content="记录STM32硬件SPI关键处，及模拟SPI和硬件SPI的不同之处。若有不同见解，还望留言一同交流学习。">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -120,7 +117,7 @@ tags: 嵌入式记录STM32硬件SPI的关键处，及模拟SPI和硬件SPI差别
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">自动化专业EE方向不知名小本一枚，喜欢计算机，崇尚科技，热爱技术，当然偶尔也会二次元走一遭......技术无界，Welcome指点一二~~</div>
+					<div id="js-aboutme">自动化专业EE方向不知名小本一枚，喜欢计算机，崇尚科技，热爱技术，当然偶尔也会二次元走一遭......有机会希望能和大家一起交流学习~ ~</div>
 				</section>
 				
 			</div>
@@ -173,8 +170,8 @@ tags: 嵌入式记录STM32硬件SPI的关键处，及模拟SPI和硬件SPI差别
       <div class="body-wrap"><article id="post-stm32-spi" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/03/28/stm32-spi/" class="article-date">
-  	<time datetime="2016-03-28T09:36:13.570Z" itemprop="datePublished">2016-03-28</time>
+      <a href="/2016/03/30/stm32-spi/" class="article-date">
+  	<time datetime="2016-03-30T04:36:39.000Z" itemprop="datePublished">2016-03-30</time>
 </a>
     </div>
   
@@ -183,11 +180,32 @@ tags: 嵌入式记录STM32硬件SPI的关键处，及模拟SPI和硬件SPI差别
       <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      stm32-SPI
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/嵌入式/">嵌入式</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+      </div>
+      
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<p>title: stm32-硬件SPI与模拟SPI<br>date: 2016-03-28 17:36:13</p>
-<h2 id="tags-嵌入式"><a href="#tags-嵌入式" class="headerlink" title="tags: 嵌入式"></a>tags: 嵌入式</h2><p>记录STM32硬件SPI的关键处，及模拟SPI和硬件SPI差别。若有不同见解还望可以留言交流。<a id="more"></a>  </p>
+        <p>记录STM32硬件SPI关键处，及模拟SPI和硬件SPI的不同之处。若有不同见解，还望留言一同交流学习。<a id="more"></a></p>
 
       
     </div>
@@ -234,7 +252,7 @@ tags: 嵌入式记录STM32硬件SPI的关键处，及模拟SPI和硬件SPI差别
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="stm32-spi" data-title="" data-url="http://avalonlz.github.io/2016/03/28/stm32-spi/"></div>
+	<div class="ds-thread" data-thread-key="stm32-spi" data-title="stm32-SPI" data-url="http://avalonlz.github.io/2016/03/30/stm32-spi/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>Raspberry Pi-Commands | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录下玩Raspberry Pi常用的Linux命令">
+  <meta name="description" content="玩Raspberry Pi常用的Linux命令">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Raspberry Pi-Commands">
 <meta property="og:url" content="http://avalonlz.github.io/2016/04/01/raspberry-pi-commands/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="记录下玩Raspberry Pi常用的Linux命令">
-<meta property="og:updated_time" content="2016-04-01T04:09:02.285Z">
+<meta property="og:description" content="玩Raspberry Pi常用的Linux命令">
+<meta property="og:updated_time" content="2016-04-01T10:07:19.131Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Raspberry Pi-Commands">
-<meta name="twitter:description" content="记录下玩Raspberry Pi常用的Linux命令">
+<meta name="twitter:description" content="玩Raspberry Pi常用的Linux命令">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -205,7 +205,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>记录下玩Raspberry Pi常用的Linux命令<a id="more"></a></p>
+        <p>玩Raspberry Pi常用的Linux命令<a id="more"></a>  </p>
+<p><strong>目录相关</strong><br>cd [文件夹路径] ：进入文件夹（如cd /home/pi，进入pi文件夹）<br>cd .. :返回该目录下的上级目录<br>cd - ：返回进入该目录前所在目录  </p>
+<p><strong>列出文件夹内容命令</strong><br>ls ：列出该目录下文件和文件夹（不包括隐含文件）<br>ls -l ：列出该目录下文件、文件夹详细信息（包括隐含文件）  </p>
+<p><strong>移动命令</strong><br>mv -i [需要移动的文件路径，需要选择文件本身] [文件新路径，不需要选择文件本身] ：移动文件到新目录，若有同名文件则询问是否需要覆盖。（例如，mv -i /home/pi/Desktop/test/testone.c /home/pi/ 将testone.c文件移动到pi文件夹下）<br>可以使用mv命令进行重命名 ：例如，mv /home/pi/Desktop/test/testone.c /home/pi/Desktop/test/testtwo.c    </p>
+<p><strong>复制文件</strong><br>cp -i [要复制的文件所在路径，包括文件本身] [文件新路径，不包括文件本身] ：复制文件到新目录，若新目录有同名文件则询问是否需要覆盖。(例如，cp -i /home/pi/Desktop/test/testone.c /home/pi/)<br>个人喜欢使用cp -Rf，不提示直接覆盖同名文件  </p>
+<p><strong>删除</strong><br>rm -r [目录路径]：删除整个目录（目录路径换为文件路径即可删除文件）  </p>
+<p><strong>权限</strong><br>在Debain中主要使用是chmod命令<br>chmod [who] [+或-或=] [mode] [文件名]：<br>who是指需要指定的用户，包括：u文件所有者。g同组用户。o其他用户。a所有用户（系统默认是a）<br>+是指添加某个权限，-是取消某权限，=是给指定的权限<br>mode表示权限，包括：r可读。w可写。x可执行（这几个常用）等其他<br>一般使用chmod 777 [文件名]：所有用户拥有可读可写可执行权限  </p>
+<p><strong>压缩和解压</strong><br>tar [主选项+辅选项] 文件或者目录  </p>
+<p>（未完） </p>
 
       
     </div>

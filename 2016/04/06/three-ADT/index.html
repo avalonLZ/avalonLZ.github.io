@@ -4,21 +4,20 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>stm32-USART+DMA配置 | 木子人人人&#39;s Blog</title>
+  <title>三种基本抽象数据类型 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
+  <meta name="description" content="简单做了个三种基本抽象数据类型的Mind Map">
 <meta property="og:type" content="article">
-<meta property="og:title" content="stm32-USART+DMA配置">
-<meta property="og:url" content="http://avalonlz.github.io/2016/02/29/stm32-USART_DMA/index.html">
+<meta property="og:title" content="三种基本抽象数据类型">
+<meta property="og:url" content="http://avalonlz.github.io/2016/04/06/three-ADT/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png">
-<meta property="og:updated_time" content="2016-04-01T04:02:41.406Z">
+<meta property="og:description" content="简单做了个三种基本抽象数据类型的Mind Map">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/ADTQQ%E5%9B%BE%E7%89%8720160406180945.png">
+<meta property="og:updated_time" content="2016-04-06T10:17:14.016Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="stm32-USART+DMA配置">
-<meta name="twitter:description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
+<meta name="twitter:title" content="三种基本抽象数据类型">
+<meta name="twitter:description" content="简单做了个三种基本抽象数据类型的Mind Map">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/ADTQQ%E5%9B%BE%E7%89%8720160406180945.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -170,11 +169,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-stm32-USART_DMA" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-three-ADT" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/02/29/stm32-USART_DMA/" class="article-date">
-  	<time datetime="2016-02-29T03:16:51.000Z" itemprop="datePublished">2016-02-29</time>
+      <a href="/2016/04/06/three-ADT/" class="article-date">
+  	<time datetime="2016-04-06T10:16:42.000Z" itemprop="datePublished">2016-04-06</time>
 </a>
     </div>
   
@@ -187,7 +186,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      stm32-USART+DMA配置
+      三种基本抽象数据类型
     </h1>
   
 
@@ -196,7 +195,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/STM32/">STM32</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ADT/">ADT</a></li></ul>
 	</div>
 
         
@@ -208,58 +207,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。<a id="more"></a>  </p>
-<h1 id="DMA通道"><a href="#DMA通道" class="headerlink" title="DMA通道"></a><strong>DMA通道</strong></h1><p>各功能可以请求的DMA通道<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png" alt="">    </p>
-<h1 id="USART-DMA配置"><a href="#USART-DMA配置" class="headerlink" title="USART+DMA配置"></a><strong>USART+DMA配置</strong></h1><p>main函数，采用寄存器方式配置DMA：</p>
-<pre><code>int main(void)
-{
-    uint8_t tx[10]={0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x10};
-    SysTick_Init();
-    UART_Initone();
-//////////////////////////////////////////DMA
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE); 
-    DMA1_Channel7-&gt;CNDTR=sizeof(tx);
-    DMA1_Channel7-&gt;CPAR=(uint32_t)(&amp;USART2-&gt;DR);//目的地址
-    DMA1_Channel7-&gt;CMAR=(uint32_t)tx;
-    DMA1_Channel7-&gt;CCR=(uint32_t)0x1090;//对CCR寄存器配置为非存储器到存储器模式等其他
-    DMA1_Channel7-&gt;CCR|=(uint32_t)0x0001;
-//////////////////////////////////////////
-    LED2_ON;
-    LED3_ON;
-while(1)
- {
-
- } 
-}
-</code></pre><p>USART2初始化函数UART_Initone:</p>
-<pre><code>void UART_Initone(void)
-{
-    GPIO_InitTypeDef GPIO_InitStructureuart;
-    USART_InitTypeDef usartone;
-
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-    //TX_GPIO
-    GPIO_InitStructureuart.GPIO_Pin = GPIO_Pin_2;
-    GPIO_InitStructureuart.GPIO_Mode=GPIO_Mode_AF_PP;
-    GPIO_InitStructureuart.GPIO_Speed=GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &amp;GPIO_InitStructureuart);
-    //RX_GPIO
-    GPIO_InitStructureuart.GPIO_Pin = GPIO_Pin_3;
-    GPIO_InitStructureuart.GPIO_Mode=GPIO_Mode_IN_FLOATING;
-    GPIO_Init(GPIOA, &amp;GPIO_InitStructureuart);
-
-    usartone.USART_BaudRate=9600;
-    usartone.USART_WordLength=USART_WordLength_8b;
-    usartone.USART_StopBits=USART_StopBits_1;
-    usartone.USART_Parity=USART_Parity_No;
-    usartone.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
-    usartone.USART_Mode=USART_Mode_Rx | USART_Mode_Tx;
-    USART_Init(USART2, &amp;usartone);
-    USART_DMACmd( USART2, USART_DMAReq_Tx, ENABLE);/////使能USART2的DMA请求
-    USART_Cmd(USART2, ENABLE);//使能USART
-}  
-</code></pre><p>不开中断就不需要配置NVIC。</p>
+        <p>简单做了个三种基本抽象数据类型的Mind Map<a id="more"></a><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/ADTQQ%E5%9B%BE%E7%89%8720160406180945.png" alt=""></p>
 
       
     </div>
@@ -269,18 +217,9 @@ while(1)
     
 <nav id="article-nav">
   
-    <a href="/2016/02/29/stm32-gpio-function-configure/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          stm32-总线结构、引脚功能及其配置
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/01/31/two-system/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Win7下安装Linux双系统</div>
+    <a href="/2016/04/01/raspberry-pi-commands/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Raspberry Pi-Commands</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -315,7 +254,7 @@ while(1)
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="stm32-USART_DMA" data-title="stm32-USART+DMA配置" data-url="http://avalonlz.github.io/2016/02/29/stm32-USART_DMA/"></div>
+	<div class="ds-thread" data-thread-key="three-ADT" data-title="三种基本抽象数据类型" data-url="http://avalonlz.github.io/2016/04/06/three-ADT/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

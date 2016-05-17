@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2016/04/01/raspberry-pi-commands/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="玩Raspberry Pi常用的Linux命令">
-<meta property="og:updated_time" content="2016-04-01T10:07:19.131Z">
+<meta property="og:updated_time" content="2016-05-17T13:44:49.153Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Raspberry Pi-Commands">
 <meta name="twitter:description" content="玩Raspberry Pi常用的Linux命令">
@@ -213,6 +213,8 @@
 <p><strong>删除</strong><br>rm -r [目录路径]：删除整个目录（目录路径换为文件路径即可删除文件）  </p>
 <p><strong>权限</strong><br>在Debain中主要使用是chmod命令<br>chmod [who] [+或-或=] [mode] [文件名]：<br>who是指需要指定的用户，包括：u文件所有者。g同组用户。o其他用户。a所有用户（系统默认是a）<br>+是指添加某个权限，-是取消某权限，=是给指定的权限<br>mode表示权限，包括：r可读。w可写。x可执行（这几个常用）等其他<br>一般使用chmod 777 [文件名]：所有用户拥有可读可写可执行权限  </p>
 <p><strong>压缩和解压</strong><br>tar [主选项+辅选项] 文件或者目录  </p>
+<p><strong>U盘挂（卸）载</strong><br>mount -t vfat /dev/sdb1/ /mnt/<br>/dev/sdb1/ ：是在dev文件下显示的驱动，需要自己查找，可以进入dev中查看，也可以用fdisk -l命令查看<br>/mnt/ ：挂载点，即需要将U盘挂载在何处  </p>
+<p>umount /mnt/ ：卸载U盘 </p>
 <p>（未完） </p>
 
       

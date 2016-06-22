@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>stm32-I2C | 木子人人人&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="看寄存器文档写了一天硬件I2C，写了好几遍都不对，最后还是用库了。。。。。。。。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stm32-I2C">
+<meta property="og:url" content="http://avalonlz.github.io/2016/03/26/stm32-I2C/index.html">
+<meta property="og:site_name" content="木子人人人's Blog">
+<meta property="og:description" content="看寄存器文档写了一天硬件I2C，写了好几遍都不对，最后还是用库了。。。。。。。。">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115610.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160330220040.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115813.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160330220025.png">
+<meta property="og:updated_time" content="2016-04-01T04:02:23.674Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stm32-I2C">
+<meta name="twitter:description" content="看寄存器文档写了一天硬件I2C，写了好几遍都不对，最后还是用库了。。。。。。。。">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115610.png">
+  
+    <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">木子人人人</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">积跬步 至千里</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/ADT/" style="font-size: 10px;">ADT</a> <a href="/tags/C/" style="font-size: 10px;">C</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/DNSpod/" style="font-size: 10px;">DNSpod</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Raspberry-Pi/" style="font-size: 10px;">Raspberry Pi</a> <a href="/tags/STM32/" style="font-size: 20px;">STM32</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/双系统安装/" style="font-size: 10px;">双系统安装</a> <a href="/tags/存储/" style="font-size: 10px;">存储</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">自动化专业EE方向不知名小本一枚，喜欢计算机，崇尚科技，热爱技术，当然偶尔也会二次元走一遭......文章若有出入，还望大家指出，交流</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">木子人人人</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">木子人人人</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">积跬步 至千里</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-stm32-I2C" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/26/stm32-I2C/" class="article-date">
+  	<time datetime="2016-03-26T06:16:32.000Z" itemprop="datePublished">2016-03-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      stm32-I2C
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/STM32/">STM32</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>看寄存器文档写了一天硬件I2C，写了好几遍都不对，最后还是用库了。。。。。。。。<a id="more"></a>看了下火哥的代码，发现其实stm32固件库已经把每一步需要检测的标志位封装好了，我们要做的只是根据文档来检测这些标志，并采取下一步动作。下面是STM32和AT24C02的硬件I2C分析  </p>
+<h1 id="硬件I2C主发送"><a href="#硬件I2C主发送" class="headerlink" title="硬件I2C主发送"></a><strong>硬件I2C主发送</strong></h1><p>下图是stm32主发送时序图和AT24C02的写字节操作流程图，其中EV5、EV6、EV8_1、EV8、EV8_2、EV9这些事件标志在stm32的官方固件库都有详细编写出来（stm32f10x_i2c.h），我们只需调用检测即可。野火的硬件I2C也就是在这两个图和官方固件库的基础上编写的。<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115610.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160330220040.png" alt=""><br>有详细的英文注释，很好理解  </p>
+<pre><code>void I2C_EE_ByteWrite(u8* pBuffer, u8 WriteAddr)//将pBuffer地址内的数据写入AT24C02的指定地址中
+{
+  /* Send STRAT condition */
+  I2C_GenerateSTART(I2C2, ENABLE);
+
+  /* Test on EV5 and clear it */
+  while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));  
+
+  /* Send EEPROM address for write */
+  I2C_Send7bitAddress(I2C2, EEPROM_ADDRESS, I2C_Direction_Transmitter);
+
+  /* Test on EV6 and clear it */
+  while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+
+  /* Send the EEPROM&apos;s internal address to write to */
+  I2C_SendData(I2C2, WriteAddr);
+
+  /* Test on EV8 and clear it */
+  while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+
+  /* Send the byte to be written */
+  I2C_SendData(I2C2, *pBuffer); 
+
+  /* Test on EV8 and clear it */
+  while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+
+  /* Send STOP condition */
+  I2C_GenerateSTOP(I2C2, ENABLE);
+}  
+</code></pre><h1 id="硬件I2C主接收"><a href="#硬件I2C主接收" class="headerlink" title="硬件I2C主接收"></a><strong>硬件I2C主接收</strong></h1><p>和发送一样，这些事件标志在官方库中都有写出，但是需要注意由于是操作AT24C02所以根据它的要求在读之前会需要先写入需要读出的数据所在地址，所以接收数据前还需要先写数据。<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115813.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160330220025.png" alt=""><br>以下是野火的AT2402读操作函数：  </p>
+<pre><code>void I2C_EE_BufferRead(u8* pBuffer, u8 ReadAddr, u16 NumByteToRead)//从ReadAddr处读出
+{  
+  //*((u8 *)0x4001080c) |=0x80; 
+    while(I2C_GetFlagStatus(I2C2, I2C_FLAG_BUSY)); // Added by Najoua 27/08/2008
+
+
+  /* Send START condition */
+  I2C_GenerateSTART(I2C2, ENABLE);
+  //*((u8 *)0x4001080c) &amp;=~0x80;
+
+  /* Test on EV5 and clear it */
+  while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));
+
+  /* Send EEPROM address for write */
+  I2C_Send7bitAddress(I2C2, EEPROM_ADDRESS, I2C_Direction_Transmitter);
+
+  /* Test on EV6 and clear it */
+  while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+
+  /* Clear EV6 by setting again the PE bit */
+  I2C_Cmd(I2C2, ENABLE);
+
+  /* Send the EEPROM&apos;s internal address to write to */
+  I2C_SendData(I2C2, ReadAddr);  
+
+  /* Test on EV8 and clear it */
+  while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+
+        /*以上都还为写操作阶段，接下来准备读*/
+
+  /* Send STRAT condition a second time */  
+  I2C_GenerateSTART(I2C2, ENABLE);
+
+  /* Test on EV5 and clear it */
+  while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_MODE_SELECT));
+
+  /* Send EEPROM address for read */
+  I2C_Send7bitAddress(I2C2, EEPROM_ADDRESS, I2C_Direction_Receiver);
+
+  /* Test on EV6 and clear it */
+  while(!I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
+
+  /* While there is data to be read */
+  while(NumByteToRead)  
+  {
+    if(NumByteToRead == 1)
+    {
+      /* Disable Acknowledgement */
+      I2C_AcknowledgeConfig(I2C2, DISABLE);
+
+      /* Send STOP Condition */
+      I2C_GenerateSTOP(I2C2, ENABLE);
+    }
+
+    /* Test on EV7 and clear it */
+    if(I2C_CheckEvent(I2C2, I2C_EVENT_MASTER_BYTE_RECEIVED))  
+    {      
+      /* Read a byte from the EEPROM */
+      *pBuffer = I2C_ReceiveData(I2C2);
+
+      /* Point to the next location where the byte read will be saved */
+      pBuffer++; 
+
+      /* Decrement the read bytes counter */
+      NumByteToRead--;        
+    }   
+  }
+
+  /* Enable Acknowledgement to be ready for another reception */
+  I2C_AcknowledgeConfig(I2C2, ENABLE);
+}  
+</code></pre><h1 id="硬件I2C主发送操作后的检测函数"><a href="#硬件I2C主发送操作后的检测函数" class="headerlink" title="硬件I2C主发送操作后的检测函数"></a><strong>硬件I2C主发送操作后的检测函数</strong></h1><p>火哥他对寄存器文档把握很准，需要什么不需要什么都很了解，当然也很熟悉官方固件库的内容，绝逼是老手了。下面一个函数是再次写入设备地址，用于检测从设备是否有响应，判断是否从设备已完成了以上数据写入操作。  </p>
+<pre><code>void I2C_EE_WaitEepromStandbyState(void)      
+{
+  vu16 SR1_Tmp = 0;
+
+  do
+  {
+    /* Send START condition */
+    I2C_GenerateSTART(I2C2, ENABLE);
+    /* Read I2C2 SR1 register */
+    SR1_Tmp = I2C_ReadRegister(I2C2, I2C_Register_SR1);
+    /* Send EEPROM address for write */
+    I2C_Send7bitAddress(I2C2, EEPROM_ADDRESS, I2C_Direction_Transmitter);
+  }while(!(I2C_ReadRegister(I2C2, I2C_Register_SR1) &amp; 0x0002));
+
+  /* Clear AF flag */
+  I2C_ClearFlag(I2C2, I2C_FLAG_AF);
+    /* STOP condition */    
+    I2C_GenerateSTOP(I2C2, ENABLE); 
+}  
+</code></pre><h1 id="模拟I2C"><a href="#模拟I2C" class="headerlink" title="模拟I2C"></a><strong>模拟I2C</strong></h1><p>对于模拟I2C这里只记录几点重要的地方，代码就不贴出来了。  </p>
+<ol>
+<li>开始信号：SDA、SCL都为高的前提下，SDA跳为低电平。  </li>
+<li>停止信号：SCL为高时，SDA由低电平跳为高电平。  </li>
+<li>数据变化：只有当SCL为低电平的时候SDA线上的数据（高低电平）才可以变化。  </li>
+<li>等待ACK时，需要将SDA的GPIO引脚变为浮空输入。   </li>
+</ol>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/03/26/Linux-mind-map/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Linux文件夹Mindmap
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/24/stm32-flash/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">stm32-flash</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="stm32-I2C" data-title="stm32-I2C" data-url="http://avalonlz.github.io/2016/03/26/stm32-I2C/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lizhong"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    	<!--	&copy; 2016 木子人人人 -->
+    	</div>
+      	<div class="footer-right">
+      	<!--	<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten -->
+		<span id="busuanzi_container_site_uv">Total visited <span id="busuanzi_value_site_uv"></span> times</span>
+		
+		
+		<script>
+		(function(){
+			var bp = document.createElement('script');
+			bp.src = '//push.zhanzhang.baidu.com/push.js';
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(bp, s);
+		})();
+		</script>
+		
+		
+      	</div>
+    </div>
+  </div>
+</footer>
+
+
+
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

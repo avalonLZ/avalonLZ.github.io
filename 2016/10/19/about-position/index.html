@@ -4,18 +4,90 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>stm32-flash | 木子人人人&#39;s Blog</title>
+  <title>定位相关笔记 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="关于stm32写片内Flash操作的记录">
+  <meta name="description" content="LBS、GNSS、WiFi定位方式
+LBS:
+
+COO、Cell——ID定位（单基站）
+
+七号信令定位（单基站）
+
+TOA（到达时间）/TDOA（到达时间差）定位（三基站）
+
+AOA（到达角度）定位（两基站）
+
+基于场强的定位（三基站）
+
+AGPS混合定位
+
+
+
+GNSS:
+GPS
+
+北斗
+
+伽利略
+
+Glonass">
 <meta property="og:type" content="article">
-<meta property="og:title" content="stm32-flash">
-<meta property="og:url" content="http://avalonlz.github.io/2016/03/24/stm32-flash/index.html">
+<meta property="og:title" content="定位相关笔记">
+<meta property="og:url" content="http://avalonlz.github.io/2016/10/19/about-position/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="关于stm32写片内Flash操作的记录">
-<meta property="og:updated_time" content="2016-04-01T04:02:23.673Z">
+<meta property="og:description" content="LBS、GNSS、WiFi定位方式
+LBS:
+
+COO、Cell——ID定位（单基站）
+
+七号信令定位（单基站）
+
+TOA（到达时间）/TDOA（到达时间差）定位（三基站）
+
+AOA（到达角度）定位（两基站）
+
+基于场强的定位（三基站）
+
+AGPS混合定位
+
+
+
+GNSS:
+GPS
+
+北斗
+
+伽利略
+
+Glonass">
+<meta property="og:updated_time" content="2016-10-19T15:02:12.171Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="stm32-flash">
-<meta name="twitter:description" content="关于stm32写片内Flash操作的记录">
+<meta name="twitter:title" content="定位相关笔记">
+<meta name="twitter:description" content="LBS、GNSS、WiFi定位方式
+LBS:
+
+COO、Cell——ID定位（单基站）
+
+七号信令定位（单基站）
+
+TOA（到达时间）/TDOA（到达时间差）定位（三基站）
+
+AOA（到达角度）定位（两基站）
+
+基于场强的定位（三基站）
+
+AGPS混合定位
+
+
+
+GNSS:
+GPS
+
+北斗
+
+伽利略
+
+Glonass">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -167,11 +239,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-stm32-flash" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-about-position" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/03/24/stm32-flash/" class="article-date">
-  	<time datetime="2016-03-24T14:11:06.000Z" itemprop="datePublished">2016-03-24</time>
+      <a href="/2016/10/19/about-position/" class="article-date">
+  	<time datetime="2016-10-19T14:41:58.000Z" itemprop="datePublished">2016-10-19</time>
 </a>
     </div>
   
@@ -184,7 +256,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      stm32-flash
+      定位相关笔记
     </h1>
   
 
@@ -193,7 +265,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/STM32/">STM32</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/定位/">定位</a></li></ul>
 	</div>
 
         
@@ -205,43 +277,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>关于stm32写片内Flash操作的记录<a id="more"></a>  </p>
-<h1 id="标准编程"><a href="#标准编程" class="headerlink" title="标准编程"></a><strong>标准编程</strong></h1><p>在对Flash进行写入操作前，都必须先解锁Flash再擦除操作目的地址所在页。之后再写入  </p>
-<ol>
-<li>对FLASH_KEYR寄存器分别依次写入0x45670123和0xCDEF89AB  </li>
-<li>检查FLASH_SR寄存器的BSY位，为0才可操作  </li>
-<li>将FLASH_CR的第2位置一，配置为页擦除  </li>
-<li>将需要擦除的地址填入FLASH_AR寄存器  </li>
-<li>FLASH_CR寄存器第6位置一，开始擦除  </li>
-<li>检测FLASH_SR的EOP位，完成后硬件会置1，再将其写入1清零  </li>
-<li>将FLASH_CR的第2位置零  </li>
-<li>检测BSY位，判断是否繁忙准备写入数据  </li>
-<li>将FLASH_CR第一位写1  </li>
-<li>将数据写入地址  </li>
-<li>检测FLASH_SR的EOP位判断是否完成  </li>
-</ol>
-<p>寄存器和库函数版本：  </p>
-<pre><code>  ////////////////////////////////////寄存器
-  FLASH-&gt;KEYR=(uint32_t)0x45670123;
-  FLASH-&gt;KEYR=(uint32_t)0xCDEF89AB;
-  while((FLASH-&gt;SR &amp; 0x00000001)!=0);
-  FLASH-&gt;CR|=0x00000002;
-  FLASH-&gt;AR=0x0807FFFe;
-  FLASH-&gt;CR|=0x00000040;    
-  while(0==(FLASH-&gt;SR &amp; 0x00000020));
-  FLASH-&gt;SR |= 0x00000020;    
-  FLASH-&gt;CR&amp;=0x00001FFD;
-  while(0!=(FLASH-&gt;SR &amp; 0x00000001));
-  FLASH-&gt;CR|=0x00000001;
-*(__IO uint16_t*)writeone=(uint16_t)0x8765;
-  while(0==(FLASH-&gt;SR &amp; 0x00000020));
-  FLASH-&gt;SR |= 0x00000020;
+        <p>  <big>LBS、GNSS、WiFi定位方式</big></p>
+<h1 id="LBS"><a href="#LBS" class="headerlink" title="LBS:"></a>LBS:</h1><blockquote>
+<ul>
+<li><p>COO、Cell——ID定位（单基站）</p>
+</li>
+<li><p>七号信令定位（单基站）</p>
+</li>
+<li><p>TOA（到达时间）/TDOA（到达时间差）定位（三基站）</p>
+</li>
+<li><p>AOA（到达角度）定位（两基站）</p>
+</li>
+<li><p>基于场强的定位（三基站）</p>
+</li>
+<li><p>AGPS混合定位</p>
+</li>
+</ul>
+</blockquote>
+<h1 id="GNSS"><a href="#GNSS" class="headerlink" title="GNSS:"></a>GNSS:</h1><ul>
+<li><p>GPS</p>
+</li>
+<li><p>北斗</p>
+</li>
+<li><p>伽利略</p>
+</li>
+<li><p>Glonass</p>
+</li>
+</ul>
 
-////////////////////////////////////库函数    
-  FLASH_Unlock();
-  status1=FLASH_ErasePage(writeone);
-  status2=FLASH_ProgramHalfWord(writeone, 0x1234);
-</code></pre>
       
     </div>
     
@@ -250,18 +313,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/03/26/stm32-I2C/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          stm32-I2C
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/03/23/storage/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">关于存储设备</div>
+    <a href="/2016/04/06/three-ADT/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">三种基本抽象数据类型</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -296,7 +350,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="stm32-flash" data-title="stm32-flash" data-url="http://avalonlz.github.io/2016/03/24/stm32-flash/"></div>
+	<div class="ds-thread" data-thread-key="about-position" data-title="定位相关笔记" data-url="http://avalonlz.github.io/2016/10/19/about-position/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

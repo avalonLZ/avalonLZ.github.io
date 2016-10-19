@@ -6,88 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>定位相关笔记 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="LBS、GNSS、WiFi定位方式
-LBS:
-
-COO、Cell——ID定位（单基站）
-
-七号信令定位（单基站）
-
-TOA（到达时间）/TDOA（到达时间差）定位（三基站）
-
-AOA（到达角度）定位（两基站）
-
-基于场强的定位（三基站）
-
-AGPS混合定位
-
-
-
-GNSS:
-GPS
-
-北斗
-
-伽利略
-
-Glonass">
+  <meta name="description" content="罗列一些LBS、GNSS、WiFi的定位方法，以及对应的三种模块的数据解析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="定位相关笔记">
 <meta property="og:url" content="http://avalonlz.github.io/2016/10/19/about-position/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="LBS、GNSS、WiFi定位方式
-LBS:
-
-COO、Cell——ID定位（单基站）
-
-七号信令定位（单基站）
-
-TOA（到达时间）/TDOA（到达时间差）定位（三基站）
-
-AOA（到达角度）定位（两基站）
-
-基于场强的定位（三基站）
-
-AGPS混合定位
-
-
-
-GNSS:
-GPS
-
-北斗
-
-伽利略
-
-Glonass">
-<meta property="og:updated_time" content="2016-10-19T15:02:12.171Z">
+<meta property="og:description" content="罗列一些LBS、GNSS、WiFi的定位方法，以及对应的三种模块的数据解析">
+<meta property="og:updated_time" content="2016-10-19T15:33:34.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="定位相关笔记">
-<meta name="twitter:description" content="LBS、GNSS、WiFi定位方式
-LBS:
-
-COO、Cell——ID定位（单基站）
-
-七号信令定位（单基站）
-
-TOA（到达时间）/TDOA（到达时间差）定位（三基站）
-
-AOA（到达角度）定位（两基站）
-
-基于场强的定位（三基站）
-
-AGPS混合定位
-
-
-
-GNSS:
-GPS
-
-北斗
-
-伽利略
-
-Glonass">
+<meta name="twitter:description" content="罗列一些LBS、GNSS、WiFi的定位方法，以及对应的三种模块的数据解析">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -277,16 +205,16 @@ Glonass">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>  <big>LBS、GNSS、WiFi定位方式</big></p>
-<h1 id="LBS"><a href="#LBS" class="headerlink" title="LBS:"></a>LBS:</h1><blockquote>
+        <p>罗列一些LBS、GNSS、WiFi的定位方法，以及对应的三种模块的数据解析<a id="more"></a></p>
+<h2 id="定位方法："><a href="#定位方法：" class="headerlink" title="定位方法："></a>定位方法：</h2><h3 id="LBS"><a href="#LBS" class="headerlink" title="LBS:"></a>LBS:</h3><blockquote>
 <ul>
 <li><p>COO、Cell——ID定位（单基站）</p>
 </li>
 <li><p>七号信令定位（单基站）</p>
 </li>
-<li><p>TOA（到达时间）/TDOA（到达时间差）定位（三基站）</p>
-</li>
 <li><p>AOA（到达角度）定位（两基站）</p>
+</li>
+<li><p>TOA（到达时间）/TDOA（到达时间差）定位（三基站）</p>
 </li>
 <li><p>基于场强的定位（三基站）</p>
 </li>
@@ -294,7 +222,8 @@ Glonass">
 </li>
 </ul>
 </blockquote>
-<h1 id="GNSS"><a href="#GNSS" class="headerlink" title="GNSS:"></a>GNSS:</h1><ul>
+<h3 id="GNSS"><a href="#GNSS" class="headerlink" title="GNSS:"></a>GNSS:</h3><blockquote>
+<ul>
 <li><p>GPS</p>
 </li>
 <li><p>北斗</p>
@@ -304,6 +233,10 @@ Glonass">
 <li><p>Glonass</p>
 </li>
 </ul>
+</blockquote>
+<h3 id="WiFi"><a href="#WiFi" class="headerlink" title="WiFi:"></a>WiFi:</h3><p>获取附近WiFi信号源的MAC地址上传到相应的定位服务器上，定位服务器搜索数据库，找到MAC地址所对应的经纬度坐标，并返回。</p>
+<p>##数据解析：</p>
+<h3 id="WiFi-ESP8266模块"><a href="#WiFi-ESP8266模块" class="headerlink" title="WiFi(ESP8266模块):"></a>WiFi(ESP8266模块):</h3><p>！<a href="http://7xs3i8.com1.z0.glb.clouddn.com/about-positionwifi%E7%8E%B0%E8%B1%A1.png" target="_blank" rel="external"></a></p>
 
       
     </div>

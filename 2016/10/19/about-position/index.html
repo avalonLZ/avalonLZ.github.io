@@ -13,7 +13,14 @@
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="罗列一些LBS、GNSS、WiFi的定位方法，以及对应的三种模块的数据解析">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/about-positionwifi%E7%8E%B0%E8%B1%A1.png">
-<meta property="og:updated_time" content="2016-10-19T16:20:01.553Z">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/about-position76C7658557984A09AE6170EAE5B345FE.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/about-positionD60B453D63534A958F553CE9C3C323E5.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/about-position968AED03D49B4885B4D4324D2ACA377A.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/about-positionB1C509F4EF0D4174B0DFA4C346549E7A.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/about-position8995AC157FC24194B51129CD9A555E33.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/about-position76E3C7ECB4C9462B8260582670CDB83D.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/about-positionAAC68BFF949540E38582BA05888A0463.jpg">
+<meta property="og:updated_time" content="2016-10-31T14:56:47.435Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="定位相关笔记">
 <meta name="twitter:description" content="罗列一些LBS、GNSS、WiFi的定位方法，以及对应的三种模块的数据解析">
@@ -242,7 +249,15 @@
 <blockquote>
 <p>获取附近WiFi信号源的MAC地址上传到相应的定位服务器上，定位服务器搜索数据库，找到MAC地址所对应的经纬度坐标，并返回。  </p>
 </blockquote>
-<h1 id="数据解析："><a href="#数据解析：" class="headerlink" title="数据解析："></a><strong>数据解析：</strong></h1><p><strong>WiFi(ESP8266模块):</strong><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/about-positionwifi%E7%8E%B0%E8%B1%A1.png" alt=""></p>
+<h1 id="数据解析："><a href="#数据解析：" class="headerlink" title="数据解析："></a><strong>数据解析：</strong></h1><p><strong>WiFi(ESP8266模块):</strong><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/about-positionwifi%E7%8E%B0%E8%B1%A1.png" alt=""><br>WifiInfo,1（wifi数量），c4…b3（mac地址），-90（wifi信号，信号最好-100），<em>1a(校验和$…到</em>之间所有<br>字符ASCII码的校验和，各字节做异或运算，得到校验和后，再转换16进制格式的ASCII字符)  </p>
+<p><strong>GPS模块：</strong></p>
+<p>打开此GNSS模块就会有数据输出，应该也是封装好指令的GNSS模块。数据格式符合NMEA-0183协议，返回数据如下：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/about-position76C7658557984A09AE6170EAE5B345FE.jpg" alt="">    </p>
+<h4 id="①-GPGGA（GPS定位信息）：重要，主要用来取水平精度衰减因子（HDOP）和高度"><a href="#①-GPGGA（GPS定位信息）：重要，主要用来取水平精度衰减因子（HDOP）和高度" class="headerlink" title="① GPGGA（GPS定位信息）：重要，主要用来取水平精度衰减因子（HDOP）和高度"></a>① GPGGA（GPS定位信息）：重要，主要用来取水平精度衰减因子（HDOP）和高度</h4><p>$GPGGA,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11>,<12>,<13>,<14><em>hh<cr><lf><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/about-positionD60B453D63534A958F553CE9C3C323E5.jpg" alt=""><br>$GPGGA（GGA协议头）,235949.317（定位点的UTC时间，协调世界时）,（纬度）,（纬度方向）,（经度）,（经度方向）,0（GPS定位指示状态）,（使用卫星数量）,（水平精度衰减因子）,（海平面高度）,M（高度单位）,（大地椭球面相对于海平面的高度）,M（高度单位）,（差分修订时间）,(差分参考基站ID号)</lf></cr></em>4D（校验和）<cr><lf>  </lf></cr></14></13></12></11></10></9></8></7></6></5></4></3></2></1></p>
+<h4 id="②GPGLL（地理定位信息）：重要"><a href="#②GPGLL（地理定位信息）：重要" class="headerlink" title="②GPGLL（地理定位信息）：重要"></a>②GPGLL（地理定位信息）：重要</h4><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/about-position968AED03D49B4885B4D4324D2ACA377A.jpg" alt=""><br>$GPGLL（GLL协议头）,（纬度）,（纬度方向）,（经度）,（经度方向）,235949.317（定位点的UTC时间）,V（状态 标志）,N（未知）*7F（校验和）  </p>
+<h4 id="③GPGSA（当前卫星信息）："><a href="#③GPGSA（当前卫星信息）：" class="headerlink" title="③GPGSA（当前卫星信息）："></a>③GPGSA（当前卫星信息）：</h4><p>$GPGSA,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11>,<12>,<13>,<14>,<15>,<16>,<17><em>hh<cr><lf><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/about-positionB1C509F4EF0D4174B0DFA4C346549E7A.jpg" alt=""><br>$GPGSA（GSA协议头）,A,1,,,,,,,,,,,,,,,</lf></cr></em>1E  </17></16></15></14></13></12></11></10></9></8></7></6></5></4></3></2></1></p>
+<h4 id="④GPGSV（可见卫星信息）："><a href="#④GPGSV（可见卫星信息）：" class="headerlink" title="④GPGSV（可见卫星信息）："></a>④GPGSV（可见卫星信息）：</h4><p>$GPGSV,<1>,<2>,<3>,<4>,<5>,<6>,<7>,…,<4>,<5>,<6>,<7><em>hh<cr><lf><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/about-position8995AC157FC24194B51129CD9A555E33.jpg" alt=""><br>$GPGSV,1,1,00</lf></cr></em>79（以上信息说明没有搜到卫星）  </7></6></5></4></7></6></5></4></3></2></1></p>
+<h4 id="⑤GPRMC-最简定位信息-：重要，主要取了磁偏角以上的数据"><a href="#⑤GPRMC-最简定位信息-：重要，主要取了磁偏角以上的数据" class="headerlink" title="⑤GPRMC(最简定位信息)：重要，主要取了磁偏角以上的数据"></a>⑤GPRMC(最简定位信息)：重要，主要取了磁偏角以上的数据</h4><p>$GPRMC,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11><em>hh<cr><lf><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/about-position76E3C7ECB4C9462B8260582670CDB83D.jpg" alt=""><br>$GPRMC（协议头）,235955.800（定位点UTC时间）,V（定位状态）,（纬度）,（纬度方向）,（经度）,（经度方向）,0.00（对地航速）,0.00（对地航向）,050180（定位点UTC日期）,（磁偏角）,（磁偏角方向）,N（未知）</lf></cr></em>44（校验和）  </11></10></9></8></7></6></5></4></3></2></1></p>
+<h4 id="⑥GPVTG（地面速度信息）："><a href="#⑥GPVTG（地面速度信息）：" class="headerlink" title="⑥GPVTG（地面速度信息）："></a>⑥GPVTG（地面速度信息）：</h4><p>$GPVTG,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8><em>hh<cr><lf><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/about-positionAAC68BFF949540E38582BA05888A0463.jpg" alt=""><br>$GPVTG,0.00,T,,M,0.00,N,0.00,K,N</lf></cr></em>32</8></7></6></5></4></3></2></1></p>
 
       
     </div>

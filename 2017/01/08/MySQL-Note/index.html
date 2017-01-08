@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>MySQL_Note | 木子人人人&#39;s Blog</title>
+  <title>MySQL | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="MySQL数据库学习笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL_Note">
+<meta property="og:title" content="MySQL">
 <meta property="og:url" content="http://avalonlz.github.io/2017/01/08/MySQL-Note/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="MySQL数据库学习笔记">
-<meta property="og:updated_time" content="2017-01-08T03:44:12.535Z">
+<meta property="og:updated_time" content="2017-01-08T10:09:20.457Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL_Note">
+<meta name="twitter:title" content="MySQL">
 <meta name="twitter:description" content="MySQL数据库学习笔记">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
@@ -184,7 +184,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      MySQL_Note
+      MySQL
     </h1>
   
 
@@ -207,9 +207,71 @@
       
         <p>MySQL数据库学习笔记<a id="more"></a>  </p>
 <h1 id="ubuntu下安装MySQL"><a href="#ubuntu下安装MySQL" class="headerlink" title="ubuntu下安装MySQL"></a><strong>ubuntu下安装MySQL</strong></h1><p>1.sudo apt-get install mysql-server<br>2.sudo apt-get install mysql-client<br>3.sudo apt-get install libmysqlclient-dev  </p>
-<h1 id="查看MySQL版本"><a href="#查看MySQL版本" class="headerlink" title="查看MySQL版本"></a><strong>查看MySQL版本</strong></h1><p>mysql -V  </p>
-<h1 id="MySQL常用命令"><a href="#MySQL常用命令" class="headerlink" title="MySQL常用命令"></a><strong>MySQL常用命令</strong></h1><p>登录数据库<br>mysql -uroot -p<br>显示所有数据库<br>show databases;<br>创建数据库<br>create databases  database_name<br>选定数据库<br>use database_name<br>查看所有表<br>show tables;<br>创建表<br>create table table_name<br>(<br>id int unsigned not null auto_increment primary key,<br>name char(8) not null,<br>sex char(2) not null,<br>age tinyint unsigned not null,<br>tel char(13) null default “-“<br>);<br>删除表<br>drop table tabe_name;<br>添加内容到表table_name中<br>insert into table_name values(1,”lizhong”,”man”,22,”18040109422”)<br>查看表中内容<br>select * from table_name;<br>查看表结构<br>desc table_name;<br>修改表某列的类型<br>alter table 表名 modify 列名 类型;<br>修改表的列名和类型<br>alter table 表名 change 原列名 新列名 类型;<br>删除表的某一列<br>alter table 表名 drop 列名;<br>添加某一列<br>alter table 表名 add 列名 类型;<br>修改表名<br>alter table 表名 rename 新表名;<br>修改表中数据<br>updata 表名 set 列名 = 需要改成的值 where 条件;（条件是用来指定修改哪个数据，例如条件写为id = 1）</p>
-
+<h1 id="查看MySQL版本"><a href="#查看MySQL版本" class="headerlink" title="查看MySQL版本"></a><strong>查看MySQL版本</strong></h1><pre><code>mysql -V  
+</code></pre><h1 id="MySQL常用命令"><a href="#MySQL常用命令" class="headerlink" title="MySQL常用命令"></a><strong>MySQL常用命令</strong></h1><p>登录数据库：    </p>
+<pre><code>mysql -uroot -p  
+</code></pre><p>显示所有数据库：    </p>
+<pre><code>show databases;  
+</code></pre><p>创建数据库：    </p>
+<pre><code>create databases  database_name  
+</code></pre><p>选定数据库：   </p>
+<pre><code>use database_name  
+</code></pre><p>查看所有表：  </p>
+<pre><code>show tables;  
+</code></pre><p>创建表：   </p>
+<pre><code>create table table_name  
+(  
+id int unsigned not null auto_increment primary key,  
+name char(8) not null,  
+sex char(2) not null,
+age tinyint unsigned not null,  
+tel char(13) null default &quot;-&quot;  
+);  
+</code></pre><p>删除表：    </p>
+<pre><code>drop table tabe_name;  
+</code></pre><p>添加内容到表table_name中：    </p>
+<pre><code>insert into table_name values(1,&quot;lizhong&quot;,&quot;man&quot;,22,&quot;18040109422&quot;)  
+</code></pre><p>查看表中内容：    </p>
+<pre><code>select * from table_name;  
+</code></pre><p>查看表结构：    </p>
+<pre><code>desc table_name;  
+</code></pre><p>修改表某列的类型：    </p>
+<pre><code>alter table 表名 modify 列名 类型;  
+</code></pre><p>修改表的列名和类型：    </p>
+<pre><code>alter table 表名 change 原列名 新列名 类型;  
+</code></pre><p>删除表的某一列：    </p>
+<pre><code>alter table 表名 drop 列名;  
+</code></pre><p>添加某一列：    </p>
+<pre><code>alter table 表名 add 列名 类型;  
+</code></pre><p>修改表名：    </p>
+<pre><code>alter table 表名 rename 新表名;  
+</code></pre><p>修改表中数据：  </p>
+<pre><code>updata 表名 set 列名 = 需要改成的值 where 条件;（条件是用来指定修改哪个数据，例如条件写为id = 1）
+</code></pre><h1 id="Python操作MySQL"><a href="#Python操作MySQL" class="headerlink" title="Python操作MySQL"></a><strong>Python操作MySQL</strong></h1><p>安装MySQLdb   </p>
+<pre><code>sudo apt-get install python-mysqldb  
+</code></pre><p>导入MySQLdb  </p>
+<pre><code>import MySQLdb  
+</code></pre><p>连接数据库  </p>
+<pre><code>db = MySQLdb.connect(&quot;localhost&quot;,&quot;user(root)&quot;,&quot;password&quot;,&quot;DataBase_name(lizhong)&quot;)    
+</code></pre><p>使用cursor()方法获取操作游标  </p>
+<pre><code>cu = db.cursor()  
+</code></pre><p>利用execute()方法操作数据库  </p>
+<pre><code>cu.execute(&quot;数据库操作语句&quot;)  
+</code></pre><p>除了使用create table table_name(…)创建表语句不需要提交数据库执行外，其他添加、修改、删除都需要提交修改  </p>
+<pre><code>db.commit()#提交修改  
+</code></pre><p>查询  </p>
+<pre><code>cu.execute(&quot;select * from table_name&quot;)  
+results = cu.fetchall()#获取所有记录列表  
+for row in results:  
+fname = row[0]  
+lname = row[1]  
+age = row[2]  
+sex = row[3]  
+income = row[4]  
+print &quot;fname:%s&quot;,lname:%s,age:%d,sex:%s,income:%d % (fname, lanme, age, sex, income)  
+</code></pre><p>关闭数据库连接  </p>
+<pre><code>db.close()
+</code></pre>
       
     </div>
     
@@ -222,7 +284,7 @@
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          Django_Note
+          Django
         
       </div>
     </a>
@@ -264,7 +326,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="MySQL-Note" data-title="MySQL_Note" data-url="http://avalonlz.github.io/2017/01/08/MySQL-Note/"></div>
+	<div class="ds-thread" data-thread-key="MySQL-Note" data-title="MySQL" data-url="http://avalonlz.github.io/2017/01/08/MySQL-Note/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

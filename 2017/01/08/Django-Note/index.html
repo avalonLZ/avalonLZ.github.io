@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Django_Note | 木子人人人&#39;s Blog</title>
+  <title>Django | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="记录Django框架的学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Django_Note">
+<meta property="og:title" content="Django">
 <meta property="og:url" content="http://avalonlz.github.io/2017/01/08/Django-Note/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="记录Django框架的学习">
-<meta property="og:updated_time" content="2017-01-08T04:13:49.714Z">
+<meta property="og:updated_time" content="2017-01-08T09:09:06.475Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Django_Note">
+<meta name="twitter:title" content="Django">
 <meta name="twitter:description" content="记录Django框架的学习">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
@@ -184,7 +184,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Django_Note
+      Django
     </h1>
   
 
@@ -207,7 +207,20 @@
       
         <p>记录Django框架的学习<a id="more"></a>  </p>
 <h1 id="安装Django"><a href="#安装Django" class="headerlink" title="安装Django"></a><strong>安装Django</strong></h1><p>sudo apt-get install python-django -y  </p>
-<h1 id="Django的简单配置"><a href="#Django的简单配置" class="headerlink" title="Django的简单配置"></a><strong>Django的简单配置</strong></h1><p>1.在根目录下创建一个项目：django-admin startproject newproject<br>2.进入项目文件夹，创建一个应用：python manage.py startapp one<br>3.在项目的settings.py文件中添加刚刚建立的应用（为了使用render函数渲染模板，）：  </p>
+<h1 id="Django的简单配置"><a href="#Django的简单配置" class="headerlink" title="Django的简单配置"></a><strong>Django的简单配置</strong></h1><p>1.在根目录下创建一个项目：django-admin startproject django1<br>  startproject创建的目录结构如下：  </p>
+<blockquote>
+<p>django1/<br>&#160; &#160; &#160; &#160;manage.py<br>&#160; &#160; &#160; &#160;django1/<br>&#160; &#160; &#160; &#160;&#160; &#160; &#160; &#160;__init__.py<br>&#160; &#160; &#160; &#160;&#160; &#160; &#160; &#160;settings.py<br>&#160; &#160; &#160; &#160;&#160; &#160; &#160; &#160;urls.py<br>&#160; &#160; &#160; &#160;&#160; &#160; &#160; &#160;wsgi.py    </p>
+</blockquote>
+<ul>
+<li>外层django1目录只是项目的一个容器，对于Django来说该目录名并不重要，可以重命名该文件夹  </li>
+<li>manage.py：它是一个实用的命令行工具，使用它可以与该Django项目进行交互，可以在django-admin.py and manage.py中查看manage.py所有细节。  </li>
+<li>内层django1目录是项目中的实际Python包，该目录名就是Python包名，通过它可以导入里面的任何东西。（例如：import django1.settings）  </li>
+<li>django1/__init__.py：一个空文件，告诉Python该目录是一个Python包  </li>
+<li>django1/setting.py :该Django项目的设置、配置。  </li>
+<li>django1/urls.py：该Django项目的URL声明，一份由Django驱动的网站“目录”  </li>
+<li>django1/wsgi.py：一个WSGI兼容的Web服务器的入口，用于项目的运行</li>
+</ul>
+<p>2.进入项目文件夹，创建一个应用：python manage.py startapp one<br>3.在项目的settings.py文件中添加刚刚建立的应用（为了使用render函数渲染模板，）：  </p>
 <pre><code>INSTALLED_APPS = (
     &apos;django.contrib.admin&apos;,
     &apos;django.contrib.auth&apos;,
@@ -216,7 +229,162 @@
     &apos;django.contrib.messages&apos;,
     &apos;django.contrib.staticfiles&apos;,
     &apos;one&apos;,
-)  
+)      
+</code></pre><h1 id="模板的使用"><a href="#模板的使用" class="headerlink" title="模板的使用"></a><strong>模板的使用</strong></h1><p>1.url配置（更改url.py文件）：<br>在url.py的patterns中添加类似    </p>
+<pre><code>url(r&apos;^one/&apos;,&apos;one.views.index&apos;)    
+</code></pre><p>的语句，引用界面在one文件夹下的views.py中的index视图函数<br>2.编写views.py文件的index函数，实现加载html文件（第一种写法）：  </p>
+<pre><code>from django.shortcuts import render
+from django.http import HttpResponse
+from django.template import loader,Context
+def index(req):
+    test_html = loader.get_template(&apos;test.html&apos;)#搜索app中templates文件夹下的test.html文件，并生成模板对象
+    text = Context({})#生成模板参数对象
+    return HttpResponse(test_html.render(text))#模板对象通过render方法加入模板参数用HttpResponse返回浏览器  
+</code></pre><p>加载html文件（第二种写法）：  </p>
+<pre><code>from django.shortcuts import render,render_to_response
+def index(req):
+    return render_to_response(&apos;test.html&apos;,{})#第一个为模板文件，第二个为模板参数  
+</code></pre><p>3.views变量（后台变量传递到前端显示），修改views.py：    </p>
+<pre><code>class person():
+     def __init__(self,name,age,sex):
+         self.name = name
+         self.age = age
+         self.sex = sex
+     def say(self):
+          return self.name
+ def index(req):
+     user = {&apos;name&apos;:&apos;lizhong&apos;,&apos;age&apos;:&apos;22&apos;,&apos;sex&apos;:&apos;man&apos;}
+     user2 = person(&apos;lz&apos;,&apos;23&apos;,&apos;man&apos;)
+     user3 = [&apos;c&apos;,&apos;c++&apos;,&apos;python&apos;]
+     direc = {&apos;title&apos;:&apos;test&apos;,&apos;hone&apos;:&apos;Test&apos;,&apos;li&apos;:user,&apos;zhong&apos;:user2,&apos;web&apos;:user3}
+     return render_to_response(&apos;test.html&apos;,direc)#template and parameter
+</code></pre><p>Html文件中可以接收title这样的普通变量、字典、以及对象（函数返回值和属性）和列表，但最外层都需要被一个字典所包围，前后端通过该字典的key值做出匹配（优先级关系：变量&gt;字典&gt;对象属性&gt;对象方法&gt;列表），html代码如下：  </p>
+<pre><code>&lt;title&gt;{{title}}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h&gt;Hello World!!!&lt;/h&gt;
+&lt;h1&gt;{{hone}}&lt;/h1&gt;
+&lt;h2&gt;user:&lt;/h2&gt;
+&lt;li&gt;name:{{li.name}}&lt;/li&gt;
+&lt;li&gt;age:{{li.age}}&lt;/li&gt;
+&lt;li&gt;sex:{{li.sex}}&lt;/li&gt;
+
+&lt;h2&gt;user2:&lt;/h2&gt;
+&lt;li&gt;name:{{zhong.name}}&lt;/li&gt;
+&lt;li&gt;age:{{zhong.age}}&lt;/li&gt;
+&lt;li&gt;sex:{{zhong.sex}}&lt;/li&gt;
+&lt;li&gt;{{zhong.name}} say :I am {{zhong.say}}&lt;/li&gt;
+
+&lt;h2&gt;user3:&lt;/h2&gt;
+&lt;li&gt;lanuageone:{{web.0}}&lt;/li&gt;
+&lt;li&gt;lanuagetwo:{{web.1}}&lt;/li&gt;
+&lt;li&gt;lanuagethree:{{web.2}}&lt;/li&gt;
+&lt;/body&gt;  
+</code></pre><p>4.标签（if else endif ,for endfor）的使用,views.py文件：  </p>
+<pre><code>class person():
+    def __init__(self,name,age,sex):
+        self.name = name
+        self.age = age
+        self.sex = sex
+        self.value = 1
+    def say(self):
+        return self.name
+
+def index(req):
+    user = person(&apos;lizhong&apos;,22,&apos;man&apos;)
+    direc = {&apos;user2&apos;:user,&apos;web&apos;:[&apos;python&apos;,&apos;c&apos;,&apos;c++&apos;]}
+    return render_to_response(&apos;tagtest.html&apos;,direc)  
+</code></pre><p>Html文件：    </p>
+<pre><code>&lt;body&gt;
+&lt;h&gt;Hello World!!!&lt;/h&gt;
+&lt;h1&gt;{{hone}}&lt;/h1&gt;
+&lt;h2&gt;user:&lt;/h2&gt;
+&lt;li&gt;name:{{li.name}}&lt;/li&gt;
+&lt;li&gt;age:{{li.age}}&lt;/li&gt;
+&lt;li&gt;sex:{{li.sex}}&lt;/li&gt;
+
+{% if user2.value == 1%}
+	<h2>user2:</h2>
+	<li>name:{{user2.name}}</li>
+	<li>age:{{user2.age}}</li>
+	<li>sex:{{user2.sex}}</li>
+	<li>{{user2.name}} say :I am {{user2.say}}</li>
+	{% else %}
+	{% endif %}
+
+&lt;h2&gt;user3:&lt;/h2&gt;
+{% for i in web %}
+	<li>{{forloop.counter}}.lanuage:{{i}}</li>#（forloop.counter有好几种for方法，此方法可以输出序列）
+	{% endfor %}
+&lt;/body&gt;  
+</code></pre><h1 id="在Django中操作MySQL数据库"><a href="#在Django中操作MySQL数据库" class="headerlink" title="在Django中操作MySQL数据库"></a><strong>在Django中操作MySQL数据库</strong></h1><p>1.在MySQL中创建DataBase<br>2.配置settings.py：<br>添加应用(INSTALLED_APPS)，添加数据库(DataBases)，安装south管理数据库  </p>
+<ul>
+<li><p>安装South：  </p>
+<p>  sudo pip install South  </p>
+</li>
+<li><p>把south加入到settings.py中的INSTALL_APPS中    </p>
+</li>
+</ul>
+<pre><code>INSTALLED_APPS = (
+        &apos;django.contrib.admin&apos;,
+        &apos;django.contrib.auth&apos;,
+        &apos;django.contrib.contenttypes&apos;,
+        &apos;django.contrib.sessions&apos;,
+        &apos;django.contrib.messages&apos;,
+        &apos;django.contrib.staticfiles&apos;,
+        &apos;one&apos;,  
+        &apos;south&apos;,
+    )  
+</code></pre><ul>
+<li>修改好后运行一次python manage.py syncdb  </li>
+<li><p>将之前建好的应用由South管理了,运行：  </p>
+<p>  python manage.py convert_to_south one(app_name)  </p>
+</li>
+<li><p>若该应用之前创建过相关的表，可以采用以下方法来“假装”用South创建的：    </p>
+<p>  python manage.py migrate one(app_name) –fake  </p>
+</li>
+</ul>
+<p>这个意思是，表我之前就建好了，现在只是用South记录下创建记录  </p>
+<ul>
+<li>之后当对one(aap_name).models做修改后，执行  </li>
+</ul>
+<pre><code>python manage.py schemamigration one(app_name) --auto  
+</code></pre><p>再执行  </p>
+<pre><code>python manage.py migrate  
+</code></pre><p>即可<br>3.编写app应用文件夹下的models.py文件     </p>
+<pre><code>#models.py
+from django.db import models
+class Employ(models.Model):#Databases set in setting.py  Employ is table, name is list,
+        name = models.CharField(max_length = 10, null = False ,blank = False)
+        age = models.PositiveSmallIntegerField(blank = False, null = False)
+        sex = models.CharField(max_length = 10, null = False, blank = False)
+        tel = models.CharField(max_length = 13, blank = False, null = False)
+        def __unicode__(self):
+            return self.name  
+</code></pre><p>最后附上Field常用字段及其选项  </p>
+<p>4.在Django上操作数据库  </p>
+<pre><code>python manage.py shell#进入Django-shell中  
+from one.models import Employ  
+#创建  
+first_var = Employ.objects.create(name = &apos;cc&apos;, age = 24)  
+#查询  
+print Employ.objects.get(id = 1).name或first_var.name  
+print Employ.objects.get(id = 1).age或first_var.age  
+
+#创建  
+first_var = Employ()  
+first_var.name = &quot;cc&quot;  
+first_var.age = 23  
+first_var.save()  
+#查询  
+search_var = Employ.objects.all()  
+print search_var[0].name  
+print search_var[0].age  
+</code></pre><p>5.数据库到前端显示  </p>
+<pre><code>search_var = Employ.objects.all()  
+return render_to_response(&apos;index.html&apos;,{&apos;name&apos;:search_var[0].name,&apos;age&apos;:search_var[0].age})  
+</code></pre><p>或者直接将数据库传递到前端，再通过前端模板标签进行处理  </p>
+<pre><code>return render_to_response(&apos;index&apos;,{&apos;person&apos;:search_var})
 </code></pre>
       
     </div>
@@ -228,7 +396,7 @@
   
   
     <a href="/2017/01/08/MySQL-Note/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">MySQL_Note</div>
+      <div class="article-nav-title">MySQL</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -263,7 +431,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Django-Note" data-title="Django_Note" data-url="http://avalonlz.github.io/2017/01/08/Django-Note/"></div>
+	<div class="ds-thread" data-thread-key="Django-Note" data-title="Django" data-url="http://avalonlz.github.io/2017/01/08/Django-Note/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

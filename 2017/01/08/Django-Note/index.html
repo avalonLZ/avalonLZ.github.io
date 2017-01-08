@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2017/01/08/Django-Note/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="记录Django框架的学习">
-<meta property="og:updated_time" content="2017-01-08T04:06:24.311Z">
+<meta property="og:updated_time" content="2017-01-08T04:12:23.444Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Django_Note">
 <meta name="twitter:description" content="记录Django框架的学习">
@@ -207,7 +207,7 @@
       
         <p>记录Django框架的学习<a id="more"></a>  </p>
 <h1 id="安装Django"><a href="#安装Django" class="headerlink" title="安装Django"></a><strong>安装Django</strong></h1><p>sudo apt-get install python-django -y  </p>
-<h1 id="Django的简单配置"><a href="#Django的简单配置" class="headerlink" title="Django的简单配置"></a><strong>Django的简单配置</strong></h1><p>1.在根目录下创建一个项目：django-admin startproject newproject<br>2.进入项目文件夹，创建一个应用：python manage.py startapp one<br>3.在项目的settings.py文件中添加刚刚建立的应用（为了使用render函数渲染模板，）：<br>    INSTALLED_APPS = (<br>        ‘django.contrib.admin’,<br>        ‘django.contrib.auth’,<br>        ‘django.contrib.contenttypes’,<br>        ‘django.contrib.sessions’,<br>        ‘django.contrib.messages’,<br>        ‘django.contrib.staticfiles’,<br>        ‘one’,<br>    )</p>
+<h1 id="Django的简单配置"><a href="#Django的简单配置" class="headerlink" title="Django的简单配置"></a><strong>Django的简单配置</strong></h1><p>1.在根目录下创建一个项目：django-admin startproject newproject<br>2.进入项目文件夹，创建一个应用：python manage.py startapp one<br>3.在项目的settings.py文件中添加刚刚建立的应用（为了使用render函数渲染模板，）：<br>‘’’<br>INSTALLED_APPS = (<br>    ‘django.contrib.admin’,<br>    ‘django.contrib.auth’,<br>    ‘django.contrib.contenttypes’,<br>    ‘django.contrib.sessions’,<br>    ‘django.contrib.messages’,<br>    ‘django.contrib.staticfiles’,<br>    ‘one’,<br>)<br>‘’’</p>
 
       
     </div>

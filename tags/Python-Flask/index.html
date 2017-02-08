@@ -4,21 +4,17 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>使用DNSpod做域名解析问题 | 木子人人人&#39;s Blog</title>
+  <title>Tag: Python_Flask | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="上GoDaddy买的域名，使用DNSpod做解析，按网上教程配置DNSpod出错，SO在此记录。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="使用DNSpod做域名解析问题">
-<meta property="og:url" content="http://avalonlz.github.io/2016/03/20/use-dnspod/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="木子人人人's Blog">
+<meta property="og:url" content="http://avalonlz.github.io/tags/Python-Flask/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="上GoDaddy买的域名，使用DNSpod做解析，按网上教程配置DNSpod出错，SO在此记录。">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135431.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135331.png">
-<meta property="og:updated_time" content="2016-03-21T16:18:11.156Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用DNSpod做域名解析问题">
-<meta name="twitter:description" content="上GoDaddy买的域名，使用DNSpod做解析，按网上教程配置DNSpod出错，SO在此记录。">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135431.png">
+<meta name="twitter:title" content="木子人人人's Blog">
+<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -170,129 +166,53 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-use-dnspod" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap">
   
-    <div class="article-meta">
-      <a href="/2016/03/20/use-dnspod/" class="article-date">
-  	<time datetime="2016-03-20T07:28:27.000Z" itemprop="datePublished">2016-03-20</time>
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2017/02/08/Flask-HomeMonitorSystem/" class="archive-article-date">
+  	<time datetime="2017-02-08T11:40:03.000Z" itemprop="datePublished">Feb 8</time>
 </a>
-    </div>
+        </div>
+    	 
   
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      使用DNSpod做域名解析问题
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2017/02/08/Flask-HomeMonitorSystem/">B/S模式家庭监控系统</a>
     </h1>
   
 
-      </header>
-      
-      <div class="article-info article-info-post">
-        
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DNSpod/">DNSpod</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python-Flask/">Python_Flask</a></li></ul>
 	</div>
 
-        
+          
 
+        </div>
         <div class="clearfix"></div>
-		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
-      </div>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>上GoDaddy买的域名，使用DNSpod做解析，按网上教程配置DNSpod出错，SO在此记录。<a id="more"></a>  </p>
-<ul>
-<li><p>首先在GoDaddy上买完域名，进入域名管理（域名详细信息），部分显示信息如下图<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135431.png" alt=""><br>GoDaddy上的配置主要是更改域名服务器，即借用DNSpod的免费域名解析服务器。  </p>
-</li>
-<li><p>进入DNSpod开启域名解析服务，添加需要解析的域名。之后点击刚才添加的域名进入域名解析配置，复制灰色的“记录值”即免费的域名解析服务器（F1G1NS1.DNSPOD.NET和F1G1NS2.DNSPOD.NET），填入GoDaddy上域名管理的“域名服务器处”，GoDaddy配置完成。  </p>
-</li>
-<li><p>回到DNSpod的域名解析配置，此处添加两个A记录即可，无需再添加CNAME（别名记录），两个A记录都指向需要访问的主机IP<img src="http://7xs3i8.com1.z0.glb.clouddn.com/godaddy%2BdnspodQQ%E6%88%AA%E5%9B%BE20160321135331.png" alt="">  </p>
-</li>
-<li><p>配置完成。<br>如果按网上某些教程添加CNAME记录，依然是可以Ping通，但是正常访问时可能会报unknow domain错误。</p>
-</li>
-</ul>
-
-      
-    </div>
-    
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2016/03/23/storage/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          关于存储设备
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2016/02/29/stm32-SysTick/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">stm32-SysTick嘀嗒定时器</div>
-      <strong class="article-nav-caption">></strong>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
 
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">分享到: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-    <a class="jiathis_button_twitter"></a>
-    <a class="jiathis_button_plus"></a> 
-    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
-
-
-
-
-
-
-<div class="duoshuo">
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="use-dnspod" data-title="使用DNSpod做域名解析问题" data-url="http://avalonlz.github.io/2016/03/20/use-dnspod/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"lizhong"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-	<!-- 多说公共JS代码 end -->
-</div>
-
-
-
+    
 
 </div>
       <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -335,9 +255,9 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false
 	}

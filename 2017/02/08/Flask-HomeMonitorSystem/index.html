@@ -6,19 +6,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>B/S模式家庭监控系统 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本科毕业设计，利用Raspberry Pi做的家庭监控系统，其中用了Python中的Flask框架。当时只是想把底层到Web的一条技术栈打通，就做了这么个东东，写个小教程吧。点文见图。">
+  <meta name="description" content="本科毕业设计，当时利用Raspberry Pi做的家庭监控系统，其中用了Python中的Flask框架。当时只是想把底层到Web的一条技术栈打通，就做了这么个东东，写个简单的小教程吧。点文见图。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="B/S模式家庭监控系统">
 <meta property="og:url" content="http://avalonlz.github.io/2017/02/08/Flask-HomeMonitorSystem/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="本科毕业设计，利用Raspberry Pi做的家庭监控系统，其中用了Python中的Flask框架。当时只是想把底层到Web的一条技术栈打通，就做了这么个东东，写个小教程吧。点文见图。">
+<meta property="og:description" content="本科毕业设计，当时利用Raspberry Pi做的家庭监控系统，其中用了Python中的Flask框架。当时只是想把底层到Web的一条技术栈打通，就做了这么个东东，写个简单的小教程吧。点文见图。">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design%E5%9B%BE%E7%89%872.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design%E5%9B%BE%E7%89%874.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design%E5%9B%BE%E7%89%873.jpg">
-<meta property="og:updated_time" content="2017-02-08T14:36:00.861Z">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_DesignQQ%E6%88%AA%E5%9B%BE20170219195230.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/2.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design1.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design3.png">
+<meta property="og:updated_time" content="2017-02-19T13:58:09.270Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="B/S模式家庭监控系统">
-<meta name="twitter:description" content="本科毕业设计，利用Raspberry Pi做的家庭监控系统，其中用了Python中的Flask框架。当时只是想把底层到Web的一条技术栈打通，就做了这么个东东，写个小教程吧。点文见图。">
+<meta name="twitter:description" content="本科毕业设计，当时利用Raspberry Pi做的家庭监控系统，其中用了Python中的Flask框架。当时只是想把底层到Web的一条技术栈打通，就做了这么个东东，写个简单的小教程吧。点文见图。">
 <meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design%E5%9B%BE%E7%89%872.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
@@ -110,7 +114,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/ADT/" style="font-size: 10px;">ADT</a> <a href="/tags/C/" style="font-size: 10px;">C</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/DNSpod/" style="font-size: 10px;">DNSpod</a> <a href="/tags/DataBases/" style="font-size: 10px;">DataBases</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/MQTT/" style="font-size: 10px;">MQTT</a> <a href="/tags/MTK/" style="font-size: 10px;">MTK</a> <a href="/tags/Python-Django/" style="font-size: 10px;">Python_Django</a> <a href="/tags/Python-Flask/" style="font-size: 10px;">Python_Flask</a> <a href="/tags/Raspberry-Pi/" style="font-size: 10px;">Raspberry Pi</a> <a href="/tags/STM32/" style="font-size: 20px;">STM32</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/双系统安装/" style="font-size: 10px;">双系统安装</a> <a href="/tags/存储/" style="font-size: 10px;">存储</a> <a href="/tags/定位/" style="font-size: 10px;">定位</a>
+						<a href="/tags/ADT/" style="font-size: 10px;">ADT</a> <a href="/tags/C/" style="font-size: 10px;">C</a> <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/DNSpod/" style="font-size: 10px;">DNSpod</a> <a href="/tags/DataBases/" style="font-size: 10px;">DataBases</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/MQTT/" style="font-size: 10px;">MQTT</a> <a href="/tags/MTK/" style="font-size: 10px;">MTK</a> <a href="/tags/Python-Django/" style="font-size: 10px;">Python_Django</a> <a href="/tags/Python-Flask/" style="font-size: 10px;">Python_Flask</a> <a href="/tags/Raspberry-Pi/" style="font-size: 10px;">Raspberry Pi</a> <a href="/tags/STM32/" style="font-size: 20px;">STM32</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/双系统安装/" style="font-size: 10px;">双系统安装</a> <a href="/tags/存储/" style="font-size: 10px;">存储</a> <a href="/tags/定位/" style="font-size: 10px;">定位</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
 					</div>
 				</section>
 				
@@ -121,7 +125,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">自动化专业EE方向不知名小本一枚，喜欢计算机，崇尚科技，热爱技术，当然偶尔也会二次元走一遭......文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">学习是一辈子的事.....文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -209,11 +213,70 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本科毕业设计，利用Raspberry Pi做的家庭监控系统，其中用了Python中的Flask框架。当时只是想把底层到Web的一条技术栈打通，就做了这么个东东，写个小教程吧。点文见图。<a id="more"></a>  </p>
+        <p>本科毕业设计，当时利用Raspberry Pi做的家庭监控系统，其中用了Python中的Flask框架。当时只是想把底层到Web的一条技术栈打通，就做了这么个东东，写个简单的小教程吧。点文见图。<a id="more"></a>  </p>
 <h4 id="实物图："><a href="#实物图：" class="headerlink" title="实物图："></a>实物图：</h4><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design%E5%9B%BE%E7%89%872.jpg" alt="">  </p>
 <h4 id="登录界面及控制界面："><a href="#登录界面及控制界面：" class="headerlink" title="登录界面及控制界面："></a>登录界面及控制界面：</h4><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design%E5%9B%BE%E7%89%874.jpg" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design%E5%9B%BE%E7%89%873.jpg" alt="">  </p>
-<h4 id="硬件开发环境："><a href="#硬件开发环境：" class="headerlink" title="硬件开发环境："></a>硬件开发环境：</h4><p>Raspberry Pi + usb免驱摄像头 + usb免驱无线网卡（Pi 3中集成了无线网卡） + 两个LED灯 + DHT11温湿度传感器 + ULN2003步进电机驱动板 + 一个步进电机  </p>
-<h4 id="软件开发环境："><a href="#软件开发环境：" class="headerlink" title="软件开发环境："></a>软件开发环境：</h4><p>Debain系统 + motion开源库 + fswebcam抓图软件 + Flask框架 </p>
+<h4 id="硬件开发环境："><a href="#硬件开发环境：" class="headerlink" title="硬件开发环境："></a>硬件开发环境：</h4><p>Raspberry Pi + usb免驱摄像头 + usb免驱无线网卡（Pi 3中集成了无线网卡） + 两个LED灯 + DHT11温湿度传感器 + ULN2003步进电机驱动板 + 一个步进电机 + USB-TTL串口调试工具（非必须）  </p>
+<h4 id="软件开发环境："><a href="#软件开发环境：" class="headerlink" title="软件开发环境："></a>软件开发环境：</h4><p>Debain系统 + motion开源库 + fswebcam抓图软件 + Flask框架    </p>
+<h4 id="硬件连接示意图"><a href="#硬件连接示意图" class="headerlink" title="硬件连接示意图"></a>硬件连接示意图</h4><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_DesignQQ%E6%88%AA%E5%9B%BE20170219195230.png" alt=""><br>按照以上硬件连接示意图将硬件设备接入树莓派，接下来就可以进行软件开发平台的搭建工作。  </p>
+<h4 id="软件开发平台的搭建"><a href="#软件开发平台的搭建" class="headerlink" title="软件开发平台的搭建"></a>软件开发平台的搭建</h4><h5 id="1、首先是Debain系统的安装："><a href="#1、首先是Debain系统的安装：" class="headerlink" title="1、首先是Debain系统的安装："></a>1、首先是Debain系统的安装：</h5><p>Raspberry Pi的Bootloader首先访问的是GPU内的Flash区域，Raspberry Pi出厂时将挂载TF卡的程序烧写进GPU的Flash中，所以想要让Raspberry Pi运行Debian Linux操作系统就需先将Debian烧写入TF卡中。此处建议使用Class10 TF卡，因为Class10相对读写速度较快，有利于程序在Raspberry Pi上的运行。<br>本次开发使用Win32diskimager对从Raspberry Pi官网下在的Debian系统进行TF卡烧写，本设计使用的是内核版本为4.1.13的Debian系统。烧写完成后将TF卡插入Raspberry Pi底部的MicroSD卡槽，启动Raspberry Pi。  </p>
+<h5 id="2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）"><a href="#2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）" class="headerlink" title="2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）"></a>2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）</h5><p>USB-TTL CH340串口调试工具和树莓连接图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/2.png" alt=""><br>在开发计算机上下载Putty软件。将CH340模块插入电脑USB口，安装驱动程序。<br>打开Putty软件，在Connection type选项中选择Serial（串口模式），在Serial line文本框中修改COM口，修改为设备管理器中所显示COM口。在Speed文本框中输入通讯波特率115200。点击Putty右下角的Open开始通讯并将Raspberry Pi上电。等待树莓启动后，在Raspberrypi login：的光标后输入默认用户名pi并回车输入密码raspberry。之后便成功登入了系统。  </p>
+<h5 id="3、WiFi模块的配置"><a href="#3、WiFi模块的配置" class="headerlink" title="3、WiFi模块的配置"></a>3、WiFi模块的配置</h5><p>接下来配置Raspberry Pi的WiFi模块。将WiFi模块插入USB口，在CLI界面输入命令：lsusb，出现所有采用USB协议通讯的设备。找到RTL8188CUS 802.11n WLAN Adapter设备，说明此时WiFi模块已被正确识别。接下来输入sudo iwlist wlan0 scan命令，将会列出附近所有WiFi信号的详细信息。在各个信号的SSID中找到家庭网络所命名的SSID，本次开发使用SSID为lz1。在确定可以检测到家庭网络后输入wpa_passphrase lz1(SSID用户名) 581218147（密码）并回车。出现下回显信息：    </p>
+<pre><code>network={
+        ssid=&quot;lz1&quot;
+        #psk=&quot;581218147&quot;
+        psk=4690a5c5b75c028fc5e3ba2eed03c0b93a06121b27bda85ff510a308e03ce5ea
+}    
+</code></pre><p>将此段信息复制并保存到/etc/wpa_supplicant/wpa_supplicant.conf文件内即在CLI界面输入sudo nano /etc/wpa_supplicant/wpa_supplicant.conf命令。保存退出后再输入sudo nano /etc/network/interfaces命令，进入interfaces文件内进行WiFi配置。在文件内用“#”注释其他配置信息并输入以下配置命令：<br>auto lo<br>iface lo inet loopback<br>iface eth0 inet dhcp<br>auto wlan0<br>allow-hotplug wlan0<br>iface wlan0 inet static<br>wpa-ssid “lz1”<br>wpa-psk “581218147”<br>address 192.168.191.2<br>保存退出后，在CLI界面先后分别输入sudo ifdown wlan0和sudo ifup wlan0命令重启wlan0，之后在输入ifconfig命令，出现wlan0 WiFi连接的详细信息：  </p>
+<pre><code>wlan0     Link encap:Ethernet  HWaddr e8:4e:06:26:e2:15
+          inet addr:192.168.191.2  Bcast:192.168.191.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:25 errors:0 dropped:11 overruns:0 frame:0
+          TX packets:8 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:3883 (3.7 KiB)  TX bytes:872 (872.0 B)  
+</code></pre><p>可以看到此时设备已经正确获取了设置IP，至此WiFi模块配置完成。</p>
+<h5 id="4、Flask框架的安装"><a href="#4、Flask框架的安装" class="headerlink" title="4、Flask框架的安装"></a>4、Flask框架的安装</h5><p>WiFi配置完成便可以访问到互联网。可以开始Flask平台的搭建，首先需要安装Python2.7版本，因为此Raspberry Pi下的Debian Linux操作系统自带了Python2.7版本，所以直接进行pip命令的安装。使用sudo apt-get install python-pip命令直接下载安装pip即可。安装完成后可以使用pip –help命令查看是否成功安装，若成功安装便会在窗口显示“Usage: pip COMMAND [OPTIONS]”等说明帮助。之后使用pip对flask进行安装。执行sudo pip install flask命令。窗口出现“Successfully installed flask Werkzeug Jinja2 itsdangerous MarkupSafe”字样说明已经成功安装Flask，可以写一个.py文件进行简单测试。执行cd /home/pi/Desktop命令进入桌面，使用mkdir test命令新建一个test文件夹并进入。使用sudo nano test.py命令并在其中输入以下代码：  </p>
+<pre><code>from flask import Flask  
+app = Flask(__name__)
+@app.route(&apos;/&apos;)
+def hello_world():
+    return &apos;Hello World!&apos;
+if __name__ == &apos;__main__&apos;:
+    app.run(&quot;192.168.191.2&quot;)  
+</code></pre><p>如此创建一个简单的Flask工程，测试Flask环境是否已经搭建完成。在同一网段终端设备的浏览器地址栏输入<a href="http://192.168.191.2:5000/并回车，出现下图所示画面则说明Flask应用框架开发平台搭建完成。" target="_blank" rel="external">http://192.168.191.2:5000/并回车，出现下图所示画面则说明Flask应用框架开发平台搭建完成。</a><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design1.png" alt=""><br>接下来开始使用摄像头部分的环境搭建。首先将USB摄像头接入Raspberry Pi的USB口，输入lsusb命令，回显出现Z-Star Microelectronics Corp. Venus USB2.0 Camera字样，则说明系统可以识别出该USB摄像头。再输入ls /dev/vid*查看是否有对应驱动程序，当回显/dev/video0时说明Linux已经有了USB摄像头的驱动程序。接下来便可以开始开源软件Motion的安装以及配置工作。  </p>
+<h5 id="5、Motion的安装及其配置"><a href="#5、Motion的安装及其配置" class="headerlink" title="5、Motion的安装及其配置"></a>5、Motion的安装及其配置</h5><p>在CLI中输入sudo apt-get install motion安装Motion，安装完成后输入sudo nano /etc/default/motion在该文件内，将start_motion_daemon=no，改为start_motion_daemon=yes表示允许后台运行，保存并退出。之后进入sudo nano /etc/motion/motion.conf 进行Motion的详细配置。在此次开发中配置如下：  </p>
+<pre><code>daemon off #关闭Motion的守护进程（后台运行）功能。
+videodevice /dev/video0 #使用video0库驱动摄像头。
+# Values :
+# V4L2_PIX_FMT_SN9C10X : 0  &apos;S910&apos;
+# V4L2_PIX_FMT_SBGGR8  : 1  &apos;BA81&apos;
+# V4L2_PIX_FMT_MJPEG   : 2  &apos;MJPEG&apos;
+# V4L2_PIX_FMT_JPEG    : 3  &apos;JPEG&apos;
+# V4L2_PIX_FMT_RGB24   : 4  &apos;RGB3&apos;
+# V4L2_PIX_FMT_UYVY    : 5  &apos;UYVY&apos;
+# V4L2_PIX_FMT_YUYV    : 6  &apos;YUYV&apos;
+# V4L2_PIX_FMT_YUV422P : 7  &apos;422P&apos;
+# V4L2_PIX_FMT_YUV420  : 8  &apos;YU12&apos;
+v4l2_palette 5 #选择摄像头的采样模式，这个选项是根据摄像头自身所支持的采样模式来选择的，此次开发使用的USB摄像头支持UYVY模式所以选择5。
+width 176 #图像宽度，受带宽影响为了图像传输顺畅暂时设置为176。
+height 144 #图像高度，受带宽影响为了图像传输顺畅暂时设置为144。
+framerate 10 # framerate为1秒帧率默认为2，最高100也就是一秒拍摄传输2张图像，经过比较测试发现此参数设置为10可以基本符合要求。
+output_all off #不保存拍摄到的图像。
+output_normal on #保存检测到运动物体时的图像。
+ffmpeg_cap_new off #检测到运动物体时不进行摄像。
+locate off #关闭本地查看功能。
+target_dir /home/lz/motion-images #设置照片存放路径，需要将此路径设置成最低权限。
+; thread /usr/local/etc/thread1.conf
+#; thread /usr/local/etc/thread2.conf
+#; thread /usr/local/etc/thread3.conf
+#; thread /usr/local/etc/thread4.conf #以上四条设置是否开启多个摄像头采集画面，由于本次设计只采用一个摄像头，所以只启用了一条配置线程。其他的配置选项都可以按Motion的默认参数来配置。最后保存并退出配置文件，执行update-rc.d -f motion remove命令删除Motion开启启动项。  
+</code></pre><p>以上所配置的只是Motion众多配置中的冰山一角，Motion还支持很多强大的功能，如有需要还可以随时进行更改。至此，完成了Motion的配置，下面进行简单测试。退出配置文件后在终端窗口中输入sudo service motion start命令启动Motion，之后通过同一网段终端浏览器访问Raspberry Pi的8081端口，出现下图所示画面则说明配置成功，可以进行下一步开发。<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Graduation_Design3.png" alt="">  </p>
+<h5 id="6、外围模块设计-DHT11"><a href="#6、外围模块设计-DHT11" class="headerlink" title="6、外围模块设计-DHT11"></a>6、外围模块设计-DHT11</h5><p>根据DHT11的DataSheet编写相应的Python程序对模块进行驱动，具体实现函数见：<br><a href="https://github.com/avalonLZ/Flask_HomeMonitorSystem/blob/master/dht11.py" target="_blank" rel="external">https://github.com/avalonLZ/Flask_HomeMonitorSystem/blob/master/dht11.py</a></p>
+<h5 id="7、外围模块设计-驱动步进电机"><a href="#7、外围模块设计-驱动步进电机" class="headerlink" title="7、外围模块设计-驱动步进电机"></a>7、外围模块设计-驱动步进电机</h5><p>在步进电机的驱动方面，是采用UNL2003高耐压、大电流复合晶体管阵列对28BYJ-48五线四相步进电机进行驱动。06号GPIO口作为INT1口的输入，13号GPIO口作为INT2的输入，19号GPIO口作为INT3的输入26号GPIO口作为INT4的输入。暂时使用了单四拍设计。具体实现函数见：<br><a href="https://github.com/avalonLZ/Flask_HomeMonitorSystem/blob/master/motor.py" target="_blank" rel="external">https://github.com/avalonLZ/Flask_HomeMonitorSystem/blob/master/motor.py</a>  </p>
+<h5 id="8、Web前端设计"><a href="#8、Web前端设计" class="headerlink" title="8、Web前端设计"></a>8、Web前端设计</h5><p>Web界面当时做的比较随意，并没有花很多时间去深入学习各种前端技术，简单的做了几个界面，Html及CSS见：<br><a href="https://github.com/avalonLZ/Flask_HomeMonitorSystem/tree/master/templates" target="_blank" rel="external">https://github.com/avalonLZ/Flask_HomeMonitorSystem/tree/master/templates</a>  </p>
+<h5 id="9、用Flask框架实现后台逻辑"><a href="#9、用Flask框架实现后台逻辑" class="headerlink" title="9、用Flask框架实现后台逻辑"></a>9、用Flask框架实现后台逻辑</h5><p>后台逻辑主要使用了Flask框架来实现，在HTTP协议中浏览器请求主要分为GET和POST请求两种类型。简单来说GET方式是从服务器中获取数据，而POST方式则是提交数据到服务器。本次后台设计也就主要以这两种请求方式分别设计实现函数。具体Python代码见：<br><a href="https://github.com/avalonLZ/Flask_HomeMonitorSystem/blob/master/app.py" target="_blank" rel="external">https://github.com/avalonLZ/Flask_HomeMonitorSystem/blob/master/app.py</a>  </p>
+<p>至此整个家庭监控系统就搭建完成了，在Flask项目所在文件夹下使用sudo python app.py命令即可运行查看效果了，最后还可以将这个命令添加到Linux下的自启动脚本中，这样每当树莓派启动就会启动这个监控系统，同一网段的终端就可以通过浏览器对设备所处环境进行视频监控了（不过这视频流走的是MJPEG格式，如果是WiFi建立的局域网还是会存在1-2秒的延迟）。<br>整个项目的代码放在GitHub仓库中，如有需要可访问：<br><a href="https://github.com/avalonLZ/Flask_HomeMonitorSystem" target="_blank" rel="external">https://github.com/avalonLZ/Flask_HomeMonitorSystem</a>    </p>
 
       
     </div>
@@ -222,6 +285,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2017/02/19/Freescale_PID/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          PD控制、位置PID以及增量PID
+        
+      </div>
+    </a>
   
   
     <a href="/2017/02/07/Wechat-Autoreply/" id="article-nav-older" class="article-nav-link-wrap">

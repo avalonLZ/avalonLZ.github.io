@@ -4,17 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Tag: Raspberry Pi | 木子人人人&#39;s Blog</title>
+  <title>PD控制、位置PID以及增量PID | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="木子人人人's Blog">
-<meta property="og:url" content="http://avalonlz.github.io/tags/Raspberry-Pi/index.html">
+  <meta name="description" content="回忆大学时光，最感慨的还是两年飞卡。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PD控制、位置PID以及增量PID">
+<meta property="og:url" content="http://avalonlz.github.io/2017/02/19/Freescale_PID/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description">
+<meta property="og:description" content="回忆大学时光，最感慨的还是两年飞卡。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多">
+<meta property="og:updated_time" content="2017-02-19T14:15:14.443Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="木子人人人's Blog">
-<meta name="twitter:description">
+<meta name="twitter:title" content="PD控制、位置PID以及增量PID">
+<meta name="twitter:description" content="回忆大学时光，最感慨的还是两年飞卡。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -166,53 +167,110 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-Freescale_PID" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/04/01/raspberry-pi-commands/" class="archive-article-date">
-  	<time datetime="2016-04-01T03:58:34.000Z" itemprop="datePublished">Apr 1</time>
+    <div class="article-meta">
+      <a href="/2017/02/19/Freescale_PID/" class="article-date">
+  	<time datetime="2017-02-19T14:00:14.000Z" itemprop="datePublished">2017-02-19</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/04/01/raspberry-pi-commands/">Raspberry Pi-Commands</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PD控制、位置PID以及增量PID
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Raspberry-Pi/">Raspberry Pi</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/飞思卡尔/">飞思卡尔</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+      </div>
+      
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>回忆大学时光，最感慨的还是两年飞卡。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多<a id="more"></a>  </p>
+<h4 id="直立PD控制"><a href="#直立PD控制" class="headerlink" title="直立PD控制"></a>直立PD控制</h4><h4 id="位置PID控制"><a href="#位置PID控制" class="headerlink" title="位置PID控制"></a>位置PID控制</h4><h4 id="增量PID控制"><a href="#增量PID控制" class="headerlink" title="增量PID控制"></a>增量PID控制</h4>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/02/08/Flask-HomeMonitorSystem/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">B/S模式家庭监控系统</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Freescale_PID" data-title="PD控制、位置PID以及增量PID" data-url="http://avalonlz.github.io/2017/02/19/Freescale_PID/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"lizhong"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
 
 </div>
       <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -255,9 +313,9 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false
 	}

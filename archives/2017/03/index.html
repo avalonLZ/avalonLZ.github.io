@@ -4,21 +4,17 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>stm32-SysTick嘀嗒定时器 | 木子人人人&#39;s Blog</title>
+  <title>Archives: 2017/3 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="由stm32F103zet6嘀嗒定时器引申出的系统中断和外设中断问题。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="stm32-SysTick嘀嗒定时器">
-<meta property="og:url" content="http://avalonlz.github.io/2016/02/29/stm32-SysTick/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="木子人人人's Blog">
+<meta property="og:url" content="http://avalonlz.github.io/archives/2017/03/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="由stm32F103zet6嘀嗒定时器引申出的系统中断和外设中断问题。">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32ccc.jpg">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160328171647.png">
-<meta property="og:updated_time" content="2016-04-01T04:02:35.089Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="stm32-SysTick嘀嗒定时器">
-<meta name="twitter:description" content="由stm32F103zet6嘀嗒定时器引申出的系统中断和外设中断问题。">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32ccc.jpg">
+<meta name="twitter:title" content="木子人人人's Blog">
+<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -170,121 +166,53 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-stm32-SysTick" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap">
   
-    <div class="article-meta">
-      <a href="/2016/02/29/stm32-SysTick/" class="article-date">
-  	<time datetime="2016-02-29T13:48:54.000Z" itemprop="datePublished">2016-02-29</time>
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2017/03/26/Tetris/" class="archive-article-date">
+  	<time datetime="2017-03-26T06:46:15.000Z" itemprop="datePublished">Mar 26</time>
 </a>
-    </div>
+        </div>
+    	 
   
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      stm32-SysTick嘀嗒定时器
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2017/03/26/Tetris/">Tetris</a>
     </h1>
   
 
-      </header>
-      
-      <div class="article-info article-info-post">
-        
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/STM32/">STM32</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li></ul>
 	</div>
 
-        
+          
 
+        </div>
         <div class="clearfix"></div>
-		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
-      </div>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由stm32F103zet6嘀嗒定时器引申出的系统中断和外设中断问题。<a id="more"></a>  </p>
-<h1 id="嘀嗒定时器（SysTick）"><a href="#嘀嗒定时器（SysTick）" class="headerlink" title="嘀嗒定时器（SysTick）"></a><strong>嘀嗒定时器（SysTick）</strong></h1><p>在外部中断里使用滴答定时器延时（理论上中断里不可以延时，此处只做研究嘀嗒的工作方式用）,直接调用void SysTick_Init(void)函数后在中断中使用延时发现不起作用。（中断配置为只有抢占优先级模式，并且外部中断优先级设为1）<br>后找到SysTick_Init、SysTick_Config、NVIC_SetPriority函数，最后在NVIC_SetPriority函数中发现写了SCB系统控制寄存器组中SHP系统操作优先级寄存器的第11位（SHP[11]），默认SysTick初始化后是7。之后将该位写0（SCB-&gt;SHP[11]=0;），即把嘀嗒的优先级调到了0（最高）。开启后可行。<br>通过查看NVIC_SetPriority函数发现，配置32的中断优先级有两个寄存器，分别是配置配置系统中断和外设中断的，这二者的中断关系通过查看M3的权威手册<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32ccc.jpg" alt=""><br>发现是同级的关系，SO在有理论依据的基础上就可以大胆配置了。  </p>
-<p><font color="red"><strong>外部中断的IO口映像图：</strong><font><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160328171647.png" alt="">  </font></font></p>
-
-      
-    </div>
-    
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2016/03/20/use-dnspod/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          使用DNSpod做域名解析问题
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2016/02/29/stm32-gpio-function-configure/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">stm32-总线结构、引脚功能及其配置</div>
-      <strong class="article-nav-caption">></strong>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
 
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">分享到: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-    <a class="jiathis_button_twitter"></a>
-    <a class="jiathis_button_plus"></a> 
-    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
-
-
-
-
-
-
-<div class="duoshuo">
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="stm32-SysTick" data-title="stm32-SysTick嘀嗒定时器" data-url="http://avalonlz.github.io/2016/02/29/stm32-SysTick/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"lizhong"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-	<!-- 多说公共JS代码 end -->
-</div>
-
-
-
+    
 
 </div>
       <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -327,8 +255,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>排序算法 | 木子人人人&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="常见的排序算法练习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序算法">
+<meta property="og:url" content="http://avalonlz.github.io/2017/04/06/SortCaculate/index.html">
+<meta property="og:site_name" content="木子人人人's Blog">
+<meta property="og:description" content="常见的排序算法练习">
+<meta property="og:updated_time" content="2017-04-06T10:06:55.958Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="排序算法">
+<meta name="twitter:description" content="常见的排序算法练习">
+  
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="undefined" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">木子人人人</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">积跬步 至千里</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">木子人人人</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="undefined" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">木子人人人</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">积跬步 至千里</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-SortCaculate" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/06/SortCaculate/" class="article-date">
+  	<time datetime="2017-04-06T09:28:46.000Z" itemprop="datePublished">2017-04-06</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      排序算法
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>常见的排序算法练习<a id="more"></a>  </p>
+<h1 id="冒泡排序："><a href="#冒泡排序：" class="headerlink" title="冒泡排序："></a><strong>冒泡排序：</strong></h1><p>从小到大：<br>取数据A[0]将其与其后面的数据A[1]、A[2]、A[3]…等数据比较，遇到比A[0]更小的数就交换数值，再继续用A[0]和后面的数据比较，这样下来A[0]一定是这组数中最小的了。之后再取A[1]、A[2]、A[3]…等数据比较，和A[0]一样，A[1]最后成为剩下数据中最小的那一个…如此往复，直到排序结束。  </p>
+<h4 id="Code"><a href="#Code" class="headerlink" title="Code:"></a>Code:</h4><pre><code>template&lt;typename T, unsigned char SIZE&gt;
+void Data&lt;T, SIZE&gt;::bubble_smalltobig()
+{
+    cout &lt;&lt; &quot;**********************Bubble:small to big*******************************&quot; &lt;&lt; endl;
+    unsigned char i, j;
+
+    /*遇到小的马上交换，交换后，用小的继续和下面的数比较，边比较（轮询）边换位*/
+    for(i = 0; i &lt; SIZE; i++)
+    {
+        for(j = i + 1; j &lt; SIZE; j++)
+        {
+            if(data[i] &gt; data[j])
+            {
+                /*i、j互换也可以实现交换*/
+                data[j] ^= data[i];
+                data[i] = data[j] ^ data[i];
+                data[j] ^= data[i];
+            }        
+        }
+    }
+
+    for(i = 0; i &lt; SIZE; i++)
+    {
+        cout &lt;&lt; data[i] &lt;&lt; &quot; &quot;;
+    }
+
+    if(i == SIZE)
+    {
+        cout &lt;&lt; endl;
+    }    
+}
+</code></pre><h1 id="选择排序："><a href="#选择排序：" class="headerlink" title="选择排序："></a><strong>选择排序：</strong></h1><p>从大到小：<br>取数据A[0]，记录其下角标‘0’，并将其与后面的数据A[1]、A[2]、A[3]…等数据进行比较，遇到比A[0]更小的数则将A[0]的下角标记录并替换掉，继续用新的A[新下角标值]和后面的A[5]、A[6]、A[7]等数据比较，有更小的数则同样记录并替换，最后得到一个最小数据对应的下角标，如果这个下角标和‘0’不同，则进行交换，至此A[0]中将是这组数据中最小的一个。接着对A[1]也进行新一轮的判别，记录下角标‘1’…..如此循环往复，直到排序完成。  </p>
+<h4 id="Code-1"><a href="#Code-1" class="headerlink" title="Code:"></a>Code:</h4><pre><code>template&lt;typename T, unsigned char SIZE&gt;
+void Data&lt;T, SIZE&gt;::select_bigtosmall()
+{
+    cout &lt;&lt; &quot;****************************Select:big to small**********************************&quot; &lt;&lt; endl;
+
+    unsigned char i,j;
+    unsigned char note = 0;//记录最大数的下角标
+
+    /*先轮询一边，记录最大的数的下角标，之后在换位*/
+    for(i = 0; i &lt; SIZE ; i++)
+    {
+        note = i;
+        for(j = i + 1; j &lt; SIZE; j++)
+        {
+            if(data[note] &lt; data[j])
+                note = j;
+        }
+        if(note != i)
+        {
+            data[i] ^= data[note];
+            data[note] = data[i] ^ data[note];
+            data[i] ^= data[note];
+        }
+    }
+
+     for(i = 0; i &lt; SIZE; i++)
+    {
+        cout &lt;&lt; data[i] &lt;&lt; &quot; &quot;;
+    }
+
+    if(i == SIZE)
+    {
+        cout &lt;&lt; endl;
+    }
+}
+</code></pre><h1 id="插入排序："><a href="#插入排序：" class="headerlink" title="插入排序："></a><strong>插入排序：</strong></h1><p>从大到小：<br>数据A：45 35 84 1 36<br>首先假设45是已经排好序的，则取35，和A[0]比较，比45小则不动作，此时45和35也已经可以看做是一个从大到小的小的排序序列了45 35 84 1 36<br>然后再取84先和A[0]比较，发现84比A[0]大，则进行移位排序，排序后序列为84 45 35 1 36<br>再取1和A[0]比较，比84小，不触发排序，和A[1]比较，同样也不触发排序，和A[2]比较，依然没有触发排序，所以1原地不动84 45 35 1 36<br>再取36，和A[0]比较，比84小，不触发排序，和A[1]比，还是小，不触发排序，和A[2]比，比35大，触发排序移位，注意此时已经没有必要再和35后面的数比较了，因为35已经是之后的一段数中最大的了，所以要用break,最后84 45 36 35 1至此完成排序  </p>
+<h4 id="Code-2"><a href="#Code-2" class="headerlink" title="Code:"></a>Code:</h4><pre><code>template&lt;typename T, unsigned char SIZE&gt;
+void Data&lt;T, SIZE&gt;::insert_bigtosmall()
+{
+    cout &lt;&lt; &quot;*************************Insert:big to small*************************&quot; &lt;&lt; endl;
+    int i,j,k = 0;
+    T temp;
+
+    /*取一个数去和可能插入的左方的数比较，如果该数大于左方的被比较数则移位，因为保证了之前就是大到小排列，所以排完一次就break*/
+    for(i = 1; i &lt; SIZE; i++)
+    {
+        temp = data[i];
+
+        for(j = 0; j &lt; i ; j++)
+        {
+            if(data[i] &gt; data[j])
+            {
+                for(k = i - 1; k &gt;= j; k--)
+                {
+                    data[k+1] = data[k];
+                }
+                data[j] = temp;
+                break;
+            }
+        }
+    }
+
+    for(i = 0; i &lt; SIZE; i++)
+    {
+        cout &lt;&lt; data[i] &lt;&lt; &quot; &quot;;
+    }
+
+    if(i == SIZE)
+    {
+        cout &lt;&lt; endl;
+    }
+}
+</code></pre><h1 id="快速排序："><a href="#快速排序：" class="headerlink" title="快速排序："></a><strong>快速排序：</strong></h1><p>1、定中轴（一般取第一个数）<br>2、从后往前：找出后面更小的数放前面（第一个数处），同时前面的下角标自加<br>3、从前往后：找出前面更大的数放后面（最后一个数处），同时后面下角标自减<br>4、递归调用：利用中轴，分别进行前后两边的排序，递归结束条件 high&lt;=low  </p>
+<h4 id="Code-3"><a href="#Code-3" class="headerlink" title="Code:"></a>Code:</h4><pre><code>unsigned char quick(int *a, unsigned char low, unsigned char high)
+{
+    int temp = 0;
+    temp = a[low];
+    while(low &lt; high)
+    {
+        /*从后面开始找出小的放前面*/
+        while(low &lt; high &amp;&amp; a[high] &gt;= temp)
+        {
+            high--;
+        }
+
+        if(low &lt; high)
+        {
+            a[low] = a[high];
+            low++;
+        }
+
+        /*从前面开始找出大的放后面*/
+        while(low &lt; high &amp;&amp; a[low] &lt; temp)
+        {
+            low++;
+        }
+
+        if(low &lt; high)
+        {
+            a[high] = a[low];
+            high--;
+        }
+        a[low] = temp;
+    }
+    return low;
+}
+
+void quicksort(int a[], unsigned char low, unsigned char high)
+{
+    unsigned char temp = 0;
+
+    if(low &lt; high)
+    {
+        temp = quick(a, low, high);//先分两半
+        quicksort(a, temp+1, high);//对后半部分排序
+        quicksort(a, low, temp-1);//对前半部分排序
+    } 
+}
+</code></pre>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/27/Linux编程/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux编程</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+
+
+
+</div>
+      <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    	<!--	&copy; 2017 木子人人人 -->
+    	</div>
+      	<div class="footer-right">
+      	<!--	<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten -->
+		<span id="busuanzi_container_site_uv">Total visited <span id="busuanzi_value_site_uv"></span> times</span>
+		
+		
+		<script>
+		(function(){
+			var bp = document.createElement('script');
+			bp.src = '//push.zhanzhang.baidu.com/push.js';
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(bp, s);
+		})();
+		</script>
+		
+		
+      	</div>
+    </div>
+  </div>
+</footer>
+
+
+
+    </div>
+    
+
+<script>
+	var yiliaConfig = {
+		fancybox: undefined,
+		mathjax: undefined,
+		animate: undefined,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: undefined
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+  </div>
+</body>
+</html>

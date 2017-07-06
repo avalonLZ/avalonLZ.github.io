@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>python notes | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="python基础笔记。(内容较多,整理中)">
+  <meta name="description" content="python2.7笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python notes">
 <meta property="og:url" content="http://avalonlz.github.io/2015/10/16/python-notes/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="python基础笔记。(内容较多,整理中)">
-<meta property="og:updated_time" content="2017-06-18T14:46:29.875Z">
+<meta property="og:description" content="python2.7笔记">
+<meta property="og:updated_time" content="2017-07-06T15:42:40.472Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python notes">
-<meta name="twitter:description" content="python基础笔记。(内容较多,整理中)">
+<meta name="twitter:description" content="python2.7笔记">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -205,7 +205,255 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>python基础笔记。(内容较多,整理中)<a id="more"></a></p>
+        <p>python2.7笔记<a id="more"></a>  </p>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><ul>
+<li>id(a)可以查看a的地址  </li>
+</ul>
+<h3 id="输入输出"><a href="#输入输出" class="headerlink" title="输入输出"></a>输入输出</h3><ul>
+<li>raw_input():取得值为字符，化为整数需要用：int(raw_input)  </li>
+<li>print ‘xxxxxx’<br>(int():指可将纯数字字符串转成数字，type():可以查看变量类型)  </li>
+</ul>
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><ul>
+<li>3**2（运算结果为3^2）  </li>
+<li>5/2（2）  </li>
+<li>5.0/2（2.5）  </li>
+<li>5.0//2（2.0，整数除法，用于需要取商的整数部分，且除数或被除数中存在未知变量）  </li>
+<li>5%2（1）  </li>
+<li>成员测试:in, not in  </li>
+</ul>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><ul>
+<li>int: -2147483647~2147483647(超此变为long型)  </li>
+<li>213L(l)将强制定义为常整型  </li>
+<li>213.0将强制定义为浮点型  </li>
+<li>213j将强制定义为复数类型  </li>
+<li>‘213’或”213”将强制定义为字符串  </li>
+</ul>
+<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><ul>
+<li>单行注释：#  </li>
+<li>多行注释：’’’xxxx’’’  </li>
+</ul>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><ul>
+<li>a = ‘acvfs’  </li>
+<li>a[2]为v，此为索引。a[1]+a[2]为’cv’(Python中加号两边都为字符类型，则会进行字符连接。若有一边为int则会异常。两边都是序列也会进行连接，两边同类型则不会异常)  </li>
+</ul>
+<h3 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h3><ul>
+<li>a[0:5]为acvfs(注意结束点要+1)  </li>
+<li>a[:5]从0位置开始取到结尾  </li>
+<li>a[0:]从0位置开始取到结尾（更倾向于此种方式）  </li>
+</ul>
+<h3 id="步长"><a href="#步长" class="headerlink" title="步长"></a>步长</h3><ul>
+<li>a[::2] avs,此处步长为1  </li>
+<li>a[-1] s,负数反着取  </li>
+<li>a[:-1] acvf(负数最少都会丢一个尾数)  </li>
+<li>a[1:-1] cvf  </li>
+</ul>
+<h3 id="元组-tuple"><a href="#元组-tuple" class="headerlink" title="元组(tuple)"></a>元组(tuple)</h3><p>一般用于定义不变数据  </p>
+<pre><code>&gt;&gt;&gt; t = (&apos;lz&apos;, 23, &apos;boy&apos;)
+&gt;&gt;&gt; name , age, sex = t
+&gt;&gt;&gt; name
+&apos;lz&apos;
+&gt;&gt;&gt; age
+23
+&gt;&gt;&gt; sex
+&apos;boy&apos;
+&gt;&gt;&gt;  
+</code></pre><h3 id="列表-list"><a href="#列表-list" class="headerlink" title="列表(list)"></a>列表(list)</h3><p>列表操作方法：    </p>
+<ul>
+<li>取值操作：<br>切片和索引<br>列表名[]  </li>
+<li>添加：<br>列表名.append()  </li>
+<li>删除：<br>del(列表名)<br>list.remove(元素)（不用特意加引号，用于删除列表中第一次出现的某元素）<br>list.remove(列表名[xx])(用于删除列表中索引为xx的元素)  </li>
+<li>修改：<br>列表名.[xx] = xx  </li>
+<li>查找：<br>if 元素 in 列表名  </li>
+</ul>
+<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><ul>
+<li>字典添加值：dir[add key] = add value  </li>
+<li><p>字典修改值：dir[old key] = new value  </p>
+</li>
+<li><p>删除并返回key为’a’的元素:dict1.pop(‘a’)  </p>
+</li>
+<li>删除字典所有元素：dict1.clear()#将为空字典  </li>
+<li>删除整个字典：del dict1#将无此字典类型的变量  :</li>
+</ul>
+<p>一些常用函数：  </p>
+<ul>
+<li>dir.get(‘key’,3)#有’key’对应的value则取出，若没有则返回3这一数值  </li>
+<li>dir.values():打印所有value值,组成一个list  </li>
+<li>dir.keys():打印所有key值，组成一个list  </li>
+</ul>
+<h3 id="Python中的形参"><a href="#Python中的形参" class="headerlink" title="Python中的形参"></a>Python中的形参</h3><ul>
+<li><p>传入元组，元组元素依次对应形参传入函数：    </p>
+<pre><code>&gt;&gt;&gt; def parmarytest(x,y,z):
+        return x+y+z
+
+&gt;&gt;&gt; tuplenum = (1,2,3)
+&gt;&gt;&gt; parmarytest(*tuplenum)#传入元组时加入参数，可以使元组元素单独处理
+6
+&gt;&gt;&gt; listnum = [1,2,3]
+&gt;&gt;&gt; parmarytest(*list)#只可以使用元组，列表不行
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#10&gt;&quot;, line 1, in &lt;module&gt;
+parmarytest(*list)
+TypeError: parmarytest() argument after * must be a sequence, not type
+&gt;&gt;&gt; 
+</code></pre></li>
+<li><p>处理多余实参：    </p>
+<pre><code>&gt;&gt;&gt; def surplusparm(x,*y,**z):
+    print x
+    print y
+    print z
+
+&gt;&gt;&gt; surplusparm(1,2,3,4,5,6,a = 7, b = 8, c = 9)
+1
+(2, 3, 4, 5, 6)
+{&apos;a&apos;: 7, &apos;c&apos;: 9, &apos;b&apos;: 8}
+&gt;&gt;&gt; surplusparm(1,2,3,4,5,6,x = 7, b = 8, c = 9)
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#25&gt;&quot;, line 1, in &lt;module&gt;
+    surplusparm(1,2,3,4,5,6,x = 7, b = 8, c = 9)
+TypeError: surplusparm() got multiple values for keyword argument &apos;x&apos;
+&gt;&gt;&gt; 
+</code></pre></li>
+</ul>
+<h3 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h3><ul>
+<li><p>用lambda定义一个函数：    </p>
+<pre><code>g = lamdba x,y:x*y # 冒号后x*y为需要执行的内容。执行这个lamdba表达式：g(3,2)    
+fun = lamdba : function()#用fun()即可执行function()函数
+</code></pre></li>
+</ul>
+<h3 id="reduce函数"><a href="#reduce函数" class="headerlink" title="reduce函数"></a>reduce函数</h3><h3 id="switch实现"><a href="#switch实现" class="headerlink" title="switch实现"></a>switch实现</h3><ul>
+<li><p>Python中没有switch case语句，但可以用字典和它的get方法加lamdba语句实现：  </p>
+<pre><code>def NumberToString(arg):
+    switcher = {0:&apos;zero&apos;, 1:&apos;one&apos;, 2:&apos;two&apos;}  
+    return switcher.get(arg, &apos;none&apos;)  
+</code></pre></li>
+</ul>
+<h3 id="Python常用内置函数（可查看想关函数库进行详细了解）"><a href="#Python常用内置函数（可查看想关函数库进行详细了解）" class="headerlink" title="Python常用内置函数（可查看想关函数库进行详细了解）"></a>Python常用内置函数（可查看想关函数库进行详细了解）</h3><pre><code>abs()#返回绝对值  
+max()#返回最大值  
+min()#返回最小值  
+len()#返回字符串、列表、元组、字典的长度，字典长度按key或value个数来统计  
+divmod(x, y)#返回(x/y, x%y)  
+pow(x, y)#返回x^y的值  
+round(x)#返回x的浮点数形式  
+callable(func)#测试func()函数是否可被调用，可以返回true  
+type(x)#返回x的类型  
+isinstance(x, list)#判断x的类型是否是list是则true否则false  
+cmp(x, y)#比较x和y的大小，x&lt;y返回-1，x&gt;y返回1，相等返回0  
+range(x, y)#生成x至y-1个数组成的list（顺序）  
+tuple(x)#将x转换成元组  
+hex(x)#将十进制数x转换成十六进制数返回str类型  
+oct(x)#将十进制数x转换成八进制数，返回str类型  
+ord(x)#将一个ASCII码转换成十进制数，返回int类型  
+</code></pre><h3 id="String函数"><a href="#String函数" class="headerlink" title="String函数"></a>String函数</h3><pre><code>str1.capitalize()#将str1字符串的第一个字符大写  
+str1.replace(&apos;xxx&apos;, &apos;2&apos;, 1)#从左到右将str1字符串中的&apos;xxx&apos;字符串替换为&apos;2&apos;这一字符，替换一次  
+str1.split(&apos;.&apos;, 1)#将str1字符串以&apos;.为界切割一次，返回一个list，list内两个元素字符串分别为分割的左右两边  
+</code></pre><h3 id="序列处理函数"><a href="#序列处理函数" class="headerlink" title="序列处理函数"></a>序列处理函数</h3><ul>
+<li><p>filter(func, list):#func为过滤规则，list为输入量，tulpe也可以进行过滤  </p>
+<pre><code>&gt;&gt;&gt; list1 = [1,2,3,4,5,6,7]
+&gt;&gt;&gt; def f_fliter(x):#过滤规则，大于5的数保留
+    if x &gt;5:
+        return True
+&gt;&gt;&gt; filter(f_fliter, list1)
+[6, 7]
+&gt;&gt;&gt;     
+</code></pre></li>
+</ul>
+<ul>
+<li><p>zip(list1, list2):可以遍历两个列表，组成一个对应的由元组组成的新列表  </p>
+<pre><code>&gt;&gt;&gt; l = [2,4,5,6]
+&gt;&gt;&gt; li = [29,0,3]
+&gt;&gt;&gt; zip(li, l)
+[(29, 2), (0, 4), (3, 5)]
+&gt;&gt;&gt; zip(l,li)
+[(2, 29), (4, 0), (5, 3)]    
+</code></pre></li>
+<li><p>map(func, list1, list2):分别取两列表中的元素按func规定的方式进行处理，返回结果为一个list（list1和list2中的元素个数要相同）  </p>
+</li>
+</ul>
+<pre><code>&gt;&gt;&gt; li1 = [1,2,3,4]
+&gt;&gt;&gt; li2 = [5,6,7,8]
+&gt;&gt;&gt; def Add(x, y):
+    return x + y
+
+&gt;&gt;&gt; map(Add, li1, li2)
+[6, 8, 10, 12]
+&gt;&gt;&gt; li2 = [5,6,7,8,9]
+&gt;&gt;&gt; map(Add, li1, li2)
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#30&gt;&quot;, line 1, in &lt;module&gt;
+    map(Add, li1, li2)
+  File &quot;&lt;pyshell#27&gt;&quot;, line 2, in Add
+    return x + y
+TypeError: unsupported operand type(s) for +: &apos;NoneType&apos; and &apos;int&apos;
+&gt;&gt;&gt;  
+</code></pre><ul>
+<li><p>reduce(func, list):去列表中的元素按func定义的规则进行相应运算，并输出运算结果  </p>
+<pre><code>&gt;&gt;&gt; li1 = [1,2,3,4]
+&gt;&gt;&gt; def func(x, y):
+    return x + y
+
+&gt;&gt;&gt; reduce(func, li1)
+10
+&gt;&gt;&gt;   
+</code></pre></li>
+</ul>
+<h3 id="Python模块（库）"><a href="#Python模块（库）" class="headerlink" title="Python模块（库）"></a>Python模块（库）</h3><ul>
+<li>import的模块名和库名、脚本名相同：例如编写一个名为Items.py的脚本，则可在另一个脚本中使用import Items语句来导入它    </li>
+<li>__name__==’__main__’：在IDE中直接运行某py文件中的函数时等号会成立，若处于import引用的环境下则此处等号不成立  </li>
+<li>优先导入当前目录下的py文件  </li>
+<li>Python中的模块可以按目录组织为包：步骤如下：<br>建立了一个名字为包名字的文件夹<br>在该文件夹下创建一个__init__.py文件<br>根据需要在该文件夹下存放脚本文件、已编译扩展及子包<br>import pack.m1, pack.m2, pack.m3  </li>
+<li>from 文件夹名.py文件名 import .py文件中的类或函数 #from后一定要跟到.py文件，虽然导入的模块和当前编写的文件一般在同一文件夹中，但也可以用文件夹名来开头  </li>
+<li>import .py文件 #import后面跟到.py文件，在程序中具体要使用哪个类或者函数，再用.py文件名.类名/函数名，调用（一般推荐此种做法）  </li>
+</ul>
+<h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><h3 id="浅拷贝与深拷贝"><a href="#浅拷贝与深拷贝" class="headerlink" title="浅拷贝与深拷贝"></a>浅拷贝与深拷贝</h3><ul>
+<li><p>浅拷贝：  </p>
+<pre><code>&gt;&gt;&gt; a = [2,3,4]
+&gt;&gt;&gt; b = a#浅拷贝，可将b看做是一个a的引用（将b也放入了a的坑中），copy.copy(a)效果相同
+&gt;&gt;&gt; a.append(1)
+&gt;&gt;&gt; a
+[2, 3, 4, 1]
+&gt;&gt;&gt; b
+[2, 3, 4, 1]#a增加的同时b也增加了
+&gt;&gt;&gt; a = [0,6]#改变a的值，在Python中其实是将a丢入某个值中
+&gt;&gt;&gt; b#所以b并未改变，b还是在a之前的那个坑中
+[2, 3, 4, 1]
+</code></pre></li>
+<li><p>深拷贝：  </p>
+<pre><code>&gt;&gt;&gt; import copy
+&gt;&gt;&gt; a = [1,2,3]
+&gt;&gt;&gt; c = copy.deepcopy(a)#深拷贝，将a所在的坑重新复制了一个，并将c放入新坑中，所以c不能看做a的引用
+&gt;&gt;&gt; a.append(5)
+&gt;&gt;&gt; a#a增加
+[1, 2, 3, 5]
+&gt;&gt;&gt; c#c未增加
+[1, 2, 3]  
+</code></pre></li>
+</ul>
+<h3 id="Python文件读写"><a href="#Python文件读写" class="headerlink" title="Python文件读写"></a>Python文件读写</h3><p>mode:  </p>
+<ul>
+<li>r：只读  </li>
+<li>r+：读写  </li>
+<li>w：写入，先删除原文件，再重新写入，如果文件没有则创建  </li>
+<li>w+：读写，先删除原文件，再重新写入，如果文件没有则创建（可以写入输出）  </li>
+<li>a：写入，在文件末尾追加新的内容，文件不存在，则创建  </li>
+<li>a+：读写，在文件末尾追加新的内容，文件不存在，则创建  </li>
+<li>b：打开二进制的文件，可以与r,w,a,+结合使用  </li>
+<li>U：支持所有的换行符号  </li>
+</ul>
+<p>read：    </p>
+<pre><code>s = open/file(r&apos;路径&apos;)  
+s.read()  
+s.close()  
+</code></pre><p>write：  </p>
+<pre><code>s = open/file(r&apos;路径&apos;，&apos;w&apos;)  
+s.write(&apos;ssss&apos;)  
+s.close()#一定要执行这一步才会真正写入文件  
+</code></pre><h3 id="Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）"><a href="#Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）" class="headerlink" title="Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）"></a>Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）</h3><ul>
+<li>类定义-&gt;类对象（class test: ,test就是一个类对象）-&gt;类实例对象：含self的方法必须要有实例对象才能被调用，不含self，且不含参数的方法可以直接被类对象调用。有self作为形参定义的方法才是实例对象可用的方法  </li>
+<li>类中属性名若和方法名相同，则属性将会覆盖方法</li>
+</ul>
 
       
     </div>

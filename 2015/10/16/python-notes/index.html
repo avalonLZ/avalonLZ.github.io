@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2015/10/16/python-notes/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="python2.7笔记">
-<meta property="og:updated_time" content="2017-07-06T15:42:40.472Z">
+<meta property="og:updated_time" content="2017-07-07T03:47:50.708Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python notes">
 <meta name="twitter:description" content="python2.7笔记">
@@ -452,9 +452,25 @@ s.write(&apos;ssss&apos;)
 s.close()#一定要执行这一步才会真正写入文件  
 </code></pre><h3 id="Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）"><a href="#Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）" class="headerlink" title="Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）"></a>Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）</h3><ul>
 <li>类定义-&gt;类对象（class test: ,test就是一个类对象）-&gt;类实例对象：含self的方法必须要有实例对象才能被调用，不含self，且不含参数的方法可以直接被类对象调用。有self作为形参定义的方法才是实例对象可用的方法  </li>
-<li>类中属性名若和方法名相同，则属性将会覆盖方法</li>
+<li>类中属性名若和方法名相同，则属性将会覆盖方法  </li>
+<li>Python的重载只能使用def test(x, y, z=4)这种，参数默认值的方式实现重载（默认值就是python用来实现函数重载的重要方法）    </li>
+<li><p>私有变量的定义与访问  </p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>class test:</p>
+<pre><code>def __init__(self):
+    self.__test1 = 1
+</code></pre></blockquote>
+</blockquote>
+</blockquote>
+</li>
 </ul>
-
+<pre><code>&gt;&gt;&gt; o = test()
+&gt;&gt;&gt; o._test__test1
+1
+&gt;&gt;&gt; 
+</code></pre>
       
     </div>
     

@@ -6,16 +6,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>自写Terminal服务器部分 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="为巩固Python，深入学习Django，于是将手上定位终端的服务器部分(包括简单的Web数据显示)用Python在自己的VPS上实现了一遍，此文章记录了此次实现的全过程">
+  <meta name="description" content="为巩固Python，进一步学习Django、Bootstrap和JS，于是将手上定位终端的服务器部分(基本上就是简单的Web数据显示)用Python在自己的VPS上实现了一遍，此文章记录了此次实现的全过程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="自写Terminal服务器部分">
 <meta property="og:url" content="http://avalonlz.github.io/2017/06/18/Django-Terminal/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="为巩固Python，深入学习Django，于是将手上定位终端的服务器部分(包括简单的Web数据显示)用Python在自己的VPS上实现了一遍，此文章记录了此次实现的全过程">
-<meta property="og:updated_time" content="2017-06-18T14:57:14.456Z">
+<meta property="og:description" content="为巩固Python，进一步学习Django、Bootstrap和JS，于是将手上定位终端的服务器部分(基本上就是简单的Web数据显示)用Python在自己的VPS上实现了一遍，此文章记录了此次实现的全过程">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminallogin.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminalindex.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminaladmin.png">
+<meta property="og:updated_time" content="2017-07-07T07:54:05.957Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自写Terminal服务器部分">
-<meta name="twitter:description" content="为巩固Python，深入学习Django，于是将手上定位终端的服务器部分(包括简单的Web数据显示)用Python在自己的VPS上实现了一遍，此文章记录了此次实现的全过程">
+<meta name="twitter:description" content="为巩固Python，进一步学习Django、Bootstrap和JS，于是将手上定位终端的服务器部分(基本上就是简单的Web数据显示)用Python在自己的VPS上实现了一遍，此文章记录了此次实现的全过程">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminallogin.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -205,7 +209,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>为巩固Python，深入学习Django，于是将手上定位终端的服务器部分(包括简单的Web数据显示)用Python在自己的VPS上实现了一遍，此文章记录了此次实现的全过程<a id="more"></a>  </p>
+        <p>为巩固Python，进一步学习Django、Bootstrap和JS，于是将手上定位终端的服务器部分(基本上就是简单的Web数据显示)用Python在自己的VPS上实现了一遍，此文章记录了此次实现的全过程<a id="more"></a>  </p>
+<p>目前实现效果如下(咯简陋的点,前端只学了一丢丢)：<br>Login：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminallogin.png" alt=""><br>Index：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminalindex.png" alt=""><br>Admin：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminaladmin.png" alt="">  </p>
+<h1 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a><strong>数据库设计</strong></h1><p>对于这类Web应用，数据库的设计在写后台单独的入库程序的时候大部分就应该要设计好了，下图为我的数据库设计框图（哈哈，也比较简单，就用了外键的形式连接各表）：  </p>
 
       
     </div>

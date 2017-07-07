@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>C++notes | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="C++知识点，不定期更新。(整理中)">
+  <meta name="description" content="C++知识点，不定期更新">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++notes">
 <meta property="og:url" content="http://avalonlz.github.io/2016/01/27/C-notes-0/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="C++知识点，不定期更新。(整理中)">
-<meta property="og:updated_time" content="2017-06-18T14:43:22.987Z">
+<meta property="og:description" content="C++知识点，不定期更新">
+<meta property="og:updated_time" content="2017-07-07T07:54:06.763Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++notes">
-<meta name="twitter:description" content="C++知识点，不定期更新。(整理中)">
+<meta name="twitter:description" content="C++知识点，不定期更新">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -205,7 +205,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>C++知识点，不定期更新。(整理中)<a id="more"></a>  </p>
+        <p>C++知识点，不定期更新<a id="more"></a>    </p>
+<h1 id="面向对象设计思想"><a href="#面向对象设计思想" class="headerlink" title="面向对象设计思想"></a><strong>面向对象设计思想</strong></h1><p>一个需要做的东西A，先一层一层的找出最底层需要做的东西B，然后定义一个B类（允许只有方法），再将需要做的东西上升一个层次C再定一个C类（可以继承B,或者定义一个B类的变量，这样就可以包括B类的方法等），然后再上一层定义一个D类（同样继承C,或者定义一个C）…..如此直到到达A层  </p>
+<h1 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a><strong>虚函数</strong></h1><ul>
+<li>构造函数不可以为虚函数或纯虚函数，析构函数可以为虚函数或纯虚函数  </li>
+<li>virtual void function();//function为虚函数，需要在类中或类外对其进行实现，子类（派生类）可以重写它：void function()  </li>
+<li>纯虚函数（只在类中声明了函数体，并未在类中或类外定义该函数）：<br>virtual void function() = 0;//function为纯虚函数<br>纯虚函数相当于一接口，想要使用它就必须要派生类来具体实现其定义，这有利于编码的分工合作  </li>
+</ul>
+<h1 id="拷贝-复制构造函数"><a href="#拷贝-复制构造函数" class="headerlink" title="拷贝/复制构造函数"></a><strong>拷贝/复制构造函数</strong></h1><ul>
+<li>若要防止调用拷贝构造函数可声明一个private类型的拷贝函数<br>拷贝/复制构造函数：<br>func(const typename &amp; x)#注意没void，func的命名和class名相同<br>func(typename &amp; x)<br>func(volatile typename &amp; x)<br>func(const volatile typename &amp; x)  </li>
+</ul>
+<h1 id="重载与重写"><a href="#重载与重写" class="headerlink" title="重载与重写"></a><strong>重载与重写</strong></h1><ul>
+<li><p>重载：函数的重载，只要满足名字相同，参数不同就可以实现重载（类型或个数不同都可以实现重载），只有返回类型不同，其他相同，编译器会报错，无法实现重载。返回类型和参数同时改变则可以实现重载  </p>
+</li>
+<li><p>重写：需要返回类型相同，参数相同，函数名也相同才能实现重写。若只有返回类型不同，则会报错，若参数不同则会认为是另一个函数  </p>
+</li>
+</ul>
 
       
     </div>

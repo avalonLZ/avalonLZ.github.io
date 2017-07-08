@@ -12,10 +12,12 @@
 <meta property="og:url" content="http://avalonlz.github.io/2016/01/27/C-notes-0/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="C++知识点，不定期更新">
-<meta property="og:updated_time" content="2017-07-07T07:54:06.763Z">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/CPP_5FFD4E134F024ADD867A67124671F280.jpg">
+<meta property="og:updated_time" content="2017-07-08T10:01:40.749Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++notes">
 <meta name="twitter:description" content="C++知识点，不定期更新">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/CPP_5FFD4E134F024ADD867A67124671F280.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -207,21 +209,100 @@
       
         <p>C++知识点，不定期更新<a id="more"></a>    </p>
 <h1 id="面向对象设计思想"><a href="#面向对象设计思想" class="headerlink" title="面向对象设计思想"></a><strong>面向对象设计思想</strong></h1><p>一个需要做的东西A，先一层一层的找出最底层需要做的东西B，然后定义一个B类（允许只有方法），再将需要做的东西上升一个层次C再定一个C类（可以继承B,或者定义一个B类的变量，这样就可以包括B类的方法等），然后再上一层定义一个D类（同样继承C,或者定义一个C）…..如此直到到达A层  </p>
+<h1 id="类的声明和定义"><a href="#类的声明和定义" class="headerlink" title="类的声明和定义"></a><strong>类的声明和定义</strong></h1><pre><code>class A;//声明
+class A{
+    ...
+};//定义,若在类中有实例化其他类的对象，需要在此类定义前，加入其他类的声明  
+</code></pre><h1 id="类继承相关：默认private继承"><a href="#类继承相关：默认private继承" class="headerlink" title="类继承相关：默认private继承"></a><strong>类继承相关：默认private继承</strong></h1><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/CPP_5FFD4E134F024ADD867A67124671F280.jpg" alt="">   </p>
+<ul>
+<li><p>子类继承模板类的时候，记得加与该子类相同的模板参数：   </p>
+<pre><code>template &lt;typename P&gt;  
+class Child:public Father&lt;P&gt;{//注意父模板类也需要传入P，否则报错
+    ...
+} 
+</code></pre></li>
+<li><p>子类在调用父类的成员函数时，最好使用 父类class名::父类成员函数名()，防止子类中有同名函数而引起的歧义（若子类中存在，不加的话，默认是采用就近调用原则的）  </p>
+</li>
+</ul>
+<h1 id="名称空间相关"><a href="#名称空间相关" class="headerlink" title="名称空间相关"></a><strong>名称空间相关</strong></h1><ul>
+<li>名称空间一般放入的东西:类声明、定义（不含类方法的具体实现）以及一些全局性的东西</li>
+</ul>
+<h1 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a><strong>运算符重载</strong></h1><ul>
+<li><p>格式：返回类型 operator 符号(A(类名) &amp;x){具体实现}//同类型参数可以访问私有成员（同一类的成员函数可以访问同一类的私有成员）  </p>
+<pre><code>bool operator *(double j);//作为类成员函数时的声明  
+bool operator *(A i, doublej)
+{
+    ...
+}//作为非类成员函数时的定义，非类成员函数重载运算符时，需要传递两个参数，且分别对应了运算符的左右两边  
+</code></pre></li>
+</ul>
+<h1 id="友元函数：使用非成员函数，也可以直接访问类的私有成员，非类成员函数所以具体实现时不用加"><a href="#友元函数：使用非成员函数，也可以直接访问类的私有成员，非类成员函数所以具体实现时不用加" class="headerlink" title="友元函数：使用非成员函数，也可以直接访问类的私有成员，非类成员函数所以具体实现时不用加::"></a><strong>友元函数：使用非成员函数，也可以直接访问类的私有成员，非类成员函数所以具体实现时不用加::</strong></h1><ul>
+<li><p>友元函数不是类的成员函数！但友元函数可作为类的扩展接口  </p>
+<pre><code>friend void function(A &amp;i);//在A类中声明，则function为友元函数，可以调用A类中的私有成员，外部实现时不必再加friend  
+void function (A &amp;i)
+{
+    ...
+}//外部实现  
+</code></pre></li>
+</ul>
+<h1 id="类类型的自动转换和强制类型转换-两种格式，对应不同方法"><a href="#类类型的自动转换和强制类型转换-两种格式，对应不同方法" class="headerlink" title="类类型的自动转换和强制类型转换(两种格式，对应不同方法)"></a><strong>类类型的自动转换和强制类型转换(两种格式，对应不同方法)</strong></h1><ul>
+<li>自动转换利用一个参数的构造函数实现(如：int-&gt;类类型)，取消自动隐式转换在构造函数前加入explicit  </li>
+<li><p>operator 类型()   </p>
+<pre><code>Stonewt mycat;
+mycat = 19.2;//此处自动调用了Stonewt中的构造函数，生成了一个临时对象，再赋值给mycat,若在构造函数前加explicit则会报错
+mycat = Stonewt(19.2)；//以下两种用了operator 类型() 的转换函数(转换函数必须是类方法，不能指定返回类型，不能有参数)，如：operator int();  
+mycat = (Stonewt)19.2;  
+</code></pre></li>
+</ul>
 <h1 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a><strong>虚函数</strong></h1><ul>
 <li>构造函数不可以为虚函数或纯虚函数，析构函数可以为虚函数或纯虚函数  </li>
 <li>virtual void function();//function为虚函数，需要在类中或类外对其进行实现，子类（派生类）可以重写它：void function()  </li>
 <li>纯虚函数（只在类中声明了函数体，并未在类中或类外定义该函数）：<br>virtual void function() = 0;//function为纯虚函数<br>纯虚函数相当于一接口，想要使用它就必须要派生类来具体实现其定义，这有利于编码的分工合作  </li>
 </ul>
+<h1 id="浅拷贝和深拷贝"><a href="#浅拷贝和深拷贝" class="headerlink" title="浅拷贝和深拷贝"></a><strong>浅拷贝和深拷贝</strong></h1><ul>
+<li>浅拷贝：只对对象的数据成员进行简单复制，涉及到动态分配时，如果按浅拷贝进行复制，不做特殊处理，复制完成后，两个对象中涉及动态分配的变量，会指向同一内存区域，导致析构释放内存时出现错误  </li>
+<li>深拷贝：对新产生的指针变量进行动态内存分配再赋值给新的指针变量，并拷贝整个内存区域</li>
+<li>默认复制构造函数、=运算符，所进行的都是浅拷贝    </li>
+<li>浅拷贝可能引发的问题：<br>1、析构时，同一个内存空间被释放两次，会出错<br>2、浅拷贝后，指针指向同一内存空间，任何一方改变都会影响到另一方  </li>
+</ul>
 <h1 id="拷贝-复制构造函数"><a href="#拷贝-复制构造函数" class="headerlink" title="拷贝/复制构造函数"></a><strong>拷贝/复制构造函数</strong></h1><ul>
-<li>若要防止调用拷贝构造函数可声明一个private类型的拷贝函数<br>拷贝/复制构造函数：<br>func(const typename &amp; x)#注意没void，func的命名和class名相同<br>func(typename &amp; x)<br>func(volatile typename &amp; x)<br>func(const volatile typename &amp; x)  </li>
+<li>默认的复制构造函数进行的是浅拷贝  </li>
+<li><p>何种情况会调用复制构造函数：<br>1、程序中需要建立一个新对象，并用另一个同类的对象对它进行初始化时：A x = y;//不同于A a;a = y;后一种情况调用的是该类等号的重载函数（若存在的话，未定义的话，会存在一个默认的，同样是进行浅拷贝）<br>2、当函数的参数为类对象时，传入实参，会调用复制构造函数<br>3、当函数返回类型是一个类的时候  </p>
+</li>
+<li><p>若要防止调用拷贝构造函数可声明一个private类型的拷贝函数  </p>
+</li>
+<li>拷贝/复制构造函数：<br>func(const typename &amp; x)#注意没void，func的命名和class名相同<br>func(typename &amp; x)<br>func(volatile typename &amp; x)<br>func(const volatile typename &amp; x)  </li>
 </ul>
 <h1 id="重载与重写"><a href="#重载与重写" class="headerlink" title="重载与重写"></a><strong>重载与重写</strong></h1><ul>
 <li><p>重载：函数的重载，只要满足名字相同，参数不同就可以实现重载（类型或个数不同都可以实现重载），只有返回类型不同，其他相同，编译器会报错，无法实现重载。返回类型和参数同时改变则可以实现重载  </p>
 </li>
-<li><p>重写：需要返回类型相同，参数相同，函数名也相同才能实现重写。若只有返回类型不同，则会报错，若参数不同则会认为是另一个函数  </p>
+<li><p>重写：需要返回类型相同，参数相同，函数名也相同才能实现重写。若只有返回类型不同，则会报错，若参数不同则会认为是另一个函数    </p>
 </li>
 </ul>
-
+<h1 id="C-引用"><a href="#C-引用" class="headerlink" title="C++引用"></a><strong>C++引用</strong></h1><ul>
+<li>引用可以看做实参的别名，在函数内对形参的修改其实就是对实参的修改，非指针类型  </li>
+<li>C++中引用不可以传常量，如果用const修饰后则可以  </li>
+<li>const typename &amp;i 和 typename const &amp;i的区别（暂时认为是一样的）  </li>
+</ul>
+<h1 id="C-Template"><a href="#C-Template" class="headerlink" title="C++ Template"></a><strong>C++ Template</strong></h1><ul>
+<li>将数据类型变为可后期指定（使得数据类型可定制化）  </li>
+<li><p>非类型的模板形参可以当宏定义使用，但非类型形参只能是整型、指针和引用：      </p>
+<pre><code>template&lt;class T, int VALUE&gt;//VALUE为非类型模板形参  
+class B {
+    private:
+        T element = VALUE;
+}
+</code></pre></li>
+</ul>
+<h1 id="静态成员变量和静态成员函数"><a href="#静态成员变量和静态成员函数" class="headerlink" title="静态成员变量和静态成员函数"></a><strong>静态成员变量和静态成员函数</strong></h1><ul>
+<li>静态成员变量：所有对象共享同一个静态成员变量（内存共享），初始化：类型 类名::变量名 = …;  </li>
+<li>静态成员函数：  </li>
+</ul>
+<h1 id="单冒号"><a href="#单冒号" class="headerlink" title="单冒号"></a><strong>单冒号</strong></h1><ul>
+<li>类构造函数初始化列表</li>
+</ul>
+<p>/<strong><strong><strong><strong><strong><strong><strong><strong><em>*</em></strong></strong></strong></strong></strong></strong></strong></strong>QT <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><em>*</em></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>/  </p>
+<h1 id="信号和槽"><a href="#信号和槽" class="headerlink" title="信号和槽"></a><strong>信号和槽</strong></h1>
       
     </div>
     

@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="C++知识点，不定期更新">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/CPP_5FFD4E134F024ADD867A67124671F280.jpg">
-<meta property="og:updated_time" content="2017-07-08T10:01:40.749Z">
+<meta property="og:updated_time" content="2017-07-08T14:12:29.810Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++notes">
 <meta name="twitter:description" content="C++知识点，不定期更新">
@@ -299,10 +299,25 @@ class B {
 <li>静态成员函数：  </li>
 </ul>
 <h1 id="单冒号"><a href="#单冒号" class="headerlink" title="单冒号"></a><strong>单冒号</strong></h1><ul>
-<li>类构造函数初始化列表</li>
+<li><p>类构造函数初始化列表</p>
+<pre><code>class firstclass{
+    private:
+        int a;
+        const int b;
+    public:
+        firstclass();
+};
+
+firstclass::firstclass():a(1), b(1){}//对变量a和const变量b进行初始化，可以对const变量进行初始化赋值。初始化顺序要和类中成员变量的声明顺序相同  
+</code></pre></li>
 </ul>
-<p>/<strong><strong><strong><strong><strong><strong><strong><strong><em>*</em></strong></strong></strong></strong></strong></strong></strong></strong>QT <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><em>*</em></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>/  </p>
-<h1 id="信号和槽"><a href="#信号和槽" class="headerlink" title="信号和槽"></a><strong>信号和槽</strong></h1>
+<p>对于继承的类类来说，在初始化列表中也可以进行基类的初始化，初始化的顺序是先基类初始化，然后再根据该类自己的变量的声明顺序对子类成员变量进行初始化         </p>
+<hr>
+<h1 id="QT："><a href="#QT：" class="headerlink" title="QT："></a>QT：</h1><h1 id="信号和槽"><a href="#信号和槽" class="headerlink" title="信号和槽"></a><strong>信号和槽</strong></h1><ul>
+<li>connect一次，就会产生一个回调函数，并不会覆盖  </li>
+<li>connect(viewpic, SIGNAL(clicked()), this, SLOT(paintEvent(QPaintEvent <em>)));这样写是不对的，错在：<br>1、首先信号和槽函数参数类型需要一致，就类似int对int，不管是系统自带的还是自己定义的，首先参数类型都要一致。此处clicked()是无参数的，而paintEvent(QpaintEvent </em>)却带有参数<br>2、其次，connect中不能传入实际的参数</li>
+</ul>
+
       
     </div>
     

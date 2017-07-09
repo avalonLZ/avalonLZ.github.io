@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2017/03/27/Linux编程/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="文章涉及Linux编程常用函数，Linux多线程、多进程编程以及Linux网络编程相关知识，不定期更新">
-<meta property="og:updated_time" content="2017-03-27T14:55:52.740Z">
+<meta property="og:updated_time" content="2017-07-09T03:02:55.687Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux编程">
 <meta name="twitter:description" content="文章涉及Linux编程常用函数，Linux多线程、多进程编程以及Linux网络编程相关知识，不定期更新">
@@ -205,7 +205,93 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>文章涉及Linux编程常用函数，Linux多线程、多进程编程以及Linux网络编程相关知识，不定期更新<a id="more"></a></p>
+        <p>文章涉及Linux编程常用函数，Linux多线程、多进程编程以及Linux网络编程相关知识，不定期更新<a id="more"></a>  </p>
+<h1 id="Linux网络编程"><a href="#Linux网络编程" class="headerlink" title="Linux网络编程"></a><strong>Linux网络编程</strong></h1><ul>
+<li>UDP广播和UDP组播（组播可实现跨网段通讯）<br>UDP广播只能在同一网段（严格意义上的网段）内进行广播，不可跨网段广播，而UDP组播可以实现跨网段广播，组播地址只能作为目的地址（组播地址也就是组播组），另外组播也被称为多播<br>组播架构：点对点两台主机，或者多台主机连接配置了支持组播的路由器（路由一般默认关闭组播功能）。这些主机IP地址都可不在同一网段<br>IGMP协议：<br>IGMP是IP组播的基础，在IP协议出现以后为了加入对组播的支持，IGMP产生了。IGMP所做的时间上就是告诉路由，在这个路由所在的子网内有人对发送到某一个组播组（组播IP）的数据感兴趣，这样当这个组播组的数据到达后，路由就不会抛弃它，而是把它转送给所有感兴趣的客户。假如不同子网内的A和B要进行组播通讯，那么位于AB直接的所有路由器必须都支持IGMP协议，否则AB之间不能进行通讯<br>组播的原理：<br>组播首先有一个用户申请一个组播组，这个组播组被维护在路由中，其他用户申请加入，这样当一个用户向组内发送消息时，路由器将消息转发给组内的所有成员。如果申请加入的组不在本级路由中，且路由和交换机允许组播协议通过，路由则将申请加入的操作箱上级路由提交。广域网通讯要经过多级路由器和交换机，几乎所有的网络设备都默认阻止组播协议通过（只允许本网段内的广播，不向上级提交），这使得广域网组播实现有一定局限<br>UDP组播基本步骤：<br>1、建立socket<br>2、socket和端口绑定（最初的Receive方需要bind 0.0.0.0端口）<br>3、加入一个组播组<br>4、通过sendto/recvfrom进行数据收发<br>5、关闭socket<br>所有终端必须都要加入相同的主播地址<br>Python组播实现：  </li>
+</ul>
+<p>Terminal_One:      </p>
+<pre><code>#-*- coding:utf-8 -*-
+
+import time
+import struct
+from socket import *
+
+SENDERIP = &apos;192.168.8.11&apos; # 本地ip
+SENDERPORT = 1501  # 本地接口
+MYPORT = 1234  # 发送数据到该端口
+MYGROUP = &apos;225.0.0.77&apos;  # 组播组
+MYTTL = 255  # 发送数据的TTL
+
+
+def sender():
+    s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)
+    s.bind((SENDERIP, SENDERPORT))
+    # Set Time-to-live (optional)
+    ttl_bin = struct.pack(&apos;@i&apos;, MYTTL)
+    s.setsockopt(IPPROTO_IP, IP_MULTICAST_TTL, ttl_bin)
+    status = s.setsockopt(IPPROTO_IP,
+                          IP_ADD_MEMBERSHIP,
+                          inet_aton(MYGROUP) + inet_aton(SENDERIP))  # 加入到组播组
+    i = 0
+    while True:
+        data = &apos;cisco&apos;
+        s.sendto(data + &apos;\0&apos;, (MYGROUP, MYPORT))
+        i = i + 1
+        print &quot;%d send data ok !&quot; % i
+        time.sleep(10)
+
+
+if __name__ == &quot;__main__&quot;:
+    sender()
+</code></pre><p>Terminal_Two:</p>
+<pre><code># -*- coding:utf-8 -*-
+
+import time
+import socket
+
+SENDERIP = &apos;169.254.51.246&apos;
+MYPORT = 1234 #监听组播组端口
+MYGROUP = &apos;225.0.0.77&apos;
+
+def receiver():
+    # create a UDP socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+    # allow multiple sockets to use the same PORT number
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    # Bind to the port that we know will receive multicast data
+    #bind一般用于服务器绑定、监听本地IP和端口，只可以可以绑定本机所具有的IP和端口
+    #但在组播中bind应该设置为监听组播IP和其端口，但bind无法设置为绑定、监听非本机的IP（保留IP也不可以被设置为监听对象）
+    #所以在组播中必须bind所有ip，和对应组播的端口号
+    sock.bind((&apos;0.0.0.0&apos;, MYPORT))#留空也可以
+    # tell the kernel that we are a multicast socket
+    # sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 255)
+    # Tell the kernel that we want to add ourselves to a multicast group
+    # The address for the multicast group is the third param
+    #加入组播组
+    status = sock.setsockopt(socket.IPPROTO_IP,
+                             socket.IP_ADD_MEMBERSHIP,
+                             socket.inet_aton(MYGROUP) + socket.inet_aton(SENDERIP));
+
+    sock.setblocking(0)
+    # ts = time.time()
+    while 1:
+        try:
+            data, addr = sock.recvfrom(1024)
+        except socket.error, e:
+            pass
+        else:
+            print &quot;Receive data!&quot;
+
+            print &quot;TIME:&quot;, time.time()
+            print &quot;FROM: &quot;, addr
+            print &quot;DATA: &quot;, data
+
+
+if __name__ == &quot;__main__&quot;:
+    receiver()  
+</code></pre><ul>
+<li>CGI程序：<br>CGI程序一般指运行于HTTP服务器上的后台交互程序<br>Web后台架构可分为：<br>1、服务端（HTTP协议解析）<br>2、中间件（WSGI才有）<br>3、应用端（CGI/WSGI程序）<br>一个HTTP</li>
+</ul>
 
       
     </div>

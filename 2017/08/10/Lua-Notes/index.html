@@ -14,7 +14,7 @@ tags: 计算机语言_Lualua脚本语言学习记录">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="title: Lua_Notesdate: 2017-08-10 21:41:31
 tags: 计算机语言_Lualua脚本语言学习记录">
-<meta property="og:updated_time" content="2017-08-10T13:43:39.803Z">
+<meta property="og:updated_time" content="2017-08-14T11:55:43.881Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="木子人人人's Blog">
 <meta name="twitter:description" content="title: Lua_Notesdate: 2017-08-10 21:41:31
@@ -193,12 +193,164 @@ t_table = {}
 t_table[&quot;li&quot;] = &quot;lizhong&quot; --等价于t_table.li = &quot;lizhong&quot;
 
 2、
-t_table = {&apos;a&apos;, &apos;b&apos;, &apos;c&apos;}
-for i = 1, #t_table do --#t获取table中key连续为数字的个数，遇到nil结束（nil不统计）。table.maxn则以最大数字下角标为准，统计nil
-    print(t_table[i])
+t_table = {&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, key1 = &apos;cc&apos;, &apos;bb&apos;}
+for i = 1, #t_table do --#t获取table中key为数字的个数，key为nil的元素则不统计。table.maxn则以最大数字下角标为准，统计nil
+    print(t_table[i]) --输出a, b, c, bb
 end
 
 3、
+</code></pre><h3 id="必用脚本语法"><a href="#必用脚本语法" class="headerlink" title="必用脚本语法"></a>必用脚本语法</h3><p>1、脚本开头可加#！/usr/local/bin/lua用于指定解释器路径，可不用显式使用lua。（实际测试结果：还是需要显式使用lua xxx.lua才能执行）<br>2、单行注释：– //两个减号<br>多行注释：–[[xxxxxxxxx –]]<br>3、标识符（变量名）：不要使用下划线加大写字母的标识符，因为lua中的保留字一般这样写。约定下划线开头连接一串大写字母的名字（_VERSION）被保留用于lua内部全局变量。lua区分大小写<br>4、全局变量：默认情况下，变量总是全局的，给一个变量赋值后即创建了这个全局变量，访问一个没初始化的全局变量会返回nil，若希望删除一个全局变量，只需要将变量赋值为nil（也就是说，当且仅当一个变量不等于nil时，这个变量即存在）  </p>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>脚本语言无需定义变量类型，只需要对变量进行赋值<br>nil：表示一个无效值（具有删除作用，给一个）<br>boolean：false和true<br>number：表示双精度类型的实浮点数（可以看出lua中的数值都按此类表示）<br>string：字符串由一对双引号或单引号来表示     </p>
+<pre><code>string1 = &apos;hello&apos;  
+string2 = &quot;hello&quot;  
+string3 = [[123,  
+456   
+78965413  
+]] --[[]]可表示一块字符串  
+print(&apos;2&apos;+6) --return 8.0,lua会自动将数字字符串转换为一个10进制数字，直接丢弃其引号
+print(#&apos;132123&apos;) --用#计算字符串长度
+</code></pre><p>function：由C或lua编写的函数  </p>
+<pre><code>function test(n)
+    print(n)
+test1 = test
+test1(10) --lua中函数可以直接赋值给变量，通过变量调用此函数
+
+function printf(n,fun)
+    fun(n)
+printf(1, function(m)
+    print(m)
+end) --function定义一个匿名函数
+</code></pre><p>userdata：表示任意存储在变量中的C数据结构，可以将C/C++中的任意数据类型（通常是struct和指针）存储到lua变量中调用<br>thread：表示执行的独立线路，用于执行协同程序<br>table：一个关联数组，用{}来创建。（可以看出table类似于Python中的字典，只不过此处更适合看做是变量和其值的集合）  </p>
+<pre><code>key的几种类型：
+dir0 = {[&quot;key1&quot;] = 1, key2 = 2} --等价，key定义时若为数字或字符串则需加[]
+
+dir1 = {key1 = &apos;value1&apos;, key2 = &apos;value2&apos;} --需要使用dir1[&quot;key1&quot;]进行索引
+
+dir2 = {&apos;value1&apos;, &apos;value2&apos;} --一维数组 --等价于：dir2 = {[1] = &apos;value1&apos;, [2] = &apos;value2&apos;}
+
+-需要使用dir2[1]和dir[2]进行索引，注意lua中下标是从1开始计数的，而非0
+
+dir3 = {i = &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, ii = &apos;d&apos;, &apos;e&apos;} -- dir3[3]返回e
+</code></pre><p>可以使用type函数查询类型：<br>print(type(“123”))    –&gt;string<br>print(type(123))    –&gt;number    </p>
+<p>do end –相当于C++中的{}名称空间  </p>
+<h3 id="lua变量"><a href="#lua变量" class="headerlink" title="lua变量"></a>lua变量</h3><p>局部变量的作用域仅限于声明他们的那个块。块可以是一个控制结构的执行体、一个函数的执行体或者是一个程序块（do end中间的部分）<br>（所声明的局部变量的作用域从声明语句开始，直至所在块的结尾）</p>
+<pre><code>x = 10 --没有local就默认为全局变量，在函数中也是如此
+local i = 1 --程序块中的局部变量
+
+while i &lt;= x do
+    local x = i * 2 --while循环体中的局部变量  
+    print(x) --while循环体中的局部变量，输出2,4,6,8...
+    i = i +1
+end
+
+if i &gt; 20 then
+    local x --then中的局部变量
+    x = 20 --then中的局部变量
+    print(x + 2) --then中的局部变量，输出22
+else
+    print(x) --开头定义的全局变量x,输出10
+end
+print(x) --开头定义的全局变量x，输出10
+</code></pre><p>注意：交互模式下每输入一行语句都会成为一个程序块，所以想在交互模式下正确指定作用域，就需要显示的用do end来指定块</p>
+<h3 id="关系操作符"><a href="#关系操作符" class="headerlink" title="关系操作符"></a>关系操作符</h3><p>只能对两个数字或两个字符串做大小比较，不同类的会返回false。字符串的比较是按照字母次序例如：  </p>
+<pre><code>&quot;bc&quot; &lt; &quot;ace&quot; --&gt;返回false  
+&quot;2&quot; &lt; &quot;15&quot; --&gt;返回false
+&quot;a&quot; &gt; &quot;9&quot; --&gt;返回true，说明字母字符串总大于数字字符串
+</code></pre><p>nil只与其自身相等   </p>
+<p>~= –不等<br>= –赋值，注意table的赋值是引用（不同于深浅拷贝）</p>
+<pre><code>a = {&apos;a&apos;, &apos;b&apos;}
+c = a
+c[1] = &apos;z&apos;
+print(a[1]) --&gt;返回z，说明是引用
+
+c = {&apos;v&apos;, &apos;r&apos;}
+print(a[1]) --&gt;返回z，说明c已经变为了另一个table的引用
+</code></pre><h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>not 数字 –&gt;输出都为false<br>not nil –&gt;输出true<br>not false –&gt;输出true<br>(a &gt; b) and a or b –&gt;a若大于b则括号内成立，则true and a or b,根据短路法则直接返回true and a。（and对应&amp;&amp;，or对应||）,有nil参与的逻辑运算可将nil视为0  </p>
+<h3 id="字符串连接符"><a href="#字符串连接符" class="headerlink" title="字符串连接符"></a>字符串连接符</h3><p>..（两个点），如果任意一边是数字则会将数字直接转换为字符串（直接加引号）再进行连接输出。  </p>
+<h3 id="运算符优先级"><a href="#运算符优先级" class="headerlink" title="运算符优先级"></a>运算符优先级</h3><p>由高到低（高优先级先执行）：<br>^（右结合:x^y^z &lt;–&gt; x^(y^z)）<br>not # -  </p>
+<ul>
+<li>/ %  </li>
+</ul>
+<ul>
+<li><ul>
+<li>..（右结合）<br>&lt; &gt; &lt;= &gt;= -= ==<br>and<br>or  </li>
+</ul>
+</li>
+</ul>
+<h3 id="多重赋值"><a href="#多重赋值" class="headerlink" title="多重赋值"></a>多重赋值</h3><p>交换：x, y = y, x –x与y互换<br>右边值多于左边变量，值会被丢弃。右边值少于左边变量，多出的变量被置为nil  </p>
+<h3 id="控制结构"><a href="#控制结构" class="headerlink" title="控制结构"></a>控制结构</h3><p>注意：在控制结构中所有不是false和nil的值都会被视为真（数字0也是真）</p>
+<pre><code>if ... then
+    ...
+else
+    ...
+end
+
+if ... then
+    ...
+elseif ... then 
+    ...
+else
+    ...
+end
+
+whie ... do
+    ...
+end
+
+repeat --重复执行循环体，直到条件为真
+    ...
+until ...（条件）
+
+--数值for循环
+--var从exp1变化到exp2，每次变化以exp3为步长递增，并执行一次循环体，若不存在exp3，则默认步长为1。for的三个表达式在循环开始前进行一次性求值，之后不再求值
+for var = exp1, exp2, exp3 do 
+    &lt;执行体&gt;
+end 
+
+--泛型for循环（注意pairs是无序的，ipairs是有序的）
+dir3 = {i = &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, ii = &apos;d&apos;, &apos;e&apos;}
+--pairs(dir3)方法可以用于遍历table,可以遍历表中所有的key。
+--ipairs(dir3)只能遍历到表中出现第一个不是整数的key。也就是说ipairs(dir3)只可以遍历出b,c,e  
+
+dir3 = {[2] = &apos;b&apos;, &apos;c&apos;, &apos;e&apos;}--这样ipairs将遍历出c,e。因为[2]的值再e定义时被改写了
+dir3 = {key1 = &apos;a&apos;, key2 = &apos;b&apos;}--这样ipairs将无法遍历，直接跳出循环，因为dir3[1]=nil
+
+--pairs和ipairs只能遍历一维数据，多维数据还是要依赖for循环
+</code></pre><h3 id="多重返回函数"><a href="#多重返回函数" class="headerlink" title="多重返回函数"></a>多重返回函数</h3><pre><code>function foo()
+    return &apos;a&apos;, &apos;b&apos;
+end
+
+function goo(i, j, k)
+    return i, j, k
+end
+--若foo()被调用，并且不是一系列表达式的最后一个元素，那么Lua会将其返回值数量调整为1
+x, y = foo(), 10 --x = &apos;a&apos;, y = 10  
+print(foo(), 2) --输出a, 2
+goo(foo()) --输出a, b, nil
+goo(foo(), 1) --foo将只返回一个值,输出a, 1, nil
+goo((foo())) --foo()放入括号内将迫使它只返回一个值a, nil, nil
+
+--泛型调用，unpack(),接受一个数组table作为参数，并从下标1开始返回该数组的所有元素,与ipairs相似，只不过这个可以直接返回值
+list1 = {&apos;a&apos;, &apos;b&apos;, &apos;c&apos;}
+print(table.unpack(list1))
+
+--变长参数
+function add(...)
+    local s = 0
+    for i, v in ipairs(...) do
+        s = s + v
+    end
+    return s
+end
+print(add({10, 20, 30, 40})) --返回100,注意...处需要传入的是一个table    
+
+function foo(...)
+    local a, b, c, e, f =...
+end
+
+function goo(a, ...) -- 在变长参数...前可以加入固定参数
+    print(a, ...) --注意...处需要传入table，零散的参数不可以
+end
 </code></pre>
       
     </div>

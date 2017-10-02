@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2017/08/15/Lua-Notes/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="lua脚本语言学习记录">
-<meta property="og:updated_time" content="2017-08-15T12:23:08.025Z">
+<meta property="og:updated_time" content="2017-10-02T14:08:46.788Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Lua_Notes">
 <meta name="twitter:description" content="lua脚本语言学习记录">
@@ -205,7 +205,106 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>lua脚本语言学习记录<a id="more"></a>  </p>
+        <p>lua脚本语言学习记录<a id="more"></a>      </p>
+<h3 id="Vim下Lua的补全（只能实现到支持Lua标准库）"><a href="#Vim下Lua的补全（只能实现到支持Lua标准库）" class="headerlink" title="Vim下Lua的补全（只能实现到支持Lua标准库）"></a>Vim下Lua的补全（只能实现到支持Lua标准库）</h3><p>使用Vundle + vim-lua-ftplugin + vim-misc<br>1、安装Vundle<br>2、在命令行输入vim ~/.vimrc对.vimrc文件进行修改<br>3、在My Bundles here：下加入，并保存退出：<br>    Bundle ‘xolox/vim-lua-ftplugin’<br>    Bundle ‘xolox/vim-misc’<br>4、开启vim，输入:BundleInstall，安装vim-lua-ftplugin和vim-misc插件，重启vim即可使用补全  </p>
+<h3 id="C-C-中嵌入Lua脚本"><a href="#C-C-中嵌入Lua脚本" class="headerlink" title="C/C++中嵌入Lua脚本"></a>C/C++中嵌入Lua脚本</h3><p>Lua文件：  </p>
+<pre><code>function test_print()
+    print(&quot;test!&quot;)
+end
+</code></pre><p>CPP文件：    </p>
+<pre><code>#include&lt;iostream&gt;
+
+extern &quot;C&quot;{
+#include&lt;lua.h&gt;
+#include&lt;lualib.h&gt;
+#include&lt;lauxlib.h&gt;
+}
+using namespace std;
+
+int main()
+{
+    lua_State *L = luaL_newstate(); 
+
+    luaL_openlibs(L);//加载lua通用扩展库
+
+    if(L == NULL)
+        cout &lt;&lt; &quot;Lua Error&quot; &lt;&lt; endl;
+
+    if(luaL_loadfile(L, &quot;test.lua&quot;) != LUA_OK)//载入lua脚本
+        cout &lt;&lt; &quot;Load File Error!&quot; &lt;&lt; endl;
+
+    if(lua_pcall(L, 0, 0, 0))//加载完lua文件后需要先运行一遍文件，此后才可以对文件内容操作
+        cout &lt;&lt; &quot;Load lua field error!&quot; &lt;&lt; endl;
+
+    lua_getglobal(L, &quot;test_print&quot;);//将函数压入栈中
+
+    if(lua_pcall(L, 0, 0, 0))//执行函数
+    {
+        cout &lt;&lt; &quot;Run lua Function Error!&quot; &lt;&lt; endl;
+        const char *tempstr = lua_tostring(L, -1);
+        cout &lt;&lt; tempstr &lt;&lt; endl;
+
+    }
+    lua_close(L);
+}
+</code></pre><p>编译链接：g++ main.cpp -llua -ldl  </p>
+<h3 id="Lua中使用C-C-模块"><a href="#Lua中使用C-C-模块" class="headerlink" title="Lua中使用C/C++模块"></a>Lua中使用C/C++模块</h3><p>一般采用动态链接库的方式载入模块，所以首先要先编译C/C++文件，生成动态链接库  </p>
+<p>头文件：  </p>
+<pre><code>#ifndef _CPPLUALIB_H
+#define _CPPLUALIB_H
+
+#ifdef __cplusplus
+//以下内容按C的规则进行编译
+    extern &quot;C&quot;{
+#endif
+
+/*必须在h文件中加入这几个头文件，否则认不到LUA_API*/
+/*防止重复定义，可以自己宏定义个flag*/
+#include&quot;lua.h&quot;
+#include&quot;lualib.h&quot;
+#include &quot;lauxlib.h&quot;
+
+LUA_API int luaopen_my_lib(lua_State *L);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif  
+</code></pre><p>C++文件：    </p>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;stdio.h&gt;
+#include&lt;string&gt;
+#include &quot;cpplualib.h&quot;
+using namespace std;
+
+static int SayHello(lua_State *L)
+{
+    cout &lt;&lt; &quot;Hello World!&quot; &lt;&lt; endl;
+    int num = lua_gettop(L);
+    cout &lt;&lt; num &lt;&lt; endl;
+   // cout &lt;&lt; temstr &lt;&lt; endl;//所有参数都被放入L栈中
+
+    //lua_pushstring(L, &quot;LZ&quot;);
+    return num;//返回所有压栈数量
+}
+
+static const struct luaL_Reg my_lib[] = 
+{
+    {&quot;SayHello&quot;, SayHello},
+    {NULL, NULL}
+};
+
+int luaopen_my_lib(lua_State *L) //必须和上面的数组同名，并且生成的动态链接库也必须命名为my_lib.so
+{
+    luaL_newlib(L, my_lib);
+    return 1;
+}
+</code></pre><p>Lua文件：    </p>
+<pre><code>local mylib = require &quot;my_lib&quot;//导入模块
+print (mylib.SayHello(&quot;mytest&quot;, 1,2,3))  
+</code></pre><p>生成动态链接库：g++ -fPIC -shared -o my_lib.so xxx.cpp    </p>
+<p>执行Lua脚本：lua xxx.lua即可看到打印输出    </p>
 <h3 id="语法糖"><a href="#语法糖" class="headerlink" title="语法糖"></a>语法糖</h3><pre><code>1、
 t_table = {}
 t_table[&quot;li&quot;] = &quot;lizhong&quot; --等价于t_table.li = &quot;lizhong&quot;

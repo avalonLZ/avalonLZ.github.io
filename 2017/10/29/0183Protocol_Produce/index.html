@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>0183协议生成器 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
+  <meta name="description" content="为模拟GPS数据给到AIS模块，随手写了这么个工具，顺便复习下快、准、狠的pyqt（开发效率极高，不过如果是需要发布的软件还是用QT吧，毕竟C++稳啊）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="0183协议生成器">
 <meta property="og:url" content="http://avalonlz.github.io/2017/10/29/0183Protocol_Produce/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description">
-<meta property="og:updated_time" content="2017-10-29T07:15:58.879Z">
+<meta property="og:description" content="为模拟GPS数据给到AIS模块，随手写了这么个工具，顺便复习下快、准、狠的pyqt（开发效率极高，不过如果是需要发布的软件还是用QT吧，毕竟C++稳啊）">
+<meta property="og:updated_time" content="2017-10-29T14:41:10.441Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="0183协议生成器">
-<meta name="twitter:description">
+<meta name="twitter:description" content="为模拟GPS数据给到AIS模块，随手写了这么个工具，顺便复习下快、准、狠的pyqt（开发效率极高，不过如果是需要发布的软件还是用QT吧，毕竟C++稳啊）">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -205,7 +205,191 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <a id="more"></a>
+        <p>为模拟GPS数据给到AIS模块，随手写了这么个工具，顺便复习下快、准、狠的pyqt（开发效率极高，不过如果是需要发布的软件还是用QT吧，毕竟C++稳啊）<a id="more"></a><br>开发环境(IDE自然是pycharm)：<br>python-2.7.9.amd64 + PyQt4-4.10.3-gpl-Py2.7-Qt4.8.5-x64 + pywin32-216.win-amd64-py2.7 + pyserial-3.4 + py2exe-0.6.9.win64-py2.7.amd64<br>源码地址：<a href="https://github.com/avalonLZ/Project/tree/master/Python/PyQT/pyqt_gis" target="_blank" rel="external">https://github.com/avalonLZ/Project/tree/master/Python/PyQT/pyqt_gis</a>    </p>
+<pre><code># -*- coding: utf-8 -*-
+import sys
+import time
+from gis_form import *
+from PyQt4 import QtCore, QtGui
+import serial
+import serial.tools.list_ports
+
+#$GNGGA,033723.000,2308.9503,N,11325.9527,E,6,06,4.1,30.6,M,0.0,M,,*40
+#$GNRMC,033723.000,A,2308.9503,N,11325.9527,E,999.00,103.94,261017,,,E*72
+
+#GIS信息校验
+def GIS_Check(temstr):
+    checksum = 0
+
+    for i in temstr:
+        checksum = checksum ^ ord(str(i))#注意需要一个str
+    return checksum
+
+#串口扫描，返回存在的COM口
+def serial_ports(open_com = None):
+    ports = []
+    port_list = list(serial.tools.list_ports.comports())
+    for i in port_list:
+        ports.append(str(i.device))
+    return ports
+
+class Thread_SendData(QtCore.QThread):
+
+    def __init__(self, temstr = &apos;&apos;, parent=None, obj = None):
+        super(Thread_SendData, self).__init__(parent)
+        self.temstr = temstr
+        self.serial = obj.ser
+        self.interval = obj.return_interval()
+        self.display = obj.return_ui_display()
+        self.nostop = 1
+
+    def run(self):
+        while self.nostop:#while结束线程也就退出了
+            self.serial.write(str(self.temstr))
+            self.display.append(str(self.temstr))
+            self.display.currentFont()
+            time.sleep(int(self.interval))
+
+    def senddata_stop(self):#被外信号绑定的函数不能写为私有函数
+        self.nostop = 0
+
+old_port = []#保证不一致刷新com口数量
+class Thread_ScanCom(QtCore.QThread):
+    sinOut = QtCore.pyqtSignal(list)
+
+    def __init__(self, parent=None):
+        super(Thread_ScanCom, self).__init__(parent)
+        self.new_port = []
+
+    def run(self):
+        while 1:
+             old_port = self.new_port
+             self.new_port = serial_ports()
+
+             if self.new_port != old_port:
+                self.sinOut.emit(self.new_port)#发送信号到主线程
+
+class MainWindow(QtGui.QWidget):
+    sin2senddatastop = QtCore.pyqtSignal()#类变量，可由类名直接调用，也可由实例调用。一个线程只能绑定一个信号量
+    ser = serial.Serial()
+
+    def __init__(self,parent=None):
+        QtGui.QWidget.__init__(self,parent)
+        self.__ui = Ui_Windows()
+        self.__ui.setupUi(self)
+
+        self.__param_init()
+        self.__solt_init()
+
+        # 创建线程扫描com变化
+        self.thread_scancom = Thread_ScanCom()
+        self.thread_scancom.sinOut.connect(self.__scancom)
+        self.thread_scancom.start()
+
+    def __click_start(self):
+        if self.__ui.comboBox.currentText() == &apos;&apos; or str(self.__ui.serial.currentText()) == &apos;&apos;:
+            QtGui.QMessageBox.warning(self, u&quot;错误&quot; ,u&quot;串口或波特率错误，请检查&quot;)
+            return
+        self.__ui_disable(self.__ui.start)
+        self.__ui_disable(self.__ui.clean)
+        self.__serial_config(serial = self.ser, port = str(self.__ui.serial.currentText()),
+                             baudrate = int(self.__ui.comboBox.currentText()))
+        #若已经打开，关闭前将无法再次打开，此后的程序不再执行
+        self.ser.open()
+
+        self.__gis_fill()
+
+        #创建线程按1秒间隔发送gis信息
+        self.__thread_senddata = Thread_SendData(temstr = self.gga + &apos;\r\n&apos; + self.rmc + &apos;\r\n&apos;, obj = self)
+        self.sin2senddatastop.connect(self.__thread_senddata.senddata_stop)  # 绑定信号
+        self.__thread_senddata.start()
+
+    def __click_end(self):
+        self.__ui_enable(self.__ui.start)
+        self.__ui_enable(self.__ui.clean)
+        self.sin2senddatastop.emit()
+        self.ser.close()
+
+    def __click_cleandisplay(self):
+        self.__ui.display.clear()
+
+    def __click_about(self):
+        QtGui.QMessageBox.about(self, u&quot;关于&quot;, u&quot;0183协议生成器\r\n从指定串口输出0183协议数据\r\n&quot;
+                                             u&quot;                                 by:lz&quot;)
+
+    def __scancom(self, com_list):
+        self.__ui.serial.clear()
+        self.__ui.serial.addItems(com_list)
+
+    def __param_init(self):
+        self.gga1 = &quot;$GNGGA,033723.000,&quot;
+        self.latitudenum = &quot;2308.9503&quot;  # 纬度
+        self.gga2 = &quot;,N,&quot;
+        self.longitudenum = &quot;11325.9527&quot;  # 经度
+        self.gga3 = &quot;,E,6,06,4.1,30.6,M,0.0,M,,*&quot;
+        self.ggachecknum = &quot;0&quot;
+        self.gga = &quot;&quot;
+
+        self.rmc1 = &quot;$GNRMC,033723.000,A,&quot;
+        self.rmc2 = &quot;,N,&quot;
+        self.rmc3 = &quot;,E,&quot;
+        self.speednum = &quot;999.00&quot;
+        self.rmc4 = &quot;,103.94,261017,,,E*&quot;
+        self.rmcchecknum = &quot;0&quot;
+        self.rmc = &quot;&quot;
+
+        self.interval = &quot;&quot;
+
+    def __solt_init(self):
+        self.connect(self.__ui.start, QtCore.SIGNAL(&quot;clicked()&quot;), self.__click_start)
+        self.connect(self.__ui.end, QtCore.SIGNAL(&quot;clicked()&quot;), self.__click_end)
+        self.connect(self.__ui.clean, QtCore.SIGNAL(&quot;clicked()&quot;), self.__click_cleandisplay)
+        self.connect(self.__ui.about, QtCore.SIGNAL(&quot;clicked()&quot;), self.__click_about)
+
+    def __serial_config(self, serial = None, port = None, baudrate = None, bytesize = 8, stopbits = 1, parity = &apos;N&apos;):
+        serial.port = port
+        serial.baudrate = baudrate
+        serial.bytesize = bytesize
+        serial.stopbits = stopbits
+        serial.parity = parity
+
+    def __gis_fill(self):
+        self.longitudenum = self.__ui.longutide.text()
+        self.latitudenum = self.__ui.latitude.text()
+        self.speednum = self.__ui.speed.text()
+        self.gga = self.gga1 + self.latitudenum + self.gga2 + self.longitudenum + self.gga3
+        self.ggachecknum = GIS_Check(self.gga)
+        self.gga += hex(self.ggachecknum)[2:]
+
+        self.rmc = self.rmc1 + self.latitudenum + self.rmc2 + self.longitudenum + self.rmc3 + self.speednum + self.rmc4
+        self.rmcchecknum = GIS_Check(self.rmc)
+        self.rmc += hex(self.rmcchecknum)[2:]
+
+        self.interval = self.__ui.interval.text()
+
+    def __ui_disable(self, obj = None):
+        obj.setDisabled(True)
+
+    def __ui_enable(self, obj = None):
+        obj.setDisabled(False)
+
+    def return_ui_display(self):
+        return self.__ui.display
+
+    def return_interval(self):
+        return self.interval
+
+if __name__ == &quot;__main__&quot;:
+    app = QtGui.QApplication(sys.argv)
+    myapp=MainWindow()
+
+    #窗口最大化按键无效
+    myapp.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+
+    #锁定窗口大小
+    myapp.setFixedSize(myapp.width(), myapp.height())
+    myapp.show()
+</code></pre>
       
     </div>
     

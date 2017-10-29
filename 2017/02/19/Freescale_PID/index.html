@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>PD控制、位置PID以及增量PID | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。第九届摄像头组程序：https://github.com/avalonLZ/freescale9第十届光电组程序：https://github.com/avalonLZ/freescale10第十届的">
+  <meta name="description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。第九届摄像头组程序：https://github.com/avalonLZ/Project/tree/master/C/freescale9-master第十届光电组程序：https://github">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PD控制、位置PID以及增量PID">
 <meta property="og:url" content="http://avalonlz.github.io/2017/02/19/Freescale_PID/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。第九届摄像头组程序：https://github.com/avalonLZ/freescale9第十届光电组程序：https://github.com/avalonLZ/freescale10第十届的">
-<meta property="og:updated_time" content="2017-02-19T14:30:09.771Z">
+<meta property="og:description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。第九届摄像头组程序：https://github.com/avalonLZ/Project/tree/master/C/freescale9-master第十届光电组程序：https://github">
+<meta property="og:updated_time" content="2017-10-29T07:07:50.155Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PD控制、位置PID以及增量PID">
-<meta name="twitter:description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。第九届摄像头组程序：https://github.com/avalonLZ/freescale9第十届光电组程序：https://github.com/avalonLZ/freescale10第十届的">
+<meta name="twitter:description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。第九届摄像头组程序：https://github.com/avalonLZ/Project/tree/master/C/freescale9-master第十届光电组程序：https://github">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -205,7 +205,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。<br>第九届摄像头组程序：<a href="https://github.com/avalonLZ/freescale9" target="_blank" rel="external">https://github.com/avalonLZ/freescale9</a><br>第十届光电组程序：<a href="https://github.com/avalonLZ/freescale10" target="_blank" rel="external">https://github.com/avalonLZ/freescale10</a><br>第十届的代码主要是自己和队友写的，当时时序控制其实很头疼，但是又没人指点，最后也只能硬着头皮上。这一次，使我明白了软件架构、设计思想的重要性，也让我在今后的编码上注意这方面的知识的学习<a id="more"></a>  </p>
+        <p>回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。<br>第九届摄像头组程序：<br><a href="https://github.com/avalonLZ/Project/tree/master/C/freescale9-master" target="_blank" rel="external">https://github.com/avalonLZ/Project/tree/master/C/freescale9-master</a><br>第十届光电组程序：<br><a href="https://github.com/avalonLZ/Project/tree/master/C/freescale10-master" target="_blank" rel="external">https://github.com/avalonLZ/Project/tree/master/C/freescale10-master</a><br>第十届的代码主要是自己和队友写的，当时时序控制其实很头疼，但是又没人指点，最后也只能硬着头皮上（现在想来应该上RTOS的）。这一次，使我明白了软件架构、设计思想的重要性，也让我在今后的编码上注意这方面的知识的学习<a id="more"></a>  </p>
 <h4 id="直立PD控制"><a href="#直立PD控制" class="headerlink" title="直立PD控制"></a>直立PD控制</h4><h4 id="位置PID控制"><a href="#位置PID控制" class="headerlink" title="位置PID控制"></a>位置PID控制</h4><h4 id="增量PID控制"><a href="#增量PID控制" class="headerlink" title="增量PID控制"></a>增量PID控制</h4>
       
     </div>

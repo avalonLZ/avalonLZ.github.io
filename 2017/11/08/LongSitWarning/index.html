@@ -4,18 +4,20 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Raspberry Pi-Commands | 木子人人人&#39;s Blog</title>
+  <title>LongSitWarning | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="玩Raspberry Pi常用的Linux命令">
+  <meta name="description" content="最近做的小东西有点多，昨天刚把微信自动回复小tool的历史遗留BUG解决(网上一直没找到解决方案)，今天又撸了个久坐提醒tool，感觉还可以吧，代码整洁清晰，没有BUG！！！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Raspberry Pi-Commands">
-<meta property="og:url" content="http://avalonlz.github.io/2016/04/01/raspberry-pi-commands/index.html">
+<meta property="og:title" content="LongSitWarning">
+<meta property="og:url" content="http://avalonlz.github.io/2017/11/08/LongSitWarning/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="玩Raspberry Pi常用的Linux命令">
-<meta property="og:updated_time" content="2017-06-18T14:45:49.215Z">
+<meta property="og:description" content="最近做的小东西有点多，昨天刚把微信自动回复小tool的历史遗留BUG解决(网上一直没找到解决方案)，今天又撸了个久坐提醒tool，感觉还可以吧，代码整洁清晰，没有BUG！！！">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/pyqt_Up_Down.png">
+<meta property="og:updated_time" content="2017-11-08T12:02:22.174Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Raspberry Pi-Commands">
-<meta name="twitter:description" content="玩Raspberry Pi常用的Linux命令">
+<meta name="twitter:title" content="LongSitWarning">
+<meta name="twitter:description" content="最近做的小东西有点多，昨天刚把微信自动回复小tool的历史遗留BUG解决(网上一直没找到解决方案)，今天又撸了个久坐提醒tool，感觉还可以吧，代码整洁清晰，没有BUG！！！">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/pyqt_Up_Down.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -167,11 +169,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-raspberry-pi-commands" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-LongSitWarning" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/04/01/raspberry-pi-commands/" class="article-date">
-  	<time datetime="2016-04-01T03:58:34.000Z" itemprop="datePublished">2016-04-01</time>
+      <a href="/2017/11/08/LongSitWarning/" class="article-date">
+  	<time datetime="2017-11-08T11:41:15.000Z" itemprop="datePublished">2017-11-08</time>
 </a>
     </div>
   
@@ -184,7 +186,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Raspberry Pi-Commands
+      LongSitWarning
     </h1>
   
 
@@ -193,7 +195,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux-Raspberry-Pi/">Linux_Raspberry Pi</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/应用软件-PyQt/">应用软件_PyQt</a></li></ul>
 	</div>
 
         
@@ -205,18 +207,131 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>玩Raspberry Pi常用的Linux命令<a id="more"></a>  </p>
-<p><strong>目录相关</strong><br>cd [文件夹路径] ：进入文件夹（如cd /home/pi，进入pi文件夹）<br>cd .. :返回该目录下的上级目录<br>cd - ：返回进入该目录前所在目录  </p>
-<p><strong>列出文件夹内容命令</strong><br>ls ：列出该目录下文件和文件夹（不包括隐含文件）<br>ls -l ：列出该目录下文件、文件夹详细信息（包括隐含文件）  </p>
-<p><strong>移动命令</strong><br>mv -i [需要移动的文件路径，需要选择文件本身] [文件新路径，不需要选择文件本身] ：移动文件到新目录，若有同名文件则询问是否需要覆盖。（例如，mv -i /home/pi/Desktop/test/testone.c /home/pi/ 将testone.c文件移动到pi文件夹下）<br>可以使用mv命令进行重命名 ：例如，mv /home/pi/Desktop/test/testone.c /home/pi/Desktop/test/testtwo.c    </p>
-<p><strong>复制文件</strong><br>cp -i [要复制的文件所在路径，包括文件本身] [文件新路径，不包括文件本身] ：复制文件到新目录，若新目录有同名文件则询问是否需要覆盖。(例如，cp -i /home/pi/Desktop/test/testone.c /home/pi/)<br>个人喜欢使用cp -Rf，不提示直接覆盖同名文件  </p>
-<p><strong>删除</strong><br>rm -r [目录路径]：删除整个目录（目录路径换为文件路径即可删除文件）  </p>
-<p><strong>权限</strong><br>在Debain中主要使用是chmod命令<br>chmod [who] [+或-或=] [mode] [文件名]：<br>who是指需要指定的用户，包括：u文件所有者。g同组用户。o其他用户。a所有用户（系统默认是a）<br>+是指添加某个权限，-是取消某权限，=是给指定的权限<br>mode表示权限，包括：r可读。w可写。x可执行（这几个常用）等其他<br>一般使用chmod 777 [文件名]：所有用户拥有可读可写可执行权限  </p>
-<p><strong>压缩和解压</strong><br>tar [主选项+辅选项] 文件或者目录  </p>
-<p><strong>U盘挂（卸）载</strong><br>mount -t vfat /dev/sdb1/ /mnt/<br>/dev/sdb1/ ：是在dev文件下显示的驱动，需要自己查找，可以进入dev中查看，也可以用fdisk -l命令查看<br>/mnt/ ：挂载点，即需要将U盘挂载在何处  </p>
-<p>umount /mnt/ ：卸载U盘 </p>
-<p>（未完） </p>
+        <p>最近做的小东西有点多，昨天刚把微信自动回复小tool的历史遗留BUG解决(网上一直没找到解决方案)，今天又撸了个久坐提醒tool，感觉还可以吧，代码整洁清晰，没有BUG！！！<a id="more"></a><br>效果图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/pyqt_Up_Down.png" alt="">    </p>
+<p>源代码地址：<a href="https://github.com/avalonLZ/Project/tree/master/Python/PyQT/pyqt_longsitwarn" target="_blank" rel="external">https://github.com/avalonLZ/Project/tree/master/Python/PyQT/pyqt_longsitwarn</a>  </p>
+<p>逻辑部分Code如下：   </p>
+<pre><code># -*- coding:utf-8 -*-
+import sys
+import time
+from lsw_form import *
+from PyQt4 import QtCore, QtGui
 
+class Thread_CountDown(QtCore.QThread):
+    Thread_CountDownSin = QtCore.pyqtSignal()
+
+    def __init__(self, parent=None):
+        super(Thread_CountDown, self).__init__(parent)
+        self.__oldtime = 0
+        self.__newtime = 0
+        self.__ss = &apos;stop&apos;
+
+    def run(self):
+        while 1:
+            self.__oldtime = time.time()
+            self.__newtime = time.time()
+            while self.__ss == &apos;start&apos;:
+                self.__newtime = time.time()
+                if abs(self.__newtime - self.__oldtime) &gt;= 1:
+                    #发送信号到主线程
+                    self.__oldtime = self.__newtime
+                    self.Thread_CountDownSin.emit()
+
+    def start_stop(self, temstr):
+            self.__ss = temstr
+
+class MainWindow(QtGui.QWidget):
+    MW2CountDownSin = QtCore.pyqtSignal(str)
+    def __init__(self,parent=None):
+        QtGui.QWidget.__init__(self,parent)
+        self.__ui = Ui_Warn()
+        self.__ui.setupUi(self)
+        self.__popwarncount = 0
+        self.__timecount = 0
+        #创建连接
+        self.connect(self.__ui.about, QtCore.SIGNAL(&quot;clicked()&quot;), self.__click_about)
+        self.connect(self.__ui.start, QtCore.SIGNAL(&quot;clicked()&quot;), self.__click_start)
+        self.connect(self.__ui.stop, QtCore.SIGNAL(&quot;clicked()&quot;), self.__click_stop)
+
+        #tray不可以用槽直接连接
+        #self.connect(self.__ui.tray, QtCore.SIGNAL(&quot;clicked()&quot;), self.__click_tray)
+        #self.__ui.tray.activated.connect(self.__click_tray)#直接点击弹出主界面
+
+        #创建体统托盘图标,可以看出也算是一个插件
+        self.__ui.tray = QtGui.QSystemTrayIcon(self)
+        trayicon = QtGui.QIcon(QtCore.QString.fromUtf8(&quot;:/img/image2.png&quot;))
+        self.__ui.tray.setIcon(trayicon)
+        self.__ui.tray.setToolTip(u&quot;Up~Down~请注意休息&quot;)
+        self.__ui.tray.show()
+        # 创建右击菜单
+        traymenu = QtGui.QMenu()
+        traymenu_reply = traymenu.addAction(u&quot;恢复主界面&quot;)
+        traymenu_exit = traymenu.addAction(u&quot;退出&quot;)
+        traymenu_reply.triggered.connect(self.__click_show)
+        traymenu_exit.triggered.connect(self.__click_end)
+        self.__ui.tray.setContextMenu(traymenu)
+
+        #创建线程
+        self.__thread_countdown = Thread_CountDown()
+        self.__thread_countdown.Thread_CountDownSin.connect(self.__pop_warn)
+        self.MW2CountDownSin.connect(self.__thread_countdown.start_stop)
+        self.__thread_countdown.start()
+
+    def __click_end(self):
+        self.close()
+
+    def __click_show(self):
+        self.show()
+
+    def __click_about(self):
+        QtGui.QMessageBox.about(self, u&quot;关于&quot;, u&quot;Up~Down~：60分钟提醒一次\r\n&quot;
+                                             u&quot;                                  by:lz&quot;)
+    def __click_stop(self):
+        self.__timecount = 0
+        self.__ui.lcd.setProperty(&quot;intValue&quot;, 3600)
+        self.__ui.start.setDisabled(False)
+        self.MW2CountDownSin.emit(&apos;stop&apos;)
+
+    def __click_start(self):
+        self.__ui.start.setDisabled(True)
+        self.MW2CountDownSin.emit(&apos;start&apos;)
+        pass
+
+    def __click_tray(self):
+        self.show()
+
+    def __pop_warn(self):
+        self.__timecount += 1
+        timecount = 3600 - self.__timecount
+        self.__ui.lcd.setProperty(&quot;intValue&quot;, timecount)
+        if timecount == 0:
+            self.__timecount = 0
+            self.show()
+            self.__popwarncount += 1
+            self.__winsta = self.isHidden()
+            self.__warnbox = QtGui.QMessageBox.warning(self, u&quot;休息&quot;, u&quot;请休息5分钟&quot;)
+            if self.__warnbox == 1024 and self.__popwarncount &gt; 0:
+                self.__popwarncount -= 1
+                if self.__popwarncount == 0 and self.__winsta:
+                    self.hide()
+
+
+    def closeEvent(self, QCloseEvent):
+        if self.isActiveWindow() == True:#是否是当前活动窗口
+            self.hide()
+            QCloseEvent.ignore()
+
+if __name__ == &quot;__main__&quot;:
+    app = QtGui.QApplication(sys.argv)
+    myapp=MainWindow()
+
+    #窗口最大化按键无效
+    myapp.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
+
+    #锁定窗口大小
+    myapp.setFixedSize(myapp.width(), myapp.height())
+    myapp.show()
+    app.exec_() 
+</code></pre>
       
     </div>
     
@@ -225,18 +340,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/04/06/three-ADT/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          三种基本抽象数据类型
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/03/30/stm32-spi/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">stm32-SPI</div>
+    <a href="/2017/11/05/Design-Model/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Design_Model</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -271,7 +377,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="raspberry-pi-commands" data-title="Raspberry Pi-Commands" data-url="http://avalonlz.github.io/2016/04/01/raspberry-pi-commands/"></div>
+	<div class="ds-thread" data-thread-key="LongSitWarning" data-title="LongSitWarning" data-url="http://avalonlz.github.io/2017/11/08/LongSitWarning/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

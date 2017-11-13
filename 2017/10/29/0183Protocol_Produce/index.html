@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="为模拟GPS数据给到AIS模块，随手写了这么个工具，顺便复习下快、准、狠的pyqt（开发效率极高，不过如果是需要正式发布的软件还是用QT吧，毕竟C++是Win亲生的）">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/pyqt_0183protocol.png">
-<meta property="og:updated_time" content="2017-11-08T12:02:23.092Z">
+<meta property="og:updated_time" content="2017-11-13T03:11:46.877Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="0183协议生成器">
 <meta name="twitter:description" content="为模拟GPS数据给到AIS模块，随手写了这么个工具，顺便复习下快、准、狠的pyqt（开发效率极高，不过如果是需要正式发布的软件还是用QT吧，毕竟C++是Win亲生的）">
@@ -254,7 +254,7 @@ class Thread_SendData(QtCore.QThread):
             self.display.currentFont()
             time.sleep(int(self.interval))
 
-    def senddata_stop(self):#被外信号绑定的函数不能写为私有函数
+    def senddata_stop(self):#若写为私有函数则主线程中的sin无法绑定此函数（无法绑定到不同类的私有函数上）
         self.nostop = 0
 
 old_port = []#保证不一致刷新com口数量

@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>Linux多线程编程 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Linux多线程编程相关知识，不定期更新">
+  <meta name="description" content="Linux多线程(用户态线程)编程相关知识，不定期更新">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux多线程编程">
 <meta property="og:url" content="http://avalonlz.github.io/2017/11/12/Linux-multiThread/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="Linux多线程编程相关知识，不定期更新">
-<meta property="og:updated_time" content="2017-11-12T15:37:22.360Z">
+<meta property="og:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新">
+<meta property="og:updated_time" content="2017-11-13T07:49:24.457Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程">
-<meta name="twitter:description" content="Linux多线程编程相关知识，不定期更新">
+<meta name="twitter:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -205,10 +205,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Linux多线程编程相关知识，不定期更新<a id="more"></a>   </p>
-<h3 id="名词解析"><a href="#名词解析" class="headerlink" title="名词解析"></a>名词解析</h3><p>同步：同步就是指在一定时间内只允许一个线程访问某一资源。在该时间内其他线程不可访问该资源（实现方式：互斥锁、条件变量、读写锁）    </p>
+        <p>Linux多线程(用户态线程)编程相关知识，不定期更新<a id="more"></a>   </p>
+<h3 id="相关名词解析"><a href="#相关名词解析" class="headerlink" title="相关名词解析"></a>相关名词解析</h3><p>同步：同步就是指在一定时间内只允许一个线程访问某一资源。在该时间内其他线程不可访问该资源（实现方式：互斥锁、条件变量、读写锁）    </p>
 <p>原子操作：  某段代码在执行时不会被其他线程影响，则构成了一个原子操作</p>
-<p>互斥锁实现：      </p>
+<h3 id="线程优先级（在Linux中，内核态线程-kthread所创建-的调度与进程调度的策略、算法相同-在内核态中的线程和进程基本-，用户态线程-pthread-则需要用户自己实现）"><a href="#线程优先级（在Linux中，内核态线程-kthread所创建-的调度与进程调度的策略、算法相同-在内核态中的线程和进程基本-，用户态线程-pthread-则需要用户自己实现）" class="headerlink" title="线程优先级（在Linux中，内核态线程(kthread所创建)的调度与进程调度的策略、算法相同(在内核态中的线程和进程基本)，用户态线程(pthread)则需要用户自己实现）"></a>线程优先级（在Linux中，内核态线程(kthread所创建)的调度与进程调度的策略、算法相同(在内核态中的线程和进程基本)，用户态线程(pthread)则需要用户自己实现）</h3><p>Linux内核态线程调度算法中的SCHED_RR和大部分RTOS的线程调度算法相同。即具有高优先级抢占特性，也就是在多线程中，高优先级的线程是无条件抢占CPU的，如果高优先级线程未挂起，则低优先级线程将一直不会被执行。若多个线程处于相同优先级时则会对这几个同优先级的线程采用时间片轮转算法。  </p>
+<p>内核态线程调度（实时调度，即支持高优先级抢占运行）：<br>SCHED_OTHER//分时调度,它的特点是即使是最低优先级，他也能获得一定的时间片.<br>SCHED_FIFO//实时调度，先到先服务。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起；对于同等优先级，先运行的进程会一直占据cpu, 只有等到先运行的线程挂起后，后续进程才能得到时间片。<br>SCHED_RR//实时调度，时间片轮转。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起, ；对于同等优先级的线程，各个线程会轮流运行一定的时间片（Linux是100ms）。<br>API:  </p>
+<h3 id="同步实现方式"><a href="#同步实现方式" class="headerlink" title="同步实现方式"></a>同步实现方式</h3><p>互斥锁的实现：<br>主要实现函数：<br>1、pthread_mutex_t mutex_test = PTHREAD_MUTEX_INITIALIZER;//初始化锁<br>2、pthread_mutex_lock//上锁<br>3、pthread_mutex_unlock//解锁     </p>
 <pre><code>/*************************************************************************
     &gt; File Name: mutexlock.c
     &gt; Author:lizhong 
@@ -271,8 +273,10 @@ int main(void)
     }
 
     printf(&quot;All End\r\n&quot;);
-}
-</code></pre>
+}  
+</code></pre><p>条件变量的实现（注意：条件变量总是和一个互斥锁搭配使用）：<br>与互斥锁不同，条件变量是主动阻塞自身线程，直到某条件达成。但条件的检测需要在互斥锁的保护下进行。<br>主要实现函数：     </p>
+<p>2、int pthread_cond_signal(pthread_cond_t * cond);//通过条件变量cond发送消息，若多个线程等待，按入队顺序激活其中一个。调用后要立即释放本线程的互斥锁，因为在满足条件后pthread_cond_wait会在另一个线程立马上锁继续执行。pthread_cond_broadcast可以唤醒所有等待线程<br>3、pthread_cond_wait//函数执行时先自动释放指定的锁，然后等待条件变量的变化。在函数调用返回之前，自动将指定的互斥量重新锁住。解锁-&gt;阻塞等待条件成立-&gt;上锁，继续执行  </p>
+
       
     </div>
     

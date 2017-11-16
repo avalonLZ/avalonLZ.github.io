@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2017/11/12/Linux-multiThread/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新">
-<meta property="og:updated_time" content="2017-11-15T15:16:07.786Z">
+<meta property="og:updated_time" content="2017-11-16T14:14:12.663Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程">
 <meta name="twitter:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新">
@@ -279,8 +279,70 @@ int main(void)
     printf(&quot;All End\r\n&quot;);
 }  
 </code></pre></li>
-<li><p>条件变量的实现（注意：条件变量总是和一个互斥锁搭配使用）：<br>与互斥锁不同，条件变量是主动阻塞自身线程，直到某条件达成。但条件的检测需要在互斥锁的保护下进行。<br>主要实现函数：<br>1、pthread_cond_t temcond = PTHREAD_COND_INITIALIZER;//初始化静态定义的条件变量，一般用此即可<br>int pthread_cond_init(pthread_cond_t <em>cv,<br>const pthread_condattr_t </em>cattr);//条件变量被存放在参数cv指向的内存中，cattr一般默认为NULL，使用缺省属性<br>2、int pthread_cond_signal(pthread_cond_t <em>cv);//通过条件变量cv发送消息，若多个线程等待，按入队顺序激活其中一个。调用后要立即释放本线程的互斥锁，因为在满足条件后pthread_cond_wait会在另一个线程立马上锁继续执行。pthread_cond_broadcast可以唤醒所有等待线程<br>3、int pthread_cond_wait(pthread_cond_t </em>cv,<br>pthread_mutex_t *mutex);//函数执行时先自动释放指定的锁，然后等待条件变量的变化。在函数调用返回之前，自动将指定的互斥量重新锁住。解锁-&gt;阻塞等待条件成立-&gt;上锁，继续执行。所以需要注意在另一线程条件变量成立signal后需要立即解锁    </p>
-</li>
+<li><p>条件变量的实现（注意：条件变量总是和一个互斥锁搭配使用，当一个线程的行为依赖于另外一个线程对共享数据状态的改变时，这时候就可以使用条件变量）：<br>与互斥锁不同，条件变量是主动阻塞自身线程，直到某条件达成。但条件的检测需要在互斥锁的保护下进行。<br>主要实现函数：<br>1、pthread_cond_t temcond = PTHREAD_COND_INITIALIZER;//初始化静态定义的条件变量，一般用此即可<br>int pthread_cond_init(pthread_cond_t <em>cv,<br>const pthread_condattr_t </em>cattr);//条件变量被存放在参数cv指向的内存中，cattr一般默认为NULL，使用缺省属性<br>2、int pthread_cond_signal(pthread_cond_t <em>cv);//通过条件变量cv发送消息，若多个线程等待，按入队顺序激活其中一个。调用后要立即释放本线程的互斥锁，因为在满足条件后pthread_cond_wait会在另一个线程立马上锁继续执行。pthread_cond_broadcast可以唤醒所有等待线程<br>3、int pthread_cond_wait(pthread_cond_t </em>cv,<br>pthread_mutex_t *mutex);//函数执行时先自动释放指定的锁，然后等待条件变量的变化。在函数调用返回之前，自动将指定的互斥量重新锁住。解锁-&gt;阻塞等待条件成立-&gt;上锁，继续执行。所以需要注意在另一线程条件变量成立signal后需要立即解锁       </p>
+<pre><code>/*************************************************************************
+    &gt; File Name: ConditionVariable.c
+    &gt; Author: lizhong
+    &gt; Mail: 
+    &gt; Created Time: 2017年11月16日 星期四 05时26分09秒
+ ************************************************************************/
+
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;pthread.h&gt;
+#include&lt;sys/syscall.h&gt;
+
+pthread_mutex_t mutex_test = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond_test = PTHREAD_COND_INITIALIZER;
+
+void *One_Thread(void * tparam)
+{
+    printf(&quot;One_Thread Start!\r\n&quot;);
+    //unsigned char i = *(unsigned char *)tparam;
+    pthread_mutex_lock(&amp;mutex_test);
+    pthread_cond_wait(&amp;cond_test, &amp;mutex_test);
+    printf(&quot;One_Thread Receive Signal\r\n&quot;);
+    pthread_mutex_unlock(&amp;mutex_test);
+}
+
+void *Two_Thread(void * tparam)
+{
+    unsigned char j = 0;
+
+    printf(&quot;Two_Thread Start!\r\n&quot;);
+
+    for(j = 0; j &lt; 10; ++j)
+    {
+        if(j == 5)
+        {
+            printf(&quot;Two _Thread Ready Send Signal\r\n&quot;);
+            pthread_cond_signal(&amp;cond_test);
+            printf(&quot;Two_Thread Send Signal OK\r\n&quot;);
+        }
+        printf(&quot;Two_Thread j Value is:%d\r\n&quot;, j);       
+    }
+
+}
+
+int main(void)
+{
+    pthread_t one_thread;
+    pthread_t two_thread;
+
+    //可能会出现2号线程一直跑，
+    //1号线程却还没开始跑的情况，
+    //导致1号线程没能收到signal
+    pthread_create(&amp;one_thread, NULL, One_Thread, (void *)0);
+    sleep(1);//确保1号线程先跑,也可使用SCHED_FIFO或SCHED_RR实时调度算法初始化线程
+    pthread_create(&amp;two_thread, NULL, Two_Thread, (void *)0);
+
+    pthread_join(one_thread, NULL);
+    pthread_join(two_thread, NULL);
+    printf(&quot;ALL END\r\n&quot;);
+}  
+</code></pre></li>
 </ul>
 
       

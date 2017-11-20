@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2017/11/12/Linux-multiThread/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新">
-<meta property="og:updated_time" content="2017-11-20T08:59:23.588Z">
+<meta property="og:updated_time" content="2017-11-20T09:25:20.858Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程">
 <meta name="twitter:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新">
@@ -484,7 +484,7 @@ int main(void)
 </ul>
 <ul>
 <li><p>自旋锁的实现(在用户态暂时当做mutex看待，在用户态好像没有意义)：<br>自旋锁与互斥锁相似，唯一的区别是当一个线程试图获取一个被锁定的互斥锁时，该操作会失败然后该线程会进入睡眠，让其他线程运行。而当一个线程试图获取一个自旋锁却没成功时，该线程会不断重试，直到最终成功为止,所以在内核态的自旋锁中单核CPU就算关中断也会导致死锁（用户态的自旋锁则不会导致死锁，因为内核抢占存在(sleep也有效)，会进行内核调度）（若尝试途中进程时间片超时，则依然会被操作系统强行切换到另一个进程。因为在用户态线程中，系统的最小调度单位是进程）。<br>主要实现函数(1-5重要)：<br>1、pthread_spin_init(spinlock_t <em>lock, 0);//初始化自旋锁，将自旋锁设置为1(未上锁)<br>2、pthread_spin_lock(spinlock_t </em>lock);//循环等待，直到自旋锁解锁（被设置为1），然后再将自旋锁锁上(设置为0)<br>3、pthread_spin_unlock(spinlock_t <em>lock);//将自旋锁解锁(设置为1)<br>4、pthread_spin_lock_irq(spinlock_t </em>lock);//循环等待直到自旋锁解锁(被设置为1)，然后将自旋锁锁上(设置为0)，关中断<br>5、pthread_spin_unlock_irq(spinlock_t <em>lock);//将自旋锁解锁(设置为1)，开中断<br>6、pthread_spin_is_locked(spinlock_t </em>lock);//如果自旋锁未上锁(值为1)则返回0，否则返回1<br>7、pthread_spin_unlock_wait();//等待，直到自旋锁解锁(被设置为1)<br>8、pthread_spin_trylock(spinlock_t <em>lock);//尝试锁上自旋锁(设置为0) ，如果原来为未上锁状态，则返回1，否则返回0<br>9、pthread_spin_lock_irqsave(spinlock_t </em>lock);//循环等待直到自旋锁解锁(被设置为1)，随后将自旋锁上锁(设置为0)。关中断，将状态寄存器值存入flags<br>10、pthread_spin_unlock_irqsave(spinlock_t <em>lock);//解锁自旋锁(设置为1)。开中断，将状态寄存器值从flags存入状态寄存器<br>11、pthread_spin_lock_bh(spinlock_t </em>lock);//循环等待直到自旋锁解锁(被置为1),随后将自旋锁上锁(置为0)。阻止软中断底半部的执行<br>12、pthread_spin_unlock_bh(spinlock_t *lock);//将自旋锁解锁(设置为1)。开启底半部的执行    </p>
-<pre><code>/*************************************************************************
+<pre><code>*************************************************************************
     &gt; File Name: Spinlock.c
     &gt; Author:lizhong
     &gt; Mail: 
@@ -545,7 +545,7 @@ int main(void)
     pthread_join(one_thread, NULL);
     pthread_join(two_thread, NULL);
     printf(&quot;ALL END\r\n&quot;);
-}
+}  
 </code></pre></li>
 </ul>
 

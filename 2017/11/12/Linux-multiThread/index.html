@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2017/11/12/Linux-multiThread/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新">
-<meta property="og:updated_time" content="2017-11-20T09:25:20.858Z">
+<meta property="og:updated_time" content="2017-11-20T13:31:21.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程">
 <meta name="twitter:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新">
@@ -279,7 +279,7 @@ int main(void)
     printf(&quot;All End\r\n&quot;);
 }  
 </code></pre></li>
-<li><p>条件变量的实现（注意：条件变量总是和一个互斥锁搭配使用，当一个线程的行为依赖于另外一个线程对共享数据状态的改变时，这时候就可以使用条件变量）：<br>与互斥锁不同，条件变量是主动阻塞自身线程，直到某条件达成。但条件的检测需要在互斥锁的保护下进行。<br>主要实现函数：<br>1、pthread_cond_t temcond = PTHREAD_COND_INITIALIZER;//初始化静态定义的条件变量，一般用此即可<br>int pthread_cond_init(pthread_cond_t <em>cv,<br>const pthread_condattr_t </em>cattr);//条件变量被存放在参数cv指向的内存中，cattr一般默认为NULL，使用缺省属性<br>2、int pthread_cond_signal(pthread_cond_t <em>cv);//通过条件变量cv发送消息，若多个线程等待，按入队顺序激活其中一个。调用后要立即释放本线程的互斥锁，因为在满足条件后pthread_cond_wait会在另一个线程立马上锁继续执行。pthread_cond_broadcast可以唤醒所有等待线程<br>3、int pthread_cond_wait(pthread_cond_t </em>cv,<br>pthread_mutex_t <em>mutex);//函数执行时先自动释放指定的锁，然后等待条件变量的变化。在函数调用返回之前，自动将指定的互斥量重新锁住。解锁-&gt;阻塞等待条件成立-&gt;上锁，继续执行。所以需要注意在另一线程条件变量成立signal后需要立即解锁<br>4、int pthread_cond_destroy(pthread_cond_t </em>cv);//销毁条件变量  </p>
+<li><p>条件变量的实现（注意：条件变量总是和一个互斥锁搭配使用，当一个线程的行为依赖于另外一个线程对共享数据状态的改变时，这时候就可以使用条件变量）：<br>与互斥锁不同，条件变量是主动阻塞自身线程，直到某条件达成。但条件的检测需要在互斥锁的保护下进行。<br>主要实现函数：<br>1、pthread_cond_t temcond = PTHREAD_COND_INITIALIZER;//初始化静态定义的条件变量，一般用此即可<br>int pthread_cond_init(pthread_cond_t <em>cv,const pthread_condattr_t </em>cattr);//条件变量被存放在参数cv指向的内存中，cattr一般默认为NULL，使用缺省属性<br>2、int pthread_cond_signal(pthread_cond_t <em>cv);//通过条件变量cv发送消息，若多个线程等待，按入队顺序激活其中一个。调用后要立即释放本线程的互斥锁，因为在满足条件后pthread_cond_wait会在另一个线程立马上锁继续执行。pthread_cond_broadcast可以唤醒所有等待线程<br>3、int pthread_cond_wait(pthread_cond_t </em>cv,<br>pthread_mutex_t <em>mutex);//函数执行时先自动释放指定的锁，然后等待条件变量的变化。在函数调用返回之前，自动将指定的互斥量重新锁住。解锁-&gt;阻塞等待条件成立-&gt;上锁，继续执行。所以需要注意在另一线程条件变量成立signal后需要立即解锁<br>4、int pthread_cond_destroy(pthread_cond_t </em>cv);//销毁条件变量  </p>
 <pre><code>/*************************************************************************
     &gt; File Name: ConditionVariable.c
     &gt; Author: lizhong
@@ -346,7 +346,7 @@ int main(void)
     printf(&quot;ALL END\r\n&quot;);
 }
 </code></pre></li>
-<li><p>信号量的实现(#include<semaphore.h>)：<br>POSIX信号量(linux中还有一种过时的System V信号量)分为有名信号量(值存在文件中)和无名信号量(值保持在内存中)都可以用于线程的同步(有名信号量还可用于进程间同步，无名信号量还可用于有亲缘关系的进程间同步)<br>无名信号量主要实现函数(函数本身均属于原子操作，可以多线程同时执行)：<br>无名信号量必须是共享变量，并且无名信号量要保护的变量也必须是共享变量<br>1、int sem_init(sem_t <em>sem, int pshared, unsigned int value);//初始化一个信号量，value参数指定信号量的初始值，pshared参数指明信号量是由进程内线程共享(0值)，还是进程间共享(非0值)，value指定了信号量的初始值<br>2、int sem_wait(sem_t </em>sem);//若sem值非零则立刻执行减1操作，线程继续执行。若sem值为0则线程睡眠，等待直到其他线程操作sem使其非零时才会唤醒该线程，减1后继续执行(同条件变量一样，收到信号后随机继续跑一个线程，有可能是发信号的线程也有可能是收信号的线程)。若有两个线程都在等待同一个信号量变成非零值，则第三个线程增加1时，等待线程中只有一个随机线程能对信号量做减法并继续执行，另一个仍处于等待状态<br>3、int sem_post(sem_t <em>sem);//将信号量值加1<br>4、int sem_destroy(sem_t </em>sem);//该函数用于清理信号量，在清理信号量时若还有线程在等待该信号量则会报错  </semaphore.h></p>
+<li><p>信号量的实现(使用信号量，需要包含semaphore.h头文件)：<br>POSIX信号量(linux中还有一种过时的System V信号量)分为有名信号量(值存在文件中)和无名信号量(值保持在内存中)都可以用于线程的同步(有名信号量还可用于进程间同步，无名信号量还可用于有亲缘关系的进程间同步)<br>无名信号量主要实现函数(函数本身均属于原子操作，可以多线程同时执行)：<br>无名信号量必须是共享变量，并且无名信号量要保护的变量也必须是共享变量<br>1、int sem_init(sem_t <em>sem, int pshared, unsigned int value);//初始化一个信号量，value参数指定信号量的初始值，pshared参数指明信号量是由进程内线程共享(0值)，还是进程间共享(非0值)，value指定了信号量的初始值<br>2、int sem_wait(sem_t </em>sem);//若sem值非零则立刻执行减1操作，线程继续执行。若sem值为0则线程睡眠，等待直到其他线程操作sem使其非零时才会唤醒该线程，减1后继续执行(同条件变量一样，收到信号后随机继续跑一个线程，有可能是发信号的线程也有可能是收信号的线程)。若有两个线程都在等待同一个信号量变成非零值，则第三个线程增加1时，等待线程中只有一个随机线程能对信号量做减法并继续执行，另一个仍处于等待状态<br>3、int sem_post(sem_t <em>sem);//将信号量值加1<br>4、int sem_destroy(sem_t </em>sem);//该函数用于清理信号量，在清理信号量时若还有线程在等待该信号量则会报错  </p>
 <pre><code>/*************************************************************************
     &gt; File Name: Sem.c
     &gt; Author: 

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Python notes | 木子人人人&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Python2.7笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python notes">
+<meta property="og:url" content="http://avalonlz.github.io/2015/10/16/python-notes/index.html">
+<meta property="og:site_name" content="木子人人人's Blog">
+<meta property="og:description" content="Python2.7笔记">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Python_NodeC3C32C8C227543A19201B00AD4C7C062.jpg">
+<meta property="og:updated_time" content="2017-07-24T07:30:33.948Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python notes">
+<meta name="twitter:description" content="Python2.7笔记">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Python_NodeC3C32C8C227543A19201B00AD4C7C062.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">木子人人人</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">积跬步 至千里</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/avalonLZ" title="github">github</a>
+					        
+								<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/tags/Linux-Raspberry-Pi/" style="font-size: 10px;">Linux_Raspberry Pi</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 10px;">RTOS_UCOSII</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 20px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 16.67px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/服务器-Django/" style="font-size: 13.33px;">服务器_Django</a> <a href="/tags/服务器-Flask/" style="font-size: 10px;">服务器_Flask</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏-俄罗斯方块/" style="font-size: 10px;">游戏_俄罗斯方块</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/软件工程-DesignPattern/" style="font-size: 10px;">软件工程_DesignPattern</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">木子人人人</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">木子人人人</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">积跬步 至千里</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/avalonLZ" title="github">github</a>
+			        
+						<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-python-notes" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/10/16/python-notes/" class="article-date">
+  	<time datetime="2015-10-16T04:36:39.000Z" itemprop="datePublished">2015-10-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python notes
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机语言-Python/">计算机语言_Python</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Python2.7笔记<a id="more"></a>  </p>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a><strong>变量</strong></h1><ul>
+<li>id(a)可以查看a的地址  </li>
+</ul>
+<h1 id="输入输出"><a href="#输入输出" class="headerlink" title="输入输出"></a><strong>输入输出</strong></h1><ul>
+<li>raw_input():取得值为字符，化为整数需要用：int(raw_input)  </li>
+<li>print ‘xxxxxx’<br>(int():指可将纯数字字符串转成数字，type():可以查看变量类型)  </li>
+</ul>
+<h1 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a><strong>运算符</strong></h1><ul>
+<li>3**2（运算结果为3^2）  </li>
+<li>5/2（2）  </li>
+<li>5.0/2（2.5）  </li>
+<li>5.0//2（2.0，整数除法，用于需要取商的整数部分，且除数或被除数中存在未知变量）  </li>
+<li>5%2（1）  </li>
+<li>成员测试:in, not in  </li>
+</ul>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a><strong>数据类型</strong></h1><ul>
+<li>int: -2147483647~2147483647(超此变为long型)  </li>
+<li>213L(l)将强制定义为常整型  </li>
+<li>213.0将强制定义为浮点型  </li>
+<li>213j将强制定义为复数类型  </li>
+<li>‘213’或”213”将强制定义为字符串  </li>
+</ul>
+<h1 id="注释"><a href="#注释" class="headerlink" title="注释"></a><strong>注释</strong></h1><ul>
+<li>单行注释：#  </li>
+<li>多行注释：’’’xxxx’’’  </li>
+</ul>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a><strong>索引</strong></h1><ul>
+<li>a = ‘acvfs’  </li>
+<li>a[2]为v，此为索引。a[1]+a[2]为’cv’(Python中加号两边都为字符类型，则会进行字符连接。若有一边为int则会异常。两边都是序列也会进行连接，两边同类型则不会异常)  </li>
+</ul>
+<h1 id="切片"><a href="#切片" class="headerlink" title="切片"></a><strong>切片</strong></h1><ul>
+<li>a[0:5]为acvfs(注意结束点要+1)  </li>
+<li>a[:5]从0位置开始取到结尾  </li>
+<li>a[0:]从0位置开始取到结尾（更倾向于此种方式）  </li>
+</ul>
+<h1 id="步长"><a href="#步长" class="headerlink" title="步长"></a><strong>步长</strong></h1><ul>
+<li>a[::2] avs,此处步长为1  </li>
+<li>a[-1] s,负数反着取  </li>
+<li>a[:-1] acvf(负数最少都会丢一个尾数)  </li>
+<li>a[1:-1] cvf  </li>
+</ul>
+<h1 id="元组-tuple"><a href="#元组-tuple" class="headerlink" title="元组(tuple)"></a><strong>元组(tuple)</strong></h1><p>一般用于定义不变数据  </p>
+<pre><code>&gt;&gt;&gt; t = (&apos;lz&apos;, 23, &apos;boy&apos;)
+&gt;&gt;&gt; name , age, sex = t
+&gt;&gt;&gt; name
+&apos;lz&apos;
+&gt;&gt;&gt; age
+23
+&gt;&gt;&gt; sex
+&apos;boy&apos;
+&gt;&gt;&gt;  
+</code></pre><h1 id="列表-list"><a href="#列表-list" class="headerlink" title="列表(list)"></a><strong>列表(list)</strong></h1><p>列表操作方法：    </p>
+<ul>
+<li>取值操作：<br>切片和索引<br>列表名[]  </li>
+<li>添加：<br>列表名.append()  </li>
+<li>删除：<br>del(列表名)<br>list.remove(元素)（不用特意加引号，用于删除列表中第一次出现的某元素）<br>list.remove(列表名[xx])(用于删除列表中索引为xx的元素)  </li>
+<li>修改：<br>列表名.[xx] = xx  </li>
+<li>查找：<br>if 元素 in 列表名  </li>
+</ul>
+<h1 id="字典"><a href="#字典" class="headerlink" title="字典"></a><strong>字典</strong></h1><ul>
+<li>字典添加值：dir[add key] = add value  </li>
+<li><p>字典修改值：dir[old key] = new value  </p>
+</li>
+<li><p>删除并返回key为’a’的元素:dict1.pop(‘a’)  </p>
+</li>
+<li>删除字典所有元素：dict1.clear()#将为空字典  </li>
+<li>删除整个字典：del dict1#将无此字典类型的变量  :</li>
+</ul>
+<p>一些常用函数：  </p>
+<ul>
+<li>dir.get(‘key’,3)#有’key’对应的value则取出，若没有则返回3这一数值  </li>
+<li>dir.values():打印所有value值,组成一个list  </li>
+<li>dir.keys():打印所有key值，组成一个list  </li>
+</ul>
+<h1 id="Python中的形参"><a href="#Python中的形参" class="headerlink" title="Python中的形参"></a><strong>Python中的形参</strong></h1><ul>
+<li><p>传入元组，元组元素依次对应形参传入函数：    </p>
+<pre><code>&gt;&gt;&gt; def parmarytest(x,y,z):
+        return x+y+z
+
+&gt;&gt;&gt; tuplenum = (1,2,3)
+&gt;&gt;&gt; parmarytest(*tuplenum)#传入元组时加入参数，可以使元组元素单独处理
+6
+&gt;&gt;&gt; listnum = [1,2,3]
+&gt;&gt;&gt; parmarytest(*list)#只可以使用元组，列表不行
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#10&gt;&quot;, line 1, in &lt;module&gt;
+parmarytest(*list)
+TypeError: parmarytest() argument after * must be a sequence, not type
+&gt;&gt;&gt; 
+</code></pre></li>
+<li><p>处理多余实参：    </p>
+<pre><code>&gt;&gt;&gt; def surplusparm(x,*y,**z):
+    print x
+    print y
+    print z
+
+&gt;&gt;&gt; surplusparm(1,2,3,4,5,6,a = 7, b = 8, c = 9)
+1
+(2, 3, 4, 5, 6)
+{&apos;a&apos;: 7, &apos;c&apos;: 9, &apos;b&apos;: 8}
+&gt;&gt;&gt; surplusparm(1,2,3,4,5,6,x = 7, b = 8, c = 9)
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#25&gt;&quot;, line 1, in &lt;module&gt;
+    surplusparm(1,2,3,4,5,6,x = 7, b = 8, c = 9)
+TypeError: surplusparm() got multiple values for keyword argument &apos;x&apos;
+&gt;&gt;&gt; 
+</code></pre></li>
+</ul>
+<h1 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a><strong>lambda表达式</strong></h1><ul>
+<li><p>用lambda定义一个函数：    </p>
+<pre><code>g = lamdba x,y:x*y # 冒号后x*y为需要执行的内容。执行这个lamdba表达式：g(3,2)    
+fun = lamdba : function()#用fun()即可执行function()函数
+</code></pre></li>
+</ul>
+<h1 id="reduce函数"><a href="#reduce函数" class="headerlink" title="reduce函数"></a><strong>reduce函数</strong></h1><h1 id="switch实现"><a href="#switch实现" class="headerlink" title="switch实现"></a><strong>switch实现</strong></h1><ul>
+<li><p>Python中没有switch case语句，但可以用字典和它的get方法加lamdba语句实现：  </p>
+<pre><code>def NumberToString(arg):
+    switcher = {0:&apos;zero&apos;, 1:&apos;one&apos;, 2:&apos;two&apos;}  
+    return switcher.get(arg, &apos;none&apos;)  
+</code></pre></li>
+</ul>
+<h1 id="Python常用内置函数（可查看想关函数库进行详细了解）"><a href="#Python常用内置函数（可查看想关函数库进行详细了解）" class="headerlink" title="Python常用内置函数（可查看想关函数库进行详细了解）"></a><strong>Python常用内置函数（可查看想关函数库进行详细了解）</strong></h1><pre><code>abs()#返回绝对值  
+max()#返回最大值  
+min()#返回最小值  
+len()#返回字符串、列表、元组、字典的长度，字典长度按key或value个数来统计  
+divmod(x, y)#返回(x/y, x%y)  
+pow(x, y)#返回x^y的值  
+round(x)#返回x的浮点数形式  
+callable(func)#测试func()函数是否可被调用，可以返回true  
+type(x)#返回x的类型  
+isinstance(x, list)#判断x的类型是否是list是则true否则false  
+cmp(x, y)#比较x和y的大小，x&lt;y返回-1，x&gt;y返回1，相等返回0  
+range(x, y)#生成x至y-1个数组成的list（顺序）  
+tuple(x)#将x转换成元组  
+hex(x)#将十进制数x转换成十六进制数返回str类型  
+oct(x)#将十进制数x转换成八进制数，返回str类型  
+ord(x)#将一个ASCII码转换成十进制数，返回int类型  
+</code></pre><h1 id="String函数"><a href="#String函数" class="headerlink" title="String函数"></a><strong>String函数</strong></h1><pre><code>str1.capitalize()#将str1字符串的第一个字符大写  
+str1.replace(&apos;xxx&apos;, &apos;2&apos;, 1)#从左到右将str1字符串中的&apos;xxx&apos;字符串替换为&apos;2&apos;这一字符，替换一次  
+str1.split(&apos;.&apos;, 1)#将str1字符串以&apos;.为界切割一次，返回一个list，list内两个元素字符串分别为分割的左右两边  
+</code></pre><h1 id="序列处理函数"><a href="#序列处理函数" class="headerlink" title="序列处理函数"></a><strong>序列处理函数</strong></h1><ul>
+<li><p>filter(func, list):#func为过滤规则，list为输入量，tulpe也可以进行过滤  </p>
+<pre><code>&gt;&gt;&gt; list1 = [1,2,3,4,5,6,7]
+&gt;&gt;&gt; def f_fliter(x):#过滤规则，大于5的数保留
+    if x &gt;5:
+        return True
+&gt;&gt;&gt; filter(f_fliter, list1)
+[6, 7]
+&gt;&gt;&gt;     
+</code></pre></li>
+</ul>
+<ul>
+<li><p>zip(list1, list2):可以遍历两个列表，组成一个对应的由元组组成的新列表  </p>
+<pre><code>&gt;&gt;&gt; l = [2,4,5,6]
+&gt;&gt;&gt; li = [29,0,3]
+&gt;&gt;&gt; zip(li, l)
+[(29, 2), (0, 4), (3, 5)]
+&gt;&gt;&gt; zip(l,li)
+[(2, 29), (4, 0), (5, 3)]    
+</code></pre></li>
+<li><p>map(func, list1, list2):分别取两列表中的元素按func规定的方式进行处理，返回结果为一个list（list1和list2中的元素个数要相同）  </p>
+</li>
+</ul>
+<pre><code>&gt;&gt;&gt; li1 = [1,2,3,4]
+&gt;&gt;&gt; li2 = [5,6,7,8]
+&gt;&gt;&gt; def Add(x, y):
+    return x + y
+
+&gt;&gt;&gt; map(Add, li1, li2)
+[6, 8, 10, 12]
+&gt;&gt;&gt; li2 = [5,6,7,8,9]
+&gt;&gt;&gt; map(Add, li1, li2)
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#30&gt;&quot;, line 1, in &lt;module&gt;
+    map(Add, li1, li2)
+  File &quot;&lt;pyshell#27&gt;&quot;, line 2, in Add
+    return x + y
+TypeError: unsupported operand type(s) for +: &apos;NoneType&apos; and &apos;int&apos;
+&gt;&gt;&gt;  
+</code></pre><ul>
+<li><p>reduce(func, list):去列表中的元素按func定义的规则进行相应运算，并输出运算结果  </p>
+<pre><code>&gt;&gt;&gt; li1 = [1,2,3,4]
+&gt;&gt;&gt; def func(x, y):
+    return x + y
+
+&gt;&gt;&gt; reduce(func, li1)
+10
+&gt;&gt;&gt;   
+</code></pre></li>
+</ul>
+<h1 id="Python模块（库）"><a href="#Python模块（库）" class="headerlink" title="Python模块（库）"></a><strong>Python模块（库）</strong></h1><ul>
+<li>import的模块名和库名、脚本名相同：例如编写一个名为Items.py的脚本，则可在另一个脚本中使用import Items语句来导入它    </li>
+<li>__name__==’__main__’：在IDE中直接运行某py文件中的函数时等号会成立，若处于import引用的环境下则此处等号不成立  </li>
+<li>优先导入当前目录下的py文件  </li>
+<li>Python中的模块可以按目录组织为包：步骤如下：<br>建立了一个名字为包名字的文件夹<br>在该文件夹下创建一个__init__.py文件<br>根据需要在该文件夹下存放脚本文件、已编译扩展及子包<br>import pack.m1, pack.m2, pack.m3  </li>
+<li>from 文件夹名.py文件名 import .py文件中的类或函数 #from后一定要跟到.py文件，虽然导入的模块和当前编写的文件一般在同一文件夹中，但也可以用文件夹名来开头  </li>
+<li>import .py文件 #import后面跟到.py文件，在程序中具体要使用哪个类或者函数，再用.py文件名.类名/函数名，调用（一般推荐此种做法）  </li>
+</ul>
+<h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a><strong>正则表达式</strong></h1><h1 id="浅拷贝与深拷贝"><a href="#浅拷贝与深拷贝" class="headerlink" title="浅拷贝与深拷贝"></a><strong>浅拷贝与深拷贝</strong></h1><ul>
+<li><p>浅拷贝：  </p>
+<pre><code>&gt;&gt;&gt; a = [2,3,4]
+&gt;&gt;&gt; b = a#浅拷贝，可将b看做是一个a的引用（将b也放入了a的坑中），copy.copy(a)效果相同
+&gt;&gt;&gt; a.append(1)
+&gt;&gt;&gt; a
+[2, 3, 4, 1]
+&gt;&gt;&gt; b
+[2, 3, 4, 1]#a增加的同时b也增加了
+&gt;&gt;&gt; a = [0,6]#改变a的值，在Python中其实是将a丢入某个值中
+&gt;&gt;&gt; b#所以b并未改变，b还是在a之前的那个坑中
+[2, 3, 4, 1]
+</code></pre></li>
+<li><p>深拷贝：  </p>
+<pre><code>&gt;&gt;&gt; import copy
+&gt;&gt;&gt; a = [1,2,3]
+&gt;&gt;&gt; c = copy.deepcopy(a)#深拷贝，将a所在的坑重新复制了一个，并将c放入新坑中，所以c不能看做a的引用
+&gt;&gt;&gt; a.append(5)
+&gt;&gt;&gt; a#a增加
+[1, 2, 3, 5]
+&gt;&gt;&gt; c#c未增加
+[1, 2, 3]  
+</code></pre></li>
+</ul>
+<h1 id="Python文件读写"><a href="#Python文件读写" class="headerlink" title="Python文件读写"></a><strong>Python文件读写</strong></h1><p>mode:  </p>
+<ul>
+<li>r：只读  </li>
+<li>r+：读写  </li>
+<li>w：写入，先删除原文件，再重新写入，如果文件没有则创建  </li>
+<li>w+：读写，先删除原文件，再重新写入，如果文件没有则创建（可以写入输出）  </li>
+<li>a：写入，在文件末尾追加新的内容，文件不存在，则创建  </li>
+<li>a+：读写，在文件末尾追加新的内容，文件不存在，则创建  </li>
+<li>b：打开二进制的文件，可以与r,w,a,+结合使用  </li>
+<li>U：支持所有的换行符号  </li>
+</ul>
+<p>read：    </p>
+<pre><code>s = open/file(r&apos;路径&apos;)  
+s.read()  
+s.close()  
+</code></pre><p>write：  </p>
+<pre><code>s = open/file(r&apos;路径&apos;，&apos;w&apos;)  
+s.write(&apos;ssss&apos;)  
+s.close()#一定要执行这一步才会真正写入文件  
+</code></pre><h1 id="Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）"><a href="#Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）" class="headerlink" title="Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）"></a><strong>Python中的类（一般规定Python类名用大写开头，函数用小写字母开头）</strong></h1><ul>
+<li>类定义-&gt;类对象（class test: ,test就是一个类对象）-&gt;类实例对象：含self的方法必须要有实例对象才能被调用，不含self，且不含参数的方法可以直接被类对象调用。有self作为形参定义的方法才是实例对象可用的方法  </li>
+<li>类中属性名若和方法名相同，则属性将会覆盖方法  </li>
+<li>Python的重载只能使用def test(x, y, z=4)这种，参数默认值的方式实现重载（默认值就是python用来实现函数重载的重要方法）    </li>
+<li><p>私有变量的定义与访问  </p>
+<pre><code>&gt;&gt;&gt; class test:
+    def __init__(self):
+        self.__test1 = 1
+</code></pre></li>
+</ul>
+<pre><code>&gt;&gt;&gt; o = test()
+&gt;&gt;&gt; o._test__test1#通过此种调用可以访问到类中的私有成员变量
+1
+&gt;&gt;&gt;   
+</code></pre><ul>
+<li><p>继承：<br>1、<strong>xxx</strong>一般是魔法方法，coding时一般不要这样定义一个属性<br>2、子类中定义和父类同名属性或方法，此子类的实例对象会将父类方法覆盖<br>3、子类中若定义了<strong>init</strong>方法，则会自动的将父类中的<strong>init</strong>方法覆盖掉，所以在子类的<strong>init</strong>方法中应该要包含一个父类的<strong>init</strong>方法：<br>父类名.<strong>init</strong>(self)  或   super().<strong>init</strong>()  </p>
+</li>
+<li><p>多重继承（慎用）：<br>同时继承多个父类的属性和方法  </p>
+</li>
+<li><p>访问实例对象self属性（非私有属性）：<br>实例名.属性名  </p>
+</li>
+<li><p>组合：<br>在一个类中实例化其他类的对象就形成了组合  </p>
+</li>
+<li><p>BIF：<br>issubclass(a, b):检查a是否是b的子类，是True，否False，a,b同类也返回True。  （b不用是字符串的形式）<br>isinstance(a, b):实例对象a是否属于b类(b也可以是类组成的元组)，是True。（b不用是字符串的形式）<br>hasattr(a, “b”):实例对象a中是否有b这一属性，若b为私有属性，则都返回False<br>getattr(a, “b”, “no have the attribute”):实例对象a中若存在b属性，则返回该属性名，若没有则返回no have the attribute<br>setattr(a, “b”, value):实例对象a中若存在b属性则将其值改为value，否则增加该属性值<br>delattr(a, “b”):删除实例对象a中的b属性，若不存在则抛出异常<br>property():通过属性来设置属性，在一个class中写：a = property(获得属性的方法名， 修改属性的方法名， 删除属性的方法名)使得我们可以通过 实例.a 这种方式去修改实例中的属性：  </p>
+<pre><code>&gt;&gt;&gt; class Student:
+    def __init__(self):
+        self.__name = &apos;lz&apos;
+    def set_name(self, name):
+        self.__name = name
+    def display_name(self):
+        return self.__name
+    def delete_name(self):
+        del self.__name
+    a = property(display_name, set_name, delete_name)
+</code></pre></li>
+</ul>
+<pre><code>&gt;&gt;&gt; x = Student()
+&gt;&gt;&gt; x.a
+&apos;lz&apos;
+&gt;&gt;&gt; x.a = &apos;lizhong&apos;
+&gt;&gt;&gt; x.a
+&apos;lizhong&apos;
+&gt;&gt;&gt; del x.a
+&gt;&gt;&gt; 
+&gt;&gt;&gt; x.a#这里是疑问点，按正常来说应该是不会存在了
+&apos;lz&apos;
+&gt;&gt;&gt; del x.a
+
+Traceback (most recent call last):
+  File &quot;&lt;pyshell#70&gt;&quot;, line 1, in &lt;module&gt;
+    del x.a
+AttributeError: Student instance has no attribute &apos;a&apos;
+</code></pre><h1 id="魔法方法"><a href="#魔法方法" class="headerlink" title="魔法方法"></a><strong>魔法方法</strong></h1><p>被<strong>(双下横线)包围的方法称为魔法方法<br>常用魔法方法：<br>1、def </strong>str<strong>(self)#使用print方法打印时会自动调用此魔法方法，但要注意return后必须为str类型<br>2、def </strong>repr<strong>(self)#直接输入实例对象时需要返回的字符串，return后必须为str类型<br>3、def </strong>getattribute<strong>(self, name)#当用户访问一个属性时，此方法被调用（只要有访问属性，就会调用此方法，无论访问的属性是否存在）<br>4、def </strong>getattr<strong>(self, name)#当用户访问一个不存在的属性时，此方法被调用，name会传入用户访问的属性名<br>5、def </strong>setattr__(self, name, value)#当一个属性被设置时，此方法被调用，类内部赋值也会触发此方法，此处name传入的是被设置的属性名，value传入的是值（可以是字符也可以是数值）  </p>
+<pre><code>class test(object):
+    def __init__(self):
+        self.wide = 0#此处也会调用__setattr__方法  
+        self.height = 0
+    def __setattr__(self, name, value):
+        print &apos;__setattr__ was callback&apos;
+
+        if name == &apos;square&apos;:
+            self.wide = value
+            self.height = value
+        else:
+            object.__setattr__(self, name, value)#__setattr__和__getattribute__方法需要调用（返回）基类的中的此方法，防止死循环  
+</code></pre><p>6、def <strong>delattr</strong>(self, name)#当一个属性被删除时，此方法被调用<br>7、def <strong>del</strong>(self)#该方法只有在del最后一个应用变量时，才会被调用    </p>
+<p>运算相关魔法方法：</p>
+<h1 id="闭包和装饰器"><a href="#闭包和装饰器" class="headerlink" title="闭包和装饰器"></a><strong>闭包和装饰器</strong></h1><p>闭包：  </p>
+<h1 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a><strong>进制转换</strong></h1><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Python_NodeC3C32C8C227543A19201B00AD4C7C062.jpg" alt=""><br>其中bin()、oct()、hex()只接收十进制数，int()需要格式为：<br>二进制转十进制int(‘’, 2)、十六进制转十进制int(‘’, 16)、八进制转十进制int(‘’, 8)<br>bin()、hex()后进行切片处理([2:])然后再加zfill()对数据进行补零处理，可保证数据位数</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/01/26/c-notes/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          C语言notes
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/09/13/GitAbout/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Git相关</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+
+</div>
+      <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    	<!--	&copy; 2017 木子人人人 -->
+    	</div>
+      	<div class="footer-right">
+      	<!--	<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten -->
+		<span id="busuanzi_container_site_uv">Total visited <span id="busuanzi_value_site_uv"></span> times</span>
+		
+		
+		<script>
+		(function(){
+			var bp = document.createElement('script');
+			bp.src = '//push.zhanzhang.baidu.com/push.js';
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(bp, s);
+		})();
+		</script>
+		
+		
+      	</div>
+    </div>
+  </div>
+</footer>
+
+
+
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

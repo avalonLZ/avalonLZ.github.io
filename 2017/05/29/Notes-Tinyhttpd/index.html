@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Tinyhttpd（C语言实现的Http1.0 Server）笔记 | 木子人人人&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Tinyhttpd是一款超轻量级的C语言http服务器实现，整体框架十分简单，即使用多线程对多个Client发来的Http请求作出解析，并以多进程的方式实现CGI交互。下面将对源码进行解读">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tinyhttpd（C语言实现的Http1.0 Server）笔记">
+<meta property="og:url" content="http://avalonlz.github.io/2017/05/29/Notes-Tinyhttpd/index.html">
+<meta property="og:site_name" content="木子人人人's Blog">
+<meta property="og:description" content="Tinyhttpd是一款超轻量级的C语言http服务器实现，整体框架十分简单，即使用多线程对多个Client发来的Http请求作出解析，并以多进程的方式实现CGI交互。下面将对源码进行解读">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/HttpHttp_Request_Data.png">
+<meta property="og:updated_time" content="2017-07-09T03:00:34.257Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tinyhttpd（C语言实现的Http1.0 Server）笔记">
+<meta name="twitter:description" content="Tinyhttpd是一款超轻量级的C语言http服务器实现，整体框架十分简单，即使用多线程对多个Client发来的Http请求作出解析，并以多进程的方式实现CGI交互。下面将对源码进行解读">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/HttpHttp_Request_Data.png">
+  
+    <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">木子人人人</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">积跬步 至千里</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/avalonLZ" title="github">github</a>
+					        
+								<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/tags/Linux-Raspberry-Pi/" style="font-size: 10px;">Linux_Raspberry Pi</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 10px;">RTOS_UCOSII</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 20px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 16.67px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/服务器-Django/" style="font-size: 13.33px;">服务器_Django</a> <a href="/tags/服务器-Flask/" style="font-size: 10px;">服务器_Flask</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏-俄罗斯方块/" style="font-size: 10px;">游戏_俄罗斯方块</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/软件工程-DesignPattern/" style="font-size: 10px;">软件工程_DesignPattern</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">木子人人人</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">木子人人人</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">积跬步 至千里</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/avalonLZ" title="github">github</a>
+			        
+						<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Notes-Tinyhttpd" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/05/29/Notes-Tinyhttpd/" class="article-date">
+  	<time datetime="2017-05-29T12:24:27.000Z" itemprop="datePublished">2017-05-29</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Tinyhttpd（C语言实现的Http1.0 Server）笔记
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/服务器-Tinyhttpd/">服务器_Tinyhttpd</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Tinyhttpd是一款超轻量级的C语言http服务器实现，整体框架十分简单，即使用多线程对多个Client发来的Http请求作出解析，并以多进程的方式实现CGI交互。下面将对源码进行解读<a id="more"></a><br>配图：Http协议请求数据格式<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/HttpHttp_Request_Data.png" alt=""> </p>
+<pre><code>/* J. David&apos;s webserver */
+/* This is a simple webserver.
+ * Created November 1999 by J. David Blackstone.
+ * CSE 4344 (Network concepts), Prof. Zeigler
+ * University of Texas at Arlington
+ */
+/* This program compiles for Sparc Solaris 2.6.
+ * To compile for Linux:
+ *  1) Comment out the #include &lt;pthread.h&gt; line.
+ *  2) Comment out the line that defines the variable newthread.
+ *  3) Comment out the two lines that run pthread_create().
+ *  4) Uncomment the line that runs accept_request().
+ *  5) Remove -lsocket from the Makefile.
+ */
+ /*此程序只适用于Http1.0的协议，对于Http1.1的TCP长连接协议并不支持*/
+#include &lt;stdio.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;netinet/in.h&gt;
+#include &lt;arpa/inet.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;strings.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/stat.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;sys/wait.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdint.h&gt;
+
+/*用于检测x是否为空格字符(空格(&apos; &apos;)、水平定位字符
+(&apos;\t&apos;)、归位键(&apos;\r&apos;)、换行(&apos;\n&apos;)、垂直定位字符(&apos;\v&apos;)或翻页(&apos;\f&apos;)都是空格字符)*/
+#define ISspace(x) isspace((int)(x))
+
+#define SERVER_STRING &quot;Server: jdbhttpd/0.1.0\r\n&quot;
+#define STDIN   0
+#define STDOUT  1
+#define STDERR  2
+
+void accept_request(void *);
+void bad_request(int);
+void cat(int, FILE *);
+void cannot_execute(int);
+void error_die(const char *);
+void execute_cgi(int, const char *, const char *, const char *);
+int get_line(int, char *, int);
+void headers(int, const char *);
+void not_found(int);
+void serve_file(int, const char *);
+int startup(u_short *);
+void unimplemented(int);
+
+/**********************************************************************/
+/* A request has caused a call to accept() on the server port to
+ * return.  Process the request appropriately.
+ * Parameters: the socket connected to the client */
+/**********************************************************************/
+void accept_request(void *arg)
+{
+    int client = (intptr_t)arg;
+    char buf[1024];
+    size_t numchars;
+    char method[255];
+    char url[255];
+    char path[512];
+    size_t i, j;
+    struct stat st;
+    int cgi = 0;      /* becomes true if server decides this is a CGI
+                       * program */
+    char *query_string = NULL;
+
+    /*获取Http协议第一行(请求行)数据*/
+    numchars = get_line(client, buf, sizeof(buf));
+    i = 0; j = 0;
+    while (!ISspace(buf[i]) &amp;&amp; (i &lt; sizeof(method) - 1))
+    {
+        method[i] = buf[i];
+        i++;
+    }
+    j=i;
+    method[i] = &apos;\0&apos;;
+
+    /*不区分大小写判断是GET方式还是POST方式*/
+    if (strcasecmp(method, &quot;GET&quot;) &amp;&amp; strcasecmp(method, &quot;POST&quot;))
+    {
+        unimplemented(client);
+        return;
+    }
+
+    if (strcasecmp(method, &quot;POST&quot;) == 0)
+        cgi = 1;
+
+    i = 0;
+    while (ISspace(buf[j]) &amp;&amp; (j &lt; numchars))
+        j++;
+
+    /*获取Http协议中的URL字节段*/
+    while (!ISspace(buf[j]) &amp;&amp; (i &lt; sizeof(url) - 1) &amp;&amp; (j &lt; numchars))
+    {
+        url[i] = buf[j];
+        i++; j++;
+    }
+    url[i] = &apos;\0&apos;;
+
+    /*如果是GET方法则先遍历一遍URL判断是否带有参数，并将问号后的部分截断*/
+    if (strcasecmp(method, &quot;GET&quot;) == 0)
+    {
+        query_string = url;
+        while ((*query_string != &apos;?&apos;) &amp;&amp; (*query_string != &apos;\0&apos;))
+            query_string++;
+        if (*query_string == &apos;?&apos;)
+        {
+            cgi = 1;
+            *query_string = &apos;\0&apos;;
+            query_string++;
+        }
+    }
+
+    /*index.html放在htdocs文件夹中*/
+    sprintf(path, &quot;htdocs%s&quot;, url);
+
+    /*默认路径即访问index.html*/
+    if (path[strlen(path) - 1] == &apos;/&apos;)
+        strcat(path, &quot;index.html&quot;);//拼接两字符串
+
+    /*在系统中寻找Client访问的页面*/
+    if (stat(path, &amp;st) == -1) 
+    {
+        while ((numchars &gt; 0) &amp;&amp; strcmp(&quot;\n&quot;, buf))  /* read &amp; discard headers */
+            numchars = get_line(client, buf, sizeof(buf));
+        not_found(client);
+    }
+    else
+    {
+        /*若访问的文件是目录*/
+        if ((st.st_mode &amp; S_IFMT) == S_IFDIR)
+            strcat(path, &quot;/index.html&quot;);
+
+        /*若访问的可执行文件(并判断了是否有权限)*/
+        if ((st.st_mode &amp; S_IXUSR) ||
+                (st.st_mode &amp; S_IXGRP) ||
+                (st.st_mode &amp; S_IXOTH)    )
+            cgi = 1;
+
+        if (!cgi)
+
+            /*不需要调用CGI程序，返回一个html文件*/
+            serve_file(client, path);
+        else
+            /*若为POST方式则query_string为NULL，GET方式query_string为传入CGI的参数*/
+            execute_cgi(client, path, method, query_string);
+    }
+
+    close(client);
+}
+
+/**********************************************************************/
+/* Inform the client that a request it has made has a problem.
+ * Parameters: client socket */
+/**********************************************************************/
+void bad_request(int client)
+{
+    char buf[1024];
+
+    sprintf(buf, &quot;HTTP/1.0 400 BAD REQUEST\r\n&quot;);
+    send(client, buf, sizeof(buf), 0);
+    sprintf(buf, &quot;Content-type: text/html\r\n&quot;);
+    send(client, buf, sizeof(buf), 0);
+    sprintf(buf, &quot;\r\n&quot;);
+    send(client, buf, sizeof(buf), 0);
+    sprintf(buf, &quot;&lt;P&gt;Your browser sent a bad request, &quot;);
+    send(client, buf, sizeof(buf), 0);
+    sprintf(buf, &quot;such as a POST without a Content-Length.\r\n&quot;);
+    send(client, buf, sizeof(buf), 0);
+}
+
+/**********************************************************************/
+/* Put the entire contents of a file out on a socket.  This function
+ * is named after the UNIX &quot;cat&quot; command, because it might have been
+ * easier just to do something like pipe, fork, and exec(&quot;cat&quot;).
+ * Parameters: the client socket descriptor
+ *             FILE pointer for the file to cat */
+/**********************************************************************/
+void cat(int client, FILE *resource)
+{
+    char buf[1024];
+
+    fgets(buf, sizeof(buf), resource);
+    while (!feof(resource))
+    {
+        send(client, buf, strlen(buf), 0);
+        fgets(buf, sizeof(buf), resource);
+    }
+}
+
+/**********************************************************************/
+/* Inform the client that a CGI script could not be executed.
+ * Parameter: the client socket descriptor. */
+/**********************************************************************/
+void cannot_execute(int client)
+{
+    char buf[1024];
+
+    sprintf(buf, &quot;HTTP/1.0 500 Internal Server Error\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;Content-type: text/html\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;&lt;P&gt;Error prohibited CGI execution.\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+}
+
+/**********************************************************************/
+/* Print out an error message with perror() (for system errors; based
+ * on value of errno, which indicates system call errors) and exit the
+ * program indicating an error. */
+/**********************************************************************/
+void error_die(const char *sc)
+{
+    perror(sc);
+    exit(1);
+}
+
+/**********************************************************************/
+/* Execute a CGI script.  Will need to set environment variables as
+ * appropriate.
+ * Parameters: client socket descriptor
+ *             path to the CGI script */
+/**********************************************************************/
+void execute_cgi(int client, const char *path,
+        const char *method, const char *query_string)
+{
+    char buf[1024];
+    int cgi_output[2];
+    int cgi_input[2];
+    pid_t pid;
+    int status;
+    int i;
+    char c;
+    int numchars = 1;
+    int content_length = -1;
+
+    buf[0] = &apos;A&apos;; buf[1] = &apos;\0&apos;;
+    if (strcasecmp(method, &quot;GET&quot;) == 0)
+        while ((numchars &gt; 0) &amp;&amp; strcmp(&quot;\n&quot;, buf))  /* read &amp; discard headers */
+            numchars = get_line(client, buf, sizeof(buf));
+    else if (strcasecmp(method, &quot;POST&quot;) == 0) /*POST*/
+    {
+        numchars = get_line(client, buf, sizeof(buf));
+        while ((numchars &gt; 0) &amp;&amp; strcmp(&quot;\n&quot;, buf))
+        {
+            /*将Content-Length:截断出来单独作为一段字符串，用来获取content_length*/
+            buf[15] = &apos;\0&apos;;
+            if (strcasecmp(buf, &quot;Content-Length:&quot;) == 0)
+                content_length = atoi(&amp;(buf[16]));
+            numchars = get_line(client, buf, sizeof(buf));
+        }
+
+        if (content_length == -1) 
+        {
+            bad_request(client);
+            return;
+        }
+    }
+    else/*HEAD or other*/
+    {
+    }
+
+
+    if (pipe(cgi_output) &lt; 0) {
+        cannot_execute(client);
+        return;
+    }
+    if (pipe(cgi_input) &lt; 0) {
+        cannot_execute(client);
+        return;
+    }
+
+    if ( (pid = fork()) &lt; 0 ) {
+        cannot_execute(client);
+        return;
+    }
+
+    /*将响应头HTTP/1.0 200 OK\r\n写入buf中*/
+    sprintf(buf, &quot;HTTP/1.0 200 OK\r\n&quot;);
+
+    /*发送响应头*/
+    send(client, buf, strlen(buf), 0);
+
+    /*子进程执行CGI程序*/
+    if (pid == 0)  /* child: CGI script */
+    {
+        char meth_env[255];
+        char query_env[255];
+        char length_env[255];
+
+        dup2(cgi_output[1], STDOUT);
+        dup2(cgi_input[0], STDIN);
+        close(cgi_output[0]);
+        close(cgi_input[1]);
+        sprintf(meth_env, &quot;REQUEST_METHOD=%s&quot;, method);
+        putenv(meth_env);
+
+        if (strcasecmp(method, &quot;GET&quot;) == 0) 
+        {
+            sprintf(query_env, &quot;QUERY_STRING=%s&quot;, query_string);
+            putenv(query_env);
+        }
+        else 
+        {   /* POST */
+            sprintf(length_env, &quot;CONTENT_LENGTH=%d&quot;, content_length);
+            putenv(length_env);
+        }
+
+        /*执行CGI*/
+        execl(path, NULL);
+        exit(0);
+    } 
+    else 
+    {    /* parent */
+        close(cgi_output[1]);
+        close(cgi_input[0]);
+
+        if (strcasecmp(method, &quot;POST&quot;) == 0)
+            for (i = 0; i &lt; content_length; i++) 
+            {
+                /*并非重头开始读取，因为经过先前的读取操作，文件偏移量已经指向了content*/
+                recv(client, &amp;c, 1, 0);
+                write(cgi_input[1], &amp;c, 1);
+            }
+
+        //waitpid(pid, &amp;status, 0);//我认为应该放在此处
+
+        while (read(cgi_output[0], &amp;c, 1) &gt; 0)
+            send(client, &amp;c, 1, 0);
+
+        close(cgi_output[0]);
+        close(cgi_input[1]);
+
+        /*此处存在疑问，不应该将waitpid放在前面吗?以确保子进程先运行*/
+        waitpid(pid, &amp;status, 0);
+    }
+}
+
+/**********************************************************************/
+/* Get a line from a socket, whether the line ends in a newline,
+ * carriage return, or a CRLF combination.  Terminates the string read
+ * with a null character.  If no newline indicator is found before the
+ * end of the buffer, the string is terminated with a null.  If any of
+ * the above three line terminators is read, the last character of the
+ * string will be a linefeed and the string will be terminated with a
+ * null character.
+ * Parameters: the socket descriptor
+ *             the buffer to save the data in
+ *             the size of the buffer
+ * Returns: the number of bytes stored (excluding null) */
+/**********************************************************************/
+int get_line(int sock, char *buf, int size)
+{
+    int i = 0;
+    char c = &apos;\0&apos;;
+    int n;
+
+    while ((i &lt; size - 1) &amp;&amp; (c != &apos;\n&apos;))
+    {
+        /*读取一个字节数据到c中flags为0时和read()函数效果相同，返回实际读取的字节数*/
+        n = recv(sock, &amp;c, 1, 0);
+        /* DEBUG printf(&quot;%02X\n&quot;, c); */
+        if (n &gt; 0)
+        {
+            /*读取到一个回车符后，再用MSG_PEEK方式读取一个字节数据判断是否是换行符*/
+            /*MSG_PEEK和read()的不同在于:用MSG_PEEK时文件的偏移量并未改变，
+            下次再read()出的值和此时MSG_PEEK得出的值相同*/
+            if (c == &apos;\r&apos;)
+            {
+                n = recv(sock, &amp;c, 1, MSG_PEEK);
+                /* DEBUG printf(&quot;%02X\n&quot;, c); */
+                if ((n &gt; 0) &amp;&amp; (c == &apos;\n&apos;))
+                    recv(sock, &amp;c, 1, 0);
+                else
+                    c = &apos;\n&apos;;
+            }
+            buf[i] = c;
+            i++;
+        }
+        else
+            c = &apos;\n&apos;;
+    }
+    /*使读出的一行作为一串字符串*/
+    buf[i] = &apos;\0&apos;;
+
+    return(i);
+}
+
+/**********************************************************************/
+/* Return the informational HTTP headers about a file. */
+/* Parameters: the socket to print the headers on
+ *             the name of the file */
+/**********************************************************************/
+void headers(int client, const char *filename)
+{
+    char buf[1024];
+    (void)filename;  /* could use filename to determine file type */
+
+    strcpy(buf, &quot;HTTP/1.0 200 OK\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    strcpy(buf, SERVER_STRING);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;Content-Type: text/html\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    strcpy(buf, &quot;\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+}
+
+/**********************************************************************/
+/* Give a client a 404 not found status message. */
+/**********************************************************************/
+void not_found(int client)
+{
+    char buf[1024];
+
+    sprintf(buf, &quot;HTTP/1.0 404 NOT FOUND\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, SERVER_STRING);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;Content-Type: text/html\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;&lt;HTML&gt;&lt;TITLE&gt;Not Found&lt;/TITLE&gt;\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;&lt;BODY&gt;&lt;P&gt;The server could not fulfill\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;your request because the resource specified\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;is unavailable or nonexistent.\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;&lt;/BODY&gt;&lt;/HTML&gt;\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+}
+
+/**********************************************************************/
+/* Send a regular file to the client.  Use headers, and report
+ * errors to client if they occur.
+ * Parameters: a pointer to a file structure produced from the socket
+ *              file descriptor
+ *             the name of the file to serve */
+/**********************************************************************/
+void serve_file(int client, const char *filename)
+{
+    FILE *resource = NULL;
+    int numchars = 1;
+    char buf[1024];
+
+    buf[0] = &apos;A&apos;; buf[1] = &apos;\0&apos;;
+    while ((numchars &gt; 0) &amp;&amp; strcmp(&quot;\n&quot;, buf))  /* read &amp; discard headers */
+        numchars = get_line(client, buf, sizeof(buf));
+
+    /*以只读方式打开文件*/
+    resource = fopen(filename, &quot;r&quot;);
+    if (resource == NULL)
+        not_found(client);
+    else
+    {
+        /*将文件context封装为Http协议*/
+        headers(client, filename);
+        /*发送*/
+        cat(client, resource);
+    }
+    fclose(resource);
+}
+
+/**********************************************************************/
+/* This function starts the process of listening for web connections
+ * on a specified port.  If the port is 0, then dynamically allocate a
+ * port and modify the original port variable to reflect the actual
+ * port.
+ * Parameters: pointer to variable containing the port to connect on
+ * Returns: the socket */
+/**********************************************************************/
+int startup(u_short *port)
+{
+    int httpd = 0;
+    int on = 1;
+    struct sockaddr_in name;
+
+    httpd = socket(PF_INET, SOCK_STREAM, 0);
+    if (httpd == -1)
+        error_die(&quot;socket&quot;);
+    memset(&amp;name, 0, sizeof(name));
+    name.sin_family = AF_INET;
+    name.sin_port = htons(*port);
+    name.sin_addr.s_addr = htonl(INADDR_ANY);
+    if ((setsockopt(httpd, SOL_SOCKET, SO_REUSEADDR, &amp;on, sizeof(on))) &lt; 0)  
+    {  
+        error_die(&quot;setsockopt failed&quot;);
+    }
+    if (bind(httpd, (struct sockaddr *)&amp;name, sizeof(name)) &lt; 0)
+        error_die(&quot;bind&quot;);
+    if (*port == 0)  /* if dynamically allocating a port */
+    {
+        socklen_t namelen = sizeof(name);
+        if (getsockname(httpd, (struct sockaddr *)&amp;name, &amp;namelen) == -1)
+            error_die(&quot;getsockname&quot;);
+        *port = ntohs(name.sin_port);
+    }
+    if (listen(httpd, 5) &lt; 0)
+        error_die(&quot;listen&quot;);
+    return(httpd);
+}
+
+/**********************************************************************/
+/* Inform the client that the requested web method has not been
+ * implemented.
+ * Parameter: the client socket */
+/**********************************************************************/
+void unimplemented(int client)
+{
+    char buf[1024];
+
+    sprintf(buf, &quot;HTTP/1.0 501 Method Not Implemented\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, SERVER_STRING);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;Content-Type: text/html\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Method Not Implemented\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;&lt;/TITLE&gt;&lt;/HEAD&gt;\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;&lt;BODY&gt;&lt;P&gt;HTTP request method not supported.\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+    sprintf(buf, &quot;&lt;/BODY&gt;&lt;/HTML&gt;\r\n&quot;);
+    send(client, buf, strlen(buf), 0);
+}
+
+/**********************************************************************/
+
+int main(void)
+{
+    int server_sock = -1;
+    u_short port = 4000;
+    int client_sock = -1;
+    struct sockaddr_in client_name;
+    socklen_t  client_name_len = sizeof(client_name);
+    pthread_t newthread;
+
+    server_sock = startup(&amp;port);
+    printf(&quot;httpd running on port %d\n&quot;, port);
+
+    while (1)
+    {
+        /*阻塞等待Client接入*/
+        client_sock = accept(server_sock,
+                (struct sockaddr *)&amp;client_name,
+                &amp;client_name_len);
+        if (client_sock == -1)
+            error_die(&quot;accept&quot;);
+        /* accept_request(&amp;client_sock); */
+        /*Client接入后创建一个新线程处理该Client发来的Http请求，利用多线程实现同时多个Client的Http请求*/
+        if (pthread_create(&amp;newthread , NULL, (void *)accept_request, (void *)(intptr_t)client_sock) != 0)
+            perror(&quot;pthread_create&quot;);
+    }
+
+    close(server_sock);
+
+    return(0);
+}
+</code></pre>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/06/18/Django-Terminal/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          自写Terminal服务器Web部分
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/04/TCP-Assistant/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">TCP_Assistant</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+
+</div>
+      <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    	<!--	&copy; 2017 木子人人人 -->
+    	</div>
+      	<div class="footer-right">
+      	<!--	<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten -->
+		<span id="busuanzi_container_site_uv">Total visited <span id="busuanzi_value_site_uv"></span> times</span>
+		
+		
+		<script>
+		(function(){
+			var bp = document.createElement('script');
+			bp.src = '//push.zhanzhang.baidu.com/push.js';
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(bp, s);
+		})();
+		</script>
+		
+		
+      	</div>
+    </div>
+  </div>
+</footer>
+
+
+
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

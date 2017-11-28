@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>stm32-SPI | 木子人人人&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="记录STM32硬件SPI和W25Q64通讯关键处，及模拟SPI和硬件SPI的不同之处。若有不同见解，还望留言一同交流学习。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stm32-SPI">
+<meta property="og:url" content="http://avalonlz.github.io/2016/03/30/stm32-spi/index.html">
+<meta property="og:site_name" content="木子人人人's Blog">
+<meta property="og:description" content="记录STM32硬件SPI和W25Q64通讯关键处，及模拟SPI和硬件SPI的不同之处。若有不同见解，还望留言一同交流学习。">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331114759.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331122200.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331130727.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331122541.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331131333.png">
+<meta property="og:updated_time" content="2017-06-18T14:46:52.020Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stm32-SPI">
+<meta name="twitter:description" content="记录STM32硬件SPI和W25Q64通讯关键处，及模拟SPI和硬件SPI的不同之处。若有不同见解，还望留言一同交流学习。">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331114759.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">木子人人人</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">积跬步 至千里</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/avalonLZ" title="github">github</a>
+					        
+								<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/tags/Linux-Raspberry-Pi/" style="font-size: 10px;">Linux_Raspberry Pi</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 10px;">RTOS_UCOSII</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 20px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 16.67px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/服务器-Django/" style="font-size: 13.33px;">服务器_Django</a> <a href="/tags/服务器-Flask/" style="font-size: 10px;">服务器_Flask</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏-俄罗斯方块/" style="font-size: 10px;">游戏_俄罗斯方块</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/软件工程-DesignPattern/" style="font-size: 10px;">软件工程_DesignPattern</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">木子人人人</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">木子人人人</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">积跬步 至千里</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/avalonLZ" title="github">github</a>
+			        
+						<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-stm32-spi" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/30/stm32-spi/" class="article-date">
+  	<time datetime="2016-03-30T04:36:39.000Z" itemprop="datePublished">2016-03-30</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      stm32-SPI
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/嵌入式-STM32/">嵌入式_STM32</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>记录STM32硬件SPI和W25Q64通讯关键处，及模拟SPI和硬件SPI的不同之处。若有不同见解，还望留言一同交流学习。<a id="more"></a>  </p>
+<h1 id="STM32主机初始化"><a href="#STM32主机初始化" class="headerlink" title="STM32主机初始化"></a><strong>STM32主机初始化</strong></h1><p>对于硬件SPI来说主机初始化需要配置较多东西，而且其中有些配置存在争议，所以在此做一个详细记录。  </p>
+<pre><code>void spi_init(void)
+{
+    SPI_InitTypeDef SPI2_InitStructure;
+    GPIO_InitTypeDef GPIO_InitStructure;
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
+    /////////scl,mosi
+    GPIO_InitStructure.GPIO_Pin=GPIO_Pin_13|GPIO_Pin_15;
+    GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &amp;GPIO_InitStructure);
+    /////////miso，最好根据手册设置为上拉，有些程序设置成复用推挽输出，因为芯片结构的原因所以也可行
+    GPIO_InitStructure.GPIO_Pin=GPIO_Pin_14;
+    GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &amp;GPIO_InitStructure);
+    ///////////////NSS，选择为soft模式后需要人工进行片选操作
+    GPIO_InitStructure.GPIO_Pin=GPIO_Pin_12;
+    GPIO_InitStructure.GPIO_Mode=GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &amp;GPIO_InitStructure);
+    GPIO_SetBits(GPIOB,GPIO_Pin_12);//操作前先不选择从器件
+    SPI2_InitStructure.SPI_Mode=SPI_Mode_Master;
+    SPI2_InitStructure.SPI_Direction=SPI_Direction_2Lines_FullDuplex;
+    SPI2_InitStructure.SPI_DataSize=SPI_DataSize_8b;
+    //以下两个配置关系到芯片何时进行数据采集（采样），后做详解
+    SPI2_InitStructure.SPI_CPOL=SPI_CPOL_Low;
+    SPI2_InitStructure.SPI_CPHA=SPI_CPHA_1Edge;
+    //该处设置必须为软件模式，也就是人为操作CS引脚进行片选，而不是芯片根据自己时序操作，NSS引脚作为普通GPIO口置低电平进行片选
+    SPI2_InitStructure.SPI_NSS=SPI_NSS_Soft; 
+    SPI2_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_2;
+    SPI2_InitStructure.SPI_FirstBit=SPI_FirstBit_MSB;
+    //CRC校验，这一个参数在整个操作中并没用使用上，对CRC校验该处的设置持默认态度
+    SPI2_InitStructure.SPI_CRCPolynomial=7;
+    SPI_Init(SPI2, &amp;SPI2_InitStructure);
+    SPI_Cmd(SPI2, ENABLE);
+}  
+</code></pre><p>SPI2_InitStructure.SPI_CPOL=SPI_CPOL_Low;和SPI2_InitStructure.SPI_CPHA=SPI_CPHA_1Edge;是分别对SPI的时钟极性和时钟相位进行配置，主要有4种模式（0，0），（0，1），（1，0），（1，1）这四种模式要根据从器件的采集时序（时钟）来配置，需要和从设备相同（例如从设备只支持(0,0)模式那这里就需要配置为（0，0））。下图对这四种模式做详细介绍：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331114759.jpg" alt="">  </p>
+<h1 id="写入数据"><a href="#写入数据" class="headerlink" title="写入数据"></a><strong>写入数据</strong></h1><p>根据STM32参考手册SPI部分可以知道硬件SPI需要检测的标志位相对于硬件I2C来说少了很多，所以以32作为主机做硬件SPI的编码会更需要从器件的事件发生时序入手，下面是一个写入操作，配DATESHEET事件图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331122200.png" alt="">  </p>
+<pre><code>void SPI_Flash_Write_Page(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
+{
+     u16 i;  
+    SPI_FLASH_Write_Enable();                  
+    SPI_FLASH_CS_CLR;                              
+    SPI2_ReadWriteByte(0x02);       
+    SPI2_ReadWriteByte((u8)((WriteAddr)&gt;&gt;16));   
+    SPI2_ReadWriteByte((u8)((WriteAddr)&gt;&gt;8));   
+    SPI2_ReadWriteByte((u8)WriteAddr);   
+    for(i=0;i&lt;NumByteToWrite;i++)SPI2_ReadWriteByte(pBuffer[i]);
+    SPI_FLASH_CS_SET;                           
+    SPI_Flash_Wait_Busy();                     
+}   
+</code></pre><p>因为nor flash写入前必须擦除，根据DATESHEET描述在擦除操作前需要先写使能，所以先执行写使能函数，再发送一个0x02擦除4K存储地址命令，接下来发送由三个8位数据组成的地址，最后发送写入的数据，关片选，忙检测。<br>基本写入函数（可以看出根据32的手册分别做了标志位检测）：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331130727.png" alt="">  </p>
+<pre><code> u8 SPI2_ReadWriteByte(u8 TxData)
+{        
+    u8 retry=0;                     
+    while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TXE) == RESET) 
+        {
+        retry++;
+        if(retry&gt;200)return 0;
+        }              
+    SPI_I2S_SendData(SPI2, TxData); 
+    retry=0;
+    while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_RXNE) == RESET) 
+        {
+        retry++;
+        if(retry&gt;200)return 0;
+        }                                  
+    return SPI_I2S_ReceiveData(SPI2);                     
+} 
+</code></pre><p>写使能函数：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331122541.png" alt="">  </p>
+<pre><code>void SPI_FLASH_Write_Enable(void)   
+{
+    SPI_FLASH_CS_CLR;                           
+    SPI2_ReadWriteByte(0x06);  
+    SPI_FLASH_CS_SET;            
+}  
+</code></pre><p>忙检测，需要特殊强调下。这里的忙检测并不是对32来说的所以不可以用32库中的SPI_I2S_FLAG_BSY标志来判别，此处是对从设备的忙检测，检测从设备是否操作完成，这一步需要通过读取W25Q64的状态寄存器实现  </p>
+<pre><code>void SPI_Flash_Wait_Busy(void)   
+{   
+    while ((SPI_Flash_ReadSR()&amp;0x01)==0x01);
+}   
+
+u8 SPI_Flash_ReadSR(void)   
+{  
+    u8 byte=0;   
+    SPI_FLASH_CS_CLR;           
+    SPI2_ReadWriteByte(0x05);//读取状态标志位寄存器命令     
+    byte=SPI2_ReadWriteByte(0Xff);          
+    SPI_FLASH_CS_SET;  
+    return byte;   
+}  
+</code></pre><font color="red">这里有个发送0XFF数据，这里必须的。必须向从器件发送一个无关的数据，以便产生SCLK时钟。硬件SPI发送时才会产生SCLK时钟，所以在读取时要同时发送一个数据。这也是硬件SPI和模拟SPI差别最大的地方。</font>  
+
+<h1 id="读取数据"><a href="#读取数据" class="headerlink" title="读取数据"></a><strong>读取数据</strong></h1><p>数据的读取也是依据DATESHEET上的事件产生时间来操作，需要注意的依然是读取数据时还需要写入无关数据<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160331131333.png" alt="">  </p>
+<pre><code>void SPI_Flash_Read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
+{ 
+     u16 i;                                                        
+    SPI_FLASH_CS_CLR;//将NSS引脚置低电平，选择从设备                           
+    SPI2_ReadWriteByte(0x03);   
+    SPI2_ReadWriteByte((u8)((ReadAddr)&gt;&gt;16));  
+    SPI2_ReadWriteByte((u8)((ReadAddr)&gt;&gt;8));   
+    SPI2_ReadWriteByte((u8)ReadAddr);   
+    for(i=0;i&lt;NumByteToRead;i++)
+    { 
+        pBuffer[i]=SPI2_ReadWriteByte(0XFF); 
+    }
+    SPI_FLASH_CS_SET;//将NSS引脚置高电平，不选择该从设备          
+}  
+</code></pre><p>由于SPI是高速通讯协议，所以能用硬件SPI就尽量采用硬件解决，此处就不贴出模拟SPI的程序了。  </p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/04/01/raspberry-pi-commands/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Raspberry Pi-Commands
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/26/Linux-mind-map/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux文件系统Mindmap</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+
+</div>
+      <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    	<!--	&copy; 2017 木子人人人 -->
+    	</div>
+      	<div class="footer-right">
+      	<!--	<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten -->
+		<span id="busuanzi_container_site_uv">Total visited <span id="busuanzi_value_site_uv"></span> times</span>
+		
+		
+		<script>
+		(function(){
+			var bp = document.createElement('script');
+			bp.src = '//push.zhanzhang.baidu.com/push.js';
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(bp, s);
+		})();
+		</script>
+		
+		
+      	</div>
+    </div>
+  </div>
+</footer>
+
+
+
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

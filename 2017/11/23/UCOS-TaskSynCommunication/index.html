@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>UCOSII任务调度与同步、通信机制 | 木子人人人&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UCOSII任务调度与同步、通信机制">
+<meta property="og:url" content="http://avalonlz.github.io/2017/11/23/UCOS-TaskSynCommunication/index.html">
+<meta property="og:site_name" content="木子人人人's Blog">
+<meta property="og:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png">
+<meta property="og:updated_time" content="2017-11-28T15:11:18.370Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UCOSII任务调度与同步、通信机制">
+<meta name="twitter:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">木子人人人</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">积跬步 至千里</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/avalonLZ" title="github">github</a>
+					        
+								<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/tags/Linux-Raspberry-Pi/" style="font-size: 10px;">Linux_Raspberry Pi</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 10px;">RTOS_UCOSII</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 20px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 16.67px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/服务器-Django/" style="font-size: 13.33px;">服务器_Django</a> <a href="/tags/服务器-Flask/" style="font-size: 10px;">服务器_Flask</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏-俄罗斯方块/" style="font-size: 10px;">游戏_俄罗斯方块</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/软件工程-DesignPattern/" style="font-size: 10px;">软件工程_DesignPattern</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">木子人人人</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">木子人人人</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">积跬步 至千里</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/avalonLZ" title="github">github</a>
+			        
+						<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-UCOS-TaskSynCommunication" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/23/UCOS-TaskSynCommunication/" class="article-date">
+  	<time datetime="2017-11-23T01:05:33.000Z" itemprop="datePublished">2017-11-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      UCOSII任务调度与同步、通信机制
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RTOS-UCOSII/">RTOS_UCOSII</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。<br>插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS<a id="more"></a>      </p>
+<h3 id="UCOSII下的任务调度"><a href="#UCOSII下的任务调度" class="headerlink" title="UCOSII下的任务调度"></a>UCOSII下的任务调度</h3><p>在Linux下(此处主要讨论pthread所创建的线程，也就是用户态线程)，用户态线程的调度需要自己实现，Linux内核无法对用户态线程进行调度。<br>在UCOSII下，为了保证实时性，采用了高优先级抢占调度策略。简单解释一下，也就是说高优先级任务无条件抢占CPU，如果高优先级任务一直未挂起，则低优先级任务将一直不会被执行，且在UCOSII中原则上不能创建两个同优先级的任务。UCOSII使用3种机制来保证高优先级任务(间接调用OS_Sched()进行任务调度)的执行<br>1、用户主动调用API函数。在用户任务中调用OSFlag_Pend()、OSMboxPend()、OSMutexPend()、OSQPend()、OSSemPend()、OSTaskSuspend()、OSTimeDly()以及OSTimeDlyHMSM()这几个API函数都将间接调用OS_Sched()函数，如果检测到当前有更高优先级的任务处于就绪状态，则将调用OS_TASK_SW()函数切换到更高优先级的任务执行<br>上一张UCOSII下的任务状态图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg" alt=""><br>2、通过系统时钟(Systick)进行调度。每隔一个系统时钟间隔进行一次任务就绪状态检测，如果检测到有更高优先级的任务处于就绪态，则会进行任务切换。系统时钟间隔应当要适合，太长影响系统实时性，太短则会造成系统花费过多的资源处理定时器中断<br>3、通过触发外部中断程序进入系统调度。当发生了外部中断，造成系统任务就绪状态变化，在退出中断处理函数时，调用OSIntExit()函数。在这个函数中，如果检测到更高优先级任务处于就绪状态，则调用OSIntCtxSw()函数进行任务切换  </p>
+<h3 id="UCOSII下的任务通信、同步机制"><a href="#UCOSII下的任务通信、同步机制" class="headerlink" title="UCOSII下的任务通信、同步机制"></a>UCOSII下的任务通信、同步机制</h3><p>在Linux下因为线程间通信都是在应用层加之线程间共享内存空间，所以线程间一般都采用一段共享空间进行通讯，只要选择正确的同步方式保证共享空间操作的原子性即可。但在RTOS中由于涉及硬件和上层应用交互的需求，所以衍生出了更加丰富的通信手段(当然这些手段也可以自己在Linux上实现)<br>下面上一张图，先简单总结下UCOSII下的任务通讯与同步机制<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png" alt=""><br>1、信号量（整数型型号量sem）：<br>建立信号量的工作，必须在任务启动(start)之前完成   </p>
+<ul>
+<li><p>创建：OS_EVENT  *OSSemCreate (INT16U cnt)<br>cnt为初始值，可看做代表允许cnt个任务同时访问某资源。<br>若没有可用的ECB则返回空指针 </p>
+</li>
+<li><p>等待信号量：OSSemPend (OS_EVENT <em>pevent, INT16U timeout, INT8U </em>perr)<br>若运行到此处，pevent中的cnt为0，该任务将挂起等待信号量，直到该信号量给到此任务一个信号。若运行到此处，cnt非0，则将cnt减一后继续执行该任务<br>timeout为超时时间，表示该任务进入等待信号量后的挂起时间，时间一到该任务将进入就绪态，若设为0则表示永久等待  </p>
+</li>
+<li><p>发送信号量：INT8U  OSSemPost (OS_EVENT *pevent)<br>调用此API首先会检测pevent信号量是否有被等待，若有被等待，则将等待列表中最高优先级的任务转变为就绪状态，接着会调用OSSched()函数进行任务调度，立即转到此时就绪态中最高优先级的任务去执行，若没有任务比当前任务优先级高，则继续执行该任务。若在调用此API时没有任务在等待该信号量，则该信号量的cnt加1           </p>
+</li>
+<li><p>放弃信号量等待：INT8U  OSSemPendAbort (OS_EVENT <em>pevent, INT8U opt, INT8U </em>perr)<br>无任务等待pevent信号量则继续执行该任务。若存在任务等待该信号量，且opt为OS_PEND_OPT_BROADCASE，则表示广播方式，释放所有等待该信号量的任务，使其全部变为就绪态，并进行任务调度。若opt为OS_PEND_OPT_NONE则表示将等待该信号量的任务中优先级最高的任务变为就绪态（此次放弃等待该信号量）并进行任务调度    </p>
+</li>
+<li><p>删除信号量：OS_EVENT  <em>OSSemDel (OS_EVENT </em>pevent, INT8U opt, INT8U *perr)<br>opt = OS_DEL_NO_PEND  若是没有等待信号量的任务，则删除该任务<br>opt = OS_DEL_ALWAYS    不管有没有任务等待，始终删除<br>由于ECB控制块数量有限（默认为十个）,所以不用的信号量应该尽快删除       </p>
+</li>
+<li><p>无等待的请求一个信号量：INT16U  OSSemAccept (OS_EVENT *pevent)   </p>
+</li>
+<li><p>查询一个信号量的当前状态：INT8U  OSSemQuery (OS_EVENT <em>pevent, OS_SEM_DATA </em>p_sem_data)   </p>
+</li>
+<li><p>重新设置信号量cnt值（一般不用）：void  OSSemSet (OS_EVENT <em>pevent, INT16U cnt, INT8U </em>perr)    </p>
+</li>
+</ul>
+<p>2、互斥信号量（二值型型号量mutex）：</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/12/Linux-MultiThread/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux多线程编程</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+
+</div>
+      <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    	<!--	&copy; 2017 木子人人人 -->
+    	</div>
+      	<div class="footer-right">
+      	<!--	<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten -->
+		<span id="busuanzi_container_site_uv">Total visited <span id="busuanzi_value_site_uv"></span> times</span>
+		
+		
+		<script>
+		(function(){
+			var bp = document.createElement('script');
+			bp.src = '//push.zhanzhang.baidu.com/push.js';
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(bp, s);
+		})();
+		</script>
+		
+		
+      	</div>
+    </div>
+  </div>
+</footer>
+
+
+
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

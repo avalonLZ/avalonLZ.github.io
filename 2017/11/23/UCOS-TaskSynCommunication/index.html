@@ -14,7 +14,7 @@
 <meta property="og:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png">
-<meta property="og:updated_time" content="2017-11-28T15:11:18.370Z">
+<meta property="og:updated_time" content="2017-12-03T15:33:44.081Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UCOSII任务调度与同步、通信机制">
 <meta name="twitter:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
@@ -213,8 +213,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。<br>插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS<a id="more"></a>      </p>
-<h3 id="UCOSII下的任务调度"><a href="#UCOSII下的任务调度" class="headerlink" title="UCOSII下的任务调度"></a>UCOSII下的任务调度</h3><p>在Linux下(此处主要讨论pthread所创建的线程，也就是用户态线程)，用户态线程的调度需要自己实现，Linux内核无法对用户态线程进行调度。<br>在UCOSII下，为了保证实时性，采用了高优先级抢占调度策略。简单解释一下，也就是说高优先级任务无条件抢占CPU，如果高优先级任务一直未挂起，则低优先级任务将一直不会被执行，且在UCOSII中原则上不能创建两个同优先级的任务。UCOSII使用3种机制来保证高优先级任务(间接调用OS_Sched()进行任务调度)的执行<br>1、用户主动调用API函数。在用户任务中调用OSFlag_Pend()、OSMboxPend()、OSMutexPend()、OSQPend()、OSSemPend()、OSTaskSuspend()、OSTimeDly()以及OSTimeDlyHMSM()这几个API函数都将间接调用OS_Sched()函数，如果检测到当前有更高优先级的任务处于就绪状态，则将调用OS_TASK_SW()函数切换到更高优先级的任务执行<br>上一张UCOSII下的任务状态图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg" alt=""><br>2、通过系统时钟(Systick)进行调度。每隔一个系统时钟间隔进行一次任务就绪状态检测，如果检测到有更高优先级的任务处于就绪态，则会进行任务切换。系统时钟间隔应当要适合，太长影响系统实时性，太短则会造成系统花费过多的资源处理定时器中断<br>3、通过触发外部中断程序进入系统调度。当发生了外部中断，造成系统任务就绪状态变化，在退出中断处理函数时，调用OSIntExit()函数。在这个函数中，如果检测到更高优先级任务处于就绪状态，则调用OSIntCtxSw()函数进行任务切换  </p>
-<h3 id="UCOSII下的任务通信、同步机制"><a href="#UCOSII下的任务通信、同步机制" class="headerlink" title="UCOSII下的任务通信、同步机制"></a>UCOSII下的任务通信、同步机制</h3><p>在Linux下因为线程间通信都是在应用层加之线程间共享内存空间，所以线程间一般都采用一段共享空间进行通讯，只要选择正确的同步方式保证共享空间操作的原子性即可。但在RTOS中由于涉及硬件和上层应用交互的需求，所以衍生出了更加丰富的通信手段(当然这些手段也可以自己在Linux上实现)<br>下面上一张图，先简单总结下UCOSII下的任务通讯与同步机制<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png" alt=""><br>1、信号量（整数型型号量sem）：<br>建立信号量的工作，必须在任务启动(start)之前完成   </p>
+<h3 id="UCOSII下的任务调度（可以使用OS-Enter-Critical-和OS-Exit-Critical-使能和失能中断，来控制是否进行任务调度）"><a href="#UCOSII下的任务调度（可以使用OS-Enter-Critical-和OS-Exit-Critical-使能和失能中断，来控制是否进行任务调度）" class="headerlink" title="UCOSII下的任务调度（可以使用OS_Enter_Critical()和OS_Exit_Critical()使能和失能中断，来控制是否进行任务调度）"></a>UCOSII下的任务调度（可以使用OS_Enter_Critical()和OS_Exit_Critical()使能和失能中断，来控制是否进行任务调度）</h3><p>在Linux下(此处主要讨论pthread所创建的线程，也就是用户态线程)，用户态线程的调度需要自己实现，Linux内核无法对用户态线程进行调度。<br>在UCOSII下，为了保证实时性，采用了高优先级抢占调度策略。简单解释一下，也就是说高优先级任务无条件抢占CPU，如果高优先级任务一直未挂起，则低优先级任务将一直不会被执行，且在UCOSII中原则上不能创建两个同优先级的任务。UCOSII使用3种机制来保证高优先级任务(间接调用OS_Sched()进行任务调度)的执行   </p>
+<p>1、用户主动调用API函数。在用户任务中调用OSFlag_Pend()、OSMboxPend()、OSMutexPend()、OSQPend()、OSSemPend()、OSTaskSuspend()、OSTimeDly()以及OSTimeDlyHMSM()这几个API函数都将间接调用OS_Sched()函数，如果检测到当前有更高优先级的任务处于就绪状态，则将调用OS_TASK_SW()函数切换到更高优先级的任务执行<br>上一张UCOSII下的任务状态图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg" alt="">   </p>
+<p>2、通过系统时钟(Systick)进行调度。每隔一个系统时钟间隔进行一次任务就绪状态检测，如果检测到有更高优先级的任务处于就绪态，则会进行任务切换。系统时钟间隔应当要适合，太长影响系统实时性，太短则会造成系统花费过多的资源处理定时器中断  </p>
+<p>3、通过触发外部中断程序进入系统调度。当发生了外部中断，造成系统任务就绪状态变化，在退出中断处理函数时，调用OSIntExit()函数。在这个函数中，如果检测到更高优先级任务处于就绪状态，则调用OSIntCtxSw()函数进行任务切换<br>注：OSIntEnter()和OSIntExit()是在中断服务程序中应该被调用的，前者用来告诉OS进入中断了，中断嵌套层数加1。后者用来告诉OS退出中断了，中断嵌套层数减1，并进行任务调度 </p>
+<h3 id="UCOSII下的任务通信、同步机制"><a href="#UCOSII下的任务通信、同步机制" class="headerlink" title="UCOSII下的任务通信、同步机制"></a>UCOSII下的任务通信、同步机制</h3><p>在Linux下因为线程间通信都是在应用层加之线程间共享内存空间，所以线程间一般都采用一段共享空间进行通讯，只要选择正确的同步方式保证共享空间操作的原子性即可。但在RTOS中由于涉及硬件和上层应用交互的需求，所以衍生出了更加丰富的通信手段(当然这些手段也可以自己在Linux上实现)<br>下面上一张图，先简单总结下UCOSII下的任务通讯与同步机制<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png" alt="">    </p>
+<p>1、信号量（整数型型号量sem。可能导致优先级翻转问题，因为API内部不会暂时提升任务优先级）：<br>建立信号量的工作，必须在任务启动(start)之前完成   </p>
 <ul>
 <li><p>创建：OS_EVENT  *OSSemCreate (INT16U cnt)<br>cnt为初始值，可看做代表允许cnt个任务同时访问某资源。<br>若没有可用的ECB则返回空指针 </p>
 </li>
@@ -233,7 +237,23 @@
 <li><p>重新设置信号量cnt值（一般不用）：void  OSSemSet (OS_EVENT <em>pevent, INT16U cnt, INT8U </em>perr)    </p>
 </li>
 </ul>
-<p>2、互斥信号量（二值型型号量mutex）：</p>
+<p>2、互斥信号量（二值型型号量mutex。能解决任务优先级翻转问题，API内部暂时提升当然任务优先级）：</p>
+<ul>
+<li><p>创建：OS_EVENT  <em>OSMutexCreate (INT8U prio, INT8U </em>perr)<br>prio：空闲的较高优先级（一般将最高优先级保留在此处使用），用于暂时提升任务优先级<br>perr：存放出错的信息  </p>
+</li>
+<li><p>等待互斥型信号量：void  OSMutexPend (OS_EVENT <em>pevent, INT16U timeout, INT8U </em>perr)<br>pevent：等待的信号量<br>timeout：等待超时时间，0值为永久等待<br>perr：存放出错的信息  </p>
+</li>
+<li><p>释放互斥型信号量：INT8U  OSMutexPost (OS_EVENT *pevent)<br>pevent：释放的信号量  </p>
+</li>
+<li><p>无阻塞请求互斥型信号量：BOOLEAN  OSMutexAccept (OS_EVENT <em>pevent, INT8U </em>perr)<br>调用此API会立即返回，不会根据信号量的状态而阻塞。返回值0表示信号量不可用，返回1表示得到互斥型信号量<br>pevent：请求的互斥型信号量<br>perr：存放出错信息  </p>
+</li>
+<li><p>查询互斥型信号量当前状态：INT8U  OSMutexQuery (OS_EVENT <em>pevent, OS_MUTEX_DATA </em>p_mutex_data)<br>返回查询出错码<br>pevent：需要查询的信号量<br>p_mutex_data：存放查询到的信号量状态信息  </p>
+</li>
+</ul>
+<p>3、事件标志组<br>预先设定好N个事件，当N个事件都达成时，才进入下一步操作  </p>
+<ul>
+<li>创建：OS_FLAG_GRP  <em>OSFlagCreate (OS_FLAGS flags, INT8U </em>perr)  </li>
+</ul>
 
       
     </div>

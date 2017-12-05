@@ -14,7 +14,7 @@
 <meta property="og:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png">
-<meta property="og:updated_time" content="2017-12-03T15:33:44.081Z">
+<meta property="og:updated_time" content="2017-12-05T14:00:42.674Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UCOSII任务调度与同步、通信机制">
 <meta name="twitter:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
@@ -252,8 +252,12 @@
 </ul>
 <p>3、事件标志组<br>预先设定好N个事件，当N个事件都达成时，才进入下一步操作  </p>
 <ul>
-<li>创建：OS_FLAG_GRP  <em>OSFlagCreate (OS_FLAGS flags, INT8U </em>perr)  </li>
+<li><p>创建：OS_FLAG_GRP  <em>OSFlagCreate (OS_FLAGS flags, INT8U </em>perr)<br>flags：创建事件标志中的初始值<br>perr：存放出错信息<br>创建完后才可使用此事件标志组</p>
+</li>
+<li><p>等待事件标志组信号：OS_FLAGS  OSFlagPend (OS_FLAG_GRP <em>pgrp, OS_FLAGS flags, INT8U wait_type, INT16U timeout, INT8U </em>perr)<br>pgrp：某个事件标志组地址<br>flags：过滤器，用于表示哪几位有效条件才成立。例如：（OS_FLAGS）3，表示请求低2位的信号<br>wait_type：如何算有效。OS_FLAG_WAIT_CLR_ALL（过滤器所有位为0），OS_FLAG_WAIT_SET_ALL（过滤器所有位为1），OS_FLAG_WAIT_CLR_ANY（过滤器任意位为0），OS_FLAG_WAIT_SET_ANY（过滤器任意位为1）。若再加上OS_FLAG_CONSUME则表示有效后清除过滤位的信号（一般配合SET使用，不加此，若任务只需要一次信号，则可以不加此）<br>timeout：超时时间，0表示永久不超时<br>perr：存放出错信息  </p>
+</li>
 </ul>
+<p><em>向事件标志组发信号：OS_FLAGS  OSFlagPost (OS_FLAG_GRP </em>pgrp, OS_FLAGS flags, INT8U opt, INT8U *perr)<br>pgrp：某个事件标志组地址<br>flags：选择需要发送的信号，例如：（OS_FLAGS）1给最低位发信号<br>opt：选择发送置1还是置0信号，OS_FLAG_SET置1信号，flags位置1。OS_FLAG_CLR置0信号，flags位置0<br>perr：存放出错信息 </p>
 
       
     </div>

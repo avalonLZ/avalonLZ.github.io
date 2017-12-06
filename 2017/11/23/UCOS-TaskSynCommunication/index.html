@@ -14,7 +14,7 @@
 <meta property="og:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png">
-<meta property="og:updated_time" content="2017-12-05T14:00:42.674Z">
+<meta property="og:updated_time" content="2017-12-06T14:28:50.890Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UCOSII任务调度与同步、通信机制">
 <meta name="twitter:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
@@ -213,22 +213,22 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。<br>插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS<a id="more"></a>      </p>
-<h3 id="UCOSII下的任务调度（可以使用OS-Enter-Critical-和OS-Exit-Critical-使能和失能中断，来控制是否进行任务调度）"><a href="#UCOSII下的任务调度（可以使用OS-Enter-Critical-和OS-Exit-Critical-使能和失能中断，来控制是否进行任务调度）" class="headerlink" title="UCOSII下的任务调度（可以使用OS_Enter_Critical()和OS_Exit_Critical()使能和失能中断，来控制是否进行任务调度）"></a>UCOSII下的任务调度（可以使用OS_Enter_Critical()和OS_Exit_Critical()使能和失能中断，来控制是否进行任务调度）</h3><p>在Linux下(此处主要讨论pthread所创建的线程，也就是用户态线程)，用户态线程的调度需要自己实现，Linux内核无法对用户态线程进行调度。<br>在UCOSII下，为了保证实时性，采用了高优先级抢占调度策略。简单解释一下，也就是说高优先级任务无条件抢占CPU，如果高优先级任务一直未挂起，则低优先级任务将一直不会被执行，且在UCOSII中原则上不能创建两个同优先级的任务。UCOSII使用3种机制来保证高优先级任务(间接调用OS_Sched()进行任务调度)的执行   </p>
-<p>1、用户主动调用API函数。在用户任务中调用OSFlag_Pend()、OSMboxPend()、OSMutexPend()、OSQPend()、OSSemPend()、OSTaskSuspend()、OSTimeDly()以及OSTimeDlyHMSM()这几个API函数都将间接调用OS_Sched()函数，如果检测到当前有更高优先级的任务处于就绪状态，则将调用OS_TASK_SW()函数切换到更高优先级的任务执行<br>上一张UCOSII下的任务状态图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg" alt="">   </p>
+<h3 id="UCOSII下的任务调度（可以使用OS-Enter-Critical-和OS-Exit-Critical-使能和失能中断，来控制是否进行任务调度）"><a href="#UCOSII下的任务调度（可以使用OS-Enter-Critical-和OS-Exit-Critical-使能和失能中断，来控制是否进行任务调度）" class="headerlink" title="UCOSII下的任务调度（可以使用OS_Enter_Critical()和OS_Exit_Critical()使能和失能中断，来控制是否进行任务调度）"></a>UCOSII下的任务调度（可以使用OS_Enter_Critical()和OS_Exit_Critical()使能和失能中断，来控制是否进行任务调度）</h3><p>在Linux下(此处主要讨论pthread所创建的线程，也就是用户态线程)，用户态线程的调度需要自己实现，Linux内核无法对用户态线程进行调度。<br>在UCOSII下，为了保证实时性，采用了高优先级抢占调度策略（注意：是高优先级抢占，而不是最高优先级抢占）。简单解释一下，也就是说高优先级任务无条件抢占CPU，如果高优先级任务一直未挂起，则低优先级任务将一直不会被执行，且在UCOSII中原则上不能创建两个同优先级的任务。UCOSII使用3种机制来保证高优先级任务(间接调用OS_Sched()进行任务调度)的执行   </p>
+<p>1、用户主动调用API函数。在用户任务中调用OSFlag_Pend()、OSMboxPend()、OSMutexPend()、OSQPend()、OSSemPend()、OSTaskSuspend()、OSTimeDly()以及OSTimeDlyHMSM()这几个API函数都将间接调用OS_Sched()函数，此后如果检测到当前有更高优先级的任务处于就绪状态，则将在OS_Sched()函数内调用OS_TASK_SW()函数，切换到更高优先级的就绪态任务去执行<br>上一张UCOSII下的任务状态图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg" alt="">   </p>
 <p>2、通过系统时钟(Systick)进行调度。每隔一个系统时钟间隔进行一次任务就绪状态检测，如果检测到有更高优先级的任务处于就绪态，则会进行任务切换。系统时钟间隔应当要适合，太长影响系统实时性，太短则会造成系统花费过多的资源处理定时器中断  </p>
 <p>3、通过触发外部中断程序进入系统调度。当发生了外部中断，造成系统任务就绪状态变化，在退出中断处理函数时，调用OSIntExit()函数。在这个函数中，如果检测到更高优先级任务处于就绪状态，则调用OSIntCtxSw()函数进行任务切换<br>注：OSIntEnter()和OSIntExit()是在中断服务程序中应该被调用的，前者用来告诉OS进入中断了，中断嵌套层数加1。后者用来告诉OS退出中断了，中断嵌套层数减1，并进行任务调度 </p>
-<h3 id="UCOSII下的任务通信、同步机制"><a href="#UCOSII下的任务通信、同步机制" class="headerlink" title="UCOSII下的任务通信、同步机制"></a>UCOSII下的任务通信、同步机制</h3><p>在Linux下因为线程间通信都是在应用层加之线程间共享内存空间，所以线程间一般都采用一段共享空间进行通讯，只要选择正确的同步方式保证共享空间操作的原子性即可。但在RTOS中由于涉及硬件和上层应用交互的需求，所以衍生出了更加丰富的通信手段(当然这些手段也可以自己在Linux上实现)<br>下面上一张图，先简单总结下UCOSII下的任务通讯与同步机制<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png" alt="">    </p>
+<h3 id="UCOSII下的任务通信、同步机制"><a href="#UCOSII下的任务通信、同步机制" class="headerlink" title="UCOSII下的任务通信、同步机制"></a>UCOSII下的任务通信、同步机制</h3><p>在Linux下因为线程间通信都是在应用层加之线程间共享内存空间，所以线程间一般都采用一段共享空间进行通讯，只要选择正确的同步方式保证共享空间操作的原子性即可。但在RTOS中由于涉及硬件和上层应用交互的需求，所以衍生出了更加丰富的通信手段，邮箱、消息队列等(当然这些手段也可以自己在Linux上实现)<br>下面上一张图，先简单总结下UCOSII下的任务通讯与同步机制<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png" alt="">    </p>
 <p>1、信号量（整数型型号量sem。可能导致优先级翻转问题，因为API内部不会暂时提升任务优先级）：<br>建立信号量的工作，必须在任务启动(start)之前完成   </p>
 <ul>
 <li><p>创建：OS_EVENT  *OSSemCreate (INT16U cnt)<br>cnt为初始值，可看做代表允许cnt个任务同时访问某资源。<br>若没有可用的ECB则返回空指针 </p>
 </li>
 <li><p>等待信号量：OSSemPend (OS_EVENT <em>pevent, INT16U timeout, INT8U </em>perr)<br>若运行到此处，pevent中的cnt为0，该任务将挂起等待信号量，直到该信号量给到此任务一个信号。若运行到此处，cnt非0，则将cnt减一后继续执行该任务<br>timeout为超时时间，表示该任务进入等待信号量后的挂起时间，时间一到该任务将进入就绪态，若设为0则表示永久等待  </p>
 </li>
-<li><p>发送信号量：INT8U  OSSemPost (OS_EVENT *pevent)<br>调用此API首先会检测pevent信号量是否有被等待，若有被等待，则将等待列表中最高优先级的任务转变为就绪状态，接着会调用OSSched()函数进行任务调度，立即转到此时就绪态中最高优先级的任务去执行，若没有任务比当前任务优先级高，则继续执行该任务。若在调用此API时没有任务在等待该信号量，则该信号量的cnt加1           </p>
+<li><p>发送信号量：INT8U  OSSemPost (OS_EVENT *pevent)<br>调用此API首先会检测pevent信号量是否有被等待，若有被等待，则将等待列表中最高优先级的任务转变为就绪状态，接着会调用OSSched()函数进行任务调度，立即转到此时就绪态中系统优先级最高的任务去执行，若没有任务比当前任务优先级高，则继续执行该任务。若在调用此API时没有任务在等待该信号量，则该信号量的cnt加1           </p>
 </li>
 <li><p>放弃信号量等待：INT8U  OSSemPendAbort (OS_EVENT <em>pevent, INT8U opt, INT8U </em>perr)<br>无任务等待pevent信号量则继续执行该任务。若存在任务等待该信号量，且opt为OS_PEND_OPT_BROADCASE，则表示广播方式，释放所有等待该信号量的任务，使其全部变为就绪态，并进行任务调度。若opt为OS_PEND_OPT_NONE则表示将等待该信号量的任务中优先级最高的任务变为就绪态（此次放弃等待该信号量）并进行任务调度    </p>
 </li>
-<li><p>删除信号量：OS_EVENT  <em>OSSemDel (OS_EVENT </em>pevent, INT8U opt, INT8U *perr)<br>opt = OS_DEL_NO_PEND  若是没有等待信号量的任务，则删除该任务<br>opt = OS_DEL_ALWAYS    不管有没有任务等待，始终删除<br>由于ECB控制块数量有限（默认为十个）,所以不用的信号量应该尽快删除       </p>
+<li><p>删除信号量：OS_EVENT  <em>OSSemDel (OS_EVENT </em>pevent, INT8U opt, INT8U *perr)<br>opt = OS_DEL_NO_PEND  若是没有等待信号量的任务，则删除该任务<br>opt = OS_DEL_ALWAYS    不管有没有任务等待，始终删除。若有任务等待则会现将所有等待任务都更新为就绪态。此后再使用OS_Sched()进行任务调度，则会立即转到就绪态中更高优先级的任务去执行<br>由于ECB控制块数量有限（默认为十个）,所以不用的信号量应该尽快删除       </p>
 </li>
 <li><p>无等待的请求一个信号量：INT16U  OSSemAccept (OS_EVENT *pevent)   </p>
 </li>
@@ -256,8 +256,16 @@
 </li>
 <li><p>等待事件标志组信号：OS_FLAGS  OSFlagPend (OS_FLAG_GRP <em>pgrp, OS_FLAGS flags, INT8U wait_type, INT16U timeout, INT8U </em>perr)<br>pgrp：某个事件标志组地址<br>flags：过滤器，用于表示哪几位有效条件才成立。例如：（OS_FLAGS）3，表示请求低2位的信号<br>wait_type：如何算有效。OS_FLAG_WAIT_CLR_ALL（过滤器所有位为0），OS_FLAG_WAIT_SET_ALL（过滤器所有位为1），OS_FLAG_WAIT_CLR_ANY（过滤器任意位为0），OS_FLAG_WAIT_SET_ANY（过滤器任意位为1）。若再加上OS_FLAG_CONSUME则表示有效后清除过滤位的信号（一般配合SET使用，不加此，若任务只需要一次信号，则可以不加此）<br>timeout：超时时间，0表示永久不超时<br>perr：存放出错信息  </p>
 </li>
+<li><p>向事件标志组发信号：OS_FLAGS  OSFlagPost (OS_FLAG_GRP <em>pgrp, OS_FLAGS flags, INT8U opt, INT8U </em>perr)<br>pgrp：某个事件标志组地址<br>flags：选择需要发送的信号，例如：（OS_FLAGS）1给最低位发信号<br>opt：选择发送置1还是置0信号，OS_FLAG_SET置1信号，flags位置1。OS_FLAG_CLR置0信号，flags位置0<br>perr：存放出错信息 </p>
+</li>
+<li><p>不等待事件标志组（若过滤器事件并不成立也不挂起当前任务）：OS_FLAGS  OSFlagAccept (OS_FLAG_GRP <em>pgrp, OS_FLAGS flags, INT8U wait_type, INT8U </em>perr)<br>pgrp：某个事件标志组地址<br>flags：过滤器，用于表示哪几位有效条件才成立。例如：（OS_FLAGS）3，表示请求低2位的信号<br>wait_type：如何算有效。OS_FLAG_WAIT_CLR_ALL（过滤器所有位为0），OS_FLAG_WAIT_SET_ALL（过滤器所有位为1），OS_FLAG_WAIT_CLR_ANY（过滤器任意位为0），OS_FLAG_WAIT_SET_ANY（过滤器任意位为1）。若再加上OS_FLAG_CONSUME则表示有效后清除过滤位的信号（一般配合SET使用，不加此，若任务只需要一次信号，则可以不加此）<br>perr：存放出错信息   </p>
+</li>
+<li><p>删除事件标志组（）：OS_FLAG_GRP  <em>OSFlagDel (OS_FLAG_GRP </em>pgrp, INT8U opt, INT8U *perr)<br>pgrp：某个事件标志组地址<br>opt：opt值为OS_DEL_NO_PEND表示当前若没有任务阻塞等待此标志组时，删除此标志组。若有任务等待则不做处理，继续运行当前任务。值为OS_DEL_ALWAYS表示不管当前标志组是否有任务等待，都删除该标志组。若有任务等待则会现将所有等待任务都更新为就绪态。此后再使用OS_Sched()进行任务调度，则会立即转到就绪态中更高优先级的任务去执行<br>perr：存放出错信息</p>
+</li>
+<li><p>查询事件标志组的当前事件标志状态：OS_FLAGS  OSFlagQuery (OS_FLAG_GRP <em>pgrp, INT8U </em>perr)<br>pgrp：某个事件标志组地址<br>perr：存放出错信息    </p>
+</li>
 </ul>
-<p><em>向事件标志组发信号：OS_FLAGS  OSFlagPost (OS_FLAG_GRP </em>pgrp, OS_FLAGS flags, INT8U opt, INT8U *perr)<br>pgrp：某个事件标志组地址<br>flags：选择需要发送的信号，例如：（OS_FLAGS）1给最低位发信号<br>opt：选择发送置1还是置0信号，OS_FLAG_SET置1信号，flags位置1。OS_FLAG_CLR置0信号，flags位置0<br>perr：存放出错信息 </p>
+<p>4、邮箱</p>
 
       
     </div>

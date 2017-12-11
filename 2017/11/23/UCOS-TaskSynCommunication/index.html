@@ -14,7 +14,7 @@
 <meta property="og:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png">
-<meta property="og:updated_time" content="2017-12-07T14:30:43.277Z">
+<meta property="og:updated_time" content="2017-12-11T12:04:13.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UCOSII任务调度与同步、通信机制">
 <meta name="twitter:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
@@ -265,11 +265,11 @@
 <li><p>查询事件标志组的当前事件标志状态：OS_FLAGS  OSFlagQuery (OS_FLAG_GRP <em>pgrp, INT8U </em>perr)<br>pgrp：某个事件标志组地址<br>perr：存放出错信息    </p>
 </li>
 </ul>
-<p>4、邮箱</p>
+<p>4、邮箱（可看做是信号量的升级版，可以实现一个任务向另一个任务发送一个指针变量）</p>
 <ul>
 <li><p>创建：OS_EVENT  <em>OSMboxCreate (void </em>pmsg)<br>pmsg：传入需要传递的消息指针，在创建邮箱的同时将此消息放入邮箱中，不想在创建时候就传入消息，或者只想将邮箱当成信号量来使用可以填入NULL  </p>
 </li>
-<li><p>等待邮件：void  <em>OSMboxPend (OS_EVENT </em>pevent, INT16U timeout, INT8U *perr)<br>此处需要强调，此API返回一个邮件指针，若指针非空则表示取出了邮箱中的消息<br>若邮箱中没有邮件则此任务会被挂起，直到等待超时，或用了Post发出邮件（在post中会将等待列表中最高优先级的任务转为就绪态，并进行调度运行）。<br>pevent：邮箱地址<br>timeout：等待超时时间，超时后任务将由挂起转为就绪态，0值为永久等待<br>perr：存放出错信息    </p>
+<li><p>等待邮件：void  <em>OSMboxPend (OS_EVENT </em>pevent, INT16U timeout, INT8U *perr)<br>此处需要强调，此API返回一个邮件指针，若指针非空则表示取出了邮箱中的消息<br>若邮箱中没有邮件则此任务会被挂起，直到等待超时，或用了Post发出邮件（在post中会将等待列表中最高优先级的任务转为就绪态，并进行调度运行，但超时只会将任务转变为就绪态，并不进行调度）。<br>pevent：邮箱地址<br>timeout：等待超时时间，超时后任务将由挂起转为就绪态（但不立即进行调度），0值为永久等待<br>perr：存放出错信息    </p>
 </li>
 <li><p>无等待查询邮件：void  <em>OSMboxAccept (OS_EVENT </em>pevent)<br>pevent：待查询的邮箱地址<br>若存在邮件则返回邮件地址，若不存在邮件则继续运行，不挂起当前任务</p>
 </li>
@@ -282,12 +282,24 @@
 <li><p>删除邮箱：OS_EVENT  <em>OSMboxDel (OS_EVENT </em>pevent, INT8U opt, INT8U *perr)<br>pevent：邮箱地址<br>opt：opt若为OS_DEL_NO_PEND表示若当前没有任务等待则删除此邮箱，若有任务等待则填写错误信息，当前任务继续运行。若为OS_DEL_ALWAYS则表示强制删除此邮箱，所有等待列表中的任务都将变为就绪态，并进行任务调度，运行就绪态中优先级最高的任务<br>perr：存放出错信息  </p>
 </li>
 </ul>
-<p>5、消息队列   </p>
+<p>5、消息队列（可以看做是邮箱的升级版，可以实现从一个任务向另一个任务发送多个指针变量，而且每个指针所指向的数据结构变量也可以有所不同）     </p>
 <ul>
-<li>初始化：void  OS_QInit (void) </li>
-</ul>
-<ul>
-<li>创建:OS_EVENT  <em>OSQCreate (void *</em>start, INT16U size)</li>
+<li><p>创建（返回队列地址）:OS_EVENT  <em>OSQCreate (void **start, INT16U size)<br>需要先定义一个存放消息指针的指针数组void </em>MyQueryMsg[SIZE]<br>start：此处填入该指针数组的地址，用于存放消息指针<br>size：填入队列所能存放数据的最大值<br>例：myquery = OSQCreate(MyQueryMsg, SIZE);  </p>
+</li>
+<li><p>等待消息队列中的消息：void  <em>OSQPend (OS_EVENT </em>pevent, INT16U timeout, INT8U *perr)<br>返回msg的地址（根据POST的方式（FIFO或LIFO）来获得msg）<br>pevent：消息队列地址<br>timeout：等待超时时间，时间到后任务进入就绪态（但不立即进行任务调度）<br>perr：存放出错信息  </p>
+</li>
+<li><p>无等待地从一个消息队列中取得消息：void  <em>OSQAccept (OS_EVENT </em>pevent, INT8U *perr)<br>pevent：消息队列地址<br>perr：存放出错信息  </p>
+</li>
+<li><p>向消息队列发送一个消息（FIFO）：INT8U  OSQPost (OS_EVENT <em>pevent, void </em>pmsg)<br>pevent：消息队列地址<br>pmsg：需要发送的消息地址，注意不要使用临时变量的地址，极可能出现BUG  </p>
+</li>
+<li><p>向消息队列发送一个消息（后进先出LIFO）：INT8U  OSQPostFront (OS_EVENT <em>pevent, void </em>pmsg)<br>同上  </p>
+</li>
+<li><p>清空一个消息队列：INT8U  OSQFlush (OS_EVENT *pevent)<br>pevent：消息队列地址  </p>
+</li>
+<li><p>查询一个消息队列状态：INT8U  OSQQuery (OS_EVENT <em>pevent, OS_Q_DATA </em>p_q_data)<br>pevent：消息队列地址<br>p_q_data：存放消息队列信息的结构体变量  </p>
+</li>
+<li><p>删除一个消息队列：OS_EVENT  <em>OSQDel (OS_EVENT </em>pevent, INT8U opt, INT8U *perr)<br>pevent：消息队列地址<br>opt：opt若为OS_DEL_NO_PEND表示若当前没有任务等待则删除此队列，若有任务等待则填写错误信息，当前任务继续运行。若为OS_DEL_ALWAYS则表示强制删除此队列，所有等待列表中的任务都将变为就绪态，并进行任务调度，运行就绪态中优先级最高的任务  </p>
+</li>
 </ul>
 
       

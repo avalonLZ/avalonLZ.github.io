@@ -4,18 +4,17 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>LinkIt Assist2502 and LinkIt One | 木子人人人&#39;s Blog</title>
+  <title>Archives: 2017/12 | 木子人人人&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近在玩LinkIt Assist2502和LinkIt One这两款MT2502可穿戴方案的板子，下面介绍下开发环境的搭建、固件更新方法以及已经实现的部分功能">
-<meta property="og:type" content="article">
-<meta property="og:title" content="LinkIt Assist2502 and LinkIt One">
-<meta property="og:url" content="http://avalonlz.github.io/2016/12/17/LinkIt-Assist2502-and-LinkIt-One/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="木子人人人's Blog">
+<meta property="og:url" content="http://avalonlz.github.io/archives/2017/12/index.html">
 <meta property="og:site_name" content="木子人人人's Blog">
-<meta property="og:description" content="最近在玩LinkIt Assist2502和LinkIt One这两款MT2502可穿戴方案的板子，下面介绍下开发环境的搭建、固件更新方法以及已经实现的部分功能">
-<meta property="og:updated_time" content="2017-06-18T14:41:31.966Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LinkIt Assist2502 and LinkIt One">
-<meta name="twitter:description" content="最近在玩LinkIt Assist2502和LinkIt One这两款MT2502可穿戴方案的板子，下面介绍下开发环境的搭建、固件更新方法以及已经实现的部分功能">
+<meta name="twitter:title" content="木子人人人's Blog">
+<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s Blog" type="application/atom+xml">
   
@@ -171,103 +170,53 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-LinkIt-Assist2502-and-LinkIt-One" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap">
   
-    <div class="article-meta">
-      <a href="/2016/12/17/LinkIt-Assist2502-and-LinkIt-One/" class="article-date">
-  	<time datetime="2016-12-17T03:22:54.000Z" itemprop="datePublished">2016-12-17</time>
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2017/12/11/Three-Control-Block/" class="archive-article-date">
+  	<time datetime="2017-12-11T12:27:19.000Z" itemprop="datePublished">Dec 11</time>
 </a>
-    </div>
+        </div>
+    	 
   
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      LinkIt Assist2502 and LinkIt One
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2017/12/11/Three-Control-Block/">UCOSII三大任务控制块</a>
     </h1>
   
 
-      </header>
-      
-      <div class="article-info article-info-post">
-        
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/嵌入式-MTK/">嵌入式_MTK</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RTOS-UCOSII/">RTOS_UCOSII</a></li></ul>
 	</div>
 
-        
+          
 
+        </div>
         <div class="clearfix"></div>
-		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
-      </div>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在玩LinkIt Assist2502和LinkIt One这两款MT2502可穿戴方案的板子，下面介绍下开发环境的搭建、固件更新方法以及已经实现的部分功能<a id="more"></a></p>
-<h1 id="开发环境的搭建："><a href="#开发环境的搭建：" class="headerlink" title="开发环境的搭建："></a><strong>开发环境的搭建：</strong></h1><h4 id="LinkIt-One"><a href="#LinkIt-One" class="headerlink" title="LinkIt One:"></a>LinkIt One:</h4><p>&#160; &#160; &#160; &#160;LinkIt One固件版本出厂时默认是1.1.23也就是支持Arduino编程的固件版本，该版固件需要安装Arduino IDE 1.5.6-r2 BETA 或者1.5.7 BETA（推荐）版本的Arduino软件（可以在Arduino官方网站上下载），之后再安装LinkIt One的SDK（mediatek_linkit<em>sdk</em>(for_arduino)-1.1.23），至此完成LinkIt One 1.1.23固件版本的开发环境。<br>&#160; &#160; &#160; &#160;LinkIt One W15.19.p2版本的固件开发环境和LinkIt Assist2502相同，下面将做简单介绍。  </p>
-<h4 id="LinkIt-Assist2502："><a href="#LinkIt-Assist2502：" class="headerlink" title="LinkIt Assist2502："></a>LinkIt Assist2502：</h4><p>Assist2502是在Eclipse中进行编译烧写的，所以要搭建Java的开发环境以及CDT(C/C++支持包)，我使用的是jre-8u91-windows-i586 + cdt-8.8.1 + eclipse-jee-mars-R-win32的组合，64位机可以完美运行，具体安装步骤可参照Assist2502中文指南。  </p>
-<h1 id="固件更新："><a href="#固件更新：" class="headerlink" title="固件更新："></a><strong>固件更新：</strong></h1><p>&#160; &#160; &#160; &#160;在这里主要介绍LinkIt One的固件更新方法：<br>&#160; &#160; &#160; &#160;下载MediaTek_LinkIt_Assist_2502_SDK_2_0_46解压后进入MediaTek_LinkIt_Assist_2502_SDK_2_0_46\LINKIT_ASSIST_SDK\tools\FirmwareUpdater该目录下运行FirmwareUpdater选择LinkIt One按照要求即可将LinkIt One刷成W15.19.p2版本，之后便可以和Assist2502一样使用Eclipse进行固件编写。<br>&#160; &#160; &#160; &#160;若需要将LinkIt One刷回1.1.23则需要找到安装有LinkIt One的Arduino SDK的Arduino目录如：D:\Arduino（当初安装LinkIt One的Arduino SDK的路径），进入目录\Arduino\hardware\tools\mtk中，运行FirmwareUpdater，按照指示，即可将LinkIt One刷回支持Arduino编程的固件版本。  </p>
-<h1 id="已实现的功能："><a href="#已实现的功能：" class="headerlink" title="已实现的功能："></a><strong>已实现的功能：</strong></h1><p>1、电子石英表：在240*240的LCD屏幕上绘制出了石英表效果，时针和分针两个表针，可以通过TCP上位机或者串口设置时间。<br>2、通话功能：在程序中使用vm_gsm_tel_call_actions完成相关参数的设置，实现了接打功能<br>3、GPS定位：串口输出GPS定位数据<br>4、WiFi连接：通过WiFi模块接入指定AP<br>网上关于MTK开发的资料较少，还望大家可以多多交流</p>
-
-      
-    </div>
-    
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2017/01/08/MySQL-Note/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          MySQL
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2016/10/20/mqtt-notes/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">MQTT协议</div>
-      <strong class="article-nav-caption">></strong>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
 
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">分享到: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-    <a class="jiathis_button_twitter"></a>
-    <a class="jiathis_button_plus"></a> 
-    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
-
-
-
-
-
-
-
+    
 
 </div>
       <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -310,8 +259,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false

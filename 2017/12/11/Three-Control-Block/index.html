@@ -13,7 +13,10 @@
 <meta property="og:site_name" content="木子人人人's Blog">
 <meta property="og:description" content="前面总结了UCOSII下的任务调度以及任务间的同步与通信机制，这篇文章简单总结下UCOSII下的三大控制块：TCB（任务控制块）、ECB（事件控制块）以及MCB（内存控制块）">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_ucosii_threecontrolblock.png">
-<meta property="og:updated_time" content="2017-12-12T15:40:36.773Z">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_5bufferList.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_ECB.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_MCB.jpg">
+<meta property="og:updated_time" content="2017-12-13T12:01:24.796Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UCOSII三大任务控制块">
 <meta name="twitter:description" content="前面总结了UCOSII下的任务调度以及任务间的同步与通信机制，这篇文章简单总结下UCOSII下的三大控制块：TCB（任务控制块）、ECB（事件控制块）以及MCB（内存控制块）">
@@ -212,6 +215,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>前面总结了UCOSII下的任务调度以及任务间的同步与通信机制，这篇文章简单总结下UCOSII下的三大控制块：TCB（任务控制块）、ECB（事件控制块）以及MCB（内存控制块）<a id="more"></a><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_ucosii_threecontrolblock.png" alt="">  </p>
+<p>UCOSII初始化时建立的五大缓冲区（以单链表的形式存在）：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_5bufferList.png" alt=""><br>若当使用相应控制块时则向缓冲区申请，不使用时释放回缓冲区，若缓冲区中的相应控制块使用完了，则不能再分配相应控制块。在初始化时可配置缓冲区大小  </p>
 <h3 id="TCB-Task-Control-Block-任务控制块："><a href="#TCB-Task-Control-Block-任务控制块：" class="headerlink" title="TCB(Task_Control_Block)任务控制块："></a>TCB(Task_Control_Block)任务控制块：</h3><pre><code>/*
 *********************************************************************************************************
 *                                          TASK CONTROL BLOCK
@@ -282,7 +286,8 @@ typedef struct os_tcb {
     INT8U            OSTCBTaskName[OS_TASK_NAME_SIZE];/* 该任务的名称 */
 #endif
 } OS_TCB;  
-</code></pre><h3 id="ECB-Event-Control-Block-事件控制块："><a href="#ECB-Event-Control-Block-事件控制块：" class="headerlink" title="ECB(Event_Control_Block)事件控制块："></a>ECB(Event_Control_Block)事件控制块：</h3><pre><code>/*
+</code></pre><h3 id="ECB-Event-Control-Block-事件控制块："><a href="#ECB-Event-Control-Block-事件控制块：" class="headerlink" title="ECB(Event_Control_Block)事件控制块："></a>ECB(Event_Control_Block)事件控制块：</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_ECB.png" alt=""></p>
+<pre><code>/*
 *********************************************************************************************************
 *                                          EVENT CONTROL BLOCK
 *********************************************************************************************************
@@ -306,7 +311,8 @@ typedef struct os_event {
 #endif
 } OS_EVENT;
 #endif  
-</code></pre><h3 id="MCB-Memory-Control-Block-事件控制块："><a href="#MCB-Memory-Control-Block-事件控制块：" class="headerlink" title="MCB(Memory_Control_Block)事件控制块："></a>MCB(Memory_Control_Block)事件控制块：</h3><pre><code>/*
+</code></pre><h3 id="MCB-Memory-Control-Block-事件控制块："><a href="#MCB-Memory-Control-Block-事件控制块：" class="headerlink" title="MCB(Memory_Control_Block)事件控制块："></a>MCB(Memory_Control_Block)事件控制块：</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_MCB.jpg" alt=""></p>
+<pre><code>/*
 *********************************************************************************************************
 *                                     MEMORY PARTITION DATA STRUCTURES
 *********************************************************************************************************
@@ -314,13 +320,13 @@ typedef struct os_event {
 
 #if (OS_MEM_EN &gt; 0) &amp;&amp; (OS_MAX_MEM_PART &gt; 0)
 typedef struct os_mem {                   /* MEMORY CONTROL BLOCK                                      */
-    void   *OSMemAddr;                    /* Pointer to beginning of memory partition                  */
-    void   *OSMemFreeList;                /* Pointer to list of free memory blocks                     */
-    INT32U  OSMemBlkSize;                 /* Size (in bytes) of each block of memory                   */
-    INT32U  OSMemNBlks;                   /* Total number of blocks in this partition                  */
-    INT32U  OSMemNFree;                   /* Number of memory blocks remaining in this partition       */
+    void   *OSMemAddr;                    /* 内存分区的首地址 */
+    void   *OSMemFreeList;                /* 内存控制块组成的链表头地址 */
+    INT32U  OSMemBlkSize;                 /* 每个内存控制块的大小(字节) */
+    INT32U  OSMemNBlks;                   /* 内存分区中内存控制块的数目 */
+    INT32U  OSMemNFree;                   /* 内存分区中空闲内存控制块的数目 */
 #if OS_MEM_NAME_SIZE &gt; 1
-    INT8U   OSMemName[OS_MEM_NAME_SIZE];  /* Memory partition name                                     */
+    INT8U   OSMemName[OS_MEM_NAME_SIZE];  /* 内存分区的名字 */
 #endif
 } OS_MEM;
 

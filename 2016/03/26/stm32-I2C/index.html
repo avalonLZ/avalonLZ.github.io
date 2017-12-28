@@ -402,7 +402,34 @@
 
 
 
+<!--
 
+//-->
+
+ <!--以下为使用畅言的代码
+  && post.comments//-->
+ 
+ 
+  <section id="comments">
+<!--高速版，加载速度快，使用前需测试页面的兼容性-->
+<div id="SOHUCS" sid="stm32-I2C">
+style="padding: 0px 30px 0px 46px;"></div>
+<script>
+  (function(){
+    var appid = 'cyto4sUr6',
+    conf = '5531a21399d22997758da7915e34b8fe';
+    var doc = document,
+    s = doc.createElement('script'),
+    h = doc.getElementsByTagName('head')[0] || doc.head || doc.documentElement;
+    s.type = 'text/javascript';
+    s.charset = 'utf-8';
+    s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&appid=' + appid;
+    h.insertBefore(s,h.firstChild);
+    window.SCS_NO_IFRAME = true;
+  })()
+</script>
+  </section>
+  
 </div>
       <!--
 注释：用卜算子来统计网页访问量

@@ -17,7 +17,7 @@
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Bridge_menu2.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Bridge_ohde.png">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Bridge_brtl.png">
-<meta property="og:updated_time" content="2017-12-28T02:10:32.217Z">
+<meta property="og:updated_time" content="2017-12-29T07:47:30.131Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="桥梁项目配置tool">
 <meta name="twitter:description" content="给手上这个即将完工的项目做个配置软件。玩QT最主要的就是信号和槽了，即使是多线程也是QT封装过的。写了几个软件后，积累了不少自己做的功能库，以后PC端的开发就很方便了">
@@ -230,7 +230,7 @@
 <p>再来就是TextEdit控件负责显示下位机发来的数据，这里也单独开了一个线程专门进行串口数据的读取。当取到数据后，利用信号发送将数据发送给主线程，主线程操作UI将新数据更新到Text Edit控件上  </p>
 <p>之后是串口的写入方面，也开了一个线程。这个线程只负责串口的写入。主线程从UI中取到用户输入的数据后，利用信号将数据发送给负责串口写入的线程，由它来发送数据到下位机  </p>
 <p>总结一下这个应用一共就开了3个分线程，分别负责串口的扫描，串口的读取以及串口的写入这三个方面。而主线程主要负责的就是UI操作，以及利用槽对用户操作做出相关响应  </p>
-<p>代码已上传GitHub需要的请自行下载~~</p>
+<p>代码已上传GitHub需要的请自行下载~~<br><a href="https://github.com/avalonLZ/PyQt_Bridge" target="_blank" rel="external">https://github.com/avalonLZ/PyQt_Bridge</a>  </p>
 
       
     </div>

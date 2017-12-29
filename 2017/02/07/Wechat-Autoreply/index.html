@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="无意间发现python有个微信库啊，刚好微信没有QQ一样的不同状态下自动回复功能，所以就做了这么个小插件">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/WeChat_AutoReplyQQ%E6%88%AA%E5%9B%BE20170207142030.png">
-<meta property="og:updated_time" content="2017-11-07T14:18:04.371Z">
+<meta property="og:updated_time" content="2017-12-29T08:08:39.929Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信自动回复小插件">
 <meta name="twitter:description" content="无意间发现python有个微信库啊，刚好微信没有QQ一样的不同状态下自动回复功能，所以就做了这么个小插件">
@@ -215,7 +215,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>无意间发现python有个微信库啊，刚好微信没有QQ一样的不同状态下自动回复功能，所以就做了这么个小插件<a id="more"></a><br>开发环境：win7_64 + python2.7.9_64 + PyQt4_64<br>1.将python2.7加入系统环境变量中<br>2.用cmd进入python2.7所在的安装文件夹，进入Script文件夹，运行easy_install.exe pip(pip安装完成)<br>3.用cmd进入python中，运行pip install itchat（安装itchat库）<br>4.安装pyqt4<br>接下来就可以编写PyQt程序了：  </p>
+        <p>无意间发现python有个微信库啊，刚好微信没有QQ一样的不同状态下自动回复功能，所以就做了这么个小插件<a id="more"></a>   </p>
+<p>开发环境：win7_64 + python2.7.9_64 + PyQt4_64<br>1.将python2.7加入系统环境变量中<br>2.用cmd进入python2.7所在的安装文件夹，进入Script文件夹，运行easy_install.exe pip(pip安装完成)<br>3.用cmd进入python中，运行pip install itchat（安装itchat库）<br>4.安装pyqt4    </p>
+<p>接下来就可以编写PyQt程序了：  </p>
 <pre><code>#coding: UTF-8
 import sys
 import itchat
@@ -345,7 +347,9 @@ def appstart():
 
 if __name__==&apos;__main__&apos;:
     appstart()
-</code></pre><p>程序运行效果如下图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/WeChat_AutoReplyQQ%E6%88%AA%E5%9B%BE20170207142030.png" alt=""><br>源码下载地址：<br><a href="https://github.com/avalonLZ/Project/tree/master/Python/PyQT/python_wechat" target="_blank" rel="external">https://github.com/avalonLZ/Project/tree/master/Python/PyQT/python_wechat</a><br>注意，若SSL报错则需要回滚CA证书：  </p>
+</code></pre><p>程序运行效果如下图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/WeChat_AutoReplyQQ%E6%88%AA%E5%9B%BE20170207142030.png" alt="">  </p>
+<p>源码下载地址：<br><a href="https://github.com/avalonLZ/PyQt_AutoWeChat" target="_blank" rel="external">https://github.com/avalonLZ/PyQt_AutoWeChat</a>   </p>
+<p>注意，若SSL报错则需要回滚CA证书：  </p>
 <pre><code>pip uninstall -y certifi
 
 pip install certifi==2015.04.28   
@@ -376,8 +380,9 @@ setup(
       windows = [{&quot;script&quot;: &quot;wechatgui.py&quot;,  
             &quot;icon_resources&quot;: [(1, u&quot;./img/image1.ico&quot;)]  
            }]  
-      )
-</code></pre><p>注意，因为itchat用到了微信SSL认证，需要提供CA证书，但一般打包后并不会将证书进行打包。并且，DEFAULT_CA_BUNDLE_PATH = certs.where()所指定的CA证书地址是一个较深入的相对地址，这样会导致打包后始终无法找到CA证书。在这里我们可以按以下步骤解决该问题<br>1、首先更改DEFAULT_CA_BUNDLE_PATH为项目所在地的根目录地址，修改Python27\Lib\site-packages\requests目录下的utils.py文件    </p>
+      )  
+</code></pre><p>注意，因为itchat用到了微信SSL认证，需要提供CA证书，但一般打包后并不会将证书进行打包。并且，DEFAULT_CA_BUNDLE_PATH = certs.where()所指定的CA证书地址是一个较深入的相对地址，这样会导致打包后始终无法找到CA证书。在这里我们可以按以下步骤解决该问题: </p>
+<p>1、首先更改DEFAULT_CA_BUNDLE_PATH为项目所在地的根目录地址，修改Python27\Lib\site-packages\requests目录下的utils.py文件    </p>
 <pre><code>NETRC_FILES = (&apos;.netrc&apos;, &apos;_netrc&apos;)
 
 DEFAULT_CA_BUNDLE_PATH = certs.where()
@@ -389,7 +394,10 @@ DEFAULT_CA_BUNDLE_PATH = join(abspath(&apos;.&apos;), &apos;cacert.pem&apos;)
 <pre><code>&gt;&gt;&gt; import certifi
 &gt;&gt;&gt; certifi.where()  
 &apos;C:\\Python27\\lib\\site-packages\\certifi\\cacert.pem&apos;  
-</code></pre><p>可以看出我们需要的CA文件就在该目录下，进入该目录，复制cacert.pem到项目所在根目录（保证了在更改了utils.py后依然可以debug成功）<br>3、现在我们可以用cmd进入项目所在根目录执行python mysetup.py py2exe对项目进行打包<br>4、最后将cacert.pem再次拷贝到项目根目录下的dist文件夹中。至此，执行exe文件发现可以正常进行微信登录等操作<br>（在项目彻底结束后最好把utils.py改回来，以免以后每次使用CA都要拷贝cacert.pem到项目根目录）</p>
+</code></pre><p>可以看出我们需要的CA文件就在该目录下，进入该目录，复制cacert.pem到项目所在根目录（保证了在更改了utils.py后依然可以debug成功）  </p>
+<p>3、现在我们可以用cmd进入项目所在根目录执行python mysetup.py py2exe对项目进行打包  </p>
+<p>4、最后将cacert.pem再次拷贝到项目根目录下的dist文件夹中。至此，执行exe文件发现可以正常进行微信登录等操作  </p>
+<p>（在项目彻底结束后最好把utils.py改回来，以免以后每次使用CA都要拷贝cacert.pem到项目根目录）</p>
 
       
     </div>

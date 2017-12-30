@@ -4,24 +4,28 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>PD控制、位置PID以及增量PID | 木子人人人&#39;s 藏经阁</title>
+  <title>飞思卡尔与PID | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。  
+  <meta name="description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法、数据结构和STL基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。  
 第九届摄像头组程序：https://github.com/avalonLZ/C_Freescale9    
-第十届光电组程序：https://github.com/avalonLZ/C_Fre">
+第十届光电组程序：https://github.com/avalonLZ/C">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PD控制、位置PID以及增量PID">
+<meta property="og:title" content="飞思卡尔与PID">
 <meta property="og:url" content="http://avalonlz.github.io/2017/02/19/Freescale_PID/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。  
+<meta property="og:description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法、数据结构和STL基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。  
 第九届摄像头组程序：https://github.com/avalonLZ/C_Freescale9    
-第十届光电组程序：https://github.com/avalonLZ/C_Fre">
-<meta property="og:updated_time" content="2017-12-29T07:53:07.585Z">
+第十届光电组程序：https://github.com/avalonLZ/C">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Freescale_ErectControl.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Freescale_SpeedControl.png">
+<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Freescale_TurnControl.png">
+<meta property="og:updated_time" content="2017-12-30T07:17:46.155Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PD控制、位置PID以及增量PID">
-<meta name="twitter:description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。  
+<meta name="twitter:title" content="飞思卡尔与PID">
+<meta name="twitter:description" content="回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法、数据结构和STL基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。  
 第九届摄像头组程序：https://github.com/avalonLZ/C_Freescale9    
-第十届光电组程序：https://github.com/avalonLZ/C_Fre">
+第十届光电组程序：https://github.com/avalonLZ/C">
+<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Freescale_ErectControl.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -194,7 +198,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      PD控制、位置PID以及增量PID
+      飞思卡尔与PID
     </h1>
   
 
@@ -219,11 +223,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法和数据结构基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。  </p>
+        <p>回忆大学时光，最感慨的还是两年飞卡（两次都是玩直立车）。现在想来更应该抽一年时间去接触ACM，打好自己的算法、数据结构和STL基础。唉，只能说是Too Young， Too Simple。选择比努力重要太多。  </p>
 <p>第九届摄像头组程序：<br><a href="https://github.com/avalonLZ/C_Freescale9" target="_blank" rel="external">https://github.com/avalonLZ/C_Freescale9</a>    </p>
 <p>第十届光电组程序：<br><a href="https://github.com/avalonLZ/C_Freescale10" target="_blank" rel="external">https://github.com/avalonLZ/C_Freescale10</a>    </p>
-<p>第十届的代码主要是自己和队友写的，当时时序控制其实很头疼，但是又没人指点，最后也只能硬着头皮上（现在想来应该上RTOS的）。这一次，使我明白了软件架构、设计思想的重要性，也让我在今后的编码上注意这方面的知识的学习<a id="more"></a>  </p>
-<h4 id="直立PD控制"><a href="#直立PD控制" class="headerlink" title="直立PD控制"></a>直立PD控制</h4><h4 id="位置PID控制"><a href="#位置PID控制" class="headerlink" title="位置PID控制"></a>位置PID控制</h4><h4 id="增量PID控制"><a href="#增量PID控制" class="headerlink" title="增量PID控制"></a>增量PID控制</h4>
+<p>第十届的代码主要是自己和队友写的，当时时序控制其实很头疼，但是又没人指点，最后也只能硬着头皮上（现在想来应该上RTOS的，已保证采集和控制任务的优先级）。这一次，使我明白了软件架构、设计思想的重要性，也让我在今后的软件设计上,注意这方面知识的学习<a id="more"></a>  </p>
+<h4 id="直立PD控制"><a href="#直立PD控制" class="headerlink" title="直立PD控制"></a>直立PD控制</h4><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Freescale_ErectControl.png" alt="">  </p>
+<h4 id="速度PI控制"><a href="#速度PI控制" class="headerlink" title="速度PI控制"></a>速度PI控制</h4><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Freescale_SpeedControl.png" alt=""></p>
+<h4 id="转向PD控制"><a href="#转向PD控制" class="headerlink" title="转向PD控制"></a>转向PD控制</h4><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Freescale_TurnControl.png" alt=""></p>
+
       
     </div>
     
@@ -289,7 +296,7 @@
  
   <section id="comments">
 <!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="PD控制、位置PID以及增量PID"></div>
+<div id="SOHUCS" sid="飞思卡尔与PID"></div>
 <script>
   (function(){
     var appid = 'cyto4sUr6',

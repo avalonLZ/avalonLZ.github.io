@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>Linux多线程编程 | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Linux多线程(用户态线程)编程相关知识，不定期更新。不过细想下用户态的多线程编程好像也就是一些同步机制，哈哈哈哈，先总结同步机制吧">
+  <meta name="description" content="Linux多线程(用户态线程)编程相关知识，不定期更新。不过细想下用户态的多线程编程好像也就是一些同步机制(其他数据交互都可以使用全局变量、静态变量、堆内变量等共享内存的变量来进行)，下面就总结下同步机制吧">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux多线程编程">
 <meta property="og:url" content="http://avalonlz.github.io/2017/11/12/Linux-MultiThread/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新。不过细想下用户态的多线程编程好像也就是一些同步机制，哈哈哈哈，先总结同步机制吧">
+<meta property="og:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新。不过细想下用户态的多线程编程好像也就是一些同步机制(其他数据交互都可以使用全局变量、静态变量、堆内变量等共享内存的变量来进行)，下面就总结下同步机制吧">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_MultiThread.png">
-<meta property="og:updated_time" content="2017-11-23T03:54:21.808Z">
+<meta property="og:updated_time" content="2018-01-03T14:46:26.060Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程">
-<meta name="twitter:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新。不过细想下用户态的多线程编程好像也就是一些同步机制，哈哈哈哈，先总结同步机制吧">
+<meta name="twitter:description" content="Linux多线程(用户态线程)编程相关知识，不定期更新。不过细想下用户态的多线程编程好像也就是一些同步机制(其他数据交互都可以使用全局变量、静态变量、堆内变量等共享内存的变量来进行)，下面就总结下同步机制吧">
 <meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_MultiThread.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
@@ -110,7 +110,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 13.33px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 13.33px;">Raspberry Pi</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 20px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 16.67px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/服务器-Django/" style="font-size: 13.33px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏-俄罗斯方块/" style="font-size: 10px;">游戏_俄罗斯方块</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/软件工程-DesignModel/" style="font-size: 10px;">软件工程_DesignModel</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
+						<a href="/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 13.33px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 13.33px;">Raspberry Pi</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 20px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 16.67px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/服务器-Django/" style="font-size: 13.33px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏-俄罗斯方块/" style="font-size: 10px;">游戏_俄罗斯方块</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/软件工程-DesignPatterns/" style="font-size: 10px;">软件工程_DesignPatterns</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
 					</div>
 				</section>
 				
@@ -215,14 +215,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Linux多线程(用户态线程)编程相关知识，不定期更新。不过细想下用户态的多线程编程好像也就是一些同步机制，哈哈哈哈，先总结同步机制吧<a id="more"></a>   </p>
-<h3 id="相关名词解析"><a href="#相关名词解析" class="headerlink" title="相关名词解析"></a>相关名词解析</h3><p>同步：同步就是指在一定时间内只允许一个线程访问某一资源。在该时间内其他线程不可访问该资源（实现方式：mutex互斥锁、condition variable条件变量、spin lock自旋锁（read/write lock读写锁是特殊自旋锁）、sem信号量等）    </p>
-<p>原子操作:某段代码在执行时不会被其他线程影响，则构成了一个原子操作</p>
-<h3 id="线程优先级（在Linux中，内核态线程-kthread所创建-的调度与进程调度的策略、算法相同，用户态线程-pthread-则需要用户自己实现调度）"><a href="#线程优先级（在Linux中，内核态线程-kthread所创建-的调度与进程调度的策略、算法相同，用户态线程-pthread-则需要用户自己实现调度）" class="headerlink" title="线程优先级（在Linux中，内核态线程(kthread所创建)的调度与进程调度的策略、算法相同，用户态线程(pthread)则需要用户自己实现调度）"></a>线程优先级（在Linux中，内核态线程(kthread所创建)的调度与进程调度的策略、算法相同，用户态线程(pthread)则需要用户自己实现调度）</h3><p>Linux内核态线程调度算法中的SCHED_RR和大部分RTOS的线程调度算法类似。即具有高优先级抢占特性，也就是在多线程中，高优先级的线程是无条件抢占CPU的，如果高优先级线程未挂起，则低优先级线程将一直不会被执行。若多个线程处于相同优先级时则会对这几个同优先级的线程采用时间片轮转算法，但在一些RTOS(ucos)中并不支持时间片轮转算法，只支持优先级抢占任务调度，在这种RTOS中的任务必须有不同的优先级。  </p>
-<p>内核态线程调度（实时调度，即支持高优先级抢占运行）：<br>SCHED_OTHER//分时调度,它的特点是即使是最低优先级，他也能获得一定的时间片.<br>SCHED_FIFO//实时调度，先到先服务。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起；对于同等优先级，先运行的进程会一直占据cpu, 只有等到先运行的线程挂起后，后续进程才能得到时间片。<br>SCHED_RR//实时调度，时间片轮转。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起, ；对于同等优先级的线程，各个线程会轮流运行一定的时间片（Linux是100ms）。    </p>
-<h3 id="多线程同步实现方式（mutex、cond、sem、rw重要）"><a href="#多线程同步实现方式（mutex、cond、sem、rw重要）" class="headerlink" title="多线程同步实现方式（mutex、cond、sem、rw重要）"></a>多线程同步实现方式（mutex、cond、sem、rw重要）</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_MultiThread.png" alt=""></p>
+        <p>Linux多线程(用户态线程)编程相关知识，不定期更新。不过细想下用户态的多线程编程好像也就是一些同步机制(其他数据交互都可以使用全局变量、静态变量、堆内变量等共享内存的变量来进行)，下面就总结下同步机制吧<a id="more"></a>   </p>
+<h3 id="相关名词解析"><a href="#相关名词解析" class="headerlink" title="相关名词解析"></a>相关名词解析</h3><p>同步：<br>同步就是指在一定时间内只允许一个线程访问某一资源。在该时间内其他线程不可访问该资源（实现方式：mutex互斥锁、condition variable条件变量、spin lock自旋锁（read/write lock读写锁是特殊自旋锁）、sem信号量等）    </p>
+<p>原子操作:<br>某段代码在执行时不会被其他线程影响，则构成了一个原子操作  </p>
+<p>临界区（非内核对象时，只在Win下多线程中存在，此处只提及不做过多说明）：<br>临界区是一种轻量级机制，在某一时间内只允许一个线程执行某个给定代码段（在RTOS下表示禁止总中断和开启总中断之间的代码段）。临界区只能用于对同一进程内的线程进行同步</p>
+<h3 id="线程优先级（在Linux中，内核态线程-kthread所创建-的调度与进程调度的策略、算法相同，用户态线程-pthread-则需要用户自己实现调度）"><a href="#线程优先级（在Linux中，内核态线程-kthread所创建-的调度与进程调度的策略、算法相同，用户态线程-pthread-则需要用户自己实现调度）" class="headerlink" title="线程优先级（在Linux中，内核态线程(kthread所创建)的调度与进程调度的策略、算法相同，用户态线程(pthread)则需要用户自己实现调度）"></a>线程优先级（在Linux中，内核态线程(kthread所创建)的调度与进程调度的策略、算法相同，用户态线程(pthread)则需要用户自己实现调度）</h3><p>Linux内核态线程调度算法中的SCHED_RR和大部分RTOS的线程调度算法类似。即具有高优先级抢占特性，也就是在多线程中，高优先级的线程是无条件抢占CPU的，如果高优先级线程未挂起，则低优先级线程将一直不会被执行。若多个线程处于相同优先级时则会对这几个同优先级的线程采用时间片轮转算法，但在一些RTOS(ucos)中并不支持时间片轮转算法，只支持优先级抢占任务调度，在这种RTOS中的任务必须有不同的优先级。<br>内核态线程调度（实时调度，即支持高优先级抢占运行）：    </p>
+<p>SCHED_OTHER//分时调度,它的特点是即使是最低优先级，他也能获得一定的时间片.  </p>
+<p>SCHED_FIFO//实时调度，先到先服务。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起；对于同等优先级，先运行的进程会一直占据cpu, 只有等到先运行的线程挂起后，后续进程才能得到时间片。  </p>
+<p>SCHED_RR//实时调度，时间片轮转。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起, ；对于同等优先级的线程，各个线程会轮流运行一定的时间片（Linux是100ms）。    </p>
+<h3 id="多线程同步实现方式（mutex、cond、sem、rw重要）"><a href="#多线程同步实现方式（mutex、cond、sem、rw重要）" class="headerlink" title="多线程同步实现方式（mutex、cond、sem、rw重要）"></a>多线程同步实现方式（mutex、cond、sem、rw重要）</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_MultiThread.png" alt="">  </p>
 <ul>
-<li><p>互斥锁的实现：<br>主要实现函数：<br>1、pthread_mutex_t mutex_test = PTHREAD_MUTEX_INITIALIZER;//初始化静态定义的锁，一般用此即可<br>pthread_mutex_init(&amp;mutex,NULL);//互斥锁被存放在参数mutex指向的内存中，第二个参数一般默认为NULL，使用缺省属性<br>2、pthread_mutex_lock(&amp;mutex_test);//上锁<br>3、pthread_mutex_unlock(&amp;mutex_test);//解锁<br>4、pthread_mutex_destroy (&amp;mutex_test); //销毁互斥锁</p>
+<li>互斥锁的实现<br>主要实现函数：  </li>
+</ul>
+<p>1、pthread_mutex_t mutex_test = PTHREAD_MUTEX_INITIALIZER;//初始化静态定义的锁，一般用此即可<br>pthread_mutex_init(&amp;mutex,NULL);//互斥锁被存放在参数mutex指向的内存中，第二个参数一般默认为NULL，使用缺省属性   </p>
+<p>2、pthread_mutex_lock(&amp;mutex_test);//上锁  </p>
+<p>3、pthread_mutex_unlock(&amp;mutex_test);//解锁      </p>
+<p>4、pthread_mutex_destroy (&amp;mutex_test); //销毁互斥锁</p>
 <pre><code>/*************************************************************************
     &gt; File Name: mutexlock.c
     &gt; Author:lizhong 
@@ -285,8 +293,13 @@ int main(void)
 
     printf(&quot;All End\r\n&quot;);
 }  
-</code></pre></li>
-<li><p>条件变量的实现（注意：条件变量总是和一个互斥锁搭配使用，当一个线程的行为依赖于另外一个线程对共享数据状态的改变时，这时候就可以使用条件变量）：<br>与互斥锁不同，条件变量是主动阻塞自身线程，直到某条件达成。但条件的检测需要在互斥锁的保护下进行。<br>主要实现函数：<br>1、pthread_cond_t temcond = PTHREAD_COND_INITIALIZER;//初始化静态定义的条件变量，一般用此即可<br>int pthread_cond_init(pthread_cond_t <em>cv,const pthread_condattr_t </em>cattr);//条件变量被存放在参数cv指向的内存中，cattr一般默认为NULL，使用缺省属性<br>2、int pthread_cond_signal(pthread_cond_t <em>cv);//通过条件变量cv发送消息，若多个线程等待，按入队顺序激活其中一个。调用后要立即释放本线程的互斥锁，因为在满足条件后pthread_cond_wait会在另一个线程立马上锁继续执行。pthread_cond_broadcast可以唤醒所有等待线程<br>3、int pthread_cond_wait(pthread_cond_t </em>cv,<br>pthread_mutex_t <em>mutex);//函数执行时先自动释放指定的锁，然后等待条件变量的变化。在函数调用返回之前，自动将指定的互斥量重新锁住。解锁-&gt;阻塞等待条件成立-&gt;上锁，继续执行。所以需要注意在另一线程条件变量成立signal后需要立即解锁<br>4、int pthread_cond_destroy(pthread_cond_t </em>cv);//销毁条件变量  </p>
+</code></pre><ul>
+<li>条件变量的实现（注意：条件变量总是和一个互斥锁搭配使用，当一个线程的行为依赖于另外一个线程对共享数据状态的改变时，这时候就可以使用条件变量）<br>与互斥锁不同，条件变量是主动阻塞自身线程，直到某条件达成。但条件的检测需要在互斥锁的保护下进行。<br>主要实现函数：       </li>
+</ul>
+<p>1、pthread_cond_t temcond = PTHREAD_COND_INITIALIZER;//初始化静态定义的条件变量，一般用此即可<br>int pthread_cond_init(pthread_cond_t <em>cv,const pthread_condattr_t </em>cattr);//条件变量被存放在参数cv指向的内存中，cattr一般默认为NULL，使用缺省属性   </p>
+<p>2、int pthread_cond_signal(pthread_cond_t *cv);//通过条件变量cv发送消息，若多个线程等待，按入队顺序激活其中一个。调用后要立即释放本线程的互斥锁，因为在满足条件后pthread_cond_wait会在另一个线程立马上锁继续执行。pthread_cond_broadcast可以唤醒所有等待线程  </p>
+<p>3、int pthread_cond_wait(pthread_cond_t <em>cv,<br>pthread_mutex_t </em>mutex);//函数执行时先自动释放指定的锁，然后等待条件变量的变化。在函数调用返回之前，自动将指定的互斥量重新锁住。解锁-&gt;阻塞等待条件成立-&gt;上锁，继续执行。所以需要注意在另一线程条件变量成立signal后需要立即解锁    </p>
+<p>4、int pthread_cond_destroy(pthread_cond_t *cv);//销毁条件变量  </p>
 <pre><code>/*************************************************************************
     &gt; File Name: ConditionVariable.c
     &gt; Author: lizhong
@@ -352,8 +365,13 @@ int main(void)
     pthread_join(two_thread, NULL);
     printf(&quot;ALL END\r\n&quot;);
 }
-</code></pre></li>
-<li><p>信号量的实现(使用信号量，需要包含semaphore.h头文件)：<br>POSIX信号量(linux中还有一种过时的System V信号量)分为有名信号量(值存在文件中)和无名信号量(值保持在内存中)都可以用于线程的同步(有名信号量还可用于进程间同步，无名信号量还可用于有亲缘关系的进程间同步)<br>无名信号量主要实现函数(函数本身均属于原子操作，可以多线程同时执行)：<br>无名信号量必须是共享变量，并且无名信号量要保护的变量也必须是共享变量<br>1、int sem_init(sem_t <em>sem, int pshared, unsigned int value);//初始化一个信号量，value参数指定信号量的初始值，pshared参数指明信号量是由进程内线程共享(0值)，还是进程间共享(非0值)，value指定了信号量的初始值<br>2、int sem_wait(sem_t </em>sem);//若sem值非零则立刻执行减1操作，线程继续执行。若sem值为0则线程睡眠，等待直到其他线程操作sem使其非零时才会唤醒该线程，减1后继续执行(同条件变量一样，收到信号后随机继续跑一个线程，有可能是发信号的线程也有可能是收信号的线程)。若有两个线程都在等待同一个信号量变成非零值，则第三个线程增加1时，等待线程中只有一个随机线程能对信号量做减法并继续执行，另一个仍处于等待状态<br>3、int sem_post(sem_t <em>sem);//将信号量值加1<br>4、int sem_destroy(sem_t </em>sem);//该函数用于清理信号量，在清理信号量时若还有线程在等待该信号量则会报错  </p>
+</code></pre><ul>
+<li>信号量的实现(使用信号量，需要包含semaphore.h头文件)：<br>POSIX信号量(linux中还有一种过时的System V信号量)分为有名信号量(值存在文件中)和无名信号量(值保持在内存中)，都可以用于线程的同步(有名信号量还可用于进程间同步，无名信号量还可用于有亲缘关系的进程间同步)<br>无名信号量必须是共享变量，并且无名信号量要保护的变量也必须是共享变量。无名信号量主要实现函数(函数本身均属于原子操作，可以多线程同时执行)：     </li>
+</ul>
+<p>1、int sem_init(sem_t *sem, int pshared, unsigned int value);//初始化一个信号量，value参数指定信号量的初始值，pshared参数指明信号量是由进程内线程共享(0值)，还是进程间共享(非0值)，value指定了信号量的初始值    </p>
+<p>2、int sem_wait(sem_t *sem);//若sem值非零则立刻执行减1操作，线程继续执行。若sem值为0则线程睡眠，等待直到其他线程操作sem使其非零时才会唤醒该线程，减1后继续执行(同条件变量一样，收到信号后随机继续跑一个线程，有可能是发信号的线程也有可能是收信号的线程)。若有两个线程都在等待同一个信号量变成非零值，则第三个线程增加1时，等待线程中只有一个随机线程能对信号量做减法并继续执行，另一个仍处于等待状态  </p>
+<p>3、int sem_post(sem_t *sem);//将信号量值加1  </p>
+<p>4、int sem_destroy(sem_t *sem);//该函数用于清理信号量，在清理信号量时若还有线程在等待该信号量则会报错  </p>
 <pre><code>/*************************************************************************
     &gt; File Name: Sem.c
     &gt; Author: 
@@ -408,8 +426,16 @@ int main(void)
 
     printf(&quot;All End\r\n&quot;);
 }
-</code></pre></li>
-<li><p>读写锁的实现（适合一个线程写，多个线程读）：<br>若一个线程用了读锁锁定临界区，则其他线程依然可以使用读锁来进入临界区(不加锁也可进入临界区)。若在此时一个线程想对临界区加读锁，则需要等待所有先前的读锁都解锁后才会锁上写锁（后来的读上锁操作都会阻塞，直到写锁上锁后才操作），若一个线程进行写锁加锁，则此后访问这个临界区的读锁或写锁都将进入阻塞。若一个临界区被锁上读锁，则<br>主要实现函数（1-5重要）：<br>1、pthread_rwlock_t rwlock_test = PTHREAD_RWLOCK_INITIALIZER;//静态初始化读写锁<br>int pthread_rwlock_init(pthread_rwlock_t <em>rwptr, const pthread_rwlockattr_t </em>attr);//初始化读写锁,attr为空指针，表示使用缺省属性<br>2、int pthread_rwlock_rdlock(pthread_rwlock_t <em>rwptr);//读锁上锁<br>3、int pthread_rwlock_wrlock(pthread_rwlock_t </em>rwptr);//写锁上锁<br>4、int pthread_rwlock_unlock(pthread_rwlock_t <em>rwptr);//解锁读写锁<br>5、int pthread_rwlock_destroy(pthread_rwlock_t </em>rwptr);//销毁读写锁<br>6、int pthread_rwlock_tryrdlock(pthread_rwlock_t <em>rwptr);//尝试读锁上锁（非阻塞），成功返回0，失败返回错误码<br>7、int pthread_rwlock_trywrlock(pthread_rwlock_t </em>rwptr);//尝试写锁上锁(非阻塞)，成功返回0，失败返回错误码  </p>
+</code></pre><ul>
+<li>读写锁的实现（适合一个线程写，多个线程读）：<br>若一个线程用了读锁锁定临界区，则其他线程依然可以使用读锁来进入临界区(不加锁也可进入临界区)。若在此时一个线程想对临界区加读锁，则需要等待所有先前的读锁都解锁后才会锁上写锁（后来的读上锁操作都会阻塞，直到写锁上锁后才操作），若一个线程进行写锁加锁，则此后访问这个临界区的读锁或写锁都将进入阻塞。若一个临界区被锁上读锁，则<br>主要实现函数（1-5重要):  </li>
+</ul>
+<p>1、pthread_rwlock_t rwlock_test = PTHREAD_RWLOCK_INITIALIZER;//静态初始化读写锁<br>int pthread_rwlock_init(pthread_rwlock_t <em>rwptr, const pthread_rwlockattr_t </em>attr);//初始化读写锁,attr为空指针，表示使用缺省属性    </p>
+<p>2、int pthread_rwlock_rdlock(pthread_rwlock_t *rwptr);//读锁上锁  </p>
+<p>3、int pthread_rwlock_wrlock(pthread_rwlock_t *rwptr);//写锁上锁  </p>
+<p>4、int pthread_rwlock_unlock(pthread_rwlock_t *rwptr);//解锁读写锁  </p>
+<p>5、int pthread_rwlock_destroy(pthread_rwlock_t *rwptr);//销毁读写锁  </p>
+<p>6、int pthread_rwlock_tryrdlock(pthread_rwlock_t *rwptr);//尝试读锁上锁（非阻塞），成功返回0，失败返回错误码  </p>
+<p>7、int pthread_rwlock_trywrlock(pthread_rwlock_t *rwptr);//尝试写锁上锁(非阻塞)，成功返回0，失败返回错误码  </p>
 <pre><code>/*************************************************************************
     &gt; File Name: RWlock.c
     &gt; Author:lizhong 
@@ -487,10 +513,21 @@ int main(void)
     pthread_join(two_thread, NULL);
     printf(&quot;ALL END\r\n&quot;);
 }
-</code></pre></li>
+</code></pre><ul>
+<li>自旋锁的实现(在用户态暂时当做mutex看待，在用户态好像没有意义)：<br>自旋锁与互斥锁相似，唯一的区别是当一个线程试图获取一个被锁定的互斥锁时，该操作会失败然后该线程会进入睡眠，让其他线程运行。而当一个线程试图获取一个自旋锁却没成功时，该线程会不断重试，直到最终成功为止,所以在内核态的自旋锁中单核CPU就算关中断也会导致死锁（用户态的自旋锁则不会导致死锁，因为内核抢占存在(sleep也有效)，会进行内核调度）（若尝试途中进程时间片超时，则依然会被操作系统强行切换到另一个进程。因为在用户态线程中，系统的最小调度单位是进程）。<br>主要实现函数(1-5重要):  </li>
 </ul>
-<ul>
-<li><p>自旋锁的实现(在用户态暂时当做mutex看待，在用户态好像没有意义)：<br>自旋锁与互斥锁相似，唯一的区别是当一个线程试图获取一个被锁定的互斥锁时，该操作会失败然后该线程会进入睡眠，让其他线程运行。而当一个线程试图获取一个自旋锁却没成功时，该线程会不断重试，直到最终成功为止,所以在内核态的自旋锁中单核CPU就算关中断也会导致死锁（用户态的自旋锁则不会导致死锁，因为内核抢占存在(sleep也有效)，会进行内核调度）（若尝试途中进程时间片超时，则依然会被操作系统强行切换到另一个进程。因为在用户态线程中，系统的最小调度单位是进程）。<br>主要实现函数(1-5重要)：<br>1、pthread_spin_init(spinlock_t <em>lock, 0);//初始化自旋锁，将自旋锁设置为1(未上锁)<br>2、pthread_spin_lock(spinlock_t </em>lock);//循环等待，直到自旋锁解锁（被设置为1），然后再将自旋锁锁上(设置为0)<br>3、pthread_spin_unlock(spinlock_t <em>lock);//将自旋锁解锁(设置为1)<br>4、pthread_spin_lock_irq(spinlock_t </em>lock);//循环等待直到自旋锁解锁(被设置为1)，然后将自旋锁锁上(设置为0)，关中断<br>5、pthread_spin_unlock_irq(spinlock_t <em>lock);//将自旋锁解锁(设置为1)，开中断<br>6、pthread_spin_is_locked(spinlock_t </em>lock);//如果自旋锁未上锁(值为1)则返回0，否则返回1<br>7、pthread_spin_unlock_wait();//等待，直到自旋锁解锁(被设置为1)<br>8、pthread_spin_trylock(spinlock_t <em>lock);//尝试锁上自旋锁(设置为0) ，如果原来为未上锁状态，则返回1，否则返回0<br>9、pthread_spin_lock_irqsave(spinlock_t </em>lock);//循环等待直到自旋锁解锁(被设置为1)，随后将自旋锁上锁(设置为0)。关中断，将状态寄存器值存入flags<br>10、pthread_spin_unlock_irqsave(spinlock_t <em>lock);//解锁自旋锁(设置为1)。开中断，将状态寄存器值从flags存入状态寄存器<br>11、pthread_spin_lock_bh(spinlock_t </em>lock);//循环等待直到自旋锁解锁(被置为1),随后将自旋锁上锁(置为0)。阻止软中断底半部的执行<br>12、pthread_spin_unlock_bh(spinlock_t *lock);//将自旋锁解锁(设置为1)。开启底半部的执行    </p>
+<p>1、pthread_spin_init(spinlock_t *lock, 0);//初始化自旋锁，将自旋锁设置为1(未上锁)    </p>
+<p>2、pthread_spin_lock(spinlock_t *lock);//循环等待，直到自旋锁解锁（被设置为1），然后再将自旋锁锁上(设置为0)  </p>
+<p>3、pthread_spin_unlock(spinlock_t *lock);//将自旋锁解锁(设置为1)  </p>
+<p>4、pthread_spin_lock_irq(spinlock_t *lock);//循环等待直到自旋锁解锁(被设置为1)，然后将自旋锁锁上(设置为0)，关中断  </p>
+<p>5、pthread_spin_unlock_irq(spinlock_t *lock);//将自旋锁解锁(设置为1)，开中断    </p>
+<p>6、pthread_spin_is_locked(spinlock_t *lock);//如果自旋锁未上锁(值为1)则返回0，否则返回1  </p>
+<p>7、pthread_spin_unlock_wait();//等待，直到自旋锁解锁(被设置为1)  </p>
+<p>8、pthread_spin_trylock(spinlock_t *lock);//尝试锁上自旋锁(设置为0) ，如果原来为未上锁状态，则返回1，否则返回0  </p>
+<p>9、pthread_spin_lock_irqsave(spinlock_t *lock);//循环等待直到自旋锁解锁(被设置为1)，随后将自旋锁上锁(设置为0)。关中断，将状态寄存器值存入flags  </p>
+<p>10、pthread_spin_unlock_irqsave(spinlock_t *lock);//解锁自旋锁(设置为1)。开中断，将状态寄存器值从flags存入状态寄存器  </p>
+<p>11、pthread_spin_lock_bh(spinlock_t *lock);//循环等待直到自旋锁解锁(被置为1),随后将自旋锁上锁(置为0)。阻止软中断底半部的执行  </p>
+<p>12、pthread_spin_unlock_bh(spinlock_t *lock);//将自旋锁解锁(设置为1)。开启底半部的执行    </p>
 <pre><code>*************************************************************************
     &gt; File Name: Spinlock.c
     &gt; Author:lizhong
@@ -553,9 +590,7 @@ int main(void)
     pthread_join(two_thread, NULL);
     printf(&quot;ALL END\r\n&quot;);
 }  
-</code></pre></li>
-</ul>
-
+</code></pre>
       
     </div>
     

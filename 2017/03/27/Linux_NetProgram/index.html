@@ -14,7 +14,7 @@
 <meta property="og:description" content="文章主要涉及TCP/IP、UDP等Linux网络编程相关知识，实现代码C/C++或Python，不定期更新">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Socket%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/socket%E6%B5%81%E7%A8%8B.jpg">
-<meta property="og:updated_time" content="2017-11-13T12:37:20.717Z">
+<meta property="og:updated_time" content="2018-01-10T07:07:15.776Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux网络编程">
 <meta name="twitter:description" content="文章主要涉及TCP/IP、UDP等Linux网络编程相关知识，实现代码C/C++或Python，不定期更新">
@@ -217,10 +217,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>文章主要涉及TCP/IP、UDP等Linux网络编程相关知识，实现代码C/C++或Python，不定期更新<a id="more"></a>  </p>
-<ul>
-<li>UDP广播和UDP组播（组播可实现跨网段通讯）<br>UDP广播只能在同一网段（严格意义上的网段）内进行广播，不可跨网段广播，而UDP组播可以实现跨网段广播，组播地址只能作为目的地址（组播地址也就是组播组），另外组播也被称为多播<br>组播架构：点对点两台主机，或者多台主机连接配置了支持组播的路由器（路由一般默认关闭组播功能）。这些主机IP地址都可不在同一网段<br>IGMP协议：<br>IGMP是IP组播的基础，在IP协议出现以后为了加入对组播的支持，IGMP产生了。IGMP所做的时间上就是告诉路由，在这个路由所在的子网内有人对发送到某一个组播组（组播IP）的数据感兴趣，这样当这个组播组的数据到达后，路由就不会抛弃它，而是把它转送给所有感兴趣的客户。假如不同子网内的A和B要进行组播通讯，那么位于AB直接的所有路由器必须都支持IGMP协议，否则AB之间不能进行通讯<br>组播的原理：<br>组播首先有一个用户申请一个组播组，这个组播组被维护在路由中，其他用户申请加入，这样当一个用户向组内发送消息时，路由器将消息转发给组内的所有成员。如果申请加入的组不在本级路由中，且路由和交换机允许组播协议通过，路由则将申请加入的操作箱上级路由提交。广域网通讯要经过多级路由器和交换机，几乎所有的网络设备都默认阻止组播协议通过（只允许本网段内的广播，不向上级提交），这使得广域网组播实现有一定局限<br>UDP组播基本步骤：<br>1、建立socket<br>2、socket和端口绑定（最初的Receive方需要bind 0.0.0.0端口）<br>3、加入一个组播组<br>4、通过sendto/recvfrom进行数据收发<br>5、关闭socket<br>所有终端必须都要加入相同的主播地址<br>Python组播实现：  </li>
-</ul>
-<p>Terminal_One:      </p>
+<h1 id="UDP广播和UDP组播（组播可实现跨网段通讯）"><a href="#UDP广播和UDP组播（组播可实现跨网段通讯）" class="headerlink" title="UDP广播和UDP组播（组播可实现跨网段通讯）"></a>UDP广播和UDP组播（组播可实现跨网段通讯）</h1><p>UDP广播只能在同一网段（严格意义上的网段）内进行广播，不可跨网段广播，而UDP组播可以实现跨网段广播，组播地址只能作为目的地址（组播地址也就是组播组），另外组播也被称为多播<br>组播架构：点对点两台主机，或者多台主机连接配置了支持组播的路由器（路由一般默认关闭组播功能）。这些主机IP地址都可不在同一网段  </p>
+<p>IGMP协议：<br>IGMP是IP组播的基础，在IP协议出现以后为了加入对组播的支持，IGMP产生了。IGMP所做的时间上就是告诉路由，在这个路由所在的子网内有人对发送到某一个组播组（组播IP）的数据感兴趣，这样当这个组播组的数据到达后，路由就不会抛弃它，而是把它转送给所有感兴趣的客户。假如不同子网内的A和B要进行组播通讯，那么位于AB直接的所有路由器必须都支持IGMP协议，否则AB之间不能进行通讯  </p>
+<p>组播的原理：<br>组播首先有一个用户申请一个组播组，这个组播组被维护在路由中，其他用户申请加入，这样当一个用户向组内发送消息时，路由器将消息转发给组内的所有成员。如果申请加入的组不在本级路由中，且路由和交换机允许组播协议通过，路由则将申请加入的操作箱上级路由提交。广域网通讯要经过多级路由器和交换机，几乎所有的网络设备都默认阻止组播协议通过（只允许本网段内的广播，不向上级提交），这使得广域网组播实现有一定局限  </p>
+<p>UDP组播基本步骤：<br>1、建立socket<br>2、socket和端口绑定（最初的Receive方需要bind 0.0.0.0端口）<br>3、加入一个组播组<br>4、通过sendto/recvfrom进行数据收发<br>5、关闭socket<br>所有终端必须都要加入相同的主播地址  </p>
+<p>Python组播实现：<br>Terminal_One:      </p>
 <pre><code>#-*- coding:utf-8 -*-
 
 import time
@@ -300,13 +301,34 @@ def receiver():
 
 if __name__ == &quot;__main__&quot;:
     receiver()  
-</code></pre><ul>
-<li><p>CGI程序：<br>CGI程序一般指运行于HTTP服务器上的后台交互程序<br>Web后台架构可分为：<br>1、服务端（HTTP协议解析）<br>2、中间件（WSGI才有）<br>3、应用端（CGI/WSGI程序）<br>一个HTTP请求到达一台服务器的80端口后，需要有一个程序来响应该请求。所谓HTTP Response，其实只是运行一个程序，它的输入是HTTP Request Header,它的返回是HTTP Response。HTTP Request Header传递方式就分为CGI、WSGI以及其他各种GI的区别<br>如果是CGI，通常来说是一个Web Server（例如Apache、Nginx）接收到请求后，将请求中的HTTP Request Header按照一定规则设置成环境变量，然后启动一个程序，将stdout的输出（其中HTTP Response Header）封装成HTTP Response返回给客户的<br>例如：Django跑在uWSGI、unicorn之类的容器里，那么程序是一个常驻进程，Web Server和Python进程用WSGI协议传递HTTP Request Header信息，然后返回给用户。如果是Django的dev server,它使用Python自带的wsgiref模块实现了一个简单的HTTP Server响应HTTP请求。从以上可以知道服务端Server对利用Apache等软件对HTTP协议解析后还会将其解析的信息加入另一协议中，此协议根据服务器的后台逻辑框架而定（Django用WSGI协议），利用此进行服务端HTTP请求和后台逻辑框架的交互  </p>
-</li>
-<li><p>Socket<br>Socket是应用层与TCP/IP协议族通信的中间软件抽象层。注意，UDP则不具备这一软件抽象层<br>Socket在网络通信中所处的位置：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Socket%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.jpg" alt="">  </p>
-</li>
-</ul>
-<p>Socket网络通讯编程流程：<br>Server端：<br>1、创建套接字（Socket）<br>2、将套接字绑定到一个本地地址和端口上（Bind）<br>3、将套接字设置为监听模式，准备接收客户端请求（Listen）<br>4、等待客户端请求到来，当请求到来后接受连接请求，返回一个新的对应于此次连接请求的套接字（accept）<br>5、用返回的套接字和客户端进行通信（Send/Recv）<br>6、返回，等待新请求<br>7、关闭套接字<br>一个简单的Server端Socket实现(C语言):     </p>
+</code></pre><h1 id="CGI程序："><a href="#CGI程序：" class="headerlink" title="CGI程序："></a>CGI程序：</h1><p>CGI程序一般指运行于HTTP服务器上的后台交互程序<br>Web后台架构可分为：<br>1、服务端（HTTP协议解析）<br>2、中间件（WSGI才有）<br>3、应用端（CGI/WSGI程序）<br>一个HTTP请求到达一台服务器的80端口后，需要有一个程序来响应该请求。所谓HTTP Response，其实只是运行一个程序，它的输入是HTTP Request Header,它的返回是HTTP Response。HTTP Request Header传递方式就分为CGI、WSGI以及其他各种GI的区别<br>如果是CGI，通常来说是一个Web Server（例如Apache、Nginx）接收到请求后，将请求中的HTTP Request Header按照一定规则设置成环境变量，然后启动一个程序，将stdout的输出（其中HTTP Response Header）封装成HTTP Response返回给客户的<br>例如：Django跑在uWSGI、unicorn之类的容器里，那么程序是一个常驻进程，Web Server和Python进程用WSGI协议传递HTTP Request Header信息，然后返回给用户。如果是Django的dev server,它使用Python自带的wsgiref模块实现了一个简单的HTTP Server响应HTTP请求。从以上可以知道服务端Server对利用Apache等软件对HTTP协议解析后还会将其解析的信息加入另一协议中，此协议根据服务器的后台逻辑框架而定（Django用WSGI协议），利用此进行服务端HTTP请求和后台逻辑框架的交互  </p>
+<h1 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h1><p>Socket是应用层与TCP/IP协议族通信的中间软件抽象层。注意，UDP则不具备这一软件抽象层<br>Socket在网络通信中所处的位置：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Socket%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.jpg" alt="">  </p>
+<p>Socket网络编程常用结构体（struct sockaddr, struct in_addr, struct sockaddr_in）定义:  </p>
+<pre><code>struct sockaddr
+{
+    unsigned short sa_family;//协议族(定义使用哪种底层网络协议),AF_INET(TCP/IPv4),AF_INET6(TCP/IPv6),AF_LOCAL或AF_UNIX(本地通信，用于本地进程间的socket通讯)
+    char sa_data[14];//14字节的协议地址
+}  
+
+//str 2 in_addr变量赋值需使用inet_addr函数:in_addr addr = inet_addr(&quot;192.168.0.2&quot;);
+//in_addr变量 2 str需使用inet_ntoa函数:char *str = inet_ntoa(addr);
+typedef struct in_addr
+{
+    union{
+        struct{unsigned char s_b1, s_b2, s_b3, s_b4;}S_un_b;
+        struct{unsigned short s_w1, s_w2;}S_un_w;
+        unsigned long S_addr;
+    }S_un;
+}IN_ADDR; 
+
+struct sockaddr_in
+{
+    short int sin_family;//协议族，在网络编程中一般就是用AF_INET
+    unsigned short int sin_port;//存放端口号(需转为大端模式再存放)
+    struct in_addr sin_addr;//存储IP地址
+    unsigned char sin_zero[8];//留空字节，保证sockaddr和sockaddr_in可以相互转换
+}  
+</code></pre><p>Socket网络通讯编程流程：<br>Server端：<br>1、创建套接字（Socket）<br>2、将套接字绑定到一个本地地址和端口上（Bind）<br>3、将套接字设置为监听模式，准备接收客户端请求（Listen）<br>4、等待客户端请求到来，当请求到来后接受连接请求，返回一个新的对应于此次连接请求的套接字（accept）<br>5、用返回的套接字和客户端进行通信（Send/Recv）<br>6、返回，等待新请求<br>7、关闭套接字<br>一个简单的Server端Socket实现(C语言):     </p>
 <pre><code>/*************************************************************************
     &gt; File Name: simplesocket.c
     &gt; Author:lizhong 
@@ -446,11 +468,7 @@ int main()
     return 0;
 }  
 </code></pre><p>Client端：<br>1、创建套接字（Socket）<br>2、向服务端发出连接请求（Connect）<br>3、和服务端进行通信（Send/Recv）<br>4、关闭套接字<br>Client与Server流程图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/socket%E6%B5%81%E7%A8%8B.jpg" alt="">  </p>
-<ul>
-<li>Socket编程中的一些坑：  </li>
-</ul>
-<p>* </p>
-
+<h1 id="Socket编程中的一些坑："><a href="#Socket编程中的一些坑：" class="headerlink" title="Socket编程中的一些坑："></a>Socket编程中的一些坑：</h1>
       
     </div>
     

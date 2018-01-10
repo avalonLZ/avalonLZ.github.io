@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="Linux下IPC(Posix)相关知识点，就把这个作为18年第一更吧。IPC的设计理念在很多地方都用的上(软件上几个模块需要数据交互，该如何选择交互方案，该如何去实现交互)，所以在系统的过一遍吧，顺便在做个导图，加深印象">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_IPC.png">
-<meta property="og:updated_time" content="2018-01-03T14:49:26.090Z">
+<meta property="og:updated_time" content="2018-01-04T03:37:51.892Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多进程编程">
 <meta name="twitter:description" content="Linux下IPC(Posix)相关知识点，就把这个作为18年第一更吧。IPC的设计理念在很多地方都用的上(软件上几个模块需要数据交互，该如何选择交互方案，该如何去实现交互)，所以在系统的过一遍吧，顺便在做个导图，加深印象">
@@ -220,8 +220,8 @@
 <ul>
 <li>共享内存的实现：<br>进程可以将同一段共享内存连接到它们自己的地址空间中，所有进程都可以访问共享内存中的地址，就好像它们是由用C语言函数malloc分配的内存一样。而如果某个进程向共享内存写入数据，所做的改动将立即影响到可以访问同一段共享内存的任何其他进程  </li>
 </ul>
-<p>1、int shmget(key_t key, size_t size, int shmflg);//创建共享内存, 返回共享内存标识id(shmid)<br>key：IPC_PRIVATE表示创建一个新的共享内存<br>size：指定共享内存容量，以字节为单位<br>shmflg:读写权限，例如0666代表root,user,other都具有读写的权限  </p>
-<p>2、void <em>shmat(int shmid, const void </em>shmaddr, int shmflg);//绑定共享内存区，返回shmaddr的地址<br>shmid:先前分配到的共享内存标识id<br>shmaddr：指定共享内存绑定到当前进程中的地址位置，通常为0，表示让系统来选择共享内存位置<br>shmflg：通常为0  </p>
+<p>1、int shmget(key_t key, size_t size, int shmflg);//创建共享内存, 返回共享内存标识id(shmid)<br>key：IPC_PRIVATE表示创建一个新的共享内存，一般固定一个key值，方便其他进程获取<br>size：指定共享内存容量，以字节为单位<br>shmflg:读写权限，例如0666代表root,user,other都具有读写的权限  </p>
+<p>2、void <em>shmat(int shmid, const void </em>shmaddr, int shmflg);//绑定共享内存区，共享内存区域的首地址<br>shmid:先前分配到的共享内存标识id<br>shmaddr：指定共享内存绑定到当前进程中的地址位置，通常为0，表示让系统来选择共享内存位置<br>shmflg：通常为0  </p>
 <p>3、int shmdt(const void *shmaddr);//解绑共享内存<br>shmaddr：shmat返回的shmaddr的地址  </p>
 
       

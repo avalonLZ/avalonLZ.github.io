@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="Linux多线程(用户态线程)编程之线程同步相关知识点">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_MultiThread.png">
-<meta property="og:updated_time" content="2018-01-12T01:49:48.454Z">
+<meta property="og:updated_time" content="2018-01-17T14:59:56.967Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程之线程同步">
 <meta name="twitter:description" content="Linux多线程(用户态线程)编程之线程同步相关知识点">
@@ -219,12 +219,6 @@
 <h3 id="相关名词解析"><a href="#相关名词解析" class="headerlink" title="相关名词解析"></a>相关名词解析</h3><p>同步：<br>同步就是指在一定时间内只允许一个线程访问某一资源。在该时间内其他线程不可访问该资源（实现方式：mutex互斥锁、condition variable条件变量、spin lock自旋锁（read/write lock读写锁是特殊自旋锁）、sem信号量等）    </p>
 <p>原子操作:<br>某段代码在执行时不会被其他线程影响，则构成了一个原子操作  </p>
 <p>临界区（非内核对象时，只在Win下多线程中存在，此处只提及不做过多说明）：<br>临界区是一种轻量级机制，在某一时间内只允许一个线程执行某个给定代码段（在RTOS下表示禁止总中断和开启总中断之间的代码段）。临界区只能用于对同一进程内的线程进行同步  </p>
-<p>//调度策略<br>在Linux中，创建一个用户进程的同时也必然创建了一个用户线程，同时在内核中也就创建了一个LWP和一个内核线程。若再创建一个用户线程，则同时在内核中又会创建一个LWP和一个内核线程。于是在这个进程执行时，Linux调度系统就会对这两个用户线程进行调度，调度的方式就是对这两个用户线程对应的内核线程进行调度（默认采用SCHED_OTHER方式进行调度）<br>内核态线程调度（实时调度，即支持高优先级抢占运行）：    </p>
-<p>SCHED_OTHER//分时调度,它的特点是即使是最低优先级，他也能获得一定的时间片.  </p>
-<p>SCHED_FIFO//实时调度，先到先服务。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起；对于同等优先级，先运行的进程会一直占据cpu, 只有等到先运行的线程挂起后，后续线程才能得到时间片。  </p>
-<p>SCHED_RR//实时调度，时间片轮转。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起, ；对于同等优先级的线程，各个线程会轮流运行一定的时间片（Linux是100ms）。     </p>
-<p>可以使用以下API改变线程调度算法:<br>int pthread_attr_init(pthread_attr_t<em>attr);//初始化线程属性<br>int pthread_attr_setschedpolicy(pthread_attr_t </em>attr, int policy);//改变内核态线程的调度算法   </p>
-<p>Linux内核态线程调度算法中的SCHED_RR和大部分RTOS的线程调度算法类似。即具有高优先级抢占特性，也就是在多线程中，高优先级的线程是无条件抢占CPU的，如果高优先级线程未挂起，则低优先级线程将一直不会被执行。若多个线程处于相同优先级时则会对这几个同优先级的线程采用时间片轮转算法，但在一些RTOS(ucos)中并不支持时间片轮转算法，只支持优先级抢占任务调度，在这种RTOS中的任务必须有不同的优先级 </p>
 <h3 id="多线程同步实现方式（mutex、cond、sem、rw重要）"><a href="#多线程同步实现方式（mutex、cond、sem、rw重要）" class="headerlink" title="多线程同步实现方式（mutex、cond、sem、rw重要）"></a>多线程同步实现方式（mutex、cond、sem、rw重要）</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_MultiThread.png" alt="">  </p>
 <ul>
 <li>互斥锁的实现<br>主要实现函数：  </li>

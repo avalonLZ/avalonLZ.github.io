@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/01/12/Linux-MultiThreadInit/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="Linux多线程(用户态线程)编程之线程初始化相关知识点">
-<meta property="og:updated_time" content="2018-01-12T01:49:47.681Z">
+<meta property="og:updated_time" content="2018-01-17T15:01:05.855Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程之线程初始化">
 <meta name="twitter:description" content="Linux多线程(用户态线程)编程之线程初始化相关知识点">
@@ -213,7 +213,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Linux多线程(用户态线程)编程之线程初始化相关知识点<a id="more"></a></p>
+        <p>Linux多线程(用户态线程)编程之线程初始化相关知识点<a id="more"></a>  </p>
+<h3 id="调度策略"><a href="#调度策略" class="headerlink" title="调度策略"></a>调度策略</h3><p>在Linux中，创建一个用户进程的同时也必然创建了一个用户线程，同时在内核中也就创建了一个LWP和一个内核线程。若再创建一个用户线程，则同时在内核中又会创建一个LWP和一个内核线程。于是在这个进程执行时，Linux调度系统就会对这两个用户线程进行调度，调度的方式就是对这两个用户线程对应的内核线程进行调度（默认采用SCHED_OTHER方式进行调度）<br>内核态线程调度（实时调度，即支持高优先级抢占运行）：    </p>
+<p>SCHED_OTHER//分时调度,它的特点是即使是最低优先级，他也能获得一定的时间片.  </p>
+<p>SCHED_FIFO//实时调度，先到先服务。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起；对于同等优先级，先运行的进程会一直占据cpu, 只有等到先运行的线程挂起后，后续线程才能得到时间片。  </p>
+<p>SCHED_RR//实时调度，时间片轮转。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起, ；对于同等优先级的线程，各个线程会轮流运行一定的时间片（Linux是100ms）。     </p>
+<p>可以使用以下API改变线程调度算法:<br>int pthread_attr_init(pthread_attr_t<em>attr);//初始化线程属性<br>int pthread_attr_setschedpolicy(pthread_attr_t </em>attr, int policy);//改变内核态线程的调度算法   </p>
+<p>Linux内核态线程调度算法中的SCHED_RR和大部分RTOS的线程调度算法类似。即具有高优先级抢占特性，也就是在多线程中，高优先级的线程是无条件抢占CPU的，如果高优先级线程未挂起，则低优先级线程将一直不会被执行。若多个线程处于相同优先级时则会对这几个同优先级的线程采用时间片轮转算法，但在一些RTOS(ucos)中并不支持时间片轮转算法，只支持优先级抢占任务调度，在这种RTOS中的任务必须有不同的优先级   </p>
+<p>未完…</p>
 
       
     </div>

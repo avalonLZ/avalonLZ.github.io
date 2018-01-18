@@ -4,18 +4,17 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Linux多线程编程之线程初始化 | 木子人人人&#39;s 藏经阁</title>
+  <title>Archives: 2017 | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Linux多线程(用户态线程)编程之线程初始化相关知识点">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Linux多线程编程之线程初始化">
-<meta property="og:url" content="http://avalonlz.github.io/2018/01/12/Linux-MultiThreadInit/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="木子人人人's 藏经阁">
+<meta property="og:url" content="http://avalonlz.github.io/archives/2017/page/3/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="Linux多线程(用户态线程)编程之线程初始化相关知识点">
-<meta property="og:updated_time" content="2018-01-17T15:01:05.855Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux多线程编程之线程初始化">
-<meta name="twitter:description" content="Linux多线程(用户态线程)编程之线程初始化相关知识点">
+<meta name="twitter:title" content="木子人人人's 藏经阁">
+<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -171,139 +170,58 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-Linux-MultiThreadInit" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap">
   
-    <div class="article-meta">
-      <a href="/2018/01/12/Linux-MultiThreadInit/" class="article-date">
-  	<time datetime="2018-01-12T00:49:39.000Z" itemprop="datePublished">2018-01-12</time>
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2017/01/08/MySQL-Note/" class="archive-article-date">
+  	<time datetime="2017-01-08T02:59:11.000Z" itemprop="datePublished">Jan 8</time>
 </a>
-    </div>
+        </div>
+    	 
   
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Linux多线程编程之线程初始化
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2017/01/08/MySQL-Note/">MySQL</a>
     </h1>
   
 
-      </header>
-      
-      <div class="article-info article-info-post">
-        
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/服务器-MySQL/">服务器_MySQL</a></li></ul>
 	</div>
 
-        
+          
 
+        </div>
         <div class="clearfix"></div>
-		
-		<!--
-		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
-		//-->
-      
-	  </div>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Linux多线程(用户态线程)编程之线程初始化相关知识点<a id="more"></a>  </p>
-<h3 id="调度策略"><a href="#调度策略" class="headerlink" title="调度策略"></a>调度策略</h3><p>在Linux中，创建一个用户进程的同时也必然创建了一个用户线程，同时在内核中也就创建了一个LWP和一个内核线程。若再创建一个用户线程，则同时在内核中又会创建一个LWP和一个内核线程。于是在这个进程执行时，Linux调度系统就会对这两个用户线程进行调度，调度的方式就是对这两个用户线程对应的内核线程进行调度（默认采用SCHED_OTHER方式进行调度）<br>内核态线程调度（实时调度，即支持高优先级抢占运行）：    </p>
-<p>SCHED_OTHER//分时调度,它的特点是即使是最低优先级，他也能获得一定的时间片.  </p>
-<p>SCHED_FIFO//实时调度，先到先服务。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起；对于同等优先级，先运行的进程会一直占据cpu, 只有等到先运行的线程挂起后，后续线程才能得到时间片。  </p>
-<p>SCHED_RR//实时调度，时间片轮转。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起, ；对于同等优先级的线程，各个线程会轮流运行一定的时间片（Linux是100ms）。     </p>
-<p>可以使用以下API改变线程调度算法:<br>int pthread_attr_init(pthread_attr_t<em>attr);//初始化线程属性<br>int pthread_attr_setschedpolicy(pthread_attr_t </em>attr, int policy);//改变内核态线程的调度算法   </p>
-<p>Linux内核态线程调度算法中的SCHED_RR和大部分RTOS的线程调度算法类似。即具有高优先级抢占特性，也就是在多线程中，高优先级的线程是无条件抢占CPU的，如果高优先级线程未挂起，则低优先级线程将一直不会被执行。若多个线程处于相同优先级时则会对这几个同优先级的线程采用时间片轮转算法，但在一些RTOS(ucos)中并不支持时间片轮转算法，只支持优先级抢占任务调度，在这种RTOS中的任务必须有不同的优先级   </p>
-<p>未完…</p>
-
-      
-    </div>
-    
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2018/01/12/Linux-MultiProcess-MultiThread/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          Linux多进程与多线程之间的关系
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2018/01/02/softframework-mcu/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">浅谈MCU软件架构</div>
-      <strong class="article-nav-caption">></strong>
-    </a>
-  
-</nav>
-
-  
 </article>
-
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">分享到: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-    <a class="jiathis_button_twitter"></a>
-    <a class="jiathis_button_plus"></a> 
-    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-  <section id="comments">
-<!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="Linux多线程编程之线程初始化"></div>
-<script>
-  (function(){
-    var appid = 'cyto4sUr6',
-    conf = '5531a21399d22997758da7915e34b8fe';
-    var doc = document,
-    s = doc.createElement('script'),
-    h = doc.getElementsByTagName('head')[0] || doc.head || doc.documentElement;
-    s.type = 'text/javascript';
-    s.charset = 'utf-8';
-    s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&appid=' + appid;
-    h.insertBefore(s,h.firstChild);
-    window.SCS_NO_IFRAME = true;
-  })()
-</script>
-  </section>
   
+  
+    </div></section>
+  
+
+    
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/archives/2017/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/2017/">1</a><a class="page-number" href="/archives/2017/page/2/">2</a><span class="page-number current">3</span>
+    </nav>
+  
+
 </div>
       <!--
 注释：用卜算子来统计网页访问量
@@ -355,8 +273,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false

@@ -14,7 +14,7 @@
 <meta property="og:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png">
-<meta property="og:updated_time" content="2018-01-31T01:40:37.152Z">
+<meta property="og:updated_time" content="2018-01-31T02:00:44.093Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UCOSII任务调度与同步、通信机制">
 <meta name="twitter:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
@@ -286,7 +286,7 @@
 <li><p>删除邮箱：<code>OS_EVENT  *OSMboxDel (OS_EVENT *pevent, INT8U opt, INT8U *perr)</code><br>pevent：邮箱地址<br>opt：opt若为OS_DEL_NO_PEND表示若当前没有任务等待则删除此邮箱，若有任务等待则填写错误信息，当前任务继续运行。若为OS_DEL_ALWAYS则表示强制删除此邮箱，所有等待列表中的任务都将变为就绪态，并进行任务调度，运行就绪态中优先级最高的任务<br>perr：存放出错信息  </p>
 </li>
 </ul>
-<p>5、消息队列（可以看做是邮箱的升级版，可以实现从一个任务向另一个任务发送多个指针变量，而且每个指针所指向的数据结构变量也可以有所不同）     </p>
+<p>5、消息队列（可以看做是邮箱的升级版，可以实现从一个任务向另一个任务发送多个指针变量，也就是说用消息队列传递，在接收处可以用while全部接收完，而且每个指针所指向的数据结构变量也可以有所不同）     </p>
 <ul>
 <li><p>创建（返回队列地址）:<code>OS_EVENT  *OSQCreate (void **start, INT16U size)</code><br>需要先定义一个存放消息指针的指针数组void *MyQueryMsg[SIZE]<br>start：此处填入该指针数组的地址，用于存放消息指针<br>size：填入队列所能存放数据的最大值<br>例：myquery = OSQCreate(MyQueryMsg, SIZE);  </p>
 </li>

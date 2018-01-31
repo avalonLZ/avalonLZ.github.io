@@ -14,7 +14,7 @@
 <meta property="og:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png">
-<meta property="og:updated_time" content="2018-01-10T11:45:30.570Z">
+<meta property="og:updated_time" content="2018-01-31T01:40:37.152Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UCOSII任务调度与同步、通信机制">
 <meta name="twitter:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
@@ -224,85 +224,85 @@
 <h3 id="UCOSII下的任务通信、同步机制"><a href="#UCOSII下的任务通信、同步机制" class="headerlink" title="UCOSII下的任务通信、同步机制"></a>UCOSII下的任务通信、同步机制</h3><p>在Linux下因为线程间通信都是在应用层加之线程间共享内存空间，所以线程间一般都采用一段共享空间进行通讯，只要选择正确的同步方式保证共享空间操作的原子性即可。但在RTOS中由于涉及硬件和上层应用交互的需求，所以衍生出了更加丰富的通信手段，邮箱、消息队列等(当然这些手段也可以自己在Linux上实现)<br>下面上一张图，先简单总结下UCOSII下的任务通讯与同步机制<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png" alt="">    </p>
 <p>1、信号量（整数型型号量sem。可能导致优先级翻转问题，因为API内部不会暂时提升任务优先级）：<br>建立信号量的工作，必须在任务启动(start)之前完成   </p>
 <ul>
-<li><p>创建：OS_EVENT  *OSSemCreate (INT16U cnt)<br>cnt为初始值，可看做代表允许cnt个任务同时访问某资源。<br>若没有可用的ECB则返回空指针 </p>
+<li><p>创建：<code>OS_EVENT  *OSSemCreate (INT16U cnt)</code><br>cnt为初始值，可看做代表允许cnt个任务同时访问某资源。<br>若没有可用的ECB则返回空指针 </p>
 </li>
-<li><p>等待信号量：OSSemPend (OS_EVENT <em>pevent, INT16U timeout, INT8U </em>perr)<br>若运行到此处，pevent中的cnt为0，该任务将挂起等待信号量，直到该信号量给到此任务一个信号。若运行到此处，cnt非0，则将cnt减一后继续执行该任务<br>timeout为超时时间，表示该任务进入等待信号量后的挂起时间，时间一到该任务将进入就绪态，若设为0则表示永久等待  </p>
+<li><p>等待信号量：<code>OSSemPend (OS_EVENT *pevent, INT16U timeout, INT8U *perr)</code><br>若运行到此处，pevent中的cnt为0，该任务将挂起等待信号量，直到该信号量给到此任务一个信号。若运行到此处，cnt非0，则将cnt减一后继续执行该任务<br>timeout为超时时间，表示该任务进入等待信号量后的挂起时间，时间一到该任务将进入就绪态，若设为0则表示永久等待  </p>
 </li>
-<li><p>发送信号量：INT8U  OSSemPost (OS_EVENT *pevent)<br>调用此API首先会检测pevent信号量是否有被等待，若有被等待，则将等待列表中最高优先级的任务转变为就绪状态，接着会调用OSSched()函数进行任务调度，立即转到此时就绪态中系统优先级最高的任务去执行，若没有任务比当前任务优先级高，则继续执行该任务。若在调用此API时没有任务在等待该信号量，则该信号量的cnt加1           </p>
+<li><p>发送信号量：<code>INT8U  OSSemPost (OS_EVENT *pevent)</code><br>调用此API首先会检测pevent信号量是否有被等待，若有被等待，则将等待列表中最高优先级的任务转变为就绪状态，接着会调用OSSched()函数进行任务调度，立即转到此时就绪态中系统优先级最高的任务去执行，若没有任务比当前任务优先级高，则继续执行该任务。若在调用此API时没有任务在等待该信号量，则该信号量的cnt加1           </p>
 </li>
-<li><p>放弃信号量等待：INT8U  OSSemPendAbort (OS_EVENT <em>pevent, INT8U opt, INT8U </em>perr)<br>无任务等待pevent信号量则继续执行该任务。若存在任务等待该信号量，且opt为OS_PEND_OPT_BROADCASE，则表示广播方式，释放所有等待该信号量的任务，使其全部变为就绪态，并进行任务调度。若opt为OS_PEND_OPT_NONE则表示将等待该信号量的任务中优先级最高的任务变为就绪态（放弃等待该信号量）并进行任务调度    </p>
+<li><p>放弃信号量等待：<code>INT8U  OSSemPendAbort (OS_EVENT *pevent, INT8U opt, INT8U *perr)</code><br>无任务等待pevent信号量则继续执行该任务。若存在任务等待该信号量，且opt为OS_PEND_OPT_BROADCASE，则表示广播方式，释放所有等待该信号量的任务，使其全部变为就绪态，并进行任务调度。若opt为OS_PEND_OPT_NONE则表示将等待该信号量的任务中优先级最高的任务变为就绪态（放弃等待该信号量）并进行任务调度    </p>
 </li>
-<li><p>删除信号量：OS_EVENT  <em>OSSemDel (OS_EVENT </em>pevent, INT8U opt, INT8U *perr)<br>opt = OS_DEL_NO_PEND  若是没有等待信号量的任务，则删除该任务<br>opt = OS_DEL_ALWAYS    不管有没有任务等待，始终删除。若有任务等待则会现将所有等待任务都更新为就绪态。此后再使用OS_Sched()进行任务调度，则会立即转到就绪态中更高优先级的任务去执行<br>由于ECB控制块数量有限（默认为十个）,所以不用的信号量应该尽快删除       </p>
+<li><p>删除信号量：<code>OS_EVENT  *OSSemDel (OS_EVENT *pevent, INT8U opt, INT8U *perr)</code><br>opt = OS_DEL_NO_PEND  若是没有等待信号量的任务，则删除该任务<br>opt = OS_DEL_ALWAYS    不管有没有任务等待，始终删除。若有任务等待则会现将所有等待任务都更新为就绪态。此后再使用OS_Sched()进行任务调度，则会立即转到就绪态中更高优先级的任务去执行<br>由于ECB控制块数量有限（默认为十个）,所以不用的信号量应该尽快删除       </p>
 </li>
-<li><p>无等待的请求一个信号量：INT16U  OSSemAccept (OS_EVENT *pevent)   </p>
+<li><p>无等待的请求一个信号量：<code>INT16U  OSSemAccept (OS_EVENT *pevent)</code>   </p>
 </li>
-<li><p>查询一个信号量的当前状态：INT8U  OSSemQuery (OS_EVENT <em>pevent, OS_SEM_DATA </em>p_sem_data)   </p>
+<li><p>查询一个信号量的当前状态：<code>INT8U  OSSemQuery (OS_EVENT *pevent, OS_SEM_DATA *p_sem_data)</code>   </p>
 </li>
-<li><p>重新设置信号量cnt值（一般不用）：void  OSSemSet (OS_EVENT <em>pevent, INT16U cnt, INT8U </em>perr)    </p>
+<li><p>重新设置信号量cnt值（一般不用）：<code>void  OSSemSet (OS_EVENT *pevent, INT16U cnt, INT8U *perr)</code>    </p>
 </li>
 </ul>
 <p>2、互斥信号量（二值型型号量mutex。能解决任务优先级翻转问题，API内部暂时提升当然任务优先级）：</p>
 <ul>
-<li><p>创建：OS_EVENT  <em>OSMutexCreate (INT8U prio, INT8U </em>perr)<br>prio：空闲的较高优先级（一般将最高优先级保留在此处使用），用于暂时提升任务优先级<br>perr：存放出错的信息  </p>
+<li><p>创建：<code>OS_EVENT  *OSMutexCreate (INT8U prio, INT8U *perr)</code><br>prio：空闲的较高优先级（一般将最高优先级保留在此处使用），用于暂时提升任务优先级<br>perr：存放出错的信息  </p>
 </li>
-<li><p>等待互斥型信号量：void  OSMutexPend (OS_EVENT <em>pevent, INT16U timeout, INT8U </em>perr)<br>pevent：等待的信号量<br>timeout：等待超时时间，0值为永久等待<br>perr：存放出错的信息  </p>
+<li><p>等待互斥型信号量：<code>void  OSMutexPend (OS_EVENT *pevent, INT16U timeout, INT8U *perr)</code><br>pevent：等待的信号量<br>timeout：等待超时时间，0值为永久等待<br>perr：存放出错的信息  </p>
 </li>
-<li><p>释放互斥型信号量：INT8U  OSMutexPost (OS_EVENT *pevent)<br>pevent：释放的信号量  </p>
+<li><p>释放互斥型信号量：<code>INT8U  OSMutexPost (OS_EVENT *pevent)</code><br>pevent：释放的信号量  </p>
 </li>
-<li><p>无阻塞请求互斥型信号量：BOOLEAN  OSMutexAccept (OS_EVENT <em>pevent, INT8U </em>perr)<br>调用此API会立即返回，不会根据信号量的状态而阻塞。返回值0表示信号量不可用，返回1表示得到互斥型信号量<br>pevent：请求的互斥型信号量<br>perr：存放出错信息  </p>
+<li><p>无阻塞请求互斥型信号量：<code>BOOLEAN  OSMutexAccept (OS_EVENT *pevent, INT8U *perr)</code><br>调用此API会立即返回，不会根据信号量的状态而阻塞。返回值0表示信号量不可用，返回1表示得到互斥型信号量<br>pevent：请求的互斥型信号量<br>perr：存放出错信息  </p>
 </li>
-<li><p>查询互斥型信号量当前状态：INT8U  OSMutexQuery (OS_EVENT <em>pevent, OS_MUTEX_DATA </em>p_mutex_data)<br>返回查询出错码<br>pevent：需要查询的信号量<br>p_mutex_data：存放查询到的信号量状态信息  </p>
+<li><p>查询互斥型信号量当前状态：<code>INT8U  OSMutexQuery (OS_EVENT *pevent, OS_MUTEX_DATA *p_mutex_data)</code><br>返回查询出错码<br>pevent：需要查询的信号量<br>p_mutex_data：存放查询到的信号量状态信息  </p>
 </li>
 </ul>
 <p>3、事件标志组<br>预先设定好N个事件，当N个事件都达成时，才进入下一步操作  </p>
 <ul>
-<li><p>创建：OS_FLAG_GRP  <em>OSFlagCreate (OS_FLAGS flags, INT8U </em>perr)<br>flags：创建事件标志中的初始值<br>perr：存放出错信息<br>创建完后才可使用此事件标志组</p>
+<li><p>创建：<code>OS_FLAG_GRP  *OSFlagCreate (OS_FLAGS flags, INT8U *perr)</code><br>flags：创建事件标志中的初始值<br>perr：存放出错信息<br>创建完后才可使用此事件标志组</p>
 </li>
-<li><p>等待事件标志组信号：OS_FLAGS  OSFlagPend (OS_FLAG_GRP <em>pgrp, OS_FLAGS flags, INT8U wait_type, INT16U timeout, INT8U </em>perr)<br>pgrp：某个事件标志组地址<br>flags：过滤器，用于表示哪几位有效条件才成立。例如：（OS_FLAGS）3，表示请求低2位的信号<br>wait_type：如何算有效。OS_FLAG_WAIT_CLR_ALL（过滤器所有位为0），OS_FLAG_WAIT_SET_ALL（过滤器所有位为1），OS_FLAG_WAIT_CLR_ANY（过滤器任意位为0），OS_FLAG_WAIT_SET_ANY（过滤器任意位为1）。若再加上OS_FLAG_CONSUME则表示有效后清除过滤位的信号（一般配合SET使用，不加此，若任务只需要一次信号，则可以不加此）<br>timeout：超时时间，0表示永久不超时<br>perr：存放出错信息  </p>
+<li><p>等待事件标志组信号：<code>OS_FLAGS  OSFlagPend (OS_FLAG_GRP *pgrp, OS_FLAGS flags, INT8U wait_type, INT16U timeout, INT8U *perr)</code><br>pgrp：某个事件标志组地址<br>flags：过滤器，用于表示哪几位有效条件才成立。例如：（OS_FLAGS）3，表示请求低2位的信号<br>wait_type：如何算有效。OS_FLAG_WAIT_CLR_ALL（过滤器所有位为0），OS_FLAG_WAIT_SET_ALL（过滤器所有位为1），OS_FLAG_WAIT_CLR_ANY（过滤器任意位为0），OS_FLAG_WAIT_SET_ANY（过滤器任意位为1）。若再加上OS_FLAG_CONSUME则表示有效后清除过滤位的信号（一般配合SET使用，不加此，若任务只需要一次信号，则可以不加此）<br>timeout：超时时间，0表示永久不超时<br>perr：存放出错信息  </p>
 </li>
-<li><p>向事件标志组发信号：OS_FLAGS  OSFlagPost (OS_FLAG_GRP <em>pgrp, OS_FLAGS flags, INT8U opt, INT8U </em>perr)<br>pgrp：某个事件标志组地址<br>flags：选择需要发送的信号，例如：（OS_FLAGS）1给最低位发信号<br>opt：选择发送置1还是置0信号，OS_FLAG_SET置1信号，flags位置1。OS_FLAG_CLR置0信号，flags位置0<br>perr：存放出错信息 </p>
+<li><p>向事件标志组发信号：<code>OS_FLAGS  OSFlagPost (OS_FLAG_GRP *pgrp, OS_FLAGS flags, INT8U opt, INT8U *perr)</code><br>pgrp：某个事件标志组地址<br>flags：选择需要发送的信号，例如：（OS_FLAGS）1给最低位发信号<br>opt：选择发送置1还是置0信号，OS_FLAG_SET置1信号，flags位置1。OS_FLAG_CLR置0信号，flags位置0<br>perr：存放出错信息 </p>
 </li>
-<li><p>不等待事件标志组（若过滤器事件并不成立也不挂起当前任务）：OS_FLAGS  OSFlagAccept (OS_FLAG_GRP <em>pgrp, OS_FLAGS flags, INT8U wait_type, INT8U </em>perr)<br>pgrp：某个事件标志组地址<br>flags：过滤器，用于表示哪几位有效条件才成立。例如：（OS_FLAGS）3，表示请求低2位的信号<br>wait_type：如何算有效。OS_FLAG_WAIT_CLR_ALL（过滤器所有位为0），OS_FLAG_WAIT_SET_ALL（过滤器所有位为1），OS_FLAG_WAIT_CLR_ANY（过滤器任意位为0），OS_FLAG_WAIT_SET_ANY（过滤器任意位为1）。若再加上OS_FLAG_CONSUME则表示有效后清除过滤位的信号（一般配合SET使用，不加此，若任务只需要一次信号，则可以不加此）<br>perr：存放出错信息   </p>
+<li><p>不等待事件标志组（若过滤器事件并不成立也不挂起当前任务）：<code>OS_FLAGS  OSFlagAccept (OS_FLAG_GRP *pgrp, OS_FLAGS flags, INT8U wait_type, INT8U *perr)</code><br>pgrp：某个事件标志组地址<br>flags：过滤器，用于表示哪几位有效条件才成立。例如：（OS_FLAGS）3，表示请求低2位的信号<br>wait_type：如何算有效。OS_FLAG_WAIT_CLR_ALL（过滤器所有位为0），OS_FLAG_WAIT_SET_ALL（过滤器所有位为1），OS_FLAG_WAIT_CLR_ANY（过滤器任意位为0），OS_FLAG_WAIT_SET_ANY（过滤器任意位为1）。若再加上OS_FLAG_CONSUME则表示有效后清除过滤位的信号（一般配合SET使用，不加此，若任务只需要一次信号，则可以不加此）<br>perr：存放出错信息   </p>
 </li>
-<li><p>删除事件标志组（）：OS_FLAG_GRP  <em>OSFlagDel (OS_FLAG_GRP </em>pgrp, INT8U opt, INT8U *perr)<br>pgrp：某个事件标志组地址<br>opt：opt值为OS_DEL_NO_PEND表示当前若没有任务阻塞等待此标志组时，删除此标志组。若有任务等待则不做处理，继续运行当前任务。值为OS_DEL_ALWAYS表示不管当前标志组是否有任务等待，都删除该标志组。若有任务等待则会现将所有等待任务都更新为就绪态。此后再使用OS_Sched()进行任务调度，则会立即转到就绪态中更高优先级的任务去执行<br>perr：存放出错信息</p>
+<li><p>删除事件标志组（）：<code>OS_FLAG_GRP  *OSFlagDel (OS_FLAG_GRP *pgrp, INT8U opt, INT8U *perr)</code><br>pgrp：某个事件标志组地址<br>opt：opt值为OS_DEL_NO_PEND表示当前若没有任务阻塞等待此标志组时，删除此标志组。若有任务等待则不做处理，继续运行当前任务。值为OS_DEL_ALWAYS表示不管当前标志组是否有任务等待，都删除该标志组。若有任务等待则会现将所有等待任务都更新为就绪态。此后再使用OS_Sched()进行任务调度，则会立即转到就绪态中更高优先级的任务去执行<br>perr：存放出错信息</p>
 </li>
-<li><p>查询事件标志组的当前事件标志状态：OS_FLAGS  OSFlagQuery (OS_FLAG_GRP <em>pgrp, INT8U </em>perr)<br>pgrp：某个事件标志组地址<br>perr：存放出错信息    </p>
+<li><p>查询事件标志组的当前事件标志状态：<code>OS_FLAGS  OSFlagQuery (OS_FLAG_GRP *pgrp, INT8U *perr)</code><br>pgrp：某个事件标志组地址<br>perr：存放出错信息    </p>
 </li>
 </ul>
 <p>4、邮箱（可看做是信号量的升级版，可以实现一个任务向另一个任务发送一个指针变量）</p>
 <ul>
-<li><p>创建：OS_EVENT  <em>OSMboxCreate (void </em>pmsg)<br>pmsg：传入需要传递的消息指针，在创建邮箱的同时将此消息放入邮箱中，不想在创建时候就传入消息，或者只想将邮箱当成信号量来使用可以填入NULL  </p>
+<li><p>创建：<code>OS_EVENT  *OSMboxCreate (void *pmsg)</code><br>pmsg：传入需要传递的消息指针，在创建邮箱的同时将此消息放入邮箱中，不想在创建时候就传入消息，或者只想将邮箱当成信号量来使用可以填入NULL  </p>
 </li>
-<li><p>等待邮件：void  <em>OSMboxPend (OS_EVENT </em>pevent, INT16U timeout, INT8U *perr)<br>此处需要强调，此API返回一个邮件指针，若指针非空则表示取出了邮箱中的消息<br>若邮箱中没有邮件则此任务会被挂起，直到等待超时，或用了Post发出邮件（在post中会将等待列表中最高优先级的任务转为就绪态，并进行调度运行，但超时只会将任务转变为就绪态，并不进行调度）。<br>pevent：邮箱地址<br>timeout：等待超时时间，超时后任务将由挂起转为就绪态（但不立即进行调度），0值为永久等待<br>perr：存放出错信息    </p>
+<li><p>等待邮件：<code>void  *OSMboxPend (OS_EVENT *pevent, INT16U timeout, INT8U *perr)</code><br>此处需要强调，此API返回一个邮件指针，若指针非空则表示取出了邮箱中的消息<br>若邮箱中没有邮件则此任务会被挂起，直到等待超时，或用了Post发出邮件（在post中会将等待列表中最高优先级的任务转为就绪态，并进行调度运行，但超时只会将任务转变为就绪态，并不进行调度）。<br>pevent：邮箱地址<br>timeout：等待超时时间，超时后任务将由挂起转为就绪态（但不立即进行调度），0值为永久等待<br>perr：存放出错信息    </p>
 </li>
-<li><p>无等待查询邮件：void  <em>OSMboxAccept (OS_EVENT </em>pevent)<br>pevent：待查询的邮箱地址<br>若存在邮件则返回邮件地址，若不存在邮件则继续运行，不挂起当前任务</p>
+<li><p>无等待查询邮件：<code>void  *OSMboxAccept (OS_EVENT *pevent)</code><br>pevent：待查询的邮箱地址<br>若存在邮件则返回邮件地址，若不存在邮件则继续运行，不挂起当前任务</p>
 </li>
-<li><p>发送邮件： INT8U  OSMboxPost (OS_EVENT <em>pevent, void </em>pmsg)<br>pevent：邮箱地址<br>pmsg：邮件地址（邮件地址，需要为一个固定地址，局部变量的地址可能导致BUG）  </p>
+<li><p>发送邮件： <code>INT8U  OSMboxPost (OS_EVENT *pevent, void *pmsg)</code><br>pevent：邮箱地址<br>pmsg：邮件地址（邮件地址，需要为一个固定地址，局部变量的地址可能导致BUG）  </p>
 </li>
-<li><p>放弃等待邮件：INT8U  OSMboxPendAbort (OS_EVENT <em>pevent, INT8U opt, INT8U </em>perr)<br>pevent：邮箱地址<br>opt：值为OS_ERR_NONE，表示将等待任务列表中优先级最高的置为就绪态，放弃此次等待。OS_ERR_PEND_ABORT，表示所有等待任务都变为就绪态。最后都将进行任务调度，调用就绪态中最高优先级的任务去运行<br>perr：存放出错信息 </p>
+<li><p>放弃等待邮件：<code>INT8U  OSMboxPendAbort (OS_EVENT *pevent, INT8U opt, INT8U *perr)</code><br>pevent：邮箱地址<br>opt：值为OS_ERR_NONE，表示将等待任务列表中优先级最高的置为就绪态，放弃此次等待。OS_ERR_PEND_ABORT，表示所有等待任务都变为就绪态。最后都将进行任务调度，调用就绪态中最高优先级的任务去运行<br>perr：存放出错信息 </p>
 </li>
-<li><p>查询一个邮箱的当前状态：INT8U  OSMboxQuery (OS_EVENT <em>pevent, OS_MBOX_DATA </em>p_mbox_data)<br>pevent：邮箱地址<br>p_mbox_data：邮箱信息地址（邮箱信息将填入此地址中）</p>
+<li><p>查询一个邮箱的当前状态：<code>INT8U  OSMboxQuery (OS_EVENT *pevent, OS_MBOX_DATA *p_mbox_data)</code><br>pevent：邮箱地址<br>p_mbox_data：邮箱信息地址（邮箱信息将填入此地址中）</p>
 </li>
-<li><p>删除邮箱：OS_EVENT  <em>OSMboxDel (OS_EVENT </em>pevent, INT8U opt, INT8U *perr)<br>pevent：邮箱地址<br>opt：opt若为OS_DEL_NO_PEND表示若当前没有任务等待则删除此邮箱，若有任务等待则填写错误信息，当前任务继续运行。若为OS_DEL_ALWAYS则表示强制删除此邮箱，所有等待列表中的任务都将变为就绪态，并进行任务调度，运行就绪态中优先级最高的任务<br>perr：存放出错信息  </p>
+<li><p>删除邮箱：<code>OS_EVENT  *OSMboxDel (OS_EVENT *pevent, INT8U opt, INT8U *perr)</code><br>pevent：邮箱地址<br>opt：opt若为OS_DEL_NO_PEND表示若当前没有任务等待则删除此邮箱，若有任务等待则填写错误信息，当前任务继续运行。若为OS_DEL_ALWAYS则表示强制删除此邮箱，所有等待列表中的任务都将变为就绪态，并进行任务调度，运行就绪态中优先级最高的任务<br>perr：存放出错信息  </p>
 </li>
 </ul>
 <p>5、消息队列（可以看做是邮箱的升级版，可以实现从一个任务向另一个任务发送多个指针变量，而且每个指针所指向的数据结构变量也可以有所不同）     </p>
 <ul>
-<li><p>创建（返回队列地址）:OS_EVENT  <em>OSQCreate (void **start, INT16U size)<br>需要先定义一个存放消息指针的指针数组void </em>MyQueryMsg[SIZE]<br>start：此处填入该指针数组的地址，用于存放消息指针<br>size：填入队列所能存放数据的最大值<br>例：myquery = OSQCreate(MyQueryMsg, SIZE);  </p>
+<li><p>创建（返回队列地址）:<code>OS_EVENT  *OSQCreate (void **start, INT16U size)</code><br>需要先定义一个存放消息指针的指针数组void *MyQueryMsg[SIZE]<br>start：此处填入该指针数组的地址，用于存放消息指针<br>size：填入队列所能存放数据的最大值<br>例：myquery = OSQCreate(MyQueryMsg, SIZE);  </p>
 </li>
-<li><p>等待消息队列中的消息：void  <em>OSQPend (OS_EVENT </em>pevent, INT16U timeout, INT8U *perr)<br>返回msg的地址（根据POST的方式（FIFO或LIFO）来获得msg）<br>pevent：消息队列地址<br>timeout：等待超时时间，时间到后任务进入就绪态（但不立即进行任务调度）<br>perr：存放出错信息  </p>
+<li><p>等待消息队列中的消息：<code>void  *OSQPend (OS_EVENT *pevent, INT16U timeout, INT8U *perr)</code><br>返回msg的地址（根据POST的方式（FIFO或LIFO）来获得msg）<br>pevent：消息队列地址<br>timeout：等待超时时间，时间到后任务进入就绪态（但不立即进行任务调度）<br>perr：存放出错信息  </p>
 </li>
-<li><p>无等待地从一个消息队列中取得消息：void  <em>OSQAccept (OS_EVENT </em>pevent, INT8U *perr)<br>pevent：消息队列地址<br>perr：存放出错信息  </p>
+<li><p>无等待地从一个消息队列中取得消息：<code>void  *OSQAccept (OS_EVENT *pevent, INT8U *perr)</code><br>pevent：消息队列地址<br>perr：存放出错信息  </p>
 </li>
-<li><p>向消息队列发送一个消息（FIFO）：INT8U  OSQPost (OS_EVENT <em>pevent, void </em>pmsg)<br>pevent：消息队列地址<br>pmsg：需要发送的消息地址，注意不要使用临时变量的地址，极可能出现BUG  </p>
+<li><p>向消息队列发送一个消息（FIFO）：<code>INT8U  OSQPost (OS_EVENT *pevent, void *pmsg)</code><br>pevent：消息队列地址<br>pmsg：需要发送的消息地址，注意不要使用临时变量的地址，极可能出现BUG  </p>
 </li>
-<li><p>向消息队列发送一个消息（后进先出LIFO）：INT8U  OSQPostFront (OS_EVENT <em>pevent, void </em>pmsg)<br>同上  </p>
+<li><p>向消息队列发送一个消息（后进先出LIFO）：<code>INT8U  OSQPostFront (OS_EVENT *pevent, void *pmsg)</code><br>同上  </p>
 </li>
-<li><p>清空一个消息队列：INT8U  OSQFlush (OS_EVENT *pevent)<br>pevent：消息队列地址  </p>
+<li><p>清空一个消息队列：<code>INT8U  OSQFlush (OS_EVENT *pevent)</code><br>pevent：消息队列地址  </p>
 </li>
-<li><p>查询一个消息队列状态：INT8U  OSQQuery (OS_EVENT <em>pevent, OS_Q_DATA </em>p_q_data)<br>pevent：消息队列地址<br>p_q_data：存放消息队列信息的结构体变量  </p>
+<li><p>查询一个消息队列状态：<code>INT8U  OSQQuery (OS_EVENT *pevent, OS_Q_DATA *p_q_data)</code><br>pevent：消息队列地址<br>p_q_data：存放消息队列信息的结构体变量  </p>
 </li>
-<li><p>删除一个消息队列：OS_EVENT  <em>OSQDel (OS_EVENT </em>pevent, INT8U opt, INT8U *perr)<br>pevent：消息队列地址<br>opt：opt若为OS_DEL_NO_PEND表示若当前没有任务等待则删除此队列，若有任务等待则填写错误信息，当前任务继续运行。若为OS_DEL_ALWAYS则表示强制删除此队列，所有等待列表中的任务都将变为就绪态，并进行任务调度，运行就绪态中优先级最高的任务  </p>
+<li><p>删除一个消息队列：<code>OS_EVENT  *OSQDel (OS_EVENT *pevent, INT8U opt, INT8U *perr)</code><br>pevent：消息队列地址<br>opt：opt若为OS_DEL_NO_PEND表示若当前没有任务等待则删除此队列，若有任务等待则填写错误信息，当前任务继续运行。若为OS_DEL_ALWAYS则表示强制删除此队列，所有等待列表中的任务都将变为就绪态，并进行任务调度，运行就绪态中优先级最高的任务  </p>
 </li>
 </ul>
 

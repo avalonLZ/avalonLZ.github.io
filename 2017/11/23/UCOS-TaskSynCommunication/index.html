@@ -14,7 +14,7 @@
 <meta property="og:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_TasksStatus.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/UCOSII_Syn_Com.png">
-<meta property="og:updated_time" content="2018-01-31T03:06:44.105Z">
+<meta property="og:updated_time" content="2018-01-31T14:45:19.022Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UCOSII任务调度与同步、通信机制">
 <meta name="twitter:description" content="前段时间总结了Linux下多线程同步机制。今天总结下，在实时操作系统UCOSII下是如何进行任务调度的，以及有哪些任务间的同步、通信机制。插两句闲话，个人感觉，RTOS只有在对实时性强要求(例如控制类)的产品上才需要使用。物联网相关的嵌入式产品大部分都只需要一个良好的系统架构（可以进行快速开发、利于后期维护修改），该类产品其实并不需要使用RTOS">
@@ -302,9 +302,10 @@
 </li>
 <li><p>查询一个消息队列状态：<br><code>INT8U  OSQQuery (OS_EVENT *pevent, OS_Q_DATA *p_q_data)</code><br>pevent：消息队列地址<br>p_q_data：存放消息队列信息的结构体变量  </p>
 </li>
-<li><p>删除一个消息队列：<br><code>OS_EVENT  *OSQDel (OS_EVENT *pevent, INT8U opt, INT8U *perr)</code><br>pevent：消息队列地址<br>opt：opt若为OS_DEL_NO_PEND表示若当前没有任务等待则删除此队列，若有任务等待则填写错误信息，当前任务继续运行。若为OS_DEL_ALWAYS则表示强制删除此队列，所有等待列表中的任务都将变为就绪态，并进行任务调度，运行就绪态中优先级最高的任务  </p>
+<li><p>删除一个消息队列：<br><code>OS_EVENT  *OSQDel (OS_EVENT *pevent, INT8U opt, INT8U *perr)</code><br>pevent：消息队列地址<br>opt：opt若为OS_DEL_NO_PEND表示若当前没有任务等待则删除此队列，若有任务等待则填写错误信息，当前任务继续运行。若为OS_DEL_ALWAYS则表示强制删除此队列，所有等待列表中的任务都将变为就绪态，并进行任务调度，运行就绪态中优先级最高的任务    </p>
 </li>
 </ul>
+<p>利用闲暇时间封装的UCOSii事件库：<br><a href="https://github.com/avalonLZ/Libraries/tree/master/C/ucosii" target="_blank" rel="external">https://github.com/avalonLZ/Libraries/tree/master/C/ucosii</a></p>
 
       
     </div>

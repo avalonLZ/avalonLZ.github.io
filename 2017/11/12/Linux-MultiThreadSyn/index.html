@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="Linux多线程(用户态线程)编程之线程同步相关知识点">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_MultiThread.png">
-<meta property="og:updated_time" content="2018-01-22T03:39:30.984Z">
+<meta property="og:updated_time" content="2018-02-25T09:29:09.224Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程之线程同步">
 <meta name="twitter:description" content="Linux多线程(用户态线程)编程之线程同步相关知识点">
@@ -423,7 +423,7 @@ int main(void)
     printf(&quot;All End\r\n&quot;);
 }
 </code></pre><ul>
-<li>读写锁的实现（适合一个线程写，多个线程读）：<br>若一个线程用了读锁锁定临界区，则其他线程依然可以使用读锁来进入临界区(不加锁也可进入临界区)。若在此时一个线程想对临界区加读锁，则需要等待所有先前的读锁都解锁后才会锁上写锁（后来的读上锁操作都会阻塞，直到写锁上锁后才操作），若一个线程进行写锁加锁，则此后访问这个临界区的读锁或写锁都将进入阻塞。若一个临界区被锁上读锁，则<br>主要实现函数（1-5重要):  </li>
+<li>读写锁的实现（适合一个线程写，多个线程读）：<br>若一个线程用了读锁锁定临界区，则其他线程依然可以使用读锁来进入临界区(不加锁也可进入临界区)。若在此时一个线程想对临界区加写锁，则需要等待所有先前的读锁都解锁后才会锁上写锁(导致写锁饥饿的原因)（后来的读上锁操作都会阻塞，直到写锁上锁后才操作）。<br>若一个线程进行写锁加锁，则此后访问这个临界区的读锁或写锁都将进入阻塞。<br>主要实现函数（1-5重要):  </li>
 </ul>
 <p>1、pthread_rwlock_t rwlock_test = PTHREAD_RWLOCK_INITIALIZER;//静态初始化读写锁<br>int pthread_rwlock_init(pthread_rwlock_t <em>rwptr, const pthread_rwlockattr_t </em>attr);//初始化读写锁,attr为空指针，表示使用缺省属性    </p>
 <p>2、int pthread_rwlock_rdlock(pthread_rwlock_t *rwptr);//读锁上锁  </p>

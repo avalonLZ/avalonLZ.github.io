@@ -4,17 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Archives: 2016/10 | 木子人人人&#39;s 藏经阁</title>
+  <title>利用NFS建立Linux共享文件夹 | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="木子人人人's 藏经阁">
-<meta property="og:url" content="http://avalonlz.github.io/archives/2016/10/index.html">
+  <meta name="description" content="为了在Win下更方便的查看Linux下的代码，利用NFS搭建网络共享文件夹，记录下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用NFS建立Linux共享文件夹">
+<meta property="og:url" content="http://avalonlz.github.io/2018/03/23/Win-Linux-NFS/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description">
+<meta property="og:description" content="为了在Win下更方便的查看Linux下的代码，利用NFS搭建网络共享文件夹，记录下">
+<meta property="og:updated_time" content="2018-03-23T05:43:02.358Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="木子人人人's 藏经阁">
-<meta name="twitter:description">
+<meta name="twitter:title" content="利用NFS建立Linux共享文件夹">
+<meta name="twitter:description" content="为了在Win下更方便的查看Linux下的代码，利用NFS搭建网络共享文件夹，记录下">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -170,85 +171,149 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-Win-Linux-NFS" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/20/mqtt-notes/" class="archive-article-date">
-  	<time datetime="2016-10-19T16:10:30.000Z" itemprop="datePublished">Oct 20</time>
+    <div class="article-meta">
+      <a href="/2018/03/23/Win-Linux-NFS/" class="article-date">
+  	<time datetime="2018-03-23T01:16:35.000Z" itemprop="datePublished">2018-03-23</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/10/20/mqtt-notes/">MQTT协议</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      利用NFS建立Linux共享文件夹
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/协议解析-MQTT/">协议解析_MQTT</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/百科-Linux/">百科_Linux</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
+		
+		<!--
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+		//-->
+      
+	  </div>
+      
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/19/about-position/" class="archive-article-date">
-  	<time datetime="2016-10-19T14:41:58.000Z" itemprop="datePublished">Oct 19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/10/19/about-position/">定位</a>
-    </h1>
-  
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>为了在Win下更方便的查看Linux下的代码，利用NFS搭建网络共享文件夹，记录下<a id="more"></a><br>先强调下需要共享的Linux下的文件夹，所以Linux作为NFS的服务端，Win安装NFS的客户端    </p>
+<p>注意防火墙等软件的设置  </p>
+<h3 id="Win安装NFS服务-客户端"><a href="#Win安装NFS服务-客户端" class="headerlink" title="Win安装NFS服务(客户端)"></a>Win安装NFS服务(客户端)</h3><p>Win7:<br>控制面板-&gt;卸载程序-&gt;打开或关闭Windows功能（在左边框栏）-&gt;勾选NFS服务（子选项也勾选）-&gt;确定  </p>
+<h3 id="Linux安装NFS服务-服务器端"><a href="#Linux安装NFS服务-服务器端" class="headerlink" title="Linux安装NFS服务(服务器端)"></a>Linux安装NFS服务(服务器端)</h3><p>Ubuntu14.04LTS:<br>1、sudo apt-get install nfs-kernel-server<br>2、使用chmodm命令调整需要共享的文件夹的权限，可结合后面的anonuid和anongid来配置<br>3、  </p>
+<pre><code>sudo vim /etc/exports  
+在最后一行加入：  
+/home/lz *(rw,sync,all_squash,no_subtree_check,anonuid=1000,anongid=1000)  
+之后运行：sudo exportfs -rv  
+说明：  
+*：允许所有的网段访问，也可以使用具体的ip  
+rw：此目录的客户端对该共享目录具有读写权限  
+sync:资料同步读写  
+no_subtree_check：不检查父目录的权限  
+root_squash：在登入 NFS 主机使用分享之目录的使用者如果是 root 时，那么这个使用者的权限将被压缩成为匿名使用者，通常他的 UID 与 GID 都会变成 nobody 那个系统账号的身份。
+no_root_squash：登入 NFS 主机使用分享目录的使用者，如果是 root 的话，那么对于这个分享的目录来说，他就具有 root 的权限！这个项目『极不安全』，不建议使用！
+all_squash：登入 NFS 主机使用分享目录的使用者，所有用户均被压缩成为匿名使用者，即已nobody用户的身份登录。
+anonuid和anongid：明确指定匿名使用者使用指定的id值用户的权限，访问分享的目录(当前用户id可以输入id查看)。
+secure：限制客户端只能从小于1024的tcp/ip端口连接nfs服务器（默认设置）。
+insecure：允许客户端从大于1024的tcp/ip端口连接服务器。
+</code></pre><p>4、    </p>
+<pre><code>sudo /etc/init.d/rpcbind restart//重启portmap  
+sudo /etc/init.d/nfs-kernel-sever restart//重启nfs服务
+showmount -e//检查共享文件夹
+</code></pre><h3 id="在Win7上挂载该共享文件夹"><a href="#在Win7上挂载该共享文件夹" class="headerlink" title="在Win7上挂载该共享文件夹"></a>在Win7上挂载该共享文件夹</h3><p>在cmd中输入：   </p>
+<pre><code>showmount -e 192.168.175.129//显示该主机上共享的文件夹  
+mount 192.168.175.129:/home/lz Z://从上一条显示的共享文件夹中选择一个文件夹挂载到该系统上，Z为挂载的盘符，此处选择了/home/lz文件夹  
+</code></pre><p>至此，完成所有操作，可以在Win7上查看、修改Ubuntu上的文件夹了</p>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/协议解析-定位/">协议解析_定位</a></li></ul>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/03/13/stm32-StartUp/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">stm32-启动文件</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
+
+
+
+
+<!--
+
+//-->
+
+ <!--以下为使用畅言的代码
+  && post.comments
+  style="padding: 0px 30px 0px 46px;">
+  //-->
+ 
+ 
+  <section id="comments">
+<!--高速版，加载速度快，使用前需测试页面的兼容性-->
+<div id="SOHUCS" sid="利用NFS建立Linux共享文件夹"></div>
+<script>
+  (function(){
+    var appid = 'cyto4sUr6',
+    conf = '5531a21399d22997758da7915e34b8fe';
+    var doc = document,
+    s = doc.createElement('script'),
+    h = doc.getElementsByTagName('head')[0] || doc.head || doc.documentElement;
+    s.type = 'text/javascript';
+    s.charset = 'utf-8';
+    s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&appid=' + appid;
+    h.insertBefore(s,h.firstChild);
+    window.SCS_NO_IFRAME = true;
+  })()
+</script>
+  </section>
   
-  
-    </div></section>
-  
-
-    
-
 </div>
       <!--
 注释：用卜算子来统计网页访问量
@@ -300,8 +365,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false

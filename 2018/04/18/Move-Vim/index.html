@@ -4,20 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Linux文件系统Mindmap | 木子人人人&#39;s 藏经阁</title>
+  <title>移植Vim到Cavium | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="昨晚发现的一个不错的Linux系统思维导图，很早就想总结了，在此感谢下此图作者">
+  <meta name="description" content="为了练手（也为了在Cavium下修改文件方便点），将vim交叉编译，移植到Cavium上。参考了网上两篇文件，再此记录下">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux文件系统Mindmap">
-<meta property="og:url" content="http://avalonlz.github.io/2016/03/26/Linux-FileSysmind-map/index.html">
+<meta property="og:title" content="移植Vim到Cavium">
+<meta property="og:url" content="http://avalonlz.github.io/2018/04/18/Move-Vim/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="昨晚发现的一个不错的Linux系统思维导图，很早就想总结了，在此感谢下此图作者">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/LinuxQQ%E5%9B%BE%E7%89%8720160326113334.jpg">
-<meta property="og:updated_time" content="2018-01-22T03:42:33.463Z">
+<meta property="og:description" content="为了练手（也为了在Cavium下修改文件方便点），将vim交叉编译，移植到Cavium上。参考了网上两篇文件，再此记录下">
+<meta property="og:updated_time" content="2018-04-18T12:10:57.024Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux文件系统Mindmap">
-<meta name="twitter:description" content="昨晚发现的一个不错的Linux系统思维导图，很早就想总结了，在此感谢下此图作者">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/LinuxQQ%E5%9B%BE%E7%89%8720160326113334.jpg">
+<meta name="twitter:title" content="移植Vim到Cavium">
+<meta name="twitter:description" content="为了练手（也为了在Cavium下修改文件方便点），将vim交叉编译，移植到Cavium上。参考了网上两篇文件，再此记录下">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -173,11 +171,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-Linux-FileSysmind-map" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Move-Vim" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/03/26/Linux-FileSysmind-map/" class="article-date">
-  	<time datetime="2016-03-26T06:17:50.000Z" itemprop="datePublished">2016-03-26</time>
+      <a href="/2018/04/18/Move-Vim/" class="article-date">
+  	<time datetime="2018-04-18T09:34:15.000Z" itemprop="datePublished">2018-04-18</time>
 </a>
     </div>
   
@@ -190,7 +188,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Linux文件系统Mindmap
+      移植Vim到Cavium
     </h1>
   
 
@@ -199,7 +197,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/百科-Linux/">百科_Linux</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/嵌入式-Linux/">嵌入式_Linux</a></li></ul>
 	</div>
 
         
@@ -215,7 +213,63 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>昨晚发现的一个不错的Linux系统思维导图，很早就想总结了，在此感谢下此图作者<a id="more"></a><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/LinuxQQ%E5%9B%BE%E7%89%8720160326113334.jpg" alt=""><br>有需要的少年可以扒走  </p>
+        <p>为了练手（也为了在Cavium下修改文件方便点），将vim交叉编译，移植到Cavium上。参考了网上两篇文件，再此记录下<a id="more"></a>  </p>
+<h3 id="下载两个源码包，一个是vim的，一个是它依赖的库的"><a href="#下载两个源码包，一个是vim的，一个是它依赖的库的" class="headerlink" title="下载两个源码包，一个是vim的，一个是它依赖的库的"></a>下载两个源码包，一个是vim的，一个是它依赖的库的</h3><p>vim和ncurses:<br>百度云盘地址：<a href="https://pan.baidu.com/s/1aUvv1pyjC_tYhFFa8yJ-xw" target="_blank" rel="external">https://pan.baidu.com/s/1aUvv1pyjC_tYhFFa8yJ-xw</a><br>密码：t27m   </p>
+<h3 id="先对vim依赖的ncurses进行交叉编译"><a href="#先对vim依赖的ncurses进行交叉编译" class="headerlink" title="先对vim依赖的ncurses进行交叉编译"></a>先对vim依赖的ncurses进行交叉编译</h3><pre><code>tar -xvf ncurses-5.8  
+cd ncurses-5.8/  
+</code></pre><p>然后在解压目录下建一个build.sh脚本，方便执行./configure配置命令  </p>
+<pre><code>#! /bin/sh
+
+./configure --prefix=/home/lizhong/MoveVIM/ncurses-5.8/output --host=mips64-octeon-linux-gnu CC=mips64-octeon-linux-gnu-gcc  --without-cxx --without-cxx-binding --without-ada --without-manpages --without-progs --without-tests --with-shared  
+</code></pre><p>注意：–prefix是需要编译生成的文件的存放路径,–host是指定主机的系统,CC就是指定交叉编译器了，剩下的参数比较有针对性，可以通过./configure –help来查看相关说明  </p>
+<p>保存此文件,再提升下权限  </p>
+<pre><code>chmod 777 build.sh  
+</code></pre><p>执行  </p>
+<pre><code>make      
+make install    
+</code></pre><p>可以看到在output目录下，生成了相关文件（动态链接库等）：  </p>
+<pre><code>[lizhong@localhost ncurses-5.8]$ cd output/
+[lizhong@localhost output]$ ls
+bin  include  lib  share  
+[lizhong@localhost lib]$ ls -l
+total 7244
+-rw-r--r--. 1 lizhong lizhong  207140 Apr 17 17:58 libform.a
+-rw-r--r--. 1 lizhong lizhong 1079288 Apr 17 17:58 libform_g.a
+lrwxrwxrwx. 1 lizhong lizhong      12 Apr 17 17:58 libform.so -&gt; libform.so.5
+lrwxrwxrwx. 1 lizhong lizhong      14 Apr 17 17:58 libform.so.5 -&gt; libform.so.5.8
+-rwxrwxr-x. 1 lizhong lizhong  108435 Apr 17 17:58 libform.so.5.8
+-rw-r--r--. 1 lizhong lizhong  101532 Apr 17 17:58 libmenu.a
+-rw-r--r--. 1 lizhong lizhong  548440 Apr 17 17:58 libmenu_g.a
+lrwxrwxrwx. 1 lizhong lizhong      12 Apr 17 17:58 libmenu.so -&gt; libmenu.so.5
+lrwxrwxrwx. 1 lizhong lizhong      14 Apr 17 17:58 libmenu.so.5 -&gt; libmenu.so.5.8
+-rwxrwxr-x. 1 lizhong lizhong   45387 Apr 17 17:58 libmenu.so.5.8
+-rw-r--r--. 1 lizhong lizhong  766984 Apr 17 17:58 libncurses.a
+-rw-r--r--. 1 lizhong lizhong 3846990 Apr 17 17:58 libncurses_g.a
+lrwxrwxrwx. 1 lizhong lizhong      15 Apr 17 17:58 libncurses.so -&gt; libncurses.so.5
+lrwxrwxrwx. 1 lizhong lizhong      17 Apr 17 17:58 libncurses.so.5 -&gt; libncurses.so.5.8
+-rwxrwxr-x. 1 lizhong lizhong  424626 Apr 17 17:58 libncurses.so.5.8
+-rw-r--r--. 1 lizhong lizhong   41714 Apr 17 17:58 libpanel.a
+-rw-r--r--. 1 lizhong lizhong  213232 Apr 17 17:58 libpanel_g.a
+lrwxrwxrwx. 1 lizhong lizhong      13 Apr 17 17:58 libpanel.so -&gt; libpanel.so.5
+lrwxrwxrwx. 1 lizhong lizhong      15 Apr 17 17:58 libpanel.so.5 -&gt; libpanel.so.5.8
+-rwxrwxr-x. 1 lizhong lizhong   18125 Apr 17 17:58 libpanel.so.5.8
+lrwxrwxrwx. 1 lizhong lizhong      13 Apr 17 19:22 libtinfo.so -&gt; libtinfo.so.5
+lrwxrwxrwx. 1 lizhong lizhong      15 Apr 17 19:22 libtinfo.so.5 -&gt; libncurses.so.5
+lrwxrwxrwx. 1 lizhong lizhong      17 Apr 17 17:58 terminfo -&gt; ../share/terminfo  
+</code></pre><p>注意：这里需要做两个软连接文件（软连接，其实就是win下的快捷方式），在lib文件夹下，执行  </p>
+<pre><code>ln -s libncurses.so.5 libtinfo.so.5  
+ln -s libtinfo.so.5 libtinfo.so  
+</code></pre><p>就放在lib文件夹下就好，后面编译vim的时候会找这两个文件    </p>
+<h3 id="编译vim"><a href="#编译vim" class="headerlink" title="编译vim"></a>编译vim</h3><p>下面就可以开始编译vim了，这个还是挺折腾的，进入vim解压出的目录   </p>
+<pre><code>[lizhong@localhost MoveVIM]$ cd vim74/  
+</code></pre><p>执行下面语句：  </p>
+<pre><code>./configure --with-features=huge --disable-gui --without-x --disable-selinux --disable-acl --disable-gpm --enable-cscope --enable-sniff --enable-multibyte CC=mips64-octeon-linux-gnu-gcc PPFLAGS=-I/home/lizhong/MoveVIM/ncurses-5.8/output/include/ncurses LDFLAGS=-L/home/lizhong/MoveVIM/ncurses-5.8/output/lib --host=mips64-octeon-linux-gnu vim_cv_toupper_broken=no vim_cv_tty_group=root vim_cv_tty_mode=0620 vim_cv_terminfo=yes vim_cv_tgetent=zero vim_cv_stat_ignores_slash=yes vim_cv_memmove_handles_overlap=yes vim_cv_getcwd_broken=no vim_cv_terminfo=yes --with-tlib=ncurses  
+</code></pre><p>之前也写了这个的build.sh，但是一直报错，最后一点点排查问题，最后这个语句可以成功配置。简单说下这些配置参数（同样在./configure –hlep下也可以看到这些参数说明）<br>–with-features=huge#保留大部分特性编译<br>–disable-selinux#这个一定要加，因为在这个vim源码中没有selinux相关的代码，不加的话会编译出错<br>CC#指定交叉编译工具<br>–with-tlib=ncurses#指定库<br>PPFLAGS#指定库路径<br>LDFLAGS#指定库路径<br>–host#指定主机系统  </p>
+<p>配置完成后会生成config.mk等文件，不过ls是看不到的，如果需要清空配置，需要执行make distclean该条命令  </p>
+<p>编译：  </p>
+<pre><code>make  
+</code></pre><h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>按以上步骤进行交叉编译时，有一步会出现找不到某个头文件的错误（具体忘了是编译哪一个出问题了），原因在于那个头文件就在当前目录，而不在它指定的目录下，所以将那个出错的.c文件引用的头文件进行修改（改成#include “xxxx.h”）就可以正常编译了。  </p>
+<h3 id="迁移"><a href="#迁移" class="headerlink" title="迁移"></a>迁移</h3><p>vim编译完成后，在该路径的src/文件夹下，可以看到vim。<br>下面，将编译好的vim以及一些依赖的文件移入Cavium开发机中，具体如下<br>1、将ncurses编译完成的output文件夹下,lib文件夹中的内容,全部拷贝到开发机的/usr/lib/目录下<br>2、将ncurses编译完成的output文件夹下,share文件夹中的内容，全部拷贝到开发机的/usr/share目录下<br>以上两步，需要注意的是拷贝至开发机下的文件权限会被改变，需要对比编译机下的文件进行修改<br>3、再将vim编译完成后的，src中的vim可执行程序，拷贝到开发机的/usr/sbin目录下，并将其权限提升为777<br>4、最后注意，vim的运行需要一些动态链接库，所以需要配置环境变量，在/etc/profile中加入/usr/lib这个动态链接库的路径<br>至此完成了vim的移植操作</p>
 
       
     </div>
@@ -225,18 +279,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/03/30/stm32-spi/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          stm32-SPI
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/03/26/stm32-I2C/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">stm32-I2C</div>
+    <a href="/2018/04/10/Shell-Nodes/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Shell笔记</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -282,7 +327,7 @@
  
   <section id="comments">
 <!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="Linux文件系统Mindmap"></div>
+<div id="SOHUCS" sid="移植Vim到Cavium"></div>
 <script>
   (function(){
     var appid = 'cyto4sUr6',

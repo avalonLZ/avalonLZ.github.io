@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/04/18/Move-Vim/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="为了练手（也为了在Cavium下修改文件方便点），将vim交叉编译，移植到Cavium上。参考了网上两篇文件，再此记录下">
-<meta property="og:updated_time" content="2018-04-18T12:10:57.024Z">
+<meta property="og:updated_time" content="2018-04-19T09:16:48.151Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="移植Vim到Cavium">
 <meta name="twitter:description" content="为了练手（也为了在Cavium下修改文件方便点），将vim交叉编译，移植到Cavium上。参考了网上两篇文件，再此记录下">
@@ -269,7 +269,7 @@ ln -s libtinfo.so.5 libtinfo.so
 <p>编译：  </p>
 <pre><code>make  
 </code></pre><h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>按以上步骤进行交叉编译时，有一步会出现找不到某个头文件的错误（具体忘了是编译哪一个出问题了），原因在于那个头文件就在当前目录，而不在它指定的目录下，所以将那个出错的.c文件引用的头文件进行修改（改成#include “xxxx.h”）就可以正常编译了。  </p>
-<h3 id="迁移"><a href="#迁移" class="headerlink" title="迁移"></a>迁移</h3><p>vim编译完成后，在该路径的src/文件夹下，可以看到vim。<br>下面，将编译好的vim以及一些依赖的文件移入Cavium开发机中，具体如下<br>1、将ncurses编译完成的output文件夹下,lib文件夹中的内容,全部拷贝到开发机的/usr/lib/目录下<br>2、将ncurses编译完成的output文件夹下,share文件夹中的内容，全部拷贝到开发机的/usr/share目录下<br>以上两步，需要注意的是拷贝至开发机下的文件权限会被改变，需要对比编译机下的文件进行修改<br>3、再将vim编译完成后的，src中的vim可执行程序，拷贝到开发机的/usr/sbin目录下，并将其权限提升为777<br>4、最后注意，vim的运行需要一些动态链接库，所以需要配置环境变量，在/etc/profile中加入/usr/lib这个动态链接库的路径<br>至此完成了vim的移植操作</p>
+<h3 id="迁移"><a href="#迁移" class="headerlink" title="迁移"></a>迁移</h3><p>vim编译完成后，在该路径的src/文件夹下，可以看到vim。<br>下面，将编译好的vim以及一些依赖的文件移入Cavium开发机中，具体如下<br>1、将ncurses编译完成的output文件夹下,lib文件夹中的内容,全部拷贝到开发机的/usr/lib/目录下<br>2、将ncurses编译完成的output文件夹下,share文件夹中的内容，全部拷贝到开发机的/usr/share目录下<br>以上两步，需要注意的是拷贝至开发机下的文件权限会被改变，需要对比编译机下的文件进行修改<br>3、再将vim编译完成后的，src中的vim可执行程序，拷贝到开发机的/usr/sbin目录下，并将其权限提升为777<br>4、注意，vim的运行需要一些动态链接库，所以需要配置环境变量，在/etc/profile中加入/usr/lib这个动态链接库的路径<br>5、最后将vim的配置文件拷贝到开发机的~/路径下，注意需要将名字改为.vimrc<br>至此完成了vim的移植操作</p>
 
       
     </div>

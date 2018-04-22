@@ -16,7 +16,7 @@
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_arraylen1.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_fromshell1.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_sum.jpg">
-<meta property="og:updated_time" content="2018-04-18T09:30:39.427Z">
+<meta property="og:updated_time" content="2018-04-22T10:15:15.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell笔记">
 <meta name="twitter:description" content="想把Linux玩溜，怎可缺少Shell这个技能点呢。把它归在计算机语言里吧，毕竟也是种脚本语言（虽然它也被看做是一个应用程序）">
@@ -219,6 +219,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>想把Linux玩溜，怎可缺少Shell这个技能点呢。把它归在计算机语言里吧，毕竟也是种脚本语言（虽然它也被看做是一个应用程序）<a id="more"></a>  </p>
+<h3 id="需注意点"><a href="#需注意点" class="headerlink" title="需注意点"></a>需注意点</h3><p>1、在Shell中数字0和1并不代表真假<br>2、  </p>
 <h3 id="解释器："><a href="#解释器：" class="headerlink" title="解释器："></a>解释器：</h3><p>.sh文件开头一般都会有下面这句  </p>
 <pre><code>#! /bin/bash：    
 </code></pre><p>目的是为了告诉系统，该脚本是使用了bash这一个解释器（还存在多种解释器，但一般bash最常用）  </p>
@@ -294,8 +295,57 @@ echo ${arrayone[@]}
 <p>还有些常用参数：<br>$$：脚本运行的当前进程ID号<br>$!：后台运行的最后一个进程的ID号<br>$-：显示Shell使用的当前选项，与set命令功能相同（没理解）<br>$?：显示最后命令的退出状态，0表示没有错误，其他任何值表名有错误（没理解）</p>
 <h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_sum.jpg" alt="">      </p>
 <p>其他运算符和其他语言一样<br>需要注意的地方：<br>1、乘号(<em>)前需要加反斜杠()才能作为乘号使用<br>2、mac中的shell的expr语法是$((表达式))，此处表达式中的 “</em>“ 不需要转义符号 “\”  </p>
-<h3 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h3><p>-eq：检测两数是否相等，相等返回true，与shell运算符中的==号一样<br>-ne：检测两数是否不等，不等返回true，与shell运算符中的!=号一样<br>-gt：检测左边的数是否大于右边的，如果是，返回true<br>-lt：检测左边的数是否小于右边的，如果是，返回true<br>-ge：检测左边的数是否大于等于右边的，如果是，返回true<br>-le：检测左边的数是否小于等于右边的，如果是，返回true  </p>
+<h3 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h3><p>-eq：检测两数是否相等，相等返回true，与shell运算符中的==号一样<br>-ne：检测两数是否不等，不等返回true，与shell运算符中的!=号一样<br>-gt：检测左边的数是否大于右边的，如果是，返回true<br>-lt：检测左边的数是否小于右边的，如果是，返回true<br>-ge：检测左边的数是否大于等于右边的，如果是，返回true<br>-le：检测左边的数是否小于等于右边的，如果是，返回true<br>例：  </p>
+<pre><code>val=${1} +${2}
 
+#和是否等于3  
+if [ ${val} -eq 3 ]
+then
+    echo &quot;${1} + ${2} == 3&quot;
+else
+    echo &quot;${1} + ${2} != 3, == ${val}&quot;    
+</code></pre><h3 id="布尔运算符"><a href="#布尔运算符" class="headerlink" title="布尔运算符"></a>布尔运算符</h3><p>！：非运算，表达式为true则返回false，否则返回true<br>-o：或运算，有一个表达式为true则返回true<br>-a：与运算，两个表达式都为true才返回true<br>例：  </p>
+<pre><code>if [ 1 -gt 0 -o 0 -gt 1 ]  
+then
+    echo &quot;true&quot;  
+else
+    echo &quot;false&quot;  
+if
+&gt;&gt;true  
+</code></pre><h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;&amp;：逻辑与<br>||：逻辑或<br>逻辑运算符和上面的布尔运算符的-o和-a的用法相同  </p>
+<h3 id="字符串运算符（重要）"><a href="#字符串运算符（重要）" class="headerlink" title="字符串运算符（重要）"></a>字符串运算符（重要）</h3><p>=：检测两个字符串是否相等，相等返回true<br>!=：检测两个字符串是否相等，不相等返回true<br>-z：检测字符串长度是否为0，为0返回true<br>-n：检测字符串长度是否为0，不为0返回true<br>${a}：搭配if语句可以检测字符串a是否为空，不为空，返回true<br>例：  </p>
+<pre><code>str1=&quot;&quot;  
+
+if [ ${str1} ]
+then
+    echo &quot;字符串不为空&quot;
+else
+    echo &quot;字符串为空&quot;  
+fi  
+
+if [ -z ${str1} ]
+then
+    echo &quot;字符串长度为0&quot;  
+else
+    echo &quot;字符串长度不为0&quot;  
+fi
+
+&gt;&gt;字符串为空
+&gt;&gt;字符串长度为0
+</code></pre><h3 id="文件测试运算符"><a href="#文件测试运算符" class="headerlink" title="文件测试运算符"></a>文件测试运算符</h3><p>-b：检测文件是否是块设备文件，如果是，则返回true<br>-c：检测文件是否是字符设备文件，如果是，则返回true<br>-d：检测文件是否是目录，如果是，则返回true<br>-p：检测文件是否是有名管道，如果是，则返回true<br>-f：检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回true  </p>
+<p>-g：检测文件是否设置了SGID位，如果是，则返回true<br>-k：检测文件是否设置了粘着位(Sticky Bit)，如果是，则返回true<br>-u：检测文件是否设置了SUID位，如果是，则返回true  </p>
+<p>-r：检测文件是否可读，如果是，则返回true<br>-w：检测文件是否可写，如果是，则返回true<br>-x：检测文件是否可执行，如果是，则返回true  </p>
+<p>-s：检测文件是否为空（文件大小是否大于0），不为空，则返回true<br>-e：检测文件（包括目录）是否存在，如果是，则返回true<br>例：  </p>
+<pre><code>filedir=&quot;/home&quot;
+
+if [ -d ${filedir} ]
+then
+    echo &quot;这是目录&quot;  
+else
+    echo &quot;这不是目录&quot;  
+fi
+&gt;&gt;这是目录  
+</code></pre><h3 id="echo"><a href="#echo" class="headerlink" title="echo"></a>echo</h3>
       
     </div>
     

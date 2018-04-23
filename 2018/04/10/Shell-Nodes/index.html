@@ -16,7 +16,7 @@
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_arraylen1.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_fromshell1.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_sum.jpg">
-<meta property="og:updated_time" content="2018-04-22T10:15:15.054Z">
+<meta property="og:updated_time" content="2018-04-23T11:41:13.487Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell笔记">
 <meta name="twitter:description" content="想把Linux玩溜，怎可缺少Shell这个技能点呢。把它归在计算机语言里吧，毕竟也是种脚本语言（虽然它也被看做是一个应用程序）">
@@ -220,6 +220,7 @@
       
         <p>想把Linux玩溜，怎可缺少Shell这个技能点呢。把它归在计算机语言里吧，毕竟也是种脚本语言（虽然它也被看做是一个应用程序）<a id="more"></a>  </p>
 <h3 id="需注意点"><a href="#需注意点" class="headerlink" title="需注意点"></a>需注意点</h3><p>1、在Shell中数字0和1并不代表真假<br>2、  </p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p>read variable：等待用户输入，并将输入存放于variable中，回车为输入结束<br>`seq 结束值`：执行该语句，将以默认步长，从1开始递增到结束值  </p>
 <h3 id="解释器："><a href="#解释器：" class="headerlink" title="解释器："></a>解释器：</h3><p>.sh文件开头一般都会有下面这句  </p>
 <pre><code>#! /bin/bash：    
 </code></pre><p>目的是为了告诉系统，该脚本是使用了bash这一个解释器（还存在多种解释器，但一般bash最常用）  </p>
@@ -292,10 +293,20 @@ echo ${arrayone[@]}
 <li>获取数组长度<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_arraylen1.jpg" alt="">   </li>
 </ul>
 <h3 id="从命令行向shell脚本传递参数"><a href="#从命令行向shell脚本传递参数" class="headerlink" title="从命令行向shell脚本传递参数"></a>从命令行向shell脚本传递参数</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_fromshell1.jpg" alt="">  </p>
-<p>还有些常用参数：<br>$$：脚本运行的当前进程ID号<br>$!：后台运行的最后一个进程的ID号<br>$-：显示Shell使用的当前选项，与set命令功能相同（没理解）<br>$?：显示最后命令的退出状态，0表示没有错误，其他任何值表名有错误（没理解）</p>
-<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_sum.jpg" alt="">      </p>
+<p>还有些常用参数：<br>$$：脚本运行的当前进程ID号<br>$!：后台运行的最后一个进程的ID号<br>$-：显示Shell使用的当前选项，与set命令功能相同（没理解）</p>
+<p>$?：显示最后命令的退出状态，0表示没有错误，其他任何值表名有错误，例：  </p>
+<pre><code>#若编译成功则提示&quot;compile successfully&quot;  
+echo gcc -o hello hello.c
+
+if [ $? -eq 0 ]
+then
+    echo &quot;compile successfully&quot;
+else 
+    echo &quot;compile fail&quot;
+fi 
+</code></pre><h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_sum.jpg" alt="">      </p>
 <p>其他运算符和其他语言一样<br>需要注意的地方：<br>1、乘号(<em>)前需要加反斜杠()才能作为乘号使用<br>2、mac中的shell的expr语法是$((表达式))，此处表达式中的 “</em>“ 不需要转义符号 “\”  </p>
-<h3 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h3><p>-eq：检测两数是否相等，相等返回true，与shell运算符中的==号一样<br>-ne：检测两数是否不等，不等返回true，与shell运算符中的!=号一样<br>-gt：检测左边的数是否大于右边的，如果是，返回true<br>-lt：检测左边的数是否小于右边的，如果是，返回true<br>-ge：检测左边的数是否大于等于右边的，如果是，返回true<br>-le：检测左边的数是否小于等于右边的，如果是，返回true<br>例：  </p>
+<h3 id="关系运算符（重要）"><a href="#关系运算符（重要）" class="headerlink" title="关系运算符（重要）"></a>关系运算符（重要）</h3><p>-eq：检测两数是否相等，相等返回true，与shell运算符中的==号一样<br>-ne：检测两数是否不等，不等返回true，与shell运算符中的!=号一样<br>-gt：检测左边的数是否大于右边的，如果是，返回true<br>-lt：检测左边的数是否小于右边的，如果是，返回true<br>-ge：检测左边的数是否大于等于右边的，如果是，返回true<br>-le：检测左边的数是否小于等于右边的，如果是，返回true<br>例：  </p>
 <pre><code>val=${1} +${2}
 
 #和是否等于3  
@@ -332,7 +343,7 @@ fi
 
 &gt;&gt;字符串为空
 &gt;&gt;字符串长度为0
-</code></pre><h3 id="文件测试运算符"><a href="#文件测试运算符" class="headerlink" title="文件测试运算符"></a>文件测试运算符</h3><p>-b：检测文件是否是块设备文件，如果是，则返回true<br>-c：检测文件是否是字符设备文件，如果是，则返回true<br>-d：检测文件是否是目录，如果是，则返回true<br>-p：检测文件是否是有名管道，如果是，则返回true<br>-f：检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回true  </p>
+</code></pre><h3 id="文件测试运算符（重要）"><a href="#文件测试运算符（重要）" class="headerlink" title="文件测试运算符（重要）"></a>文件测试运算符（重要）</h3><p>-b：检测文件是否是块设备文件，如果是，则返回true<br>-c：检测文件是否是字符设备文件，如果是，则返回true<br>-d：检测文件是否是目录，如果是，则返回true<br>-p：检测文件是否是有名管道，如果是，则返回true<br>-f：检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回true  </p>
 <p>-g：检测文件是否设置了SGID位，如果是，则返回true<br>-k：检测文件是否设置了粘着位(Sticky Bit)，如果是，则返回true<br>-u：检测文件是否设置了SUID位，如果是，则返回true  </p>
 <p>-r：检测文件是否可读，如果是，则返回true<br>-w：检测文件是否可写，如果是，则返回true<br>-x：检测文件是否可执行，如果是，则返回true  </p>
 <p>-s：检测文件是否为空（文件大小是否大于0），不为空，则返回true<br>-e：检测文件（包括目录）是否存在，如果是，则返回true<br>例：  </p>
@@ -345,7 +356,170 @@ else
     echo &quot;这不是目录&quot;  
 fi
 &gt;&gt;这是目录  
-</code></pre><h3 id="echo"><a href="#echo" class="headerlink" title="echo"></a>echo</h3>
+</code></pre><h3 id="echo（该命令会自动添加换行符）（可以理解为只是用来输出字符串的，不需要输出时，可以不使用此命令，当printf一样用就好）"><a href="#echo（该命令会自动添加换行符）（可以理解为只是用来输出字符串的，不需要输出时，可以不使用此命令，当printf一样用就好）" class="headerlink" title="echo（该命令会自动添加换行符）（可以理解为只是用来输出字符串的，不需要输出时，可以不使用此命令，当printf一样用就好）"></a>echo（该命令会自动添加换行符）（可以理解为只是用来输出字符串的，不需要输出时，可以不使用此命令，当printf一样用就好）</h3><p>1、-e：开启转义，例：  </p>
+<pre><code>echo -e &quot;hello world \r\nlz&quot;  
+&gt;&gt;hello world
+&gt;&gt;lz  
+</code></pre><p>2、原样输出字符串，不进行转义或取变量，使用单引号：  </p>
+<pre><code>name=&quot;lz&quot;
+#注意，是单引号
+echo &apos;${name}\r\n&apos;  
+&gt;&gt;${name}\r\n  
+
+echo -e &apos;${name}\r\nlz&apos;#开启转义  
+&gt;&gt;${name}  
+&gt;&gt;lz  
+</code></pre><p>3、显示结果定向至文件：  </p>
+<pre><code>#在home路径下，重写test.txt文件  
+echo &quot;hello world&quot; &gt; /home/test.txt  
+</code></pre><p>4、显示命令执行结果  </p>
+<pre><code>#注意，是反引号，而不是单引号
+echo `date`  
+&gt;&gt;输出当前时间和日期  
+
+#将时间和日期追加输出至date.txt文件中      
+echo `date` &gt;&gt; /home/date.txt  
+</code></pre><h3 id="printf-不会自带换行符"><a href="#printf-不会自带换行符" class="headerlink" title="printf(不会自带换行符)"></a>printf(不会自带换行符)</h3><p>Shell中的printf和C中的差不多，跟echo的差别也就是，printf主要用在格式化输出，例：  </p>
+<pre><code>#%-10s表示左对齐10个字符，不足10个字符，自动补空格，超过10个字符，则全显示
+printf &quot;%-10s %-8s %-4s\r\n&quot; 姓名 性别 年龄  
+printf &quot;%-10s %-8s %-4d\r\n&quot; 李人 男 24  
+printf &quot;%-10s %-8s %-4d\r\n&quot; 李人人 男 24
+printf &quot;%-10s %-8s %-4d\r\n&quot; 李人人人 男 24  
+</code></pre><h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><p>test命令，常和if搭配使用，一般使用正常的if语句即可，可以不关注test  </p>
+<h3 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h3><p>1、if else  </p>
+<pre><code>#将then和fi看做if语句的花括号（{}）即可
+if condition
+then
+    command
+else
+    command
+fi  
+
+#注意，最后只要一个fi即可
+if condition
+then
+    command
+elif condition
+then
+    command
+else
+    command
+fi
+</code></pre><p>2、for循环<br>想循环一定次数，可以使用关键字seq实现，例：</p>
+<pre><code>#seq，默认从1开始，且步长为1，seq 3 4 100 从3开始，步长为4，到100
+for var in `seq 100`
+do
+    command
+done     
+
+#var依次为item1、item2...itemN，按此进行循环  
+for var in item1 item2 ...itemN  
+do   
+    command  
+done    
+
+#var依次为str的下角标所对应的元素，按此进行循环
+for var in str
+do
+    command
+done  
+
+#对执行该脚本时输入的参数进行遍历  
+for var in $*
+do
+    command
+done  
+
+#无线循环
+for (( ; ; ))
+</code></pre><p>3、while循环  </p>
+<pre><code>while ((condition))
+do
+    command
+done
+
+#例  
+var=89
+
+while ((var &lt; 100))
+do
+    echo -e &quot;${var} \c&quot;
+    let var++
+done  
+
+#无限循环
+while :#或 while true
+do
+    command
+done  
+</code></pre><p>4、until循环：<br>until循环执行一系列命令，直到条件为true时为止，写法：  </p>
+<pre><code>until condition
+do 
+    command
+done  
+</code></pre><p>5、case语句：<br>case语句为多选择语句，可以用case语句进行一个值匹配，写法：  </p>
+<pre><code>case 值 in     
+1模式/值)
+    command
+    ...
+;;
+2模式/值)
+    command
+    ...
+;;  
+*)
+    command
+;;  
+...
+esac
+</code></pre><p>在Shell的case中，取值可以为变量或常数，若匹配上某模式或值时，将执行该段语句，到;;结束。并且匹配后，不会再继续向下执行(和C不同)。若无任何一值匹配时，则可使用星号通配（相当于default）  </p>
+<p>6、break，continue语句，在Shell中同样适用，用法与C相同  </p>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>在Shell中函数的例子（带参数）：  </p>
+<pre><code>functest()
+{
+    echo &quot;run functest function&quot;
+    echo &quot;the first param is $1&quot;
+}
+
+functest 1 2 3  
+</code></pre><h3 id="输入-出的重定向（重要）"><a href="#输入-出的重定向（重要）" class="headerlink" title="输入/出的重定向（重要）"></a>输入/出的重定向（重要）</h3><p>因为Shell主要是用来写脚本的，操作一些文件啥的，所以重定向还是很重要的<br>command &gt; file：将输出重定向到file<br>command &lt; file：将输入重定向到file<br>command &gt;&gt; file: 将输出以追加方式重定向到file  </p>
+<p>下面这几个目前还不是很理解<br>n &gt; file：将文件描述符为n的文件重定向到file<br>n &gt;&gt; file：将文件描述符为n的文件以追加方式，重定向到file<br>n &gt;&amp; m：将输出文件m和n合并<br>n &lt;&amp; m：将输入文件m和n合并<br>&lt;&lt;tag：将开始标记tag和结束标记tag之间的内容作为输入    </p>
+<p>注意：一般情况下，每个linux命令运行时，都会打开三个文件：<br>标准输入文件(stdin)，文件描述符为0，默认从stdin读取数据<br>标准输出文件(stdout)，文件描述符为1，默认向stdout输出数据<br>标准错误文件(stderr)，文件描述符为2，Shell脚本报错，会向stderr流中写入错误信息<br>其中stdout和stderr默认都是向屏幕输出的<br>默认情况下，command &gt; file会将stdout重定向到file<br>默认情况下，command &lt; file会将stdin重定向到file<br>如果希望stderr重定向到file，则：  </p>
+<pre><code>command 2 &gt; file  
+
+#追加
+command 2 &gt;&gt; file    
+</code></pre><p>如果希望将stdout和stderr合并后重定向到file，则：  </p>
+<pre><code>command &gt; file 2&gt;&amp;1  
+</code></pre><p>如果希望对stdin和stdout都重定向，则：  </p>
+<pre><code>#将command命令的输入stdin重定向到file1，输出stdout重定向到file2
+command &lt; file1 &gt;file2
+</code></pre><h3 id="Here-Document（重要）"><a href="#Here-Document（重要）" class="headerlink" title="Here Document（重要）"></a>Here Document（重要）</h3><p>Here Document是Shell中的一种特殊的重定向方式，用来将输入重定向到一个交互式Shell脚本或程序，写法：  </p>
+<pre><code>#将两个delimiter中的内容(document)作为命令的输入传递给command
+#注意这里是命令的输入，也就是说，这个命令要求输入，才有用，并不是指紧跟在命令后的输入参数
+command &lt;&lt; delimiter  
+    document
+delimiter    
+
+#例
+mkdir &lt;&lt; EOF
+    testdir
+EOF
+</code></pre><h3 id="dev-null"><a href="#dev-null" class="headerlink" title="/dev/null"></a>/dev/null</h3><p>如果希望执行某命令后，不在屏幕或文件中进行输出，则可以将command的输出重定向到/dev/null下，写法：  </p>
+<pre><code>command &gt; /dev/null
+
+#屏蔽标准输出和错误输出
+command &gt; /dev/null 2&gt;&amp;1
+</code></pre><h3 id="包含Shell文件"><a href="#包含Shell文件" class="headerlink" title="包含Shell文件"></a>包含Shell文件</h3><p>主要是指，可以将Shell文件进行相互应用，例：  </p>
+<pre><code>#在1.sh中(可以不升级成执行权限)
+name=&quot;lz&quot;
+
+#在2.sh中  
+#包含1.sh文件，注意./1.sh是path路径  
+. ./1.sh
+echo &quot;my name is ${name}&quot;  
+&gt;&gt;my name is lz
+</code></pre>
       
     </div>
     

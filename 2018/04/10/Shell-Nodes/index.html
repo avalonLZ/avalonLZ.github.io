@@ -16,7 +16,7 @@
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_arraylen1.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_fromshell1.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_sum.jpg">
-<meta property="og:updated_time" content="2018-04-23T11:41:13.487Z">
+<meta property="og:updated_time" content="2018-04-23T11:58:26.381Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell笔记">
 <meta name="twitter:description" content="想把Linux玩溜，怎可缺少Shell这个技能点呢。把它归在计算机语言里吧，毕竟也是种脚本语言（虽然它也被看做是一个应用程序）">
@@ -305,7 +305,7 @@ else
     echo &quot;compile fail&quot;
 fi 
 </code></pre><h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_sum.jpg" alt="">      </p>
-<p>其他运算符和其他语言一样<br>需要注意的地方：<br>1、乘号(<em>)前需要加反斜杠()才能作为乘号使用<br>2、mac中的shell的expr语法是$((表达式))，此处表达式中的 “</em>“ 不需要转义符号 “\”  </p>
+<p>其他运算符和其他语言一样<br>需要注意的地方：<br>1、乘号(*)前需要加反斜杠(\)才能作为乘号使用<br>2、mac中的shell的expr语法是$((表达式))，此处表达式中的 “*” 不需要转义符号 “\”  </p>
 <h3 id="关系运算符（重要）"><a href="#关系运算符（重要）" class="headerlink" title="关系运算符（重要）"></a>关系运算符（重要）</h3><p>-eq：检测两数是否相等，相等返回true，与shell运算符中的==号一样<br>-ne：检测两数是否不等，不等返回true，与shell运算符中的!=号一样<br>-gt：检测左边的数是否大于右边的，如果是，返回true<br>-lt：检测左边的数是否小于右边的，如果是，返回true<br>-ge：检测左边的数是否大于等于右边的，如果是，返回true<br>-le：检测左边的数是否小于等于右边的，如果是，返回true<br>例：  </p>
 <pre><code>val=${1} +${2}
 

@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/04/24/Move-GDB/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="开发机上已经有gdb了，不过同事说不能用tui（文本用户界面）功能，不太方便，所以最好再移植个。其实关键还是使能tui，以及使能tui后需要ncurses库支持。中途遇到几个错误，其实都是引用的头文件路径问题而已（交叉编译过程的makefile一般是不会错的，所以最大的问题也就是依赖和路径问题，耐心看错误，结合搜索引擎，一般都能解决）。既然做了，就简单记录下">
-<meta property="og:updated_time" content="2018-04-24T07:15:44.893Z">
+<meta property="og:updated_time" content="2018-04-25T11:03:05.185Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="移植GDB到Cavium">
 <meta name="twitter:description" content="开发机上已经有gdb了，不过同事说不能用tui（文本用户界面）功能，不太方便，所以最好再移植个。其实关键还是使能tui，以及使能tui后需要ncurses库支持。中途遇到几个错误，其实都是引用的头文件路径问题而已（交叉编译过程的makefile一般是不会错的，所以最大的问题也就是依赖和路径问题，耐心看错误，结合搜索引擎，一般都能解决）。既然做了，就简单记录下">
@@ -213,7 +213,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>开发机上已经有gdb了，不过同事说不能用tui（文本用户界面）功能，不太方便，所以最好再移植个。其实关键还是使能tui，以及使能tui后需要ncurses库支持。中途遇到几个错误，其实都是引用的头文件路径问题而已（交叉编译过程的makefile一般是不会错的，所以最大的问题也就是依赖和路径问题，耐心看错误，结合搜索引擎，一般都能解决）。既然做了，就简单记录下<a id="more"></a></p>
+        <p>开发机上已经有gdb了，不过同事说不能用tui（文本用户界面）功能，不太方便，所以最好再移植个。其实关键还是使能tui，以及使能tui后需要ncurses库支持。中途遇到几个错误，其实都是引用的头文件路径问题而已（交叉编译过程的makefile一般是不会错的，所以最大的问题也就是依赖和路径问题，耐心看错误，结合搜索引擎，一般都能解决）。既然做了，就简单记录下<a id="more"></a>  </p>
+<h3 id="编译ncurses"><a href="#编译ncurses" class="headerlink" title="编译ncurses"></a>编译ncurses</h3><p>跟vim一样，gdb也需要ncurses这个依赖库，在移vim的时候已经编译过了，所以这里就不再编译了，直接拿来用  </p>
+<p>cp -rf </p>
 
       
     </div>

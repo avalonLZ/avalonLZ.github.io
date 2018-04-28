@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/04/24/Move-GDB/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="开发机上已经有gdb了，不过同事说不能用tui（文本用户界面）功能，不太方便，所以最好再移植个。其实关键还是使能tui，以及使能tui后需要ncurses库支持。中途遇到几个错误，其实都是引用的头文件路径问题而已（交叉编译过程的makefile一般是不会错的，所以最大的问题也就是依赖和路径问题，耐心看错误，结合搜索引擎，一般都能解决）。既然做了，就简单记录下">
-<meta property="og:updated_time" content="2018-04-28T03:43:19.580Z">
+<meta property="og:updated_time" content="2018-04-28T07:00:07.630Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="移植GDB到Cavium">
 <meta name="twitter:description" content="开发机上已经有gdb了，不过同事说不能用tui（文本用户界面）功能，不太方便，所以最好再移植个。其实关键还是使能tui，以及使能tui后需要ncurses库支持。中途遇到几个错误，其实都是引用的头文件路径问题而已（交叉编译过程的makefile一般是不会错的，所以最大的问题也就是依赖和路径问题，耐心看错误，结合搜索引擎，一般都能解决）。既然做了，就简单记录下">
@@ -242,7 +242,7 @@ make distclean
 make
 make install  
 </code></pre><p>最后搞定了，在./output/bin目录下可以看到gdb和gdbserver，之后将这两个文件拷贝到开发板的/usr/bin目录下，覆盖原文件，就OK了  </p>
-<p>注意：我这里是没有指定静态编译的，所以可能移植后还需要一些动态库，不过都在ncurses里面了，需要啥就移啥，然后在加入环境变量就可以了</p>
+<p>注意：gdb是依赖一些动态库的，所以可能移植后还需要一些动态库，不过都在ncurses里面了，需要啥就移啥，然后再加入环境变量就可以了，这里就不细说了，如果按上一篇文章说的，已经移植过vim，那就已经有了那些动态库</p>
 
       
     </div>

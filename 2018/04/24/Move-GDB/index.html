@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/04/24/Move-GDB/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="开发机上已经有gdb了，不过同事说不能用tui（文本用户界面）功能，不太方便，所以最好再移植个。其实关键还是使能tui，以及使能tui后需要ncurses库支持。中途遇到几个错误，其实都是引用的头文件路径问题而已（交叉编译过程的makefile一般是不会错的，所以最大的问题也就是依赖和路径问题，耐心看错误，结合搜索引擎，一般都能解决）。既然做了，就简单记录下">
-<meta property="og:updated_time" content="2018-04-25T11:03:05.185Z">
+<meta property="og:updated_time" content="2018-04-28T03:43:19.580Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="移植GDB到Cavium">
 <meta name="twitter:description" content="开发机上已经有gdb了，不过同事说不能用tui（文本用户界面）功能，不太方便，所以最好再移植个。其实关键还是使能tui，以及使能tui后需要ncurses库支持。中途遇到几个错误，其实都是引用的头文件路径问题而已（交叉编译过程的makefile一般是不会错的，所以最大的问题也就是依赖和路径问题，耐心看错误，结合搜索引擎，一般都能解决）。既然做了，就简单记录下">
@@ -108,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Linux多线程编程/" style="font-size: 12.5px;">Linux多线程编程</a> <a href="/tags/Linux多进程编程/" style="font-size: 10px;">Linux多进程编程</a> <a href="/tags/Linux网络编程/" style="font-size: 15px;">Linux网络编程</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 12.5px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 12.5px;">Raspberry Pi</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-Linux/" style="font-size: 12.5px;">嵌入式_Linux</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 20px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 17.5px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/服务器-Django/" style="font-size: 12.5px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Nginx/" style="font-size: 10px;">服务器_Nginx</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏编程/" style="font-size: 10px;">游戏编程</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-Linux/" style="font-size: 15px;">百科_Linux</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/计算机语言-Shell/" style="font-size: 10px;">计算机语言_Shell</a> <a href="/tags/软件工程-DesignPatterns/" style="font-size: 10px;">软件工程_DesignPatterns</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
+						<a href="/tags/Linux多线程编程/" style="font-size: 12.5px;">Linux多线程编程</a> <a href="/tags/Linux多进程编程/" style="font-size: 10px;">Linux多进程编程</a> <a href="/tags/Linux网络编程/" style="font-size: 17.5px;">Linux网络编程</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 12.5px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 12.5px;">Raspberry Pi</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-Linux/" style="font-size: 12.5px;">嵌入式_Linux</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 20px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 17.5px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/服务器-Django/" style="font-size: 12.5px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Nginx/" style="font-size: 10px;">服务器_Nginx</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏编程/" style="font-size: 10px;">游戏编程</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-Linux/" style="font-size: 15px;">百科_Linux</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/计算机语言-Shell/" style="font-size: 10px;">计算机语言_Shell</a> <a href="/tags/软件工程-DesignPatterns/" style="font-size: 10px;">软件工程_DesignPatterns</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
 					</div>
 				</section>
 				
@@ -215,7 +215,34 @@
       
         <p>开发机上已经有gdb了，不过同事说不能用tui（文本用户界面）功能，不太方便，所以最好再移植个。其实关键还是使能tui，以及使能tui后需要ncurses库支持。中途遇到几个错误，其实都是引用的头文件路径问题而已（交叉编译过程的makefile一般是不会错的，所以最大的问题也就是依赖和路径问题，耐心看错误，结合搜索引擎，一般都能解决）。既然做了，就简单记录下<a id="more"></a>  </p>
 <h3 id="编译ncurses"><a href="#编译ncurses" class="headerlink" title="编译ncurses"></a>编译ncurses</h3><p>跟vim一样，gdb也需要ncurses这个依赖库，在移vim的时候已经编译过了，所以这里就不再编译了，直接拿来用  </p>
-<p>cp -rf </p>
+<pre><code>cp -rf ~/MoveVim/ncurses-5.8/* ~/MoveGDB/ncurses-5.8/  
+</code></pre><h3 id="下载相应版本的gdb"><a href="#下载相应版本的gdb" class="headerlink" title="下载相应版本的gdb"></a>下载相应版本的gdb</h3><p>gdb的下载可以到这里：<br><a href="http://ftp.gnu.org/gnu/gdb/" target="_blank" rel="external">http://ftp.gnu.org/gnu/gdb/</a><br>因为板子上已经有7.6的了，所以我也就下了7.6的  </p>
+<pre><code>wget http://ftp.gnu.org/gnu/gdb/gdb-7.6.tar.gz  
+</code></pre><p>然后解压  </p>
+<pre><code>tar -zxvf gdb-7.6.tar.gz  
+</code></pre><p>进入解压目录，编写build脚本进行配置，生成Makefile  </p>
+<pre><code>cd  
+vim build.sh  
+#build.sh中填入如下内容，通用部分CC、CPPFLAGS、LDFLAGS  
+#! /bin/sh
+
+./configure --with-features=huge --enable-shared --prefix=/home/lizhong/MoveGDB/gdb-7.6/output --enable-tui CC=mips64-octeon-linux-gnu-gcc CPPFLAGS=-I/home/lizhong/MoveGDB/ncurses-5.8/output/include/ncurses LDFLAGS=-L/home/lizhong/MoveGDB/ncurses-5.8/output/lib --host=mips64-octeon-linux-gnu --with-tlib=ncurses  
+</code></pre><p>需要注意的是–enable-tui，因为我们主要是需要使用这个功能，所以要将它使能。之后执行该build脚本    </p>
+<pre><code>chmod 777 ./build.sh
+./build.sh  
+#可以看见，已成功生成了Makefile，然后make  
+make  
+</code></pre><p>这里应该会遇到问题，说找不到xxx头文件，我的解决方案就是用find找到那个文件（不是在ncurses里，就是在gdb这边，两边都找下），后来发现是在ncurses里，那就把它们cp过来</p>
+<pre><code>cp /home/lizhong/MoveGDB/ncurses-5.8/output/include/ncurses/* /home/lizhong/MoveGDB/gdb-7.6/gdb/  
+</code></pre><p>然后还需要做一些修改，因为之前这些头文件的引用不同，可能是绝对路径，也可能是相对路径，也可能因为没有宏定义而没有引用，反正就是该下报错的文件就可以了（不要惧怕源文件），这种东西出错（有坑）是正常的，大胆改就行，修改完后再次make  </p>
+<pre><code>#先把之前生成的文件全删了。要先clean再distclean，否则就会先把Makefile删了，就没法make clean了  
+make clean
+make distclean
+#再make  
+make
+make install  
+</code></pre><p>最后搞定了，在./output/bin目录下可以看到gdb和gdbserver，之后将这两个文件拷贝到开发板的/usr/bin目录下，覆盖原文件，就OK了  </p>
+<p>注意：我这里是没有指定静态编译的，所以可能移植后还需要一些动态库，不过都在ncurses里面了，需要啥就移啥，然后在加入环境变量就可以了</p>
 
       
     </div>
@@ -224,6 +251,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2018/04/26/DDoS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          DDoS
+        
+      </div>
+    </a>
   
   
     <a href="/2018/04/18/Move-Vim/" id="article-nav-older" class="article-nav-link-wrap">

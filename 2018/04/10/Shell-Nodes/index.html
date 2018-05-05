@@ -16,7 +16,7 @@
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_arraylen1.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_fromshell1.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_sum.jpg">
-<meta property="og:updated_time" content="2018-04-23T11:58:26.381Z">
+<meta property="og:updated_time" content="2018-05-05T16:46:42.395Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell笔记">
 <meta name="twitter:description" content="想把Linux玩溜，怎可缺少Shell这个技能点呢。把它归在计算机语言里吧，毕竟也是种脚本语言（虽然它也被看做是一个应用程序）">
@@ -518,7 +518,28 @@ name=&quot;lz&quot;
 #包含1.sh文件，注意./1.sh是path路径  
 . ./1.sh
 echo &quot;my name is ${name}&quot;  
-&gt;&gt;my name is lz
+&gt;&gt;my name is lz  
+</code></pre><h3 id="交互脚本"><a href="#交互脚本" class="headerlink" title="交互脚本"></a>交互脚本</h3><p>如果需要对某个应用程序进行一些交互操作，这里提供几种方式<br>1、利用重定向<br>2、使用“|”管道<br>3、使用expect库<br>此处推荐使用expect库，在ubuntu下直接apt-get install expect即可，以下例子为使用expect库对ftp应用程序进行交互操作  </p>
+<pre><code>#! /usr/bin/expect
+
+set openflag 1
+set drthost 192.168.175.1
+set localfile ./test.c
+set fcount 0
+
+spawn ftp -n
+send &quot;open ${drthost}\r&quot;
+send &quot;user anonymous xxx@126.com\r&quot;
+
+while { ${openflag} } {
+    send &quot;put ${localfile}\r&quot;
+    set fcount [expr ${fcount} + 1]
+    send_user &quot;put file ok,${fcount}\r\n&quot;
+    sleep 1
+}
+send &quot;close\r&quot;
+send &quot;bye\r&quot;
+interact
 </code></pre>
       
     </div>

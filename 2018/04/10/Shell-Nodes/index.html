@@ -16,7 +16,7 @@
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_arraylen1.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_fromshell1.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Shell_sum.jpg">
-<meta property="og:updated_time" content="2018-05-05T16:46:42.395Z">
+<meta property="og:updated_time" content="2018-05-08T15:10:09.462Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell笔记">
 <meta name="twitter:description" content="想把Linux玩溜，怎可缺少Shell这个技能点呢。把它归在计算机语言里吧，毕竟也是种脚本语言（虽然它也被看做是一个应用程序）">
@@ -219,7 +219,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>想把Linux玩溜，怎可缺少Shell这个技能点呢。把它归在计算机语言里吧，毕竟也是种脚本语言（虽然它也被看做是一个应用程序）<a id="more"></a>  </p>
-<h3 id="需注意点"><a href="#需注意点" class="headerlink" title="需注意点"></a>需注意点</h3><p>1、在Shell中数字0和1并不代表真假<br>2、  </p>
+<h3 id="需注意点"><a href="#需注意点" class="headerlink" title="需注意点"></a>需注意点</h3><p>1、在Shell中数字0和1并不代表真假<br>2、在Linux命令中-o这类表示选项，选项后紧跟着选项的参数。并且，不带选项的参数可以写在一起  </p>
 <h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p>read variable：等待用户输入，并将输入存放于variable中，回车为输入结束<br>`seq 结束值`：执行该语句，将以默认步长，从1开始递增到结束值  </p>
 <h3 id="解释器："><a href="#解释器：" class="headerlink" title="解释器："></a>解释器：</h3><p>.sh文件开头一般都会有下面这句  </p>
 <pre><code>#! /bin/bash：    
@@ -519,13 +519,16 @@ name=&quot;lz&quot;
 . ./1.sh
 echo &quot;my name is ${name}&quot;  
 &gt;&gt;my name is lz  
-</code></pre><h3 id="交互脚本"><a href="#交互脚本" class="headerlink" title="交互脚本"></a>交互脚本</h3><p>如果需要对某个应用程序进行一些交互操作，这里提供几种方式<br>1、利用重定向<br>2、使用“|”管道<br>3、使用expect库<br>此处推荐使用expect库，在ubuntu下直接apt-get install expect即可，以下例子为使用expect库对ftp应用程序进行交互操作  </p>
+</code></pre><h3 id="交互脚本"><a href="#交互脚本" class="headerlink" title="交互脚本"></a>交互脚本</h3><p>如果需要对某个应用程序进行一些交互操作，这里提供几种方式<br>1、利用重定向，将输入重定向至某个文件或某块文档，但不能在交互的时候使用条件语句和循环语句<br>2、使用“|”管道，缺点和上面相同<br>3、使用expect库<br>此处推荐使用expect库，在ubuntu下直接apt-get install expect即可，以下例子为使用expect库对ftp应用程序进行交互操作    </p>
 <pre><code>#! /usr/bin/expect
 
 set openflag 1
 set drthost 192.168.175.1
-set localfile ./test.c
+set localfile ./1.iso
 set fcount 0
+
+#使expect语句永久等待条件成立
+set timeout -1
 
 spawn ftp -n
 send &quot;open ${drthost}\r&quot;
@@ -533,6 +536,7 @@ send &quot;user anonymous xxx@126.com\r&quot;
 
 while { ${openflag} } {
     send &quot;put ${localfile}\r&quot;
+    expect &quot;*Transfer complete*&quot;
     set fcount [expr ${fcount} + 1]
     send_user &quot;put file ok,${fcount}\r\n&quot;
     sleep 1

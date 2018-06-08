@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>OpenVPN相关 | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录OpenVPN一些相关的知识点">
+  <meta name="description" content="记录OpenVPN一些相关的知识点，先用一张图说下Openet、Teamviewer、Shadowsocks这三者实现的区别">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OpenVPN相关">
 <meta property="og:url" content="http://avalonlz.github.io/2018/06/06/OpenVPN/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="记录OpenVPN一些相关的知识点">
-<meta property="og:updated_time" content="2018-06-06T12:27:41.302Z">
+<meta property="og:description" content="记录OpenVPN一些相关的知识点，先用一张图说下Openet、Teamviewer、Shadowsocks这三者实现的区别">
+<meta property="og:updated_time" content="2018-06-08T07:17:44.064Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OpenVPN相关">
-<meta name="twitter:description" content="记录OpenVPN一些相关的知识点">
+<meta name="twitter:description" content="记录OpenVPN一些相关的知识点，先用一张图说下Openet、Teamviewer、Shadowsocks这三者实现的区别">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -213,9 +213,91 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>记录OpenVPN一些相关的知识点<a id="more"></a>  </p>
-<h3 id="OpenVPN的安装："><a href="#OpenVPN的安装：" class="headerlink" title="OpenVPN的安装："></a>OpenVPN的安装：</h3><p>这里提供一套安装套件，是目前最新版的OpenVPN：<br>链接：<a href="https://pan.baidu.com/s/17TJ2w65Exv40llo0QXdlzA" target="_blank" rel="external">https://pan.baidu.com/s/17TJ2w65Exv40llo0QXdlzA</a> 密码：mgwx<br>里面有详细的ReadMe，按照ReadMe来安装即可  </p>
-<h3 id="OpenVPN的配置："><a href="#OpenVPN的配置：" class="headerlink" title="OpenVPN的配置："></a>OpenVPN的配置：</h3>
+        <p>记录OpenVPN一些相关的知识点，先用一张图说下Openet、Teamviewer、Shadowsocks这三者实现的区别<a id="more"></a>  </p>
+<h3 id="Openet、Teamviewer、Shadowsocks三者实现区别"><a href="#Openet、Teamviewer、Shadowsocks三者实现区别" class="headerlink" title="Openet、Teamviewer、Shadowsocks三者实现区别"></a>Openet、Teamviewer、Shadowsocks三者实现区别</h3><h3 id="OpenVPN的安装："><a href="#OpenVPN的安装：" class="headerlink" title="OpenVPN的安装："></a>OpenVPN的安装：</h3><p>这里提供一套安装套件，是目前最新版的OpenVPN：<br>链接：<a href="https://pan.baidu.com/s/1gg-AuCFgjAB2jn9ilapSTQ" target="_blank" rel="external">https://pan.baidu.com/s/1gg-AuCFgjAB2jn9ilapSTQ</a> 密码：3h45<br>里面有详细的ReadMe，按照ReadMe来安装即可  </p>
+<h3 id="OpenVPN的配置："><a href="#OpenVPN的配置：" class="headerlink" title="OpenVPN的配置："></a>OpenVPN的配置：</h3><p>1、创建目录放置相关配置文件和证书：  </p>
+<pre><code>mkdir /etc/openvpn
+cp -rpf xxx/openvpn-2.4.6/sample/sample-config-files/server.conf #拷贝一个config模板到目录  
+cp -rpf easyrsa/ /etc/openvpn/easy-rsa #拷贝解压出的证书生成工具，随便放哪，放解压处也可以，最后在配置文件指定好路径就行   
+</code></pre><p>2、使用easyrsa生成相关证书和DH参数，制作根证书：  </p>
+<pre><code>./easyrsa init-pki #初始化证书目录  
+./easyrsa build-ca nopass #创建根证书，需要输入证书名，不和服务端和客户端证书同名即可。这步后issued文件夹下生成将会生成ca.crt，private文件夹下将会生成ca.key私钥文件，还有一些serial、reqs文件  
+./easyrsa gen-dh #生成DH参数，用于密钥协商过程。这步后将生成dh.pem文件
+</code></pre><p>3、制作服务端证书</p>
+<pre><code>./easyrsa build-server-full lz_server nopass #lz_server是证书名称 ，issued文件夹下生成lz_server.crt证书，private文件夹下生成lz_server.key私钥
+</code></pre><p>4、制作客户端证书  </p>
+<pre><code>./easyrsa build-client-full lz_client nopass #lz_client是证书名称，同理生成相关证书和私钥  
+</code></pre><p>5、服务端配置<br>在此说明下，配置文件中的分号和井号都起到了注释的作用    </p>
+<pre><code>local 172.16.130.37
+
+port 7333
+
+proto tcp
+
+dev tun
+
+ca /etc/openvpn/easy-rsa/easyrsa3/pki/ca.crt
+cert /etc/openvpn/easy-rsa/easyrsa3/pki/issued/lz_server.crt
+key /etc/openvpn/easy-rsa/easyrsa3/pki/private/lz_server.key  # This file should be kept secret
+dh /etc/openvpn/easy-rsa/easyrsa3/pki/dh.pem
+
+server 10.3.3.0 255.255.255.0
+
+ifconfig-pool-persist ipp.txt
+
+#import需要访问的内网IP地址或网段
+push &quot;route xxx.xxx.xxx.0 255.255.255.0&quot;
+
+client-to-client
+
+keepalive 10 120
+
+cipher AES-256-CBC
+
+comp-lzo
+
+user nobody
+
+persist-key
+persist-tun
+
+status /var/log/openvpn-status.log
+
+log /var/log/openvpn.log
+
+verb 3
+</code></pre><p>6、客户端配置  </p>
+<pre><code>client
+
+dev tun
+
+proto tcp
+
+remote 172.16.130.37 7333
+
+resolv-retry infinite
+
+nobind
+
+persist-key
+persist-tun
+
+ca ca.crt
+cert lz_client.crt
+key lz_client.key
+
+remote-cert-tls server
+
+cipher AES-256-CBC
+
+comp-lzo
+
+verb 3
+
+#myself add
+auth-nocache
+</code></pre><p>按照以上步骤完成，正常情况下就应该可以进行访问了</p>
+
       
     </div>
     

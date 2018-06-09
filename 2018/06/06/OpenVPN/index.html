@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>OpenVPN相关 | 木子人人人&#39;s 藏经阁</title>
+  <title>OpenVPN的编译安装、配置、使用及注意事项 | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="记录OpenVPN一些相关的知识点，先用一张图说下Openet、Teamviewer、Shadowsocks这三者实现的区别">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OpenVPN相关">
+<meta property="og:title" content="OpenVPN的编译安装、配置、使用及注意事项">
 <meta property="og:url" content="http://avalonlz.github.io/2018/06/06/OpenVPN/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="记录OpenVPN一些相关的知识点，先用一张图说下Openet、Teamviewer、Shadowsocks这三者实现的区别">
-<meta property="og:updated_time" content="2018-06-08T07:17:44.064Z">
+<meta property="og:updated_time" content="2018-06-09T07:19:17.406Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OpenVPN相关">
+<meta name="twitter:title" content="OpenVPN的编译安装、配置、使用及注意事项">
 <meta name="twitter:description" content="记录OpenVPN一些相关的知识点，先用一张图说下Openet、Teamviewer、Shadowsocks这三者实现的区别">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
@@ -188,7 +188,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      OpenVPN相关
+      OpenVPN的编译安装、配置、使用及注意事项
     </h1>
   
 
@@ -214,7 +214,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>记录OpenVPN一些相关的知识点，先用一张图说下Openet、Teamviewer、Shadowsocks这三者实现的区别<a id="more"></a>  </p>
-<h3 id="Openet、Teamviewer、Shadowsocks三者实现区别"><a href="#Openet、Teamviewer、Shadowsocks三者实现区别" class="headerlink" title="Openet、Teamviewer、Shadowsocks三者实现区别"></a>Openet、Teamviewer、Shadowsocks三者实现区别</h3><h3 id="OpenVPN的安装："><a href="#OpenVPN的安装：" class="headerlink" title="OpenVPN的安装："></a>OpenVPN的安装：</h3><p>这里提供一套安装套件，是目前最新版的OpenVPN：<br>链接：<a href="https://pan.baidu.com/s/1gg-AuCFgjAB2jn9ilapSTQ" target="_blank" rel="external">https://pan.baidu.com/s/1gg-AuCFgjAB2jn9ilapSTQ</a> 密码：3h45<br>里面有详细的ReadMe，按照ReadMe来安装即可  </p>
+<h3 id="Openet、Teamviewer、Shadowsocks三者实现区别"><a href="#Openet、Teamviewer、Shadowsocks三者实现区别" class="headerlink" title="Openet、Teamviewer、Shadowsocks三者实现区别"></a>Openet、Teamviewer、Shadowsocks三者实现区别</h3><h3 id="OpenVPN的安装："><a href="#OpenVPN的安装：" class="headerlink" title="OpenVPN的安装："></a>OpenVPN的安装：</h3><p>我这里提供一套安装套件，是目前最新版的OpenVPN：<br>链接：<a href="https://pan.baidu.com/s/1gg-AuCFgjAB2jn9ilapSTQ" target="_blank" rel="external">https://pan.baidu.com/s/1gg-AuCFgjAB2jn9ilapSTQ</a> 密码：3h45<br>里面有详细的ReadMe，按照ReadMe来安装即可  </p>
 <h3 id="OpenVPN的配置："><a href="#OpenVPN的配置：" class="headerlink" title="OpenVPN的配置："></a>OpenVPN的配置：</h3><p>1、创建目录放置相关配置文件和证书：  </p>
 <pre><code>mkdir /etc/openvpn
 cp -rpf xxx/openvpn-2.4.6/sample/sample-config-files/server.conf #拷贝一个config模板到目录  
@@ -228,7 +228,8 @@ cp -rpf easyrsa/ /etc/openvpn/easy-rsa #拷贝解压出的证书生成工具，�
 </code></pre><p>4、制作客户端证书  </p>
 <pre><code>./easyrsa build-client-full lz_client nopass #lz_client是证书名称，同理生成相关证书和私钥  
 </code></pre><p>5、服务端配置<br>在此说明下，配置文件中的分号和井号都起到了注释的作用    </p>
-<pre><code>local 172.16.130.37
+<pre><code>#一个ip，client no  to client模式下需要能从这个ip，Ping通（路由到）两端主机
+local ooo.xxx.ooo.xxx
 
 port 7333
 
@@ -246,9 +247,9 @@ server 10.3.3.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 
 #import需要访问的内网IP地址或网段
-push &quot;route xxx.xxx.xxx.0 255.255.255.0&quot;
+push &quot;route xxx.xxx.xxx.xxx 255.255.255.0&quot;
 
-client-to-client
+;client-to-client
 
 keepalive 10 120
 
@@ -273,7 +274,7 @@ dev tun
 
 proto tcp
 
-remote 172.16.130.37 7333
+remote ooo.xxx.ooo.xxx 7333
 
 resolv-retry infinite
 
@@ -296,7 +297,17 @@ verb 3
 
 #myself add
 auth-nocache
-</code></pre><p>按照以上步骤完成，正常情况下就应该可以进行访问了</p>
+</code></pre><h3 id="OpenVPN的使用"><a href="#OpenVPN的使用" class="headerlink" title="OpenVPN的使用"></a>OpenVPN的使用</h3><ul>
+<li>Client no to Client模式下：<br>要求：在该模式下Server上的ip必须能路由到Client和另一端的主机（这是OpenVPN的原理决定的）  </li>
+</ul>
+<p>Server端：按照以上步骤完成，直接使用./openvpn –config /etc/openvpn/server.conf就可以启动Server服务了</p>
+<p>Client端：在Win下就安装压缩包中的OpenGUI，然后拷贝在Server上制作好的根证书、客户端证书和客户端私钥到Client上，并在client.ovpn中配置好路径，之后直接启动连接即可。连接成功后，便可以访问xxx.xxx.xxx.xxx 255.255.255.0。在Linux下则只需要吧Server的配置文件更换为Client的配置文件即可  </p>
+<ul>
+<li>Client to Client模式下：<br>要求：在该模式下则要求各个Client可以路由到Server  </li>
+</ul>
+<p>Server端：开启client-to-client选项，可以关闭push “route xxx.xxx.xxx.xxx 255.255.255.0” 选项，其他不做修改   </p>
+<p>Client端：可以不做修改  </p>
+<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h3><p>1、Client no to Client 和 Client to Client两个模式可以同时存在，但是要需要注意当前网络环境是否真的可以同时满足这两个模式的要求。<br>2、若存在多个Client则可以选择不同的Client使用不同的客户端证书和私钥（需要Server生成多个客户端证书和私钥）。或者在启动Server时加入–duplicate-cn启动选项</p>
 
       
     </div>
@@ -354,7 +365,7 @@ auth-nocache
  
   <section id="comments">
 <!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="OpenVPN相关"></div>
+<div id="SOHUCS" sid="OpenVPN的编译安装、配置、使用及注意事项"></div>
 <script>
   (function(){
     var appid = 'cyto4sUr6',

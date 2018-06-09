@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/06/06/OpenVPN/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="记录OpenVPN一些相关的知识点，先用一张图说下Openet、Teamviewer、Shadowsocks这三者实现的区别">
-<meta property="og:updated_time" content="2018-06-09T07:19:17.406Z">
+<meta property="og:updated_time" content="2018-06-09T07:25:54.442Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OpenVPN的编译安装、配置、使用及注意事项">
 <meta name="twitter:description" content="记录OpenVPN一些相关的知识点，先用一张图说下Openet、Teamviewer、Shadowsocks这三者实现的区别">
@@ -228,7 +228,7 @@ cp -rpf easyrsa/ /etc/openvpn/easy-rsa #拷贝解压出的证书生成工具，�
 </code></pre><p>4、制作客户端证书  </p>
 <pre><code>./easyrsa build-client-full lz_client nopass #lz_client是证书名称，同理生成相关证书和私钥  
 </code></pre><p>5、服务端配置<br>在此说明下，配置文件中的分号和井号都起到了注释的作用    </p>
-<pre><code>#一个ip，client no  to client模式下需要能从这个ip，Ping通（路由到）两端主机
+<pre><code>#一个ip，client no  to client模式下需要能从这个ip(主机)，Ping通两端主机
 local ooo.xxx.ooo.xxx
 
 port 7333
@@ -298,10 +298,10 @@ verb 3
 #myself add
 auth-nocache
 </code></pre><h3 id="OpenVPN的使用"><a href="#OpenVPN的使用" class="headerlink" title="OpenVPN的使用"></a>OpenVPN的使用</h3><ul>
-<li>Client no to Client模式下：<br>要求：在该模式下Server上的ip必须能路由到Client和另一端的主机（这是OpenVPN的原理决定的）  </li>
+<li>Client no to Client模式下：<br>要求：在该模式下Server上的ip必须能ping通Client和另一端的主机（这是OpenVPN的原理决定的）  </li>
 </ul>
 <p>Server端：按照以上步骤完成，直接使用./openvpn –config /etc/openvpn/server.conf就可以启动Server服务了</p>
-<p>Client端：在Win下就安装压缩包中的OpenGUI，然后拷贝在Server上制作好的根证书、客户端证书和客户端私钥到Client上，并在client.ovpn中配置好路径，之后直接启动连接即可。连接成功后，便可以访问xxx.xxx.xxx.xxx 255.255.255.0。在Linux下则只需要吧Server的配置文件更换为Client的配置文件即可  </p>
+<p>Client端：在Win下就安装压缩包中的OpenGUI，然后拷贝在Server上制作好的根证书、客户端证书和客户端私钥到Client上，并在client.ovpn中配置好路径，之后直接启动连接即可。连接成功后，便可以访问xxx.xxx.xxx.xxx 255.255.255.0。<br>在Linux下则只需要吧Server的配置文件更换为Client的配置文件即可  </p>
 <ul>
 <li>Client to Client模式下：<br>要求：在该模式下则要求各个Client可以路由到Server  </li>
 </ul>

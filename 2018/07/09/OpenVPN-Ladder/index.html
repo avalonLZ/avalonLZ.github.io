@@ -4,17 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>木子人人人&#39;s 藏经阁</title>
+  <title>利用OpenVPN实现... | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="木子人人人's 藏经阁">
-<meta property="og:url" content="http://avalonlz.github.io/page/6/index.html">
+  <meta name="description" content="此篇文章只为研究OpenVPN，不为其他目的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用OpenVPN实现...">
+<meta property="og:url" content="http://avalonlz.github.io/2018/07/09/OpenVPN-Ladder/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description">
+<meta property="og:description" content="此篇文章只为研究OpenVPN，不为其他目的">
+<meta property="og:updated_time" content="2018-07-09T01:16:01.027Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="木子人人人's 藏经阁">
-<meta name="twitter:description">
+<meta name="twitter:title" content="利用OpenVPN实现...">
+<meta name="twitter:description" content="此篇文章只为研究OpenVPN，不为其他目的">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -170,13 +171,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
-  
-    <article id="post-C-notes-0" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-OpenVPN-Ladder" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/27/C-notes-0/" class="article-date">
-  	<time datetime="2016-01-27T04:38:49.000Z" itemprop="datePublished">2016-01-27</time>
+      <a href="/2018/07/09/OpenVPN-Ladder/" class="article-date">
+  	<time datetime="2018-07-09T00:41:28.000Z" itemprop="datePublished">2018-07-09</time>
 </a>
     </div>
   
@@ -188,40 +187,144 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/27/C-notes-0/">C++notes</a>
+    <h1 class="article-title" itemprop="name">
+      利用OpenVPN实现...
     </h1>
   
 
       </header>
       
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux网络编程/">Linux网络编程</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+		
+		<!--
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+		//-->
+      
+	  </div>
+      
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>C++知识点，不定期更新
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机语言-C/">计算机语言_C++</a></li></ul>
-	</div>
+        <p>此篇文章只为研究OpenVPN，不为其他目的<a id="more"></a><br>早些时候有试过用OpenVPN去实现一些需求，但最终被墙。之前在项目上又用上了OpenVPN，实现的灵感也来自项目。下面具体介绍下如何修改，其实原理很简单。  </p>
+<p>OpenVPN的源码以及如何编译安装，都在之前的文章《OpenVPN的编译安装、配置、使用及注意事项》中详细说过，在这里就直接说需要修改哪些东西了  </p>
+<p>进入OpenVPN源码目录（解压完后进入xxx/openvpn-2.4.6/src/openvpn目录下）找到以下几个文件，并做相应修改（这里为什么这样修改只是提供了一个思路，大家灵活变通）  </p>
+<p>1、进入socket.c文件，找到link_socket_read_tcp,做如下修改:  </p>
+<pre><code>int
+link_socket_read_tcp(struct link_socket *sock,
+                     struct buffer *buf)
+{
+    int len = 0;
+
+    //add myself
+    unsigned int i;
+
+    if (!sock-&gt;stream_buf.residual_fully_formed)
+    {
+#ifdef _WIN32
+        len = socket_finalize(sock-&gt;sd, &amp;sock-&gt;reads, buf, NULL);
+#else
+        struct buffer frag;
+        stream_buf_get_next(&amp;sock-&gt;stream_buf, &amp;frag);
+        len = recv(sock-&gt;sd, BPTR(&amp;frag), BLEN(&amp;frag), MSG_NOSIGNAL);
+
+        //add myself
+        for(i = 0; i &lt;= BLEN(&amp;frag); ++i)
+        {
+             *(BPTR(&amp;frag) + i) ^= 0xff;
+        }
+#endif
+
+        if (!len)
+        {
+            sock-&gt;stream_reset = true;
+        }
+        if (len &lt;= 0)
+        {
+            return buf-&gt;len = len;
+        }
+    }
+
+    if (sock-&gt;stream_buf.residual_fully_formed
+        || stream_buf_added(&amp;sock-&gt;stream_buf, len)) /* packet complete? */
+    {
+        stream_buf_get_final(&amp;sock-&gt;stream_buf, buf);
+        stream_buf_reset(&amp;sock-&gt;stream_buf);
+
+        return buf-&gt;len;
+    }
+    else
+    {
+        return buf-&gt;len = 0; /* no error, but packet is still incomplete */
+    }
+}  
+</code></pre><p>2、进入socket.h文件，找到link_socket_write_tcp_posix,做如下修改:  </p>
+<pre><code>static inline size_t
+link_socket_write_tcp_posix(struct link_socket *sock,
+                            struct buffer *buf,
+                            struct link_socket_actual *to)
+{
+    //add myself
+    unsigned int i;
+    for(i = 0; i &lt;= BLEN(buf); ++i)
+    {
+        *(BPTR(buf) + i) ^= 0xff;
+    }
+
+    return send(sock-&gt;sd, BPTR(buf), BLEN(buf), MSG_NOSIGNAL);
+}  
+</code></pre><p>配置文件的话，只要在Server端增加以下两条即可：</p>
+<pre><code>#重定向网关，因为需要另一边所有的服务器ip，所以直接将OpenVPN作为全局的隧道（可以理解为Shadowsocks中的全局代理）
+push &quot;redirect-gateway def1 bypass-dhcp&quot;  
+
+#推送DNS，使得客户机可以正常解析域名  
+push &quot;dhcp-option DNS 108.61.10.10&quot;
+</code></pre><p>之后在编译安装即可，这样修改后就可以支持tcp的链接了，速度比做代理快。在我机子上试出现推送DNS不生效的情况，没有时间去查具体原因，暂时需要用的时候就修改客户机的/etc/resolv.conf文件，手动切换DNS(不用了记得切换回来)，可以看出用OpenVPN的话DNS请求都是走加密隧道的，目的达成。</p>
 
       
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/27/C-notes-0/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
     </div>
     
   </div>
   
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/06/OpenVPN/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">OpenVPN的编译安装、配置、使用及注意事项</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
 </article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
@@ -239,219 +342,24 @@
   //-->
  
  
-
-  
-    <article id="post-c-notes" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/26/c-notes/" class="article-date">
-  	<time datetime="2016-01-26T07:29:03.000Z" itemprop="datePublished">2016-01-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/26/c-notes/">C语言notes</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>C语言中易遗忘的知识点，不定期更新。
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机语言-C/">计算机语言_C</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/26/c-notes/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-    <article id="post-python-notes" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/10/16/python-notes/" class="article-date">
-  	<time datetime="2015-10-16T04:36:39.000Z" itemprop="datePublished">2015-10-16</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/16/python-notes/">Python notes</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Python2.7笔记
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/计算机语言-Python/">计算机语言_Python</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/10/16/python-notes/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-    <article id="post-GitAbout" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/13/GitAbout/" class="article-date">
-  	<time datetime="2015-09-13T09:13:19.000Z" itemprop="datePublished">2015-09-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/13/GitAbout/">Git相关</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Git相关记录，用到啥就记录啥，可能会略显杂乱
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/百科-Git/">百科_Git</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/13/GitAbout/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-  
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span>
-    </nav>
+  <section id="comments">
+<!--高速版，加载速度快，使用前需测试页面的兼容性-->
+<div id="SOHUCS" sid="利用OpenVPN实现..."></div>
+<script>
+  (function(){
+    var appid = 'cyto4sUr6',
+    conf = '5531a21399d22997758da7915e34b8fe';
+    var doc = document,
+    s = doc.createElement('script'),
+    h = doc.getElementsByTagName('head')[0] || doc.head || doc.documentElement;
+    s.type = 'text/javascript';
+    s.charset = 'utf-8';
+    s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&appid=' + appid;
+    h.insertBefore(s,h.firstChild);
+    window.SCS_NO_IFRAME = true;
+  })()
+</script>
+  </section>
   
 </div>
       <!--
@@ -503,8 +411,8 @@
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

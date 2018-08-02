@@ -4,20 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>TCP_Assistant | 木子人人人&#39;s 藏经阁</title>
+  <title>单核多线程自旋锁死锁 | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="用QT写的TCP_Assistant，一开始架构挺清晰的，但感觉写着写着好像写乱了T T（设计文档还是要做的…）">
+  <meta name="description" content="最近接手的QOS坑比较多，今天填了个死机的大坑，赶快写篇相关的文章，记录下">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TCP_Assistant">
-<meta property="og:url" content="http://avalonlz.github.io/2017/05/04/TCP-Assistant/index.html">
+<meta property="og:title" content="单核多线程自旋锁死锁">
+<meta property="og:url" content="http://avalonlz.github.io/2018/08/02/death-clock/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="用QT写的TCP_Assistant，一开始架构挺清晰的，但感觉写着写着好像写乱了T T（设计文档还是要做的…）">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/TCP_AssistantQQ%E6%88%AA%E5%9B%BE20170517224031.png">
-<meta property="og:updated_time" content="2017-12-29T07:55:57.806Z">
+<meta property="og:description" content="最近接手的QOS坑比较多，今天填了个死机的大坑，赶快写篇相关的文章，记录下">
+<meta property="og:updated_time" content="2018-08-02T16:01:08.136Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TCP_Assistant">
-<meta name="twitter:description" content="用QT写的TCP_Assistant，一开始架构挺清晰的，但感觉写着写着好像写乱了T T（设计文档还是要做的…）">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/TCP_AssistantQQ%E6%88%AA%E5%9B%BE20170517224031.png">
+<meta name="twitter:title" content="单核多线程自旋锁死锁">
+<meta name="twitter:description" content="最近接手的QOS坑比较多，今天填了个死机的大坑，赶快写篇相关的文章，记录下">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -173,11 +171,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-TCP-Assistant" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-death-clock" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/05/04/TCP-Assistant/" class="article-date">
-  	<time datetime="2017-05-04T15:11:14.000Z" itemprop="datePublished">2017-05-04</time>
+      <a href="/2018/08/02/death-clock/" class="article-date">
+  	<time datetime="2018-08-02T15:54:13.000Z" itemprop="datePublished">2018-08-02</time>
 </a>
     </div>
   
@@ -190,7 +188,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      TCP_Assistant
+      单核多线程自旋锁死锁
     </h1>
   
 
@@ -199,7 +197,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/应用软件-Qt/">应用软件_Qt</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux网络编程/">Linux网络编程</a></li></ul>
 	</div>
 
         
@@ -215,8 +213,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>用QT写的TCP_Assistant，一开始架构挺清晰的，但感觉写着写着好像写乱了T T（设计文档还是要做的…）<a id="more"></a><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/TCP_AssistantQQ%E6%88%AA%E5%9B%BE20170517224031.png" alt=""></p>
-<p>项目地址：<br><a href="https://github.com/avalonLZ/Qt_TCPAssistant" target="_blank" rel="external">https://github.com/avalonLZ/Qt_TCPAssistant</a></p>
+        <p>最近接手的QOS坑比较多，今天填了个死机的大坑，赶快写篇相关的文章，记录下<a id="more"></a></p>
+<p>首先该设备是多核机（但是做了核隔离，我接手的QOS模块的模型是单核多线程）。<br>导致死锁的线程即锁模型如下图（当初设计思想应该是想追求高性能，所以大量使用了自旋锁，谁知道最后偷鸡不成蚀把米）：  </p>
 
       
     </div>
@@ -226,18 +224,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/05/29/Notes-Tinyhttpd/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          Tinyhttpd（C语言实现的Http1.0 Server）笔记
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/04/06/SortCaculate/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">排序算法</div>
+    <a href="/2018/07/21/Linux-QOS/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">流控</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -283,7 +272,7 @@
  
   <section id="comments">
 <!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="TCP_Assistant"></div>
+<div id="SOHUCS" sid="单核多线程自旋锁死锁"></div>
 <script>
   (function(){
     var appid = 'cyto4sUr6',

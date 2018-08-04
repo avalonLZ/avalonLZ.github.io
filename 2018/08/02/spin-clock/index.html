@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>单核多线程自旋锁至CPU假死（死锁） | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近接手的QOS模块xx比较多，今天填了个CPU假死的xx（其实本质还是违背了spin的设计原则），赶快写篇相关的文章，记录下。先说下结论吧：在各种锁中，只有自旋锁处于busy-wait状态时，自旋着的线程/进程将获得大量时间片，占用大量cpu资源，从而引发该CPU假死状态（理论场景中其实还有可能获得锁（上锁的线程以龟速处理完逻辑，释放锁），所以在理论场景中，不能算是死锁（此时死锁条件=CPU假死">
+  <meta name="description" content="最近接手的QOS模块xx比较多，今天填了个CPU假死的xx（其实本质还是违背了spin_lock的设计原则），赶快写篇相关的文章，记录下。先说下结论吧：在各种锁中，只有自旋锁处于busy-wait状态时，自旋着的线程/进程将获得大量时间片，占用大量cpu资源，从而引发该CPU假死状态（理论场景中其实还有可能获得锁（上锁的线程以龟速处理完逻辑，释放锁），所以在理论场景中，不能算是死锁（此时死锁条件=">
 <meta property="og:type" content="article">
 <meta property="og:title" content="单核多线程自旋锁至CPU假死（死锁）">
 <meta property="og:url" content="http://avalonlz.github.io/2018/08/02/spin-clock/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="最近接手的QOS模块xx比较多，今天填了个CPU假死的xx（其实本质还是违背了spin的设计原则），赶快写篇相关的文章，记录下。先说下结论吧：在各种锁中，只有自旋锁处于busy-wait状态时，自旋着的线程/进程将获得大量时间片，占用大量cpu资源，从而引发该CPU假死状态（理论场景中其实还有可能获得锁（上锁的线程以龟速处理完逻辑，释放锁），所以在理论场景中，不能算是死锁（此时死锁条件=CPU假死">
+<meta property="og:description" content="最近接手的QOS模块xx比较多，今天填了个CPU假死的xx（其实本质还是违背了spin_lock的设计原则），赶快写篇相关的文章，记录下。先说下结论吧：在各种锁中，只有自旋锁处于busy-wait状态时，自旋着的线程/进程将获得大量时间片，占用大量cpu资源，从而引发该CPU假死状态（理论场景中其实还有可能获得锁（上锁的线程以龟速处理完逻辑，释放锁），所以在理论场景中，不能算是死锁（此时死锁条件=">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Spin_error_thread_mode.jpg">
-<meta property="og:updated_time" content="2018-08-04T03:49:27.582Z">
+<meta property="og:updated_time" content="2018-08-04T03:50:56.115Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="单核多线程自旋锁至CPU假死（死锁）">
-<meta name="twitter:description" content="最近接手的QOS模块xx比较多，今天填了个CPU假死的xx（其实本质还是违背了spin的设计原则），赶快写篇相关的文章，记录下。先说下结论吧：在各种锁中，只有自旋锁处于busy-wait状态时，自旋着的线程/进程将获得大量时间片，占用大量cpu资源，从而引发该CPU假死状态（理论场景中其实还有可能获得锁（上锁的线程以龟速处理完逻辑，释放锁），所以在理论场景中，不能算是死锁（此时死锁条件=CPU假死">
+<meta name="twitter:description" content="最近接手的QOS模块xx比较多，今天填了个CPU假死的xx（其实本质还是违背了spin_lock的设计原则），赶快写篇相关的文章，记录下。先说下结论吧：在各种锁中，只有自旋锁处于busy-wait状态时，自旋着的线程/进程将获得大量时间片，占用大量cpu资源，从而引发该CPU假死状态（理论场景中其实还有可能获得锁（上锁的线程以龟速处理完逻辑，释放锁），所以在理论场景中，不能算是死锁（此时死锁条件=">
 <meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Spin_error_thread_mode.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
@@ -215,7 +215,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近接手的QOS模块xx比较多，今天填了个CPU假死的xx（其实本质还是违背了spin的设计原则），赶快写篇相关的文章，记录下。先说下结论吧：在各种锁中，只有自旋锁处于busy-wait状态时，自旋着的线程/进程将获得大量时间片，占用大量cpu资源，从而引发该CPU假死状态（理论场景中其实还有可能获得锁（上锁的线程以龟速处理完逻辑，释放锁），所以在理论场景中，不能算是死锁（此时死锁条件=CPU假死+获得spin锁的线程需要处理实时的大流量任务））<a id="more"></a></p>
+        <p>最近接手的QOS模块xx比较多，今天填了个CPU假死的xx（其实本质还是违背了spin_lock的设计原则），赶快写篇相关的文章，记录下。先说下结论吧：在各种锁中，只有自旋锁处于busy-wait状态时，自旋着的线程/进程将获得大量时间片，占用大量cpu资源，从而引发该CPU假死状态（理论场景中其实还有可能获得锁（上锁的线程以龟速处理完逻辑，释放锁），所以在理论场景中，不能算是死锁（此时死锁条件=CPU假死+获得spin锁的线程需要处理实时的大流量任务））<a id="more"></a></p>
 <h3 id="需要了解的知识"><a href="#需要了解的知识" class="headerlink" title="需要了解的知识"></a>需要了解的知识</h3><p>要解释CPU假死现象，首先需要知道以下知识点：<br>使用默认参数创建的线程，系统是根据优先级来分配时间片的（而不是简单均分的），优先级高的分配的时间片越多，并且系统自身存在优先级的动态补偿特性（也就是说若线程A和线程B的用户指定的优先级相同（用户只能指定静态优先级），但是操作系统中的调度系统自身会会算出基于静态优先级的动态优先级，并且以该优先级来分配各自的时间片，这叫做优先级的动态补偿）（结合优先级的动态补偿，就可以解释自旋线程占用大量时间片的原因了）</p>
 <h3 id="具体运行模型"><a href="#具体运行模型" class="headerlink" title="具体运行模型"></a>具体运行模型</h3><p>首先该设备是多核机（但是做了核隔离，接手的QOS模块的模型是单核多线程）。<br>导致CPU假死并升级为死锁的线程模型如下图（当初设计思想应该是想追求高性能，所以大量使用了自旋锁，谁知道最后偷鸡不成蚀把米）：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Spin_error_thread_mode.jpg" alt="">  </p>
 <h3 id="CPU假死及升级为死锁的原因分析"><a href="#CPU假死及升级为死锁的原因分析" class="headerlink" title="CPU假死及升级为死锁的原因分析"></a>CPU假死及升级为死锁的原因分析</h3><p>首先（CPU假死）：<br>在某一时刻，线程1获得了spin锁A，接着处理它自身的任务，当线程1的时间片用完，此时该CPU被切换到了线程2。注意，此时线程1的任务还未处理完，spin锁A也还未被释放。在线程2中，线程2尝试获取spin锁A，显然它不能拿到锁A，于是它就进入了busy-wait状态，在该状态下，系统调度程序将其动态优先级调度到了最高（猜测，暂无法证实），使得线程2接下来获得了大部分的时间片（CPU大部分时间用于线程2的自旋），导致线程1只能分配到很少的时间片，这样一来，CPU很大一部分时间就进入了自旋空跑状态（CPU假死），线程1的处理时间变得更长<br>其次（升级为死锁）：<br>若线程1处理的是需要长时间处理的任务（实时的大流量或大数据量的任务），线程1将无法在少量的时间片内处理完这些任务，无法解锁，从而引发死锁  </p>

@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSequence4.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSequence5.jpg">
 <meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSequence6.jpg">
-<meta property="og:updated_time" content="2018-06-06T08:14:44.191Z">
+<meta property="og:updated_time" content="2018-09-06T15:50:20.642Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTPS(TLS/SSL)与加/解密">
 <meta name="twitter:description" content="最近由于工作需要，学习了下HTTPS（SSL/TLS）及加解密相关的知识，在此记录下。就最近的接触来看，挺多应用（加/解密）算法的实现都是基于OpenSSL来实现的，像下面要说的HTTPS，一般就可能用Nginx + OpenSSL来实现">
@@ -225,14 +225,14 @@
       
         <p>最近由于工作需要，学习了下HTTPS（SSL/TLS）及加解密相关的知识，在此记录下。就最近的接触来看，挺多应用（加/解密）算法的实现都是基于OpenSSL来实现的，像下面要说的HTTPS，一般就可能用Nginx + OpenSSL来实现<a id="more"></a>  </p>
 <h3 id="加解密相关算法总框图"><a href="#加解密相关算法总框图" class="headerlink" title="加解密相关算法总框图"></a>加解密相关算法总框图</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_AllStruct1.jpg" alt="">  </p>
-<h3 id="SSL-TLS协议栈"><a href="#SSL-TLS协议栈" class="headerlink" title="SSL/TLS协议栈"></a>SSL/TLS协议栈</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_SSL_TLS.jpg" alt="">  </p>
+<h3 id="SSL-TLS协议栈"><a href="#SSL-TLS协议栈" class="headerlink" title="SSL/TLS协议栈"></a>SSL/TLS协议栈</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_SSL_TLS.jpg" alt=""><br>注：SSL位于表示层，会对应用层的HTTP所有部分进行加密</p>
 <h3 id="HTTPS的Sequence"><a href="#HTTPS的Sequence" class="headerlink" title="HTTPS的Sequence"></a>HTTPS的Sequence</h3><p>Simple版：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSimpleSequence.jpg" alt="">    </p>
 <p>Normal版：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSequence1.jpg" alt="">  </p>
 <p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSequence2.jpg" alt="">  </p>
 <p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSequence3.jpg" alt="">  </p>
 <p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSequence4.jpg" alt="">  </p>
 <p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSequence5.jpg" alt="">  </p>
-<p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSequence6.jpg" alt=""></p>
+<p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Crypt_HttpsSequence6.jpg" alt="">  </p>
 
       
     </div>

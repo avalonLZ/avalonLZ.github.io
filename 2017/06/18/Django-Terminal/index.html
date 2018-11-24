@@ -12,15 +12,15 @@
 <meta property="og:url" content="http://avalonlz.github.io/2017/06/18/Django-Terminal/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="之前自己用Python写了一个Terminal服务器的后台入库程序，但是由于协议解析部分涉及公司内的私有协议所以不便放出，现在继续这一工程，进一步学习Django、Bootstrap和JS。简单实现下手上定位终端的服务器Web部分(基本上就是简单的Web数据显示)，此文章记录了此次实现的全过程">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminallogin.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminalindex.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminaladmin.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Django_TerminalTerminal_Django_MySQL.png">
-<meta property="og:updated_time" content="2017-12-29T07:48:38.520Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Django_Terminallogin.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Django_Terminalindex.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Django_Terminaladmin.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Django_TerminalTerminal_Django_MySQL.png">
+<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自写Terminal服务器Web部分">
 <meta name="twitter:description" content="之前自己用Python写了一个Terminal服务器的后台入库程序，但是由于协议解析部分涉及公司内的私有协议所以不便放出，现在继续这一工程，进一步学习Django、Bootstrap和JS。简单实现下手上定位终端的服务器Web部分(基本上就是简单的Web数据显示)，此文章记录了此次实现的全过程">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminallogin.png">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Django_Terminallogin.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -38,7 +38,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -124,7 +124,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -142,7 +142,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -219,9 +219,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>之前自己用Python写了一个Terminal服务器的后台入库程序，但是由于协议解析部分涉及公司内的私有协议所以不便放出，现在继续这一工程，进一步学习Django、Bootstrap和JS。简单实现下手上定位终端的服务器Web部分(基本上就是简单的Web数据显示)，此文章记录了此次实现的全过程<a id="more"></a>  </p>
-<p>目前实现效果如下(咯简陋的点,前端只学了一丢丢)：<br>Login：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminallogin.png" alt=""><br>Index：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminalindex.png" alt=""><br>Admin：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Django_Terminaladmin.png" alt="">  </p>
+<p>目前实现效果如下(咯简陋的点,前端只学了一丢丢)：<br>Login：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Django_Terminallogin.png" alt=""><br>Index：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Django_Terminalindex.png" alt=""><br>Admin：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Django_Terminaladmin.png" alt="">  </p>
 <h1 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a><strong>项目地址</strong></h1><p><a href="https://github.com/avalonLZ/Django_Terminal" target="_blank" rel="external">https://github.com/avalonLZ/Django_Terminal</a>   </p>
-<h1 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a><strong>数据库设计</strong></h1><p>对于这类Web应用，数据库的设计在写后台单独的入库程序的时候大部分就应该要设计好了，下图为我的数据库设计框图（哈哈，也比较简单，就用了外键的形式连接各表）：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Django_TerminalTerminal_Django_MySQL.png" alt="">  </p>
+<h1 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a><strong>数据库设计</strong></h1><p>对于这类Web应用，数据库的设计在写后台单独的入库程序的时候大部分就应该要设计好了，下图为我的数据库设计框图（哈哈，也比较简单，就用了外键的形式连接各表）：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Django_TerminalTerminal_Django_MySQL.png" alt="">  </p>
 
       
     </div>

@@ -12,12 +12,12 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/01/01/Linux-IPC/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="Linux下IPC(Posix)相关知识点，就把这个作为18年第一更吧。IPC的设计理念在很多地方都用的上(软件上几个模块需要数据交互，该如何选择交互方案，该如何去实现交互)，所以在系统的过一遍吧，顺便在做个导图，加深印象">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_IPC.png">
-<meta property="og:updated_time" content="2018-06-30T15:23:17.855Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_IPC.png">
+<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LinuxIPC及进程间的锁机制">
 <meta name="twitter:description" content="Linux下IPC(Posix)相关知识点，就把这个作为18年第一更吧。IPC的设计理念在很多地方都用的上(软件上几个模块需要数据交互，该如何选择交互方案，该如何去实现交互)，所以在系统的过一遍吧，顺便在做个导图，加深印象">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_IPC.png">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_IPC.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -35,7 +35,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -121,7 +121,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -139,7 +139,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -216,7 +216,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Linux下IPC(Posix)相关知识点，就把这个作为18年第一更吧。IPC的设计理念在很多地方都用的上(软件上几个模块需要数据交互，该如何选择交互方案，该如何去实现交互)，所以在系统的过一遍吧，顺便在做个导图，加深印象<a id="more"></a>    </p>
-<h1 id="IPC-MindMap"><a href="#IPC-MindMap" class="headerlink" title="IPC MindMap"></a>IPC MindMap</h1><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_IPC.png" alt="">  </p>
+<h1 id="IPC-MindMap"><a href="#IPC-MindMap" class="headerlink" title="IPC MindMap"></a>IPC MindMap</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_IPC.png" alt="">  </p>
 <h1 id="进程间的锁机制"><a href="#进程间的锁机制" class="headerlink" title="进程间的锁机制"></a>进程间的锁机制</h1><ul>
 <li>共享内存的实现：<br>进程可以将同一段共享内存连接到它们自己的地址空间中，所有进程都可以访问共享内存中的地址，就好像它们是由用C语言函数malloc分配的内存一样。而如果某个进程向共享内存写入数据，所做的改动将立即影响到可以访问同一段共享内存的任何其他进程  </li>
 </ul>

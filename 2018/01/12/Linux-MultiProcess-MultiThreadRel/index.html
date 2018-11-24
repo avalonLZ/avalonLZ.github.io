@@ -12,14 +12,14 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/01/12/Linux-MultiProcess-MultiThreadRel/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="Linux多进程与多线程之间的关系（包含用户态进程、用户态线程、轻量级进程以及内核线程）">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_Thread&Process.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_ThreadState.jpg">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_ThreadState&ProcessState.png">
-<meta property="og:updated_time" content="2018-01-22T03:42:46.565Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Thread&Process.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_ThreadState.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_ThreadState&ProcessState.png">
+<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多进程与多线程之间的关系">
 <meta name="twitter:description" content="Linux多进程与多线程之间的关系（包含用户态进程、用户态线程、轻量级进程以及内核线程）">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_Thread&Process.png">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Thread&Process.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -37,7 +37,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -123,7 +123,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -141,7 +141,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -218,7 +218,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Linux多进程与多线程之间的关系（包含用户态进程、用户态线程、轻量级进程以及内核线程）<a id="more"></a>  </p>
-<h3 id="用户态进程、用户态线程、轻量级进程以及内核线程之间的关系"><a href="#用户态进程、用户态线程、轻量级进程以及内核线程之间的关系" class="headerlink" title="用户态进程、用户态线程、轻量级进程以及内核线程之间的关系"></a>用户态进程、用户态线程、轻量级进程以及内核线程之间的关系</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_Thread&amp;Process.png" alt="">  </p>
+<h3 id="用户态进程、用户态线程、轻量级进程以及内核线程之间的关系"><a href="#用户态进程、用户态线程、轻量级进程以及内核线程之间的关系" class="headerlink" title="用户态进程、用户态线程、轻量级进程以及内核线程之间的关系"></a>用户态进程、用户态线程、轻量级进程以及内核线程之间的关系</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Thread&amp;Process.png" alt="">  </p>
 <p>调度：<br>在Linux中，只存在对进程进行调度这一种说法，所以对内核线程的调度Linux其实把它视作了进程去操作。对用户态线程的调度其实就变成了对轻量级进程的调度，对用户态进程的调度就是对一般进程的调度了。<br>总结下上面说的调度结果<br>若存在A、B两进程，且A进程中跑了a,b两线程，B进程中跑了c,d两线程。则可以对A、B两进程使用SCHED_OTHERSCHED_FIFO分时调度，对A中的a,b两线程使用实时调度，对B中的c,d两线程使用SCHED_RR实时调度</p>
 <h3 id="Linux下进程的6种状态"><a href="#Linux下进程的6种状态" class="headerlink" title="Linux下进程的6种状态"></a>Linux下进程的6种状态</h3><p>R(Running or Runnable):处于运行或能（可）运行状态   </p>
 <p>S(Interruptible Sleep):处于可中断的睡眠状态（等待某事件而被挂起）  </p>
@@ -227,8 +227,8 @@
 <p>Z(Dead_Exit_Zombie):处于僵死状态，  </p>
 <p>X(Dead_Exit_Dead):处于退出状态（一般极其短暂，可以忽略）  </p>
 <h3 id="Linux下线程的4种状态"><a href="#Linux下线程的4种状态" class="headerlink" title="Linux下线程的4种状态"></a>Linux下线程的4种状态</h3><p>就绪态、运行态、阻塞态和终止   </p>
-<p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_ThreadState.jpg" alt="">   </p>
-<h3 id="进程6种状态与线程4种状态的对应关系-自身理解"><a href="#进程6种状态与线程4种状态的对应关系-自身理解" class="headerlink" title="进程6种状态与线程4种状态的对应关系(自身理解)"></a>进程6种状态与线程4种状态的对应关系(自身理解)</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_ThreadState&amp;ProcessState.png" alt="">  </p>
+<p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_ThreadState.jpg" alt="">   </p>
+<h3 id="进程6种状态与线程4种状态的对应关系-自身理解"><a href="#进程6种状态与线程4种状态的对应关系-自身理解" class="headerlink" title="进程6种状态与线程4种状态的对应关系(自身理解)"></a>进程6种状态与线程4种状态的对应关系(自身理解)</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_ThreadState&amp;ProcessState.png" alt="">  </p>
 
       
     </div>

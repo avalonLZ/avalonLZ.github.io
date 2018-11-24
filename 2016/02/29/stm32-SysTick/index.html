@@ -12,13 +12,13 @@
 <meta property="og:url" content="http://avalonlz.github.io/2016/02/29/stm32-SysTick/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="由stm32F103zet6嘀嗒定时器引申出的系统中断和外设中断问题。">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32ccc.jpg">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160328171647.png">
-<meta property="og:updated_time" content="2017-06-18T14:46:55.896Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32ccc.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160328171647.png">
+<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stm32-SysTick嘀嗒定时器">
 <meta name="twitter:description" content="由stm32F103zet6嘀嗒定时器引申出的系统中断和外设中断问题。">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32ccc.jpg">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32ccc.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -36,7 +36,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -122,7 +122,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -140,7 +140,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -217,8 +217,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>由stm32F103zet6嘀嗒定时器引申出的系统中断和外设中断问题。<a id="more"></a>  </p>
-<h1 id="嘀嗒定时器（SysTick）"><a href="#嘀嗒定时器（SysTick）" class="headerlink" title="嘀嗒定时器（SysTick）"></a><strong>嘀嗒定时器（SysTick）</strong></h1><p>在外部中断里使用滴答定时器延时（理论上中断里不可以延时，此处只做研究嘀嗒的工作方式用）,直接调用void SysTick_Init(void)函数后在中断中使用延时发现不起作用。（中断配置为只有抢占优先级模式，并且外部中断优先级设为1）<br>后找到SysTick_Init、SysTick_Config、NVIC_SetPriority函数，最后在NVIC_SetPriority函数中发现写了SCB系统控制寄存器组中SHP系统操作优先级寄存器的第11位（SHP[11]），默认SysTick初始化后是7。之后将该位写0（SCB-&gt;SHP[11]=0;），即把嘀嗒的优先级调到了0（最高）。开启后可行。<br>通过查看NVIC_SetPriority函数发现，配置32的中断优先级有两个寄存器，分别是配置配置系统中断和外设中断的，这二者的中断关系通过查看M3的权威手册<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32ccc.jpg" alt=""><br>发现是同级的关系，SO在有理论依据的基础上就可以大胆配置了。  </p>
-<p><font color="red"><strong>外部中断的IO口映像图：</strong><font><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160328171647.png" alt="">  </font></font></p>
+<h1 id="嘀嗒定时器（SysTick）"><a href="#嘀嗒定时器（SysTick）" class="headerlink" title="嘀嗒定时器（SysTick）"></a><strong>嘀嗒定时器（SysTick）</strong></h1><p>在外部中断里使用滴答定时器延时（理论上中断里不可以延时，此处只做研究嘀嗒的工作方式用）,直接调用void SysTick_Init(void)函数后在中断中使用延时发现不起作用。（中断配置为只有抢占优先级模式，并且外部中断优先级设为1）<br>后找到SysTick_Init、SysTick_Config、NVIC_SetPriority函数，最后在NVIC_SetPriority函数中发现写了SCB系统控制寄存器组中SHP系统操作优先级寄存器的第11位（SHP[11]），默认SysTick初始化后是7。之后将该位写0（SCB-&gt;SHP[11]=0;），即把嘀嗒的优先级调到了0（最高）。开启后可行。<br>通过查看NVIC_SetPriority函数发现，配置32的中断优先级有两个寄存器，分别是配置配置系统中断和外设中断的，这二者的中断关系通过查看M3的权威手册<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32ccc.jpg" alt=""><br>发现是同级的关系，SO在有理论依据的基础上就可以大胆配置了。  </p>
+<p><font color="red"><strong>外部中断的IO口映像图：</strong><font><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160328171647.png" alt="">  </font></font></p>
 
       
     </div>

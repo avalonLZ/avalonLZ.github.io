@@ -12,13 +12,13 @@
 <meta property="og:url" content="http://avalonlz.github.io/2016/02/29/stm32-USART_DMA/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png">
-<meta property="og:updated_time" content="2017-06-18T14:47:00.590Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png">
+<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stm32-USART+DMA配置">
 <meta name="twitter:description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -36,7 +36,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -122,7 +122,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -140,7 +140,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -217,7 +217,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。<a id="more"></a>  </p>
-<h1 id="DMA通道"><a href="#DMA通道" class="headerlink" title="DMA通道"></a><strong>DMA通道</strong></h1><p>各功能可以请求的DMA通道<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png" alt="">    </p>
+<h1 id="DMA通道"><a href="#DMA通道" class="headerlink" title="DMA通道"></a><strong>DMA通道</strong></h1><p>各功能可以请求的DMA通道<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png" alt="">    </p>
 <h1 id="USART-DMA配置"><a href="#USART-DMA配置" class="headerlink" title="USART+DMA配置"></a><strong>USART+DMA配置</strong></h1><p>main函数，采用寄存器方式配置DMA：</p>
 <pre><code>int main(void)
 {

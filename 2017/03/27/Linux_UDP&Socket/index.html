@@ -12,13 +12,13 @@
 <meta property="og:url" content="http://avalonlz.github.io/2017/03/27/Linux_UDP&Socket/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="本篇文章主要介绍下UDP广播、组播以及简单Socket的实现（顺带在说下CGI）">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Socket%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.jpg">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/socket%E6%B5%81%E7%A8%8B.jpg">
-<meta property="og:updated_time" content="2018-01-22T03:35:55.706Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Socket%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/socket%E6%B5%81%E7%A8%8B.jpg">
+<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux网络编程之UDP广播、组播与简单Socket">
 <meta name="twitter:description" content="本篇文章主要介绍下UDP广播、组播以及简单Socket的实现（顺带在说下CGI）">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Socket%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.jpg">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Socket%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -36,7 +36,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -122,7 +122,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -140,7 +140,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -302,7 +302,7 @@ def receiver():
 if __name__ == &quot;__main__&quot;:
     receiver()  
 </code></pre><h1 id="CGI程序："><a href="#CGI程序：" class="headerlink" title="CGI程序："></a>CGI程序：</h1><p>CGI程序一般指运行于HTTP服务器上的后台交互程序<br>Web后台架构可分为：<br>1、服务端（HTTP协议解析）<br>2、中间件（WSGI才有）<br>3、应用端（CGI/WSGI程序）<br>一个HTTP请求到达一台服务器的80端口后，需要有一个程序来响应该请求。所谓HTTP Response，其实只是运行一个程序，它的输入是HTTP Request Header,它的返回是HTTP Response。HTTP Request Header传递方式就分为CGI、WSGI以及其他各种GI的区别<br>如果是CGI，通常来说是一个Web Server（例如Apache、Nginx）接收到请求后，将请求中的HTTP Request Header按照一定规则设置成环境变量，然后启动一个程序，将stdout的输出（其中HTTP Response Header）封装成HTTP Response返回给客户的<br>例如：Django跑在uWSGI、unicorn之类的容器里，那么程序是一个常驻进程，Web Server和Python进程用WSGI协议传递HTTP Request Header信息，然后返回给用户。如果是Django的dev server,它使用Python自带的wsgiref模块实现了一个简单的HTTP Server响应HTTP请求。从以上可以知道服务端Server对利用Apache等软件对HTTP协议解析后还会将其解析的信息加入另一协议中，此协议根据服务器的后台逻辑框架而定（Django用WSGI协议），利用此进行服务端HTTP请求和后台逻辑框架的交互  </p>
-<h1 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h1><p>Socket是应用层与TCP/IP协议族通信的中间软件抽象层。注意，UDP则不具备这一软件抽象层<br>Socket在网络通信中所处的位置：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Socket%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.jpg" alt="">  </p>
+<h1 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h1><p>Socket是应用层与TCP/IP协议族通信的中间软件抽象层。注意，UDP则不具备这一软件抽象层<br>Socket在网络通信中所处的位置：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Socket%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.jpg" alt="">  </p>
 <p>Socket网络编程常用结构体（struct sockaddr, struct in_addr, struct sockaddr_in）定义:  </p>
 <pre><code>struct sockaddr
 {
@@ -467,7 +467,7 @@ int main()
     }
     return 0;
 }  
-</code></pre><p>Client端：<br>1、创建套接字（Socket）<br>2、向服务端发出连接请求（Connect）<br>3、和服务端进行通信（Send/Recv）<br>4、关闭套接字<br>Client与Server流程图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/socket%E6%B5%81%E7%A8%8B.jpg" alt="">  </p>
+</code></pre><p>Client端：<br>1、创建套接字（Socket）<br>2、向服务端发出连接请求（Connect）<br>3、和服务端进行通信（Send/Recv）<br>4、关闭套接字<br>Client与Server流程图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/socket%E6%B5%81%E7%A8%8B.jpg" alt="">  </p>
 <h1 id="Socket编程中的一些坑："><a href="#Socket编程中的一些坑：" class="headerlink" title="Socket编程中的一些坑："></a>Socket编程中的一些坑：</h1>
       
     </div>

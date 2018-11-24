@@ -12,22 +12,22 @@
 <meta property="og:url" content="http://avalonlz.github.io/2016/02/29/stm32-gpio-function-configure/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="stm32F103zet6的总线结构、引脚功能，以及使用各个功能该如何配置GPIO引脚。">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212024.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212040.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212049.png">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212100.png">
-<meta property="og:updated_time" content="2017-06-18T14:46:38.578Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32790C21B830904DE9B5889299A3F2522C.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212024.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212040.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212049.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212100.png">
+<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stm32-总线结构、引脚功能及其配置">
 <meta name="twitter:description" content="stm32F103zet6的总线结构、引脚功能，以及使用各个功能该如何配置GPIO引脚。">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32790C21B830904DE9B5889299A3F2522C.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -45,7 +45,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -131,7 +131,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -149,7 +149,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -226,9 +226,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>stm32F103zet6的总线结构、引脚功能，以及使用各个功能该如何配置GPIO引脚。<a id="more"></a>  </p>
-<h1 id="总线结构"><a href="#总线结构" class="headerlink" title="总线结构"></a><strong>总线结构</strong></h1><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32790C21B830904DE9B5889299A3F2522C.jpg" alt=""><br><strong><font color="red">在配置stm32的事件输出/外部中断/重映射端口复用时，必须开启AFIO时钟。使用管脚的Default(默认)功能并不需要开AFIO时钟，只需要配置相应的功能时钟。</font></strong>     </p>
-<h1 id="引脚定义（功能）"><a href="#引脚定义（功能）" class="headerlink" title="引脚定义（功能）"></a><strong>引脚定义（功能）</strong></h1><p>位于stm32f103zet6 datasheet中<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png" alt="">  </p>
-<h1 id="不同功能的引脚配置"><a href="#不同功能的引脚配置" class="headerlink" title="不同功能的引脚配置"></a><strong>不同功能的引脚配置</strong></h1><p>位于stm32f103zet6参考守则中<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212024.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212040.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212049.png" alt=""><br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212100.png" alt=""></p>
+<h1 id="总线结构"><a href="#总线结构" class="headerlink" title="总线结构"></a><strong>总线结构</strong></h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32790C21B830904DE9B5889299A3F2522C.jpg" alt=""><br><strong><font color="red">在配置stm32的事件输出/外部中断/重映射端口复用时，必须开启AFIO时钟。使用管脚的Default(默认)功能并不需要开AFIO时钟，只需要配置相应的功能时钟。</font></strong>     </p>
+<h1 id="引脚定义（功能）"><a href="#引脚定义（功能）" class="headerlink" title="引脚定义（功能）"></a><strong>引脚定义（功能）</strong></h1><p>位于stm32f103zet6 datasheet中<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120106.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120124.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120139.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120153.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120208.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160322120218.png" alt="">  </p>
+<h1 id="不同功能的引脚配置"><a href="#不同功能的引脚配置" class="headerlink" title="不同功能的引脚配置"></a><strong>不同功能的引脚配置</strong></h1><p>位于stm32f103zet6参考守则中<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212024.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212040.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212049.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160324212100.png" alt=""></p>
 
       
     </div>

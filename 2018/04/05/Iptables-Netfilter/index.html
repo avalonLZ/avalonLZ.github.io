@@ -12,13 +12,13 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/04/05/Iptables-Netfilter/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="iptables/netfilter，WF开发、家用路由开发的重中之重。网络方面之前都是自己瞎鼓捣，没多深入。入职一星期，就俩字“狂补”，这文章就总结下近期对iptables的学习吧">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Iptables_image.jpg">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Iptables_cm.jpg">
-<meta property="og:updated_time" content="2018-05-04T09:56:28.447Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Iptables_image.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Iptables_cm.jpg">
+<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iptables与netfilter">
 <meta name="twitter:description" content="iptables/netfilter，WF开发、家用路由开发的重中之重。网络方面之前都是自己瞎鼓捣，没多深入。入职一星期，就俩字“狂补”，这文章就总结下近期对iptables的学习吧">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Iptables_image.jpg">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Iptables_image.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -36,7 +36,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -122,7 +122,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -140,7 +140,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -217,8 +217,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>iptables/netfilter，WF开发、家用路由开发的重中之重。网络方面之前都是自己瞎鼓捣，没多深入。入职一星期，就俩字“狂补”，这文章就总结下近期对iptables的学习吧<a id="more"></a><br>iptables/netfilter是啥？概念就不多说了，网上一搜一大片，“开胃菜”就不吃了，直接上干货 </p>
-<h3 id="iptables-netfilter的四表五链结构："><a href="#iptables-netfilter的四表五链结构：" class="headerlink" title="iptables/netfilter的四表五链结构："></a>iptables/netfilter的四表五链结构：</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Iptables_image.jpg" alt=""><br>注意：如果想要数据包走非转发路径，则本机必须含有此数据包的目的IP，而非同一网段</p>
-<h3 id="iptables规则相关语句结构："><a href="#iptables规则相关语句结构：" class="headerlink" title="iptables规则相关语句结构："></a>iptables规则相关语句结构：</h3><p>用分块的形式总结，比较直观<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Iptables_cm.jpg" alt="">  </p>
+<h3 id="iptables-netfilter的四表五链结构："><a href="#iptables-netfilter的四表五链结构：" class="headerlink" title="iptables/netfilter的四表五链结构："></a>iptables/netfilter的四表五链结构：</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Iptables_image.jpg" alt=""><br>注意：如果想要数据包走非转发路径，则本机必须含有此数据包的目的IP，而非同一网段</p>
+<h3 id="iptables规则相关语句结构："><a href="#iptables规则相关语句结构：" class="headerlink" title="iptables规则相关语句结构："></a>iptables规则相关语句结构：</h3><p>用分块的形式总结，比较直观<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Iptables_cm.jpg" alt="">  </p>
 <h3 id="iptables常用查看语句："><a href="#iptables常用查看语句：" class="headerlink" title="iptables常用查看语句："></a>iptables常用查看语句：</h3><pre><code>iptables -t filter -L -n -v//显示filter表的详细信息
 iptables -t filter -L --line-numbers//显示filter表的规则编号  
 </code></pre><h3 id="iptables-L-n-v主要字段解释"><a href="#iptables-L-n-v主要字段解释" class="headerlink" title="iptables -L -n -v主要字段解释:"></a>iptables -L -n -v主要字段解释:</h3><p>pkts：由规则或链匹配到的报文个数<br>bytes：由规则或链匹配到的所有报文大小之和</p>

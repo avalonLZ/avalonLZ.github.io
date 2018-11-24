@@ -12,13 +12,13 @@
 <meta property="og:url" content="http://avalonlz.github.io/2016/01/31/two-system/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="Win7系统下安装Fedora/Centos。">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/two%20system70442F4A65504CDF8329268CDDFFD022.jpg">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/two%20system02E5FCFEB6D643FEBD31EBDA146F3696.jpg">
-<meta property="og:updated_time" content="2017-06-18T14:49:04.334Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/two_system70442F4A65504CDF8329268CDDFFD022.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/two_system02E5FCFEB6D643FEBD31EBDA146F3696.jpg">
+<meta property="og:updated_time" content="2018-11-24T04:18:03.724Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Win7下安装Linux双系统">
 <meta name="twitter:description" content="Win7系统下安装Fedora/Centos。">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/two%20system70442F4A65504CDF8329268CDDFFD022.jpg">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/two_system70442F4A65504CDF8329268CDDFFD022.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -36,7 +36,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -122,7 +122,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -140,7 +140,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -217,7 +217,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Win7系统下安装Fedora/Centos。<a id="more"></a>  </p>
-<p><strong> 一、</strong>用磁碟通将Linux镜像写入U盘，使用USB-HDD+即可：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/two%20system70442F4A65504CDF8329268CDDFFD022.jpg" alt="">  </p>
+<p><strong> 一、</strong>用磁碟通将Linux镜像写入U盘，使用USB-HDD+即可：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/two_system70442F4A65504CDF8329268CDDFFD022.jpg" alt="">  </p>
 <p><strong> 二、</strong>U盘引导启动，按e进入路径编辑界面，修改：hd:/dev/sdc4(U盘路径，根据硬盘数和gurb中cat命令的自动补全获得hd号和mosed号)quiet(redhat类的Linux的都是在:后进行修改，修改到or前为止)  </p>
 <p><strong> 三、</strong>之后会引导入安装界面：  </p>
 <ul>
@@ -225,7 +225,7 @@
 <li>软件选择可以选择需要安装的桌面，常见有GNOME和KDE。  </li>
 <li>分区使用标准分区，分/swap（2G）和/（剩余空间）两个区，并且选择无需添加引导。（一定要记下/分区获得的sdb9此类设备名称，稍后配置引导要用）  </li>
 </ul>
-<p><strong> 四、</strong><br>进入windows使用easyBCD添加GRUB2启动项<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/two%20system02E5FCFEB6D643FEBD31EBDA146F3696.jpg" alt=""><br>重启进入GRUB2中输入命令cat（hd1（第二块硬盘），按次tab找到/分区所在位置并记入。<br>再输入：</p>
+<p><strong> 四、</strong><br>进入windows使用easyBCD添加GRUB2启动项<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/two_system02E5FCFEB6D643FEBD31EBDA146F3696.jpg" alt=""><br>重启进入GRUB2中输入命令cat（hd1（第二块硬盘），按次tab找到/分区所在位置并记入。<br>再输入：</p>
 <ul>
 <li>kernel (hd1,8)  （hd1,8 cat命令查出的路径）/boot/vm …….按tab查找…… root=/dev/sdb9 (boot所在处因为此处未单独创建/boot分区所以使用/分区的路径) quiet vga=791//引导启动Linux内核</li>
 <li>initrd (hd1,8)/boot/ini…..按tab……. .img  //引导启动图像界面</li>

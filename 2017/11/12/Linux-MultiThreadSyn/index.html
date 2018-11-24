@@ -12,12 +12,12 @@
 <meta property="og:url" content="http://avalonlz.github.io/2017/11/12/Linux-MultiThreadSyn/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="Linux多线程(用户态线程)编程之线程同步相关知识点">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_MultiThread.png">
-<meta property="og:updated_time" content="2018-02-25T09:29:09.224Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_MultiThread.png">
+<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程之线程同步">
 <meta name="twitter:description" content="Linux多线程(用户态线程)编程之线程同步相关知识点">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_MultiThread.png">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_MultiThread.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -35,7 +35,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -121,7 +121,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -139,7 +139,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -219,7 +219,7 @@
 <h3 id="相关名词解析"><a href="#相关名词解析" class="headerlink" title="相关名词解析"></a>相关名词解析</h3><p>同步：<br>同步就是指在一定时间内只允许一个线程访问某一资源。在该时间内其他线程不可访问该资源（实现方式：mutex互斥锁、condition variable条件变量、spin lock自旋锁（read/write lock读写锁是特殊自旋锁）、sem信号量等）    </p>
 <p>原子操作:<br>某段代码在执行时不会被其他线程影响，则构成了一个原子操作  </p>
 <p>临界区（非内核对象时，只在Win下多线程中存在，此处只提及不做过多说明）：<br>临界区是一种轻量级机制，在某一时间内只允许一个线程执行某个给定代码段（在RTOS下表示禁止总中断和开启总中断之间的代码段）。临界区只能用于对同一进程内的线程进行同步  </p>
-<h3 id="多线程同步实现方式（mutex、cond、sem、rw重要）"><a href="#多线程同步实现方式（mutex、cond、sem、rw重要）" class="headerlink" title="多线程同步实现方式（mutex、cond、sem、rw重要）"></a>多线程同步实现方式（mutex、cond、sem、rw重要）</h3><p><img src="http://7xs3i8.com1.z0.glb.clouddn.com/Linux_MultiThread.png" alt="">  </p>
+<h3 id="多线程同步实现方式（mutex、cond、sem、rw重要）"><a href="#多线程同步实现方式（mutex、cond、sem、rw重要）" class="headerlink" title="多线程同步实现方式（mutex、cond、sem、rw重要）"></a>多线程同步实现方式（mutex、cond、sem、rw重要）</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_MultiThread.png" alt="">  </p>
 <ul>
 <li>互斥锁的实现<br>主要实现函数：  </li>
 </ul>

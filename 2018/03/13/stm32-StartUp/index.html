@@ -12,12 +12,12 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/03/13/stm32-StartUp/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="马上要暂时告别MCU的开发了（进入Linux），趁着闲时，就整理着大学以来在MCU开发过程中的种种笔记，看到启动这块，回想下好像有些遗忘，就随手记录下吧，东西不多，但也写下，防止遗忘">
-<meta property="og:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png">
-<meta property="og:updated_time" content="2018-03-19T09:02:07.441Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png">
+<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stm32-启动文件">
 <meta name="twitter:description" content="马上要暂时告别MCU的开发了（进入Linux），趁着闲时，就整理着大学以来在MCU开发过程中的种种笔记，看到启动这块，回想下好像有些遗忘，就随手记录下吧，东西不多，但也写下，防止遗忘">
-<meta name="twitter:image" content="http://7xs3i8.com1.z0.glb.clouddn.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -35,7 +35,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+			<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 		</a>
 
@@ -121,7 +121,7 @@
 				
 				<section class="switch-part switch-part3">
 				
-					<div id="js-aboutme">起于底层，高于底层。文章若有出入，还望大家指出，交流</div>
+					<div id="js-aboutme">文章若有出入，还望大家指出，交流</div>
 				</section>
 				
 			</div>
@@ -139,7 +139,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="http://7xs3i8.com1.z0.glb.clouddn.com/profile%20imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
+				<img lazy-src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -216,7 +216,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>马上要暂时告别MCU的开发了（进入Linux），趁着闲时，就整理着大学以来在MCU开发过程中的种种笔记，看到启动这块，回想下好像有些遗忘，就随手记录下吧，东西不多，但也写下，防止遗忘<a id="more"></a>  </p>
-<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>stm32的启动主要依赖BOOT0，BOOT1的引脚电平，以及它的启动文件（也就是正宗的Bootload）,那么在MCU上，启动文件做了哪些操作呢，见下图：<br><img src="http://7xs3i8.com1.z0.glb.clouddn.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png" alt=""><br>在多说一句，UCOS这类的实时操作系统，也是依赖MCU自带的启动文件的，实时操作系统的任务堆栈初始化，也都是在MCU跳转到main后所做的操作。远程升级所说的“Bootload”也是在跳转到main后，自己写的一个判断引导程序</p>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>stm32的启动主要依赖BOOT0，BOOT1的引脚电平，以及它的启动文件（也就是正宗的Bootload）,那么在MCU上，启动文件做了哪些操作呢，见下图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png" alt=""><br>在多说一句，UCOS这类的实时操作系统，也是依赖MCU自带的启动文件的，实时操作系统的任务堆栈初始化，也都是在MCU跳转到main后所做的操作。远程升级所说的“Bootload”也是在跳转到main后，自己写的一个判断引导程序</p>
 
       
     </div>

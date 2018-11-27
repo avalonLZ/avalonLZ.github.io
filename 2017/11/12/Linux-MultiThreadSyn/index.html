@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="Linux多线程(用户态线程)编程之线程同步相关知识点">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_MultiThread.png">
-<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
+<meta property="og:updated_time" content="2018-11-27T13:38:31.421Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程之线程同步">
 <meta name="twitter:description" content="Linux多线程(用户态线程)编程之线程同步相关知识点">
@@ -510,7 +510,7 @@ int main(void)
     printf(&quot;ALL END\r\n&quot;);
 }
 </code></pre><ul>
-<li>自旋锁的实现(在用户态暂时当做mutex看待，在用户态好像没有意义)：<br>自旋锁与互斥锁相似，唯一的区别是当一个线程试图获取一个被锁定的互斥锁时，该操作会失败然后该线程会进入睡眠，让其他线程运行。而当一个线程试图获取一个自旋锁却没成功时，该线程会不断重试，直到最终成功为止,所以在内核态的自旋锁中单核CPU就算关中断也会导致死锁（用户态的自旋锁则不会导致死锁，因为内核抢占存在(sleep也有效)，会进行内核调度）（若尝试途中进程时间片超时，则依然会被操作系统强行切换到另一个进程。因为在用户态线程中，系统的最小调度单位是进程）。<br>主要实现函数(1-5重要):  </li>
+<li>自旋锁的实现(在用户态暂时当做mutex看待，在用户态好像没有意义)：<br>自旋锁与互斥锁相似，唯一的区别是当一个线程试图获取一个被锁定的互斥锁时，该操作会失败然后该线程会进入睡眠，让其他线程运行。而当一个线程试图获取一个自旋锁却没成功时，该线程会不断重试，直到最终成功为止,所以在内核态的自旋锁中单核CPU就算关中断也会导致死锁（用户态的单核多线程自旋锁，及其容易产生死锁，因为自旋会占用该CPU大量的时间片，导致主业务无法正常处理，从而难以解锁）。<br>主要实现函数(1-5重要):  </li>
 </ul>
 <p>1、pthread_spin_init(spinlock_t *lock, 0);//初始化自旋锁，将自旋锁设置为1(未上锁)    </p>
 <p>2、pthread_spin_lock(spinlock_t *lock);//循环等待，直到自旋锁解锁（被设置为1），然后再将自旋锁锁上(设置为0)  </p>
@@ -530,8 +530,6 @@ int main(void)
     &gt; Mail: 
     &gt; Created Time: 2017年11月18日 星期六 02时44分07秒
  ************************************************************************/
-
-//用户态自旋锁好像不会禁用内核抢占，使得单核情况下也不会死锁
 
 #include&lt;stdio.h&gt;
 #include&lt;string.h&gt;

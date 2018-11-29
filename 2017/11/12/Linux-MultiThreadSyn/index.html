@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="Linux多线程(用户态线程)编程之线程同步相关知识点">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_MultiThread.png">
-<meta property="og:updated_time" content="2018-11-28T14:49:56.680Z">
+<meta property="og:updated_time" content="2018-11-29T12:48:33.326Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多线程编程之线程同步">
 <meta name="twitter:description" content="Linux多线程(用户态线程)编程之线程同步相关知识点">
@@ -423,7 +423,7 @@ int main(void)
     printf(&quot;All End\r\n&quot;);
 }
 </code></pre><ul>
-<li>读写锁的实现（适合一个线程写，多个线程读）：<br>若一个线程用了读锁锁定临界区，则其他线程依然可以使用读锁来进入临界区(不加锁也可进入临界区)。若在此时一个线程想对临界区加写锁，则需要等待所有先前的读锁都解锁后才会锁上写锁（之后来的读上锁操作不会被写锁阻塞，依然可以上锁）(导致写锁饥饿的原因)。<br>若一个线程进行写锁加锁，则此后访问这个临界区的读锁或写锁都将进入阻塞。<br>主要实现函数（1-5重要):  </li>
+<li>读写锁的实现（适合一个线程写，多个线程读）：<br>若一个线程用了读锁锁定临界区，则其他线程依然可以使用读锁来进入临界区(不加锁也可进入临界区)。若在此时一个线程想对临界区加写锁，则需要等待所有先前的读锁都解锁后才会锁上写锁（之后来的读上锁操作不会被写锁阻塞，依然可以上锁）(导致写锁饥饿的原因)，也就是说，默认属性总是读锁优先的，若想改成写优先，则需要将attr属性设置为PTHREAD_RWLOCK_PREFER_WRITER_NONRECURSIVE_NP（即写锁优先，看看源码便知道为什么了），这样一来，后来的写锁将不会被阻塞，之后的读锁，需等待写锁解锁后，才能拿到写锁（看看源码就明白了）。<br>若一个线程进行写锁加锁，则此后访问这个临界区的读锁或写锁都将进入阻塞。<br>主要实现函数（1-5重要):  </li>
 </ul>
 <p>1、pthread_rwlock_t rwlock_test = PTHREAD_RWLOCK_INITIALIZER;//静态初始化读写锁<br>int pthread_rwlock_init(pthread_rwlock_t <em>rwptr, const pthread_rwlockattr_t </em>attr);//初始化读写锁,attr为空指针，表示使用缺省属性    </p>
 <p>2、int pthread_rwlock_rdlock(pthread_rwlock_t *rwptr);//读锁上锁  </p>
@@ -584,7 +584,8 @@ int main(void)
     pthread_join(two_thread, NULL);
     printf(&quot;ALL END\r\n&quot;);
 }  
-</code></pre>
+</code></pre><p>补充说明：<br>在linux中大部分用户态API都是使用glibc库实现的，在我这台Centos7（内核版本为3.10.0）上对应的glibc版本是2.17（可通过rpm -qa | grep glibc命令进行查看），通过以下路径可以拿到源码<br><a href="http://git.savannah.gnu.org/cgit/hurd/glibc.git/refs/tags" target="_blank" rel="external">http://git.savannah.gnu.org/cgit/hurd/glibc.git/refs/tags</a><br>现在，对API的使用或实现，哪里有疑问的直接戳源码查看就好了，这样效率最高了</p>
+
       
     </div>
     

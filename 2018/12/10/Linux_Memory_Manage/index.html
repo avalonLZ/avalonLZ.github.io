@@ -12,10 +12,16 @@
 <meta property="og:url" content="http://avalonlz.github.io/2018/12/10/Linux_Memory_Manage/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="断断续续的研究了一段时间的Linux内存管理，大概能理出个框架。不过Cache那部分还是有点不太确定了（手头这三本书，只有《深入浅出DPDK》对Cache有提及），所以若有不正确的地方，还需大家提醒纠正">
-<meta property="og:updated_time" content="2018-12-11T14:41:06.836Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_SearchAddress.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_RWMemory1.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_RWMemory2.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_RWMemory3.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_Cache.jpg">
+<meta property="og:updated_time" content="2018-12-30T14:28:59.440Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux内存管理">
 <meta name="twitter:description" content="断断续续的研究了一段时间的Linux内存管理，大概能理出个框架。不过Cache那部分还是有点不太确定了（手头这三本书，只有《深入浅出DPDK》对Cache有提及），所以若有不正确的地方，还需大家提醒纠正">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_SearchAddress.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -214,7 +220,13 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>断断续续的研究了一段时间的Linux内存管理，大概能理出个框架。不过Cache那部分还是有点不太确定了（手头这三本书，只有《深入浅出DPDK》对Cache有提及），所以若有不正确的地方，还需大家提醒纠正<a id="more"></a>   </p>
-<h1 id="寻址方式"><a href="#寻址方式" class="headerlink" title="寻址方式"></a>寻址方式</h1>
+<h1 id="寻址方式"><a href="#寻址方式" class="headerlink" title="寻址方式"></a>寻址方式</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_SearchAddress.jpg" alt=""><br>从图中可以看出，在Linux上，采用了虚拟地址的方式（而不是真实的物理地址），尽可能的利用有限的物理地址空间，并且为了硬件平台的可移植性，巧妙的绕过x86架构的段机制，统一采用分页机制，进行内存管理  </p>
+<h1 id="内存的访问"><a href="#内存的访问" class="headerlink" title="内存的访问"></a>内存的访问</h1><p>先简单介绍下在Linux的内存管理中采取了哪些机制（这里顺便验证了下malloc是否可以申请到超过物理内存大小的空间，网上有人说可以，但是我实际测试却返回NULL，glibc中的malloc实现可能有答案，有空再去确认下）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_RWMemory1.jpg" alt=""><br>下面，将以“页表项的建立与物理内存的映射”流程图为例，将Linux上的内存管理机制串接起来（在某些场景下，某些管理机制也可能单独被使用，例如：交换机制，就会在kswapd守护进程中所使用）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_RWMemory2.jpg" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_RWMemory3.jpg" alt=""><br>当获取到物理地址后，CPU又将如何获取到物理地址处存放的数据呢？这就需要了解Cache机制了  </p>
+<h1 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Memory_Manage_Cache.jpg" alt="">  </p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>大页内存（为什么说大页内存速度快呢，原因就在于它的TLB是可以做到100%命中的）：<br>大页内存，又可称为大页框内存。<br>大页（框）的单位（2MB）越大，在Linux的分页机制中，页表项就越少，虚拟地址中的页内偏移量所占bit也就越多。正常页框单位是4KB，也就是页内偏移会占用虚拟地址的12个bit  </p>
+<p>可执行程序的加载流程（这部分也不太确定）：<br>1、首先，通过mmap建立起磁盘中可执行程序和虚拟地址的映射关系（全映射）<br>2、然后执行“内存管理中的，页表项的建立与物理内存的映射”中的流程，获得虚拟地址与物理地址的映射（访问虚拟地址时才执行）<br>3、之后会检查该虚拟地址上是否有跟磁盘建立映射，若有，则将磁盘数据拷贝到物理地址页框中（访问虚拟地址时才执行）<br>4、最后通过虚拟地址运行可执行程序（访问虚拟地址时才执行）</p>
+<p>最后再说下mmap：<br>1、mmap可以将磁盘地址映射至虚拟地址<br>2、mmap可以将多个虚拟地址映射至同一物理地址（用户空间可以利用此来访问内核空间）（内核空间访问用户空间，需使用内核空间的“高端内存”）<br>3、mmap可以将外设地址映射成虚拟地址（DPDK中用户态驱动，由此实现）  </p>
+
       
     </div>
     

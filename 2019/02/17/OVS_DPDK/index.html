@@ -12,14 +12,14 @@
 <meta property="og:url" content="http://avalonlz.github.io/2019/02/17/OVS_DPDK/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="做个学习笔记，也算一只脚进了SDN的大门">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg?q-sign-algorithm=sha1&q-ak=AKIDv0iSI7zpsSKwtxkdW1qPx26ocEwXAahr&q-sign-time=1550410661;1550412461&q-key-time=1550410661;1550412461&q-header-list=&q-url-param-list=&q-signature=7e370897d5b6bdc4eabffcd3022b6632813f4ac3&x-cos-security-token=5a2f0287d3836b83cd24fe0d4c86f8b4dd275a0c10001">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_flow.jpg?q-sign-algorithm=sha1&q-ak=AKIDoh1zJNoJdXiy54e5SIbUhRmFDiPGy0G9&q-sign-time=1550411221;1550413021&q-key-time=1550411221;1550413021&q-header-list=&q-url-param-list=&q-signature=10497ed3e2d412b69143aa956be13139e0080589&x-cos-security-token=4951220b69ed3126bfb8c77e40a9fd777afa9ce210001">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module_with_dpdk.jpg?q-sign-algorithm=sha1&q-ak=AKIDOv4yPRwvVdCo7x9EepgbqEPQ0663bcFn&q-sign-time=1550413924;1550415724&q-key-time=1550413924;1550415724&q-header-list=&q-url-param-list=&q-signature=d113c8b710f192af5ae322c6161b0ad9d82ecf35&x-cos-security-token=1bdd2462f884afc79204d9d328b1ef76152f22cc10001">
-<meta property="og:updated_time" content="2019-02-17T15:11:11.350Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_flow.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module_with_dpdk.jpg">
+<meta property="og:updated_time" content="2019-02-18T12:18:55.079Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OVS与DPDK">
 <meta name="twitter:description" content="做个学习笔记，也算一只脚进了SDN的大门">
-<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg?q-sign-algorithm=sha1&q-ak=AKIDv0iSI7zpsSKwtxkdW1qPx26ocEwXAahr&q-sign-time=1550410661;1550412461&q-key-time=1550410661;1550412461&q-header-list=&q-url-param-list=&q-signature=7e370897d5b6bdc4eabffcd3022b6632813f4ac3&x-cos-security-token=5a2f0287d3836b83cd24fe0d4c86f8b4dd275a0c10001">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -218,10 +218,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>做个学习笔记，也算一只脚进了SDN的大门<a id="more"></a><br>OVS是什么就不在说明了，我学习的思路还是从整体到细节，从大到小。  </p>
-<h3 id="未使用DPDK"><a href="#未使用DPDK" class="headerlink" title="未使用DPDK"></a>未使用DPDK</h3><p>首先说下未使用DPDK时，OVS是怎样的一个东西吧。<br>大概画了下OVS在单台云主机上的模型，如下图：（OVS用什么和VM上的虚拟网卡交互，这个地方就没深究了，日后有需要的话在补充吧）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg?q-sign-algorithm=sha1&amp;q-ak=AKIDv0iSI7zpsSKwtxkdW1qPx26ocEwXAahr&amp;q-sign-time=1550410661;1550412461&amp;q-key-time=1550410661;1550412461&amp;q-header-list=&amp;q-url-param-list=&amp;q-signature=7e370897d5b6bdc4eabffcd3022b6632813f4ac3&amp;x-cos-security-token=5a2f0287d3836b83cd24fe0d4c86f8b4dd275a0c10001" alt=""><br>在单台主机上的众多虚拟机中，起着软交换的作用（想想你买的VPS，就能明白为啥需要OVS了）  </p>
-<p>然后是关于OVS内部的模块关系，以及未使用DPDK时的走包流程<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_flow.jpg?q-sign-algorithm=sha1&amp;q-ak=AKIDoh1zJNoJdXiy54e5SIbUhRmFDiPGy0G9&amp;q-sign-time=1550411221;1550413021&amp;q-key-time=1550411221;1550413021&amp;q-header-list=&amp;q-url-param-list=&amp;q-signature=10497ed3e2d412b69143aa956be13139e0080589&amp;x-cos-security-token=4951220b69ed3126bfb8c77e40a9fd777afa9ce210001" alt=""><br>总的来说，组件还是很多的。刚接触，感觉有些组件的部分功能存在重叠。不过还没怎么玩过，所以不吐槽了，既然存在那一定有他的道理，只是“功力”不到，无法领会到罢了  </p>
+<h3 id="未使用DPDK"><a href="#未使用DPDK" class="headerlink" title="未使用DPDK"></a>未使用DPDK</h3><p>首先说下未使用DPDK时，OVS是怎样的一个东西吧。<br>大概画了下OVS在单台云主机上的模型，如下图：（OVS用什么和VM上的虚拟网卡交互，这个地方就没深究了，日后有需要的话在补充吧）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg" alt=""><br>在单台主机上的众多虚拟机中，起着软交换的作用（想想你买的VPS，就能明白为啥需要OVS了）  </p>
+<p>然后是关于OVS内部的模块关系，以及未使用DPDK时的走包流程<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_flow.jpg" alt=""><br>总的来说，组件还是很多的。刚接触，感觉有些组件的部分功能存在重叠。不过还没怎么玩过，所以不吐槽了，既然存在那一定有他的道理，只是“功力”不到，无法领会到罢了  </p>
 <p>下面还有一张主要模块，vswitchd和DataPath模块，未使用DPDK时的模块内部详细架构  </p>
-<h3 id="使用DPDK"><a href="#使用DPDK" class="headerlink" title="使用DPDK"></a>使用DPDK</h3><p>当使用DPDK时，单台云主机上的OVS模型则变成下图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module_with_dpdk.jpg?q-sign-algorithm=sha1&amp;q-ak=AKIDOv4yPRwvVdCo7x9EepgbqEPQ0663bcFn&amp;q-sign-time=1550413924;1550415724&amp;q-key-time=1550413924;1550415724&amp;q-header-list=&amp;q-url-param-list=&amp;q-signature=d113c8b710f192af5ae322c6161b0ad9d82ecf35&amp;x-cos-security-token=1bdd2462f884afc79204d9d328b1ef76152f22cc10001" alt=""><br>图中宿主机上的NIC网卡被DPDK托管，收到的包经过OVS，再被DPDK的vhost-user模块，发送至虚拟机上的DPDK的virtio-user模块。虚拟机上的回复包则相反<br>（其中虚拟机上的virtio-user模块，可以替换成虚拟机内核原本就支持的virtio-net模块，这样的话在虚拟机中，数据包依然可以走内核协议栈）<br>特别说明一点：在linux内核中已经实现了vhost-net和virtio-net，且DPDK的vhost-user可以和linux实现的virtio-net进行交互。相对于内核的vhost-net/virtio-net全面的功能，DPDK的vhost-user/virtio-user则更加注重性能</p>
+<h3 id="使用DPDK"><a href="#使用DPDK" class="headerlink" title="使用DPDK"></a>使用DPDK</h3><p>当使用DPDK时，单台云主机上的OVS模型则变成下图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module_with_dpdk.jpg" alt=""><br>图中宿主机上的NIC网卡被DPDK托管，收到的包经过OVS，再被DPDK的vhost-user模块，发送至虚拟机上的DPDK的virtio-user模块。虚拟机上的回复包则相反<br>（其中虚拟机上的virtio-user模块，可以替换成虚拟机内核原本就支持的virtio-net模块，这样的话在虚拟机中，数据包依然可以走内核协议栈）<br>特别说明一点：在linux内核中已经实现了vhost-net和virtio-net，且DPDK的vhost-user可以和linux实现的virtio-net进行交互。相对于内核的vhost-net/virtio-net全面的功能，DPDK的vhost-user/virtio-user则更加注重性能</p>
 
       
     </div>

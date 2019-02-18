@@ -15,7 +15,7 @@
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Thread&Process.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_ThreadState.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_ThreadState&ProcessState.png">
-<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
+<meta property="og:updated_time" content="2019-02-18T13:28:08.101Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux多进程与多线程之间的关系">
 <meta name="twitter:description" content="Linux多进程与多线程之间的关系（包含用户态进程、用户态线程、轻量级进程以及内核线程）">
@@ -219,7 +219,7 @@
       
         <p>Linux多进程与多线程之间的关系（包含用户态进程、用户态线程、轻量级进程以及内核线程）<a id="more"></a>  </p>
 <h3 id="用户态进程、用户态线程、轻量级进程以及内核线程之间的关系"><a href="#用户态进程、用户态线程、轻量级进程以及内核线程之间的关系" class="headerlink" title="用户态进程、用户态线程、轻量级进程以及内核线程之间的关系"></a>用户态进程、用户态线程、轻量级进程以及内核线程之间的关系</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_Thread&amp;Process.png" alt="">  </p>
-<p>调度：<br>在Linux中，只存在对进程进行调度这一种说法，所以对内核线程的调度Linux其实把它视作了进程去操作。对用户态线程的调度其实就变成了对轻量级进程的调度，对用户态进程的调度就是对一般进程的调度了。<br>总结下上面说的调度结果<br>若存在A、B两进程，且A进程中跑了a,b两线程，B进程中跑了c,d两线程。则可以对A、B两进程使用SCHED_OTHERSCHED_FIFO分时调度，对A中的a,b两线程使用实时调度，对B中的c,d两线程使用SCHED_RR实时调度</p>
+<p>调度：<br>在Linux中，只存在对进程进行调度这一种说法，因为从内核的角度来说，它并没有线程这个概念，Linux把所有线程都当做进程来实现（轻量级进程），内核并没有准备特别的调度算法或定义特别的数据结构来表征线程，线程仅仅被视为一个实用某些共享资源的进程。<br>总结下上面说的调度结果<br>若存在A、B两进程，且A进程中跑了a,b两线程，B进程中跑了c,d两线程。则A、B两进程启动时是继承了shell的调度策略（因为其本质是由shell进程fork出来的）（应该是普通的分时进程），A进程中的a,b两线程和B进程中的c，d两线程则可选择SCHED_FIFO先入先出的实时进程、SCHED_RR时间片轮转的实时进程，以及SCHED_OTHER普通的分时进程这三种方式来进行调度  </p>
 <h3 id="Linux下进程的6种状态"><a href="#Linux下进程的6种状态" class="headerlink" title="Linux下进程的6种状态"></a>Linux下进程的6种状态</h3><p>R(Running or Runnable):处于运行或能（可）运行状态   </p>
 <p>S(Interruptible Sleep):处于可中断的睡眠状态（等待某事件而被挂起）  </p>
 <p>D(Uninterruptible Sleep):处于不可中断的睡眠状态（进程不响应异步信号，无法用kill命令杀死。一般由等待I/O引起）  </p>

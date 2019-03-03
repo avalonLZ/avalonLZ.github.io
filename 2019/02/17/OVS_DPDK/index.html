@@ -6,19 +6,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>OVS与DPDK | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="做个学习笔记，也算一只脚进了SDN的大门">
+  <meta name="description" content="做个学习笔记，也算一只脚进了云计算的大门了">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OVS与DPDK">
 <meta property="og:url" content="http://avalonlz.github.io/2019/02/17/OVS_DPDK/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="做个学习笔记，也算一只脚进了SDN的大门">
+<meta property="og:description" content="做个学习笔记，也算一只脚进了云计算的大门了">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_flow.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module_with_dpdk.jpg">
-<meta property="og:updated_time" content="2019-02-18T12:18:55.079Z">
+<meta property="og:updated_time" content="2019-03-03T04:06:43.398Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OVS与DPDK">
-<meta name="twitter:description" content="做个学习笔记，也算一只脚进了SDN的大门">
+<meta name="twitter:description" content="做个学习笔记，也算一只脚进了云计算的大门了">
 <meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
@@ -112,7 +112,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Linux多线程编程/" style="font-size: 12.5px;">Linux多线程编程</a> <a href="/tags/Linux多进程编程/" style="font-size: 10px;">Linux多进程编程</a> <a href="/tags/Linux网络编程/" style="font-size: 20px;">Linux网络编程</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 12.5px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 12.5px;">Raspberry Pi</a> <a href="/tags/SDN/" style="font-size: 10px;">SDN</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-Linux/" style="font-size: 12.5px;">嵌入式_Linux</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 17.5px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 15px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/服务器-Django/" style="font-size: 12.5px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏编程/" style="font-size: 10px;">游戏编程</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-Linux/" style="font-size: 15px;">百科_Linux</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/计算机语言-Shell/" style="font-size: 10px;">计算机语言_Shell</a> <a href="/tags/软件工程-DesignPatterns/" style="font-size: 10px;">软件工程_DesignPatterns</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
+						<a href="/tags/Linux多线程编程/" style="font-size: 12.5px;">Linux多线程编程</a> <a href="/tags/Linux多进程编程/" style="font-size: 10px;">Linux多进程编程</a> <a href="/tags/Linux网络编程/" style="font-size: 20px;">Linux网络编程</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 12.5px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 12.5px;">Raspberry Pi</a> <a href="/tags/云计算/" style="font-size: 12.5px;">云计算</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-Linux/" style="font-size: 12.5px;">嵌入式_Linux</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 17.5px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 15px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/服务器-Django/" style="font-size: 12.5px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏编程/" style="font-size: 10px;">游戏编程</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-Linux/" style="font-size: 15px;">百科_Linux</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/计算机语言-Shell/" style="font-size: 10px;">计算机语言_Shell</a> <a href="/tags/软件工程-DesignPatterns/" style="font-size: 10px;">软件工程_DesignPatterns</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
 					</div>
 				</section>
 				
@@ -201,7 +201,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SDN/">SDN</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/云计算/">云计算</a></li></ul>
 	</div>
 
         
@@ -217,7 +217,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>做个学习笔记，也算一只脚进了SDN的大门<a id="more"></a><br>OVS是什么就不在说明了，我学习的思路还是从整体到细节，从大到小。  </p>
+        <p>做个学习笔记，也算一只脚进了云计算的大门了<a id="more"></a><br>OVS是什么就不在说明了（软交换机），我学习的思路还是从整体到细节，从大到小。  </p>
 <h3 id="未使用DPDK"><a href="#未使用DPDK" class="headerlink" title="未使用DPDK"></a>未使用DPDK</h3><p>首先说下未使用DPDK时，OVS是怎样的一个东西吧。<br>大概画了下OVS在单台云主机上的模型，如下图：（OVS用什么和VM上的虚拟网卡交互，这个地方就没深究了，日后有需要的话在补充吧）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg" alt=""><br>在单台主机上的众多虚拟机中，起着软交换的作用（想想你买的VPS，就能明白为啥需要OVS了）  </p>
 <p>然后是关于OVS内部的模块关系，以及未使用DPDK时的走包流程<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_flow.jpg" alt=""><br>总的来说，组件还是很多的。刚接触，感觉有些组件的部分功能存在重叠。不过还没怎么玩过，所以不吐槽了，既然存在那一定有他的道理，只是“功力”不到，无法领会到罢了  </p>
 <p>下面还有一张主要模块，vswitchd和DataPath模块，未使用DPDK时的模块内部详细架构  </p>
@@ -230,6 +230,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2019/03/03/Openstack_SDN/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Openstack与SDN
+        
+      </div>
+    </a>
   
   
     <a href="/2018/12/30/Net-Protocol-Summed/" id="article-nav-older" class="article-nav-link-wrap">

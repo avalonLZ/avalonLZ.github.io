@@ -4,18 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Mininet+OVS+ONOS搭建SDN开发环境 | 木子人人人&#39;s 藏经阁</title>
+  <title>Mininet+OVS+ONOS搭建SDN仿真环境 | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近又开始了疯狂的学习模式，为了方便学习、开发、测试，一套方便的SDN仿真环境，就显得很重要了，如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon，之后再进入生产环境开。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN开发仿真环境">
+  <meta name="description" content="最近又开始了疯狂的学习模式，为了方便学习、开发、测试，有一套SDN仿真环境，就显得很重要了。如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN仿真环境">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mininet+OVS+ONOS搭建SDN开发环境">
+<meta property="og:title" content="Mininet+OVS+ONOS搭建SDN仿真环境">
 <meta property="og:url" content="http://avalonlz.github.io/2019/03/05/Mininet-OVS-ONOS/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="最近又开始了疯狂的学习模式，为了方便学习、开发、测试，一套方便的SDN仿真环境，就显得很重要了，如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon，之后再进入生产环境开。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN开发仿真环境">
-<meta property="og:updated_time" content="2019-03-05T12:26:54.364Z">
+<meta property="og:description" content="最近又开始了疯狂的学习模式，为了方便学习、开发、测试，有一套SDN仿真环境，就显得很重要了。如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN仿真环境">
+<meta property="og:updated_time" content="2019-03-05T14:25:49.846Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mininet+OVS+ONOS搭建SDN开发环境">
-<meta name="twitter:description" content="最近又开始了疯狂的学习模式，为了方便学习、开发、测试，一套方便的SDN仿真环境，就显得很重要了，如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon，之后再进入生产环境开。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN开发仿真环境">
+<meta name="twitter:title" content="Mininet+OVS+ONOS搭建SDN仿真环境">
+<meta name="twitter:description" content="最近又开始了疯狂的学习模式，为了方便学习、开发、测试，有一套SDN仿真环境，就显得很重要了。如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN仿真环境">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -188,7 +188,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Mininet+OVS+ONOS搭建SDN开发环境
+      Mininet+OVS+ONOS搭建SDN仿真环境
     </h1>
   
 
@@ -213,7 +213,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近又开始了疯狂的学习模式，为了方便学习、开发、测试，一套方便的SDN仿真环境，就显得很重要了，如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon，之后再进入生产环境开。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN开发仿真环境<a id="more"></a>  </p>
+        <p>最近又开始了疯狂的学习模式，为了方便学习、开发、测试，有一套SDN仿真环境，就显得很重要了。如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN仿真环境<a id="more"></a>  </p>
 <h3 id="Ubunut"><a href="#Ubunut" class="headerlink" title="Ubunut"></a>Ubunut</h3><p>我这里选用的Ubuntu是ubuntu-18.04.2LTS(Bionic Beaver)版，下载链接如下：<br><a href="http://120.198.248.41/cache/releases.ubuntu.com/18.04/ubuntu-18.04.2-desktop-amd64.iso?ich_args2=30-05202509001074_56bfc1eb28abf9721328755ab0a40e58_10001002_9c89612dd0cbf9d69539518939a83798_99a52f5e2482f7b0f5af737b3e5b3518" target="_blank" rel="external">http://120.198.248.41/cache/releases.ubuntu.com/18.04/ubuntu-18.04.2-desktop-amd64.iso?ich_args2=30-05202509001074_56bfc1eb28abf9721328755ab0a40e58_10001002_9c89612dd0cbf9d69539518939a83798_99a52f5e2482f7b0f5af737b3e5b3518</a>  </p>
 <p>注意：使用VM安装时，不要被坑，不能是简易安装系统（简易安装缺少太多东西了，gcc都没…）    </p>
 <h3 id="Mininet"><a href="#Mininet" class="headerlink" title="Mininet"></a>Mininet</h3>
@@ -273,7 +273,7 @@
  
   <section id="comments">
 <!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="Mininet+OVS+ONOS搭建SDN开发环境"></div>
+<div id="SOHUCS" sid="Mininet+OVS+ONOS搭建SDN仿真环境"></div>
 <script>
   (function(){
     var appid = 'cyto4sUr6',

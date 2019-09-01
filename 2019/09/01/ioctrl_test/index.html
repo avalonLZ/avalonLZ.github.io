@@ -4,18 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Mininet+OVS+ONOS搭建SDN仿真环境 | 木子人人人&#39;s 藏经阁</title>
+  <title>ioctl实验 | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近又开始了疯狂的学习模式，为了方便学习、开发、测试，有一套SDN仿真环境，就显得很重要了。如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN仿真环境，注意，以下的操作都在普通用户权限下进行">
+  <meta name="description" content="最近遇到比较多的问题同样的ioctl命令，对于有些网卡，执行此命令可以被up起来，对于某些网卡却无法被up起来，于是就研究了下ioctl命令">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mininet+OVS+ONOS搭建SDN仿真环境">
-<meta property="og:url" content="http://avalonlz.github.io/2019/03/05/Mininet-OVS-ONOS/index.html">
+<meta property="og:title" content="ioctl实验">
+<meta property="og:url" content="http://avalonlz.github.io/2019/09/01/ioctrl_test/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="最近又开始了疯狂的学习模式，为了方便学习、开发、测试，有一套SDN仿真环境，就显得很重要了。如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN仿真环境，注意，以下的操作都在普通用户权限下进行">
-<meta property="og:updated_time" content="2019-03-09T11:29:13.917Z">
+<meta property="og:description" content="最近遇到比较多的问题同样的ioctl命令，对于有些网卡，执行此命令可以被up起来，对于某些网卡却无法被up起来，于是就研究了下ioctl命令">
+<meta property="og:updated_time" content="2019-09-01T05:46:58.053Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mininet+OVS+ONOS搭建SDN仿真环境">
-<meta name="twitter:description" content="最近又开始了疯狂的学习模式，为了方便学习、开发、测试，有一套SDN仿真环境，就显得很重要了。如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN仿真环境，注意，以下的操作都在普通用户权限下进行">
+<meta name="twitter:title" content="ioctl实验">
+<meta name="twitter:description" content="最近遇到比较多的问题同样的ioctl命令，对于有些网卡，执行此命令可以被up起来，对于某些网卡却无法被up起来，于是就研究了下ioctl命令">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -171,11 +171,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-Mininet-OVS-ONOS" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-ioctrl_test" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2019/03/05/Mininet-OVS-ONOS/" class="article-date">
-  	<time datetime="2019-03-05T12:14:33.000Z" itemprop="datePublished">2019-03-05</time>
+      <a href="/2019/09/01/ioctrl_test/" class="article-date">
+  	<time datetime="2019-09-01T04:00:47.000Z" itemprop="datePublished">2019-09-01</time>
 </a>
     </div>
   
@@ -188,7 +188,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Mininet+OVS+ONOS搭建SDN仿真环境
+      ioctl实验
     </h1>
   
 
@@ -197,7 +197,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/云计算/">云计算</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux网络编程/">Linux网络编程</a></li></ul>
 	</div>
 
         
@@ -213,55 +213,134 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近又开始了疯狂的学习模式，为了方便学习、开发、测试，有一套SDN仿真环境，就显得很重要了。如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN仿真环境，注意，以下的操作都在普通用户权限下进行<a id="more"></a>  </p>
-<h3 id="Ubunut"><a href="#Ubunut" class="headerlink" title="Ubunut"></a>Ubunut</h3><p>我这里选用的Ubuntu是ubuntu-18.04.2LTS(Bionic Beaver)版，下载链接如下：<br><a href="http://120.198.248.41/cache/releases.ubuntu.com/18.04/ubuntu-18.04.2-desktop-amd64.iso?ich_args2=30-05202509001074_56bfc1eb28abf9721328755ab0a40e58_10001002_9c89612dd0cbf9d69539518939a83798_99a52f5e2482f7b0f5af737b3e5b3518" target="_blank" rel="external">http://120.198.248.41/cache/releases.ubuntu.com/18.04/ubuntu-18.04.2-desktop-amd64.iso?ich_args2=30-05202509001074_56bfc1eb28abf9721328755ab0a40e58_10001002_9c89612dd0cbf9d69539518939a83798_99a52f5e2482f7b0f5af737b3e5b3518</a>  </p>
-<p>注意：<br>1、使用VM安装时，最好不要是简易安装系统（不过，不简易安装，好像也没多装啥工具，都需要后面apt安装）<br>2、安装完后记得更新下apt源，可在清华开源镜像站下(<a href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)，找到此ubuntu版本适合的源" target="_blank" rel="external">https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)，找到此ubuntu版本适合的源</a>     </p>
-<h3 id="安装Mininet"><a href="#安装Mininet" class="headerlink" title="安装Mininet"></a>安装Mininet</h3><p>Mininet是一款网络仿真软件，具体安装步骤如下（这个版本，带的是2.9.2的OVS）  </p>
-<pre><code>git clone git://github.com/mininet/mininet #先clone下来  
-git checkout 1969669f510a7443f58b27b1640884b06b6867d4 #转到2.3.0d4这个版本分支上  
-cd ./mininet/util  
-./install.sh -a #安装全部组件  
-mn --version #安装完成后，使用该命令，即可查看到其版本为2.3.0d4  
-</code></pre><h3 id="解决JAVA依赖"><a href="#解决JAVA依赖" class="headerlink" title="解决JAVA依赖"></a>解决JAVA依赖</h3><p>ONOS的安装，主要也是按照它wiki上所说的做（最新版的onos是要求使用bazel编译器了，所以，网上有些过时的安装教程就不可参考了）<br>按wiki上说的，我们先安装下java依赖  </p>
-<pre><code>sudo apt-get install software-properties-common -y &amp;&amp; \
-sudo add-apt-repository ppa:webupd8team/java -y &amp;&amp; \
-sudo apt-get update &amp;&amp; \
-echo &quot;oracle-java8-installer shared/accepted-oracle-license-v1-1 select true&quot; | sudo debconf-set-selections &amp;&amp; \
-sudo apt-get install oracle-java8-installer oracle-java8-set-default -y    
-</code></pre><h3 id="安装bazel"><a href="#安装bazel" class="headerlink" title="安装bazel"></a>安装bazel</h3><p>之后还需要装下bazel编译器。注意，wiki上说支持onos的最后一版bazel编译器版本是0.19.2（我这里用最新的0.23.1）。在<a href="https://github.com/bazelbuild/bazel/releases上找到bazel-0.23.1-installer-linux-x86_64.sh并下载，之后在执行（如果要跟换版本，也只需要下载相应版本的sh文件，再--user执行，并设置好环境变量即可）：" target="_blank" rel="external">https://github.com/bazelbuild/bazel/releases上找到bazel-0.23.1-installer-linux-x86_64.sh并下载，之后在执行（如果要跟换版本，也只需要下载相应版本的sh文件，再--user执行，并设置好环境变量即可）：</a>    </p>
-<pre><code>./bazel-0.23.1-installer-linux-x86_64.sh --user    
+        <p>最近遇到比较多的问题同样的ioctl命令，对于有些网卡，执行此命令可以被up起来，对于某些网卡却无法被up起来，于是就研究了下ioctl命令<a id="more"></a>   </p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>为啥同样的ioctl命令对一些网卡生效，能将网卡up起来，而一些网卡却完全不感冒（内核未出现任何异常日志），无法被up起来  </p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>在网上查了些资料，发现ioctl命令最终调用的还是网卡驱动中的接口，那就很好理解了，因为驱动中没有提供相应接口（假设网卡固件已支持该up处理逻辑），导致ioctl无法调用到驱动中的up接口（驱动也没有日志提示说不支持），所以就导致了同样的ioctl对于一些网卡可以正常up操作，而一些网卡却不行（当然若驱动中支持了up接口，也还需要网卡固件同样也能支持才可以）  </p>
+<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>了解了以上大致原因后，自己写模块和用户态程序，验证一下即可，此处以字符设备为例（驱动分块设备、字符设备和网络设备，每类设备都有相应的驱动程序框架，按此框架，初始化相关结构体，关联相关处理函数即可）  </p>
+<p>内核驱动(ko模块)：  </p>
+<pre><code>/*************************************************************************
+    &gt; File Name: lz_test.c
+    &gt; Author:lizhong
+    &gt; Mail:423810942@qq.com
+    &gt; Created Time:Tue 27 Aug 2019 06:22:47 PM PDT
+    &gt; Instruction:
+ ************************************************************************/
+#include&lt;linux/module.h&gt;
+#include&lt;linux/kernel.h&gt;
+#include&lt;linux/init.h&gt;
+#include&lt;linux/slab.h&gt;
+#include&lt;linux/fs.h&gt;
+#include&lt;linux/device.h&gt;
+#include&lt;asm/io.h&gt;
 
-#设置环境变量
-export PATH=&quot;$PATH:$HOME/bin&quot;     
-</code></pre><h3 id="安装Karaf"><a href="#安装Karaf" class="headerlink" title="安装Karaf"></a>安装Karaf</h3><p>进入karaf的官网，下载apache-karaf-4.2.3该版本的源码（非二进制代码）  </p>
-<pre><code>cd /root
-mkdir Applications
-#再将源码解压至Applications目录下
-</code></pre><h3 id="编译ONOS"><a href="#编译ONOS" class="headerlink" title="编译ONOS"></a>编译ONOS</h3><p>之后，就可以使用bazel编译ONOS了<br>下载ONOS源码，并编译    </p>
-<pre><code>git clone https://gerrit.onosproject.org/onos 
-sudo chmod -R 777 onos #开放此文件夹的权限
-cd onos
-git checkout -b 2.0.0 #使用目前最新的onos发布版本     
+MODULE_LICENSE(&quot;GPL&quot;);
+MODULE_AUTHOR(&quot;StayrealS&quot;);
+MODULE_DESCRIPTION(&quot;Driver as a lz test&quot;);
 
-#配置下环境变量
-export ONOS_ROOT=/home/lz/Desktop/ONOS/onos #保证能定位到onos文件夹即可
-source $ONOS_ROOT/tools/dev/bash_profile    
+#define DEVICE_NAME &quot;lz_test&quot;
+#define CLASS_NAME &quot;lz_test_module&quot;
 
-#编译onos
-bazel build onos    
-</code></pre><h3 id="测试ONOS"><a href="#测试ONOS" class="headerlink" title="测试ONOS"></a>测试ONOS</h3><p>之后，再测试下onos，看下是否成功编译了    </p>
-<pre><code>#成功启动后，可以通过http://localhost:8181/onos/ui进行访问
-#onos/rocks是默认的用户名和密码      
-bazel run onos-local -- clean debug  
-</code></pre><h3 id="测试Mininet-ONOS"><a href="#测试Mininet-ONOS" class="headerlink" title="测试Mininet+ONOS"></a>测试Mininet+ONOS</h3><p>1、首先，在ONOS的web界面中，开启openflow（openflow协议）和fwd（转发功能）应用（默认是开启的）<br>2、之后，执行类似如下的命令sudo mn –custom ./custom/topo-2sw-2host.py –topo mytopo –controller remote,ip=127.0.0.1,port=6653<br>3、之后在ONOS的web界面，或后台LOG中，都能看到在mininet中创建的设备了  </p>
-<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><p>最后说下启动ONOS时，环境变量的配置，在~/.bashrc中加入如下命令  </p>
-<pre><code>#配置bazel环境变量
-export PATH=&quot;$PATH:$HOME/bin&quot;  
+static int lz_test_ioctl(struct file* filp, unsigned int cmd, unsigned long arg);
 
-#配置ONOS环境变量
-export ONOS_ROOT=/home/lz/Desktop/ONOS/onos
-source /home/lz/Desktop/ONOS/onos/tools/dev/bash_profile
-</code></pre>
+static int major_number;
+static struct class* test_module_class = NULL;
+static struct device* test_module_device = NULL;
+
+static const struct file_operations tmf = {
+    .owner = THIS_MODULE,
+    .unlocked_ioctl = lz_test_ioctl
+};
+
+static int lz_test_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+{    
+    switch(cmd)
+    {
+        case 0:
+            printk(&quot;ioctl cmd is LZ_TEST_CL\n&quot;);
+            break;
+
+        default:
+            printk(&quot;ioctl cmd is other\n&quot;);
+            return -EINVAL;
+    }
+
+    return 0;
+}
+
+static int __init lz_test_init(void)
+{
+    printk(&quot;start init lz_test ko\n&quot;);
+    major_number = register_chrdev(0, DEVICE_NAME, &amp;tmf);
+    test_module_class = class_create(THIS_MODULE, CLASS_NAME);
+    test_module_device = device_create(test_module_class, NULL, MKDEV(major_number, 0), NULL, DEVICE_NAME);
+    printk(&quot;end init lz_test ko\n&quot;);
+    return 0;
+}
+
+static void __exit lz_test_exit(void)
+{
+    printk(&quot;start uinit lz_test ko\n&quot;);
+    device_destroy(test_module_class, MKDEV(major_number, 0));
+    class_destroy(test_module_class);
+    unregister_chrdev(major_number, DEVICE_NAME);
+    printk(&quot;end unint lz_test ko\n&quot;);
+}
+
+module_init(lz_test_init);
+module_exit(lz_test_exit);
+</code></pre><p>Makefile(注意指定清楚内核源码目录环境变量)    </p>
+<pre><code>MODULE_NAME := lz_test
+obj-m := ${MODULE_NAME}.o
+
+PWD := $(shell pwd)
+
+all:
+    $(MAKE) -C $(KSRCDIR) M=$(PWD)
+
+clean:
+    $(MAKE) -C $(KSRCDIR) M=$(PWD) clean
+</code></pre><p>用户态程序(c文件)：  </p>
+<pre><code>/*************************************************************************
+    &gt; File Name: lz_test_user.c
+    &gt; Author:lizhong
+    &gt; Mail:423810942@qq.com
+    &gt; Created Time:Tue 27 Aug 2019 06:30:33 PM PDT
+    &gt; Instruction:
+ ************************************************************************/
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;math.h&gt;
+
+#include&lt;sys/ioctl.h&gt;
+#include&lt;fcntl.h&gt;
+#include&quot;lz_test_user.h&quot;
+
+int main(int argc, char *argv[])
+{
+
+    int fd = -1;
+    fd = open(&quot;/dev/lz_test&quot;, O_RDWR);
+    ioctl(fd, LZ_TEST_CL);
+    printf(&quot;send ioctl cmd\n&quot;);
+    return 0;
+}    
+</code></pre><p>头文件：  </p>
+<pre><code>/*************************************************************************
+    &gt; File Name: lz_test.h
+    &gt; Author:lizhong
+    &gt; Mail:423810942@qq.com
+    &gt; Created Time:Tue 27 Aug 2019 06:21:34 PM PDT
+    &gt; Instruction:
+ ************************************************************************/
+#ifndef _LZ_TEST_H
+#define _LZ_TEST_H
+
+#define LZ_TEST_CL 0
+
+#endif  
+</code></pre><p>再编译下用户态程序。之后insmod加载内核驱动，再运行下用户态程序，就可以看到打印出的内核日志了，说明用户态的ioctl最后调用到了该模块注册的操作函数（内核如何注册上这个模块的tmf操作变量，这回就没分析了）</p>
+
       
     </div>
     
@@ -270,18 +349,9 @@ source /home/lz/Desktop/ONOS/onos/tools/dev/bash_profile
     
 <nav id="article-nav">
   
-    <a href="/2019/09/01/ioctrl_test/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          ioctl实验
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/03/03/Openstack_SDN/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Openstack与SDN</div>
+    <a href="/2019/03/05/Mininet-OVS-ONOS/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Mininet+OVS+ONOS搭建SDN仿真环境</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -327,7 +397,7 @@ source /home/lz/Desktop/ONOS/onos/tools/dev/bash_profile
  
   <section id="comments">
 <!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="Mininet+OVS+ONOS搭建SDN仿真环境"></div>
+<div id="SOHUCS" sid="ioctl实验"></div>
 <script>
   (function(){
     var appid = 'cyto4sUr6',

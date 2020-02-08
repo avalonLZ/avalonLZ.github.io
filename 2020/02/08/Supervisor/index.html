@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2020/02/08/Supervisor/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="介绍下Supervisor进程监控工具">
-<meta property="og:updated_time" content="2020-02-08T14:01:22.352Z">
+<meta property="og:updated_time" content="2020-02-08T14:25:23.756Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Supervisor说明">
 <meta name="twitter:description" content="介绍下Supervisor进程监控工具">
@@ -214,12 +214,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>介绍下Supervisor进程监控工具<a id="more"></a>    </p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>使用pip安装：<br>    pip install supervisor  </p>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>1、配置supervisor自身：<br>生成一个默认配置<br>    echo_supervisord_conf &gt; /etc/supervisor.conf  </p>
-<p>2、创建被监控程序配置文件存放路径<br>    mkdir /etc/supervisor  </p>
-<p>3、修改配置文件中的最后两行，开放针对被监控程序的配置文件<br>    [include]<br>    files = /etc/supervisor/*.ini  </p>
-<p>4、针对需要监控的进程，在/etc/supervisor中，创建单独的ini文件，方便管理（ini文件内容，参考/etc/supervisor.conf中;[program:theprogramname]，这一段的内容）<br>    [program:eventreport]<br>    directory=/home/lz/Desktop/GitHub/Practices/Python/Practice_event<br>    command=/usr/bin/python /home/lz/Desktop/GitHub/Practices/Python/Practice_event/inotify.py<br>    startsecs=1<br>    startretries=3<br>    autorestart=true<br>    autostart=true<br>    stderr_logfile=/tmp/event_report.log<br>    stdout_logfile=/tmp/event_report.log<br>    user=root</p>
-<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>启动supervisor:<br>    supervisord -c /etc/supervisor.conf<br>启动supervisor cli控制台：<br>    supervisorctl -c /etc/supervisor.conf  </p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>使用pip安装：<br>        pip install supervisor  </p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>1、配置supervisor自身：<br>生成一个默认配置<br>        echo_supervisord_conf &gt; /etc/supervisor.conf  </p>
+<p>2、创建被监控程序配置文件存放路径<br>        mkdir /etc/supervisor  </p>
+<p>3、修改配置文件中的最后两行，开放针对被监控程序的配置文件<br>        [include]<br>        files = /etc/supervisor/*.ini  </p>
+<p>4、针对需要监控的进程，在/etc/supervisor中，创建单独的ini文件，方便管理（ini文件内容，参考/etc/supervisor.conf中;[program:theprogramname]，这一段的内容）<br>        [program:eventreport]<br>        directory=/home/lz/Desktop/GitHub/Practices/Python/Practice_event<br>        command=/usr/bin/python /home/lz/Desktop/GitHub/Practices/Python/Practice_event/inotify.py<br>        startsecs=1<br>        startretries=3<br>        autorestart=true<br>        autostart=true<br>        stderr_logfile=/tmp/event_report.log<br>        stdout_logfile=/tmp/event_report.log<br>        user=root</p>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>启动supervisor:<br>        supervisord -c /etc/supervisor.conf<br>启动supervisor cli控制台：<br>        supervisorctl -c /etc/supervisor.conf  </p>
 <p>以上便是supervisor整体的使用思路</p>
 
       

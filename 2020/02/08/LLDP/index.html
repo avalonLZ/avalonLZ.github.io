@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2020/02/08/LLDP/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="LLDP用于发现该局域网内所有网络设备，探测网络拓扑。下面将简要介绍下LLDP协议，以及针对目前主流存在的LLDP开源软件进行分析">
-<meta property="og:updated_time" content="2020-02-10T08:18:32.424Z">
+<meta property="og:updated_time" content="2020-02-10T08:36:12.615Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LLDP">
 <meta name="twitter:description" content="LLDP用于发现该局域网内所有网络设备，探测网络拓扑。下面将简要介绍下LLDP协议，以及针对目前主流存在的LLDP开源软件进行分析">
@@ -216,7 +216,7 @@
         <p>LLDP用于发现该局域网内所有网络设备，探测网络拓扑。下面将简要介绍下LLDP协议，以及针对目前主流存在的LLDP开源软件进行分析<a id="more"></a>  </p>
 <h3 id="LLDP协议"><a href="#LLDP协议" class="headerlink" title="LLDP协议"></a>LLDP协议</h3><h3 id="LLDP相关软件"><a href="#LLDP相关软件" class="headerlink" title="LLDP相关软件"></a>LLDP相关软件</h3><p>目前本人已知的开源LLDP软件包括：<br>1、Ubuntu中的lldpd(<a href="https://github.com/vincentbernat/lldpd" target="_blank" rel="external">https://github.com/vincentbernat/lldpd</a>)<br>2、Centos中的lldpad(<a href="https://github.com/jrfastab/lldpad" target="_blank" rel="external">https://github.com/jrfastab/lldpad</a>)<br>3、Open lldp(<a href="https://github.com/intel/openlldp" target="_blank" rel="external">https://github.com/intel/openlldp</a>)   </p>
 <p>这三款软件中，在github上看，还有在维护的就是lldpd了，所以将lldpd作为LLDP协议的试验软件，下面就将介绍如何在Centos下安装lldpd（本人的开发/测试环境是Centos7）   </p>
-<h6 id="下载相关软件及其依赖"><a href="#下载相关软件及其依赖" class="headerlink" title="下载相关软件及其依赖"></a>下载相关软件及其依赖</h6><p>首先下载下lldpd和libevent(<a href="https://github.com/libevent/libevent)的源码（安装编译lldpd的时候需要libevent库），我下载的lldpd-1.0.5，依赖libevent-2.0.22" target="_blank" rel="external">https://github.com/libevent/libevent)的源码（安装编译lldpd的时候需要libevent库），我下载的lldpd-1.0.5，依赖libevent-2.0.22</a><br>这里下载zip或者git clone都可以  </p>
+<h6 id="下载相关软件及其依赖"><a href="#下载相关软件及其依赖" class="headerlink" title="下载相关软件及其依赖"></a>下载相关软件及其依赖</h6><p>首先，下载lldpd和libevent(<a href="https://github.com/libevent/libevent" target="_blank" rel="external">https://github.com/libevent/libevent</a>) 的源码（安装编译lldpd的时候需要libevent库），我下载的lldpd-1.0.5，依赖libevent-2.0.22<br>这里下载zip或者git clone都可以  </p>
 <pre><code>git clone --branch 1.0.5 https://github.com/vincentbernat/lldpd.git  
 
 git clone --branch release-2.0.22-stable https://github.com/libevent/libevent.git  

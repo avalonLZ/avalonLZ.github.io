@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2020/02/08/LLDP/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
 <meta property="og:description" content="LLDP用于发现该局域网内所有网络设备，探测网络拓扑。下面将简要介绍下LLDP协议，以及针对目前主流存在的LLDP开源软件进行分析">
-<meta property="og:updated_time" content="2020-02-10T08:36:12.615Z">
+<meta property="og:updated_time" content="2020-02-10T09:55:17.968Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LLDP">
 <meta name="twitter:description" content="LLDP用于发现该局域网内所有网络设备，探测网络拓扑。下面将简要介绍下LLDP协议，以及针对目前主流存在的LLDP开源软件进行分析">
@@ -229,11 +229,24 @@ make install
 pkg-config --cflags libevent#检查一下，看下pkg-config是否找到了libevent  
 </code></pre><h6 id="编译安装lldpd"><a href="#编译安装lldpd" class="headerlink" title="编译安装lldpd"></a>编译安装lldpd</h6><p>最后编译安装lldpd  </p>
 <pre><code>./autogen.sh  
-./configure #如果libevent有问题，check libevent会提示  
+./configure --enable-privsep=no #如果libevent有问题，check libevent会提示  
 make  
 make install  
+</code></pre><p>最后在创建lldp指定的存放unix socket文件的路径  </p>
+<pre><code>mkdir -p /usr/local/var/run/  
 </code></pre><p>以上，便是lldpd的编译安装步骤（编译安装时注意lldpd的configure提示即可），接下来将介绍下lldpd的使用  </p>
-<h6 id="lldpd的使用"><a href="#lldpd的使用" class="headerlink" title="lldpd的使用"></a>lldpd的使用</h6>
+<h6 id="lldpd的使用"><a href="#lldpd的使用" class="headerlink" title="lldpd的使用"></a>lldpd的使用</h6><pre><code>lldpd -d#测试下程序是否可以正常启动  
+systemctl start lldpd.service#若可以正常启动，则使用systemctl启动lldpd  
+
+#启动后，可使用tcpdump抓取lldp数据包（在eth0口，每30s即可抓取到一个本机发出的lldp数据包）  
+tcpdump -e -x -i eth0 ether dst 01:80:c2:00:00:0e -nn  
+
+#还可以使用lldpcli查看本机维护的邻居表  
+lldpcli show neighbors  
+
+#输出json格式的邻居表  
+lldpcli show neighbors -f json
+</code></pre>
       
     </div>
     

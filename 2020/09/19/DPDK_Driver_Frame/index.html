@@ -4,17 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Archives: 2018/5 | 木子人人人&#39;s 藏经阁</title>
+  <title>DPDK驱动框架 | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="木子人人人's 藏经阁">
-<meta property="og:url" content="http://avalonlz.github.io/archives/2018/05/index.html">
+  <meta name="description" content="从源码说明下DPDK驱动框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DPDK驱动框架">
+<meta property="og:url" content="http://avalonlz.github.io/2020/09/19/DPDK_Driver_Frame/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description">
+<meta property="og:description" content="从源码说明下DPDK驱动框架">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_bus_scan.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg">
+<meta property="og:updated_time" content="2020-09-19T08:11:29.931Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="木子人人人's 藏经阁">
-<meta name="twitter:description">
+<meta name="twitter:title" content="DPDK驱动框架">
+<meta name="twitter:description" content="从源码说明下DPDK驱动框架">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_bus_scan.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -170,54 +174,150 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-DPDK_Driver_Frame" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/05/13/Crypt/" class="archive-article-date">
-  	<time datetime="2018-05-13T13:26:10.000Z" itemprop="datePublished">May 13</time>
+    <div class="article-meta">
+      <a href="/2020/09/19/DPDK_Driver_Frame/" class="article-date">
+  	<time datetime="2020-09-19T13:24:43.000Z" itemprop="datePublished">2020-09-19</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/05/13/Crypt/">HTTPS(TLS/SSL)与加/解密</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      DPDK驱动框架
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux网络编程/">Linux网络编程</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/云计算/">云计算</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+		
+		<!--
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+		//-->
+      
+	  </div>
+      
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>从源码说明下DPDK驱动框架<a id="more"></a><br>既然有时间了，那就写点东西吧。  </p>
+<h3 id="DPDK驱动框架"><a href="#DPDK驱动框架" class="headerlink" title="DPDK驱动框架"></a>DPDK驱动框架</h3><p>先找下DPDK环境初始化中，与网卡驱动相关的几个函数，以这几个函数为入口，再进行深入分析<br>● rte_bus_scan<br>● rte_bus_probe  </p>
+<h3 id="rte-bus-scan"><a href="#rte-bus-scan" class="headerlink" title="rte_bus_scan"></a>rte_bus_scan</h3><p>先来看下rte_bus_scan这个函数：    </p>
+<pre><code>int
+rte_bus_scan(void)
+{
+    int ret;
+    struct rte_bus *bus = NULL;
 
+    TAILQ_FOREACH(bus, &amp;rte_bus_list, next) {
+        ret = bus-&gt;scan();
+        if (ret)
+            RTE_LOG(ERR, EAL, &quot;Scan for (%s) bus failed.\n&quot;,
+                bus-&gt;name);
+    }
+
+    return 0;
+}  
+</code></pre><p>可以看到它是再遍历rte_bus_list这个链表，再分别各个bus的scan函数，这样的话就有三个疑问了<br>● rte_bus_list这里面放了什么东西？<br>● 元素是如何被放到rte_bus_list中的？<br>● scan做了什么？  </p>
+<p>先来看下rte_bus_list放了什么东西<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_bus_scan.jpg" alt=""><br>分析代码可以看到，注册了各种不同总线上的ops函数，包含：<br>dpaa、fslmc、ifpga、pci、vdev以及vmbus，这里我们就重点关注pci吧  </p>
+<p>那么这一个个元素是如何被注册进rte_bus_list的呢，可以看到每个bus，都会调用RTE_REGISTER_BUS宏，而这个宏的定义就是调用了rte_bus_register函数，将不同bus注册到list上的。并且我们还可以看到RTE_REGISTER_BUS宏中使用的RTE_INIT_PRIO，其定义是如下：  </p>
+<pre><code>#define RTE_INIT_PRIO(func, prio) \
+static void __attribute__((constructor(RTE_PRIO(prio)), used)) func(void)  
+</code></pre><p>所以在main函数执行前，便会将rte_bus_list初始化完成  </p>
+<p>最后我们以pci scan为例，看下都做了些什么：<br>-&gt;rte_pci_scan//遍历/sys/bus/pci/devices路径下的内容，并格式化路径名称<br> -&gt;pci_scan_one //获得该pci总线下，设备的vendor id、device_id以及当前所使用的驱动，并放入rte_pci_bus.device_list链表中，rte_pci_bus.device_list链表在RTE_REGISTER_BUS宏中就已经被初始化了，直接插入即可  </p>
+<h3 id="rte-bus-probe"><a href="#rte-bus-probe" class="headerlink" title="rte_bus_probe"></a>rte_bus_probe</h3><p>rte_bus_scan看完了，再看下rte_bus_probe，大概也就知道是调用不同bus的probe函数了，我们看下pci的probe做了些什么？  </p>
+<p>-&gt;rte_pci_probe<br> -&gt;FOREACH_DEVICE_ON_PCIBUS(dev)//遍历rte_pci_bus.device_list链表中的dev<br>  -&gt;pci_probe_all_drivers<br>   -&gt;FOREACH_DRIVER_ON_PCIBUS(dr)//遍历rte_pci_bus.driver_list（我们好像还不知道这个list是做什么的，在哪被初始化的，跟一下看看）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg" alt=""><br>可以看到这个list里放了各种dpdk pmd驱动的信息，并且用RTE_PMD_REGISTER_PCI宏，在main函数执行前，将dpdk的pmd driver信息，放入rte_pci_bus.driver_list中<br>   -&gt;rte_pci_probe_one_driver<br>    -&gt;rte_pci_match//判断当前dev是否支持dpdk的pmd驱动，若不支持,则直接返回尝试下一个dpdk pmd<br>    -&gt;dr-&gt;probe//调用匹配到的dpdk pmd driver的probe函数<br>     -&gt;rte_eth_dev_create//创建一个dpdk pmd driver<br>      -&gt;rte_eth_dev_allocate//从rte_eth_devices[RTE_MAX_ETHPORTS]链表里申请一个坑位，并填充一些信息<br>      -&gt;ethdev_init//调用当前驱动的ini函数进行初始化</p>
+<p>以上大概就是DPDK驱动框架的内容了，总的来说就是3个链表、1个数组，需要掌握：<br>1、rte_bus_list<br>2、device_list<br>3、driver_list<br>4、rte_eth_devices  </p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/02/08/LLDP/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">LLDP</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+<!--
+
+//-->
+
+ <!--以下为使用畅言的代码
+  && post.comments
+  style="padding: 0px 30px 0px 46px;">
+  //-->
+ 
+ 
+  <section id="comments">
+<!--高速版，加载速度快，使用前需测试页面的兼容性-->
+<div id="SOHUCS" sid="DPDK驱动框架"></div>
+<script>
+  (function(){
+    var appid = 'cyto4sUr6',
+    conf = '5531a21399d22997758da7915e34b8fe';
+    var doc = document,
+    s = doc.createElement('script'),
+    h = doc.getElementsByTagName('head')[0] || doc.head || doc.documentElement;
+    s.type = 'text/javascript';
+    s.charset = 'utf-8';
+    s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&appid=' + appid;
+    h.insertBefore(s,h.firstChild);
+    window.SCS_NO_IFRAME = true;
+  })()
+</script>
+  </section>
+  
 </div>
       <!--
 注释：用卜算子来统计网页访问量
@@ -269,8 +369,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false

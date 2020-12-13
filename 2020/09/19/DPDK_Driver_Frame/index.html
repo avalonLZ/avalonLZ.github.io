@@ -14,7 +14,7 @@
 <meta property="og:description" content="从源码说明下DPDK驱动框架">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_bus_scan.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg">
-<meta property="og:updated_time" content="2020-12-13T13:27:02.263Z">
+<meta property="og:updated_time" content="2020-12-13T15:15:47.517Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DPDK驱动框架">
 <meta name="twitter:description" content="从源码说明下DPDK驱动框架">
@@ -249,8 +249,13 @@ static void __attribute__((constructor(RTE_PRIO(prio)), used)) func(void)
   -&gt;pci_probe_all_drivers  
    -&gt;FOREACH_DRIVER_ON_PCIBUS(dr)//遍历rte_pci_bus.driver_list（我们好像还不知道这个list是做什么的，在哪被初始化的，跟一下看看）      
 </code></pre><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg" alt=""><br>可以看到这个list里放了各种dpdk pmd驱动的信息，并且用RTE_PMD_REGISTER_PCI宏，在main函数执行前，将dpdk的pmd driver信息，放入rte_pci_bus.driver_list中     </p>
-<p>   -&gt;rte_pci_probe_one_driver<br>    -&gt;rte_pci_match//判断当前dev是否支持dpdk的pmd驱动，若不支持,则直接返回尝试下一个dpdk pmd<br>    -&gt;dr-&gt;probe//调用匹配到的dpdk pmd driver的probe函数<br>     -&gt;rte_eth_dev_create//创建一个dpdk pmd driver<br>      -&gt;rte_eth_dev_allocate//从rte_eth_devices[RTE_MAX_ETHPORTS]链表里申请一个坑位，并填充一些信息<br>      -&gt;ethdev_init//调用当前驱动的ini函数进行初始化</p>
-<p>以上大概就是DPDK驱动框架的内容了，总的来说就是3个链表、1个数组，需要掌握：<br>1、rte_bus_list<br>2、device_list<br>3、driver_list<br>4、rte_eth_devices  </p>
+<pre><code>-&gt;rte_pci_probe_one_driver  
+ -&gt;rte_pci_match//判断当前dev是否支持dpdk的pmd驱动，若不支持,则直接返回尝试下一个dpdk pmd  
+ -&gt;dr-&gt;probe//调用匹配到的dpdk pmd driver的probe函数  
+  -&gt;rte_eth_dev_create//创建一个dpdk pmd driver
+   -&gt;rte_eth_dev_allocate//从rte_eth_devices[RTE_MAX_ETHPORTS]链表里申请一个坑位，并填充一些信息
+   -&gt;ethdev_init//调用当前驱动的ini函数进行初始化
+</code></pre><p>以上大概就是DPDK驱动框架的内容了，总的来说就是3个链表、1个数组，需要掌握：<br>1、rte_bus_list<br>2、device_list<br>3、driver_list<br>4、rte_eth_devices  </p>
 
       
     </div>

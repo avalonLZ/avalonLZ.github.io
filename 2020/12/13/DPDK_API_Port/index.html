@@ -4,17 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Archives: 2020/12 | 木子人人人&#39;s 藏经阁</title>
+  <title>探究DPDK网口操作必用API | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="木子人人人's 藏经阁">
-<meta property="og:url" content="http://avalonlz.github.io/archives/2020/12/index.html">
+  <meta name="description" content="本文主要想探究，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="探究DPDK网口操作必用API">
+<meta property="og:url" content="http://avalonlz.github.io/2020/12/13/DPDK_API_Port/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description">
+<meta property="og:description" content="本文主要想探究，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
+<meta property="og:updated_time" content="2020-12-13T16:34:31.274Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="木子人人人's 藏经阁">
-<meta name="twitter:description">
+<meta name="twitter:title" content="探究DPDK网口操作必用API">
+<meta name="twitter:description" content="本文主要想探究，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -170,54 +171,155 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-DPDK_API_Port" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/12/13/DPDK_API_Port/" class="archive-article-date">
-  	<time datetime="2020-12-13T13:16:35.000Z" itemprop="datePublished">Dec 13</time>
+    <div class="article-meta">
+      <a href="/2020/12/13/DPDK_API_Port/" class="article-date">
+  	<time datetime="2020-12-13T13:16:35.000Z" itemprop="datePublished">2020-12-13</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/12/13/DPDK_API_Port/">探究DPDK网口操作必用API</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      探究DPDK网口操作必用API
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DPDK/">DPDK</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+		
+		<!--
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+		//-->
+      
+	  </div>
+      
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文主要想探究，一个DPDK应用必须要使用的，一些网口操作API<br>首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）<a id="more"></a>  </p>
+<h3 id="DPDK-APP-Start-相关API使用流程"><a href="#DPDK-APP-Start-相关API使用流程" class="headerlink" title="DPDK APP Start 相关API使用流程"></a>DPDK APP Start 相关API使用流程</h3><p>对于一个DPDK应用来说，要想使用DPDK的PMD驱动，至少要做以下几件事情（按API的使用顺序罗列）：  </p>
+<ol>
+<li>初始化环境（rte_eal_init）  </li>
+<li>启动参数解析（xxx_parse_args）  </li>
+<li>转发核与网口绑定（自定义函数，自行维护对应关系）  </li>
+<li>创建mempool（rte_pktmbuf_pool_create）  </li>
+<li>配置网口（rte_eth_dev_configure）  </li>
+<li>初始化/配置网口收包队列（rte_eth_rx_queue_setup）  </li>
+<li>初始化/配置网口收包队列（rte_eth_tx_queue_setup）  </li>
+<li>启动网口/设备（rte_eth_dev_start）  </li>
+<li>注册转发核处理函数（rte_eal_mp_remote_launch）<br>其中4-8使用的API及其内部关键部分，本文将会重点介绍  </li>
+</ol>
+<h3 id="创建mempool"><a href="#创建mempool" class="headerlink" title="创建mempool"></a>创建mempool</h3><p>首先说下创建内存池  </p>
+<pre><code>//创建一个mempool
+struct rte_mempool *rte_pktmbuf_pool_create(const char *name, unsigned int n,
+    unsigned int cache_size, uint16_t priv_size, uint16_t data_room_size,
+    int socket_id)    
 
+
+name：mempool名称
+
+n：mempool中mbuf的数量
+
+cache_size：mempool针对不同cpu（core），自己做的一个cache，减少不同cpu访问mempool的上锁操作（一般是用32或250？） 
+
+priv_size：mempool的私有数据结构长度（正常收发包一般不用，加解密方面会用到）  
+
+data_room_size：指明一个rte_mbuf的大小    
+
+socket_id：指明该mempool要从哪个cpu插槽申请（一般是找到转发core所在的cpu插槽）
+</code></pre><p>其中比较有疑问的参数是cache_size，  </p>
+<p>针对priv_size和data_room_size，结合l2fwd的例程和以下mempool/mbuf结构图，可以看出priv_size是算作mbuf中的一部分（猜测应该是修改mbuf结构后，需要加入的size大小？）</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/11/15/DockerNotes/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Docker使用笔记</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+<!--
+
+//-->
+
+ <!--以下为使用畅言的代码
+  && post.comments
+  style="padding: 0px 30px 0px 46px;">
+  //-->
+ 
+ 
+  <section id="comments">
+<!--高速版，加载速度快，使用前需测试页面的兼容性-->
+<div id="SOHUCS" sid="探究DPDK网口操作必用API"></div>
+<script>
+  (function(){
+    var appid = 'cyto4sUr6',
+    conf = '5531a21399d22997758da7915e34b8fe';
+    var doc = document,
+    s = doc.createElement('script'),
+    h = doc.getElementsByTagName('head')[0] || doc.head || doc.documentElement;
+    s.type = 'text/javascript';
+    s.charset = 'utf-8';
+    s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&appid=' + appid;
+    h.insertBefore(s,h.firstChild);
+    window.SCS_NO_IFRAME = true;
+  })()
+</script>
+  </section>
+  
 </div>
       <!--
 注释：用卜算子来统计网页访问量
@@ -269,8 +371,8 @@
 		mathjax: true,
 		animate: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false

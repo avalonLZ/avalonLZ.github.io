@@ -14,7 +14,7 @@
 <meta property="og:description" content="从源码说明下DPDK驱动框架">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_bus_scan.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg">
-<meta property="og:updated_time" content="2020-09-19T08:11:29.932Z">
+<meta property="og:updated_time" content="2020-12-13T13:27:02.263Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DPDK驱动框架">
 <meta name="twitter:description" content="从源码说明下DPDK驱动框架">
@@ -111,7 +111,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Linux多线程编程/" style="font-size: 12.5px;">Linux多线程编程</a> <a href="/tags/Linux多进程编程/" style="font-size: 10px;">Linux多进程编程</a> <a href="/tags/Linux网络编程/" style="font-size: 20px;">Linux网络编程</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 12.5px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 12.5px;">Raspberry Pi</a> <a href="/tags/云计算/" style="font-size: 15px;">云计算</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-Linux/" style="font-size: 12.5px;">嵌入式_Linux</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 17.5px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 15px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/应用软件-Supervisor/" style="font-size: 10px;">应用软件_Supervisor</a> <a href="/tags/服务器-Django/" style="font-size: 12.5px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏编程/" style="font-size: 10px;">游戏编程</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-Linux/" style="font-size: 15px;">百科_Linux</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/百科-网络/" style="font-size: 12.5px;">百科_网络</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/计算机语言-Shell/" style="font-size: 10px;">计算机语言_Shell</a> <a href="/tags/轮子-C/" style="font-size: 10px;">轮子_C</a> <a href="/tags/软件工程-DesignPatterns/" style="font-size: 10px;">软件工程_DesignPatterns</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
+						<a href="/tags/DPDK/" style="font-size: 10px;">DPDK</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Linux多线程编程/" style="font-size: 12px;">Linux多线程编程</a> <a href="/tags/Linux多进程编程/" style="font-size: 10px;">Linux多进程编程</a> <a href="/tags/Linux网络编程/" style="font-size: 20px;">Linux网络编程</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 12px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 12px;">Raspberry Pi</a> <a href="/tags/云计算/" style="font-size: 14px;">云计算</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-Linux/" style="font-size: 12px;">嵌入式_Linux</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 18px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 16px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/应用软件-Supervisor/" style="font-size: 10px;">应用软件_Supervisor</a> <a href="/tags/服务器-Django/" style="font-size: 12px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏编程/" style="font-size: 10px;">游戏编程</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-Linux/" style="font-size: 16px;">百科_Linux</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/百科-网络/" style="font-size: 12px;">百科_网络</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/计算机语言-Shell/" style="font-size: 10px;">计算机语言_Shell</a> <a href="/tags/轮子-C/" style="font-size: 10px;">轮子_C</a> <a href="/tags/软件工程-DesignPatterns/" style="font-size: 10px;">软件工程_DesignPatterns</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
 					</div>
 				</section>
 				
@@ -200,7 +200,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/云计算/">云计算</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DPDK/">DPDK</a></li></ul>
 	</div>
 
         
@@ -240,9 +240,16 @@ rte_bus_scan(void)
 <pre><code>#define RTE_INIT_PRIO(func, prio) \
 static void __attribute__((constructor(RTE_PRIO(prio)), used)) func(void)  
 </code></pre><p>所以在main函数执行前，便会将rte_bus_list初始化完成  </p>
-<p>最后我们以pci scan为例，看下都做了些什么：<br>-&gt;rte_pci_scan//遍历/sys/bus/pci/devices路径下的内容，并格式化路径名称<br> -&gt;pci_scan_one //获得该pci总线下，设备的vendor id、device_id以及当前所使用的驱动，并放入rte_pci_bus.device_list链表中，rte_pci_bus.device_list链表在RTE_REGISTER_BUS宏中就已经被初始化了，直接插入即可  </p>
-<h3 id="rte-bus-probe"><a href="#rte-bus-probe" class="headerlink" title="rte_bus_probe"></a>rte_bus_probe</h3><p>rte_bus_scan看完了，再看下rte_bus_probe，大概也就知道是调用不同bus的probe函数了，我们看下pci的probe做了些什么？  </p>
-<p>-&gt;rte_pci_probe<br> -&gt;FOREACH_DEVICE_ON_PCIBUS(dev)//遍历rte_pci_bus.device_list链表中的dev<br>  -&gt;pci_probe_all_drivers<br>   -&gt;FOREACH_DRIVER_ON_PCIBUS(dr)//遍历rte_pci_bus.driver_list（我们好像还不知道这个list是做什么的，在哪被初始化的，跟一下看看）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg" alt=""><br>可以看到这个list里放了各种dpdk pmd驱动的信息，并且用RTE_PMD_REGISTER_PCI宏，在main函数执行前，将dpdk的pmd driver信息，放入rte_pci_bus.driver_list中<br>   -&gt;rte_pci_probe_one_driver<br>    -&gt;rte_pci_match//判断当前dev是否支持dpdk的pmd驱动，若不支持,则直接返回尝试下一个dpdk pmd<br>    -&gt;dr-&gt;probe//调用匹配到的dpdk pmd driver的probe函数<br>     -&gt;rte_eth_dev_create//创建一个dpdk pmd driver<br>      -&gt;rte_eth_dev_allocate//从rte_eth_devices[RTE_MAX_ETHPORTS]链表里申请一个坑位，并填充一些信息<br>      -&gt;ethdev_init//调用当前驱动的ini函数进行初始化</p>
+<p>最后我们以pci scan为例，看下都做了些什么：    </p>
+<pre><code>-&gt;rte_pci_scan//遍历/sys/bus/pci/devices路径下的内容，并格式化路径名称  
+ -&gt;pci_scan_one //获得该pci总线下，设备的vendor id、device_id以及当前所使用的驱动，并放入rte_pci_bus.device_list链表中，rte_pci_bus.device_list链表在RTE_REGISTER_BUS宏中就已经被初始化了，直接插入即可  
+</code></pre><h3 id="rte-bus-probe"><a href="#rte-bus-probe" class="headerlink" title="rte_bus_probe"></a>rte_bus_probe</h3><p>rte_bus_scan看完了，再看下rte_bus_probe，大概也就知道是调用不同bus的probe函数了，我们看下pci的probe做了些什么？    </p>
+<pre><code>-&gt;rte_pci_probe  
+ -&gt;FOREACH_DEVICE_ON_PCIBUS(dev)//遍历rte_pci_bus.device_list链表中的dev    
+  -&gt;pci_probe_all_drivers  
+   -&gt;FOREACH_DRIVER_ON_PCIBUS(dr)//遍历rte_pci_bus.driver_list（我们好像还不知道这个list是做什么的，在哪被初始化的，跟一下看看）      
+</code></pre><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg" alt=""><br>可以看到这个list里放了各种dpdk pmd驱动的信息，并且用RTE_PMD_REGISTER_PCI宏，在main函数执行前，将dpdk的pmd driver信息，放入rte_pci_bus.driver_list中     </p>
+<p>   -&gt;rte_pci_probe_one_driver<br>    -&gt;rte_pci_match//判断当前dev是否支持dpdk的pmd驱动，若不支持,则直接返回尝试下一个dpdk pmd<br>    -&gt;dr-&gt;probe//调用匹配到的dpdk pmd driver的probe函数<br>     -&gt;rte_eth_dev_create//创建一个dpdk pmd driver<br>      -&gt;rte_eth_dev_allocate//从rte_eth_devices[RTE_MAX_ETHPORTS]链表里申请一个坑位，并填充一些信息<br>      -&gt;ethdev_init//调用当前驱动的ini函数进行初始化</p>
 <p>以上大概就是DPDK驱动框架的内容了，总的来说就是3个链表、1个数组，需要掌握：<br>1、rte_bus_list<br>2、device_list<br>3、driver_list<br>4、rte_eth_devices  </p>
 
       

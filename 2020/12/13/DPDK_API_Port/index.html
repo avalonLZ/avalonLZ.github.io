@@ -14,7 +14,7 @@
 <meta property="og:description" content="本文主要想简单记录下，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/cache_size.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/mempool.jpg">
-<meta property="og:updated_time" content="2020-12-20T15:21:47.910Z">
+<meta property="og:updated_time" content="2020-12-20T15:26:24.875Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DPDK网口操作必用API">
 <meta name="twitter:description" content="本文主要想简单记录下，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
@@ -260,7 +260,7 @@ nb_rx_q：收包队列数（有几个转发核就需要有几个队列）
 nb_tx_q：发包队列数（有几个转发核就需要有几个队列）  
 
 dev_conf：网口需要使能的offload特性、max_pkg_len等配置信息  
-</code></pre><p>简单说一下：<br>1、这个API里头会调用rte_eth_dev_rx_queue_config和rte_eth_dev_tx_queue_config，去初始化一个可以存放queue结构的指针数组，而此指针数组被填充（queue被初始化）是在setup阶段，并且queue中填充desc(mbuf)，则是在dev_start中<br>2、dev_conf这个结构需要对网卡特性有一定了解，才能把控好它（必要时，需要结合各款网卡的datasheet）。另外，在此API中，会通过rte_eth_dev_info_get（ops-&gt;dev_infos_get）获取不同网卡所支持的特性，并比较用户下发的conf，若用户下发了该网卡不支持的特性，将抛出错误。网卡特性是否使能，在DPDK中有点恶心的是，不同厂家维护的PMD并不统一。比如，Intel可能由于你配置的包过大，会在设备start的时候再去config一次网卡(开启scattert特性)，自动设置一些特性。而Mellanox就并不会这样，一切特性都需要你自己去配置，并不会帮你自动关联开启某特性。这点就导致，若上层框架直接调用DPDK的API，就有可能会出现比较凌乱的代码结构。比较合理的做法，应该是针对必要的APi，想办法再封装一层适配层  </p>
+</code></pre><p>简单说一下：<br>1.这个API里头会调用rte_eth_dev_rx_queue_config和rte_eth_dev_tx_queue_config，去初始化一个可以存放queue结构的指针数组，而此指针数组被填充（queue被初始化）是在setup阶段，并且queue中填充desc(mbuf)，则是在dev_start中<br>2.dev_conf这个结构需要对网卡特性有一定了解，才能把控好它（必要时，需要结合各款网卡的datasheet）。另外，在此API中，会通过rte_eth_dev_info_get（ops-&gt;dev_infos_get）获取不同网卡所支持的特性，并比较用户下发的conf，若用户下发了该网卡不支持的特性，将抛出错误。网卡特性是否使能，在DPDK中有点恶心的是，不同厂家维护的PMD并不统一。比如，Intel可能由于你配置的包过大，会在设备start的时候再去config一次网卡(开启scattert特性)，自动设置一些特性。而Mellanox就并不会这样，一切特性都需要你自己去配置，并不会帮你自动关联开启某特性。这点就导致，若上层框架直接调用DPDK的API，就有可能会出现比较凌乱的代码结构。比较合理的做法，应该是针对必要的APi，想办法再封装一层适配层  </p>
 <h3 id="初始化-配置网口收包队列"><a href="#初始化-配置网口收包队列" class="headerlink" title="初始化/配置网口收包队列"></a>初始化/配置网口收包队列</h3><p>下面再说下，用于初始化网口收包队列的rte_eth_rx_queue_setup API吧  </p>
 <pre><code>int rte_eth_tx_queue_setup(uint16_t port_id, uint16_t tx_queue_id,
                uint16_t nb_tx_desc, unsigned int socket_id,

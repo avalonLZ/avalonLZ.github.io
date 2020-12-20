@@ -4,18 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>探究DPDK网口操作必用API | 木子人人人&#39;s 藏经阁</title>
+  <title>DPDK网口操作必用API | 木子人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文主要想探究，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
+  <meta name="description" content="本文主要想简单记录下，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
 <meta property="og:type" content="article">
-<meta property="og:title" content="探究DPDK网口操作必用API">
+<meta property="og:title" content="DPDK网口操作必用API">
 <meta property="og:url" content="http://avalonlz.github.io/2020/12/13/DPDK_API_Port/index.html">
 <meta property="og:site_name" content="木子人人人's 藏经阁">
-<meta property="og:description" content="本文主要想探究，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
-<meta property="og:updated_time" content="2020-12-13T16:34:31.274Z">
+<meta property="og:description" content="本文主要想简单记录下，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/cache_size.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/mempool.jpg">
+<meta property="og:updated_time" content="2020-12-20T15:21:47.910Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="探究DPDK网口操作必用API">
-<meta name="twitter:description" content="本文主要想探究，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
+<meta name="twitter:title" content="DPDK网口操作必用API">
+<meta name="twitter:description" content="本文主要想简单记录下，一个DPDK应用必须要使用的，一些网口操作API首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/cache_size.jpg">
   
     <link rel="alternative" href="/atom.xml" title="木子人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -188,7 +191,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      探究DPDK网口操作必用API
+      DPDK网口操作必用API
     </h1>
   
 
@@ -213,7 +216,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本文主要想探究，一个DPDK应用必须要使用的，一些网口操作API<br>首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）<a id="more"></a>  </p>
+        <p>本文主要想简单记录下，一个DPDK应用必须要使用的，一些网口操作API<br>首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）<a id="more"></a>  </p>
 <h3 id="DPDK-APP-Start-相关API使用流程"><a href="#DPDK-APP-Start-相关API使用流程" class="headerlink" title="DPDK APP Start 相关API使用流程"></a>DPDK APP Start 相关API使用流程</h3><p>对于一个DPDK应用来说，要想使用DPDK的PMD驱动，至少要做以下几件事情（按API的使用顺序罗列）：  </p>
 <ol>
 <li>初始化环境（rte_eal_init）  </li>
@@ -224,7 +227,7 @@
 <li>初始化/配置网口收包队列（rte_eth_rx_queue_setup）  </li>
 <li>初始化/配置网口收包队列（rte_eth_tx_queue_setup）  </li>
 <li>启动网口/设备（rte_eth_dev_start）  </li>
-<li>注册转发核处理函数（rte_eal_mp_remote_launch）<br>其中4-8使用的API及其内部关键部分，本文将会重点介绍  </li>
+<li>注册转发核处理函数（rte_eal_mp_remote_launch）<br>本文将会提及，其中4-8步所使用的API，及其关键功能  </li>
 </ol>
 <h3 id="创建mempool"><a href="#创建mempool" class="headerlink" title="创建mempool"></a>创建mempool</h3><p>首先说下创建内存池  </p>
 <pre><code>//创建一个mempool
@@ -244,8 +247,56 @@ priv_size：mempool的私有数据结构长度（正常收发包一般不用，�
 data_room_size：指明一个rte_mbuf的大小    
 
 socket_id：指明该mempool要从哪个cpu插槽申请（一般是找到转发core所在的cpu插槽）
-</code></pre><p>其中比较有疑问的参数是cache_size，  </p>
-<p>针对priv_size和data_room_size，结合l2fwd的例程和以下mempool/mbuf结构图，可以看出priv_size是算作mbuf中的一部分（猜测应该是修改mbuf结构后，需要加入的size大小？）</p>
+</code></pre><p>其中比较有疑问的参数是cache_size，DPDK的mempool针对不同core,所做的软件cache（并非一个core内部的cache）。目的，是为了减少不同core访问mempool时的上锁操作（原理大致如下图所示）。cache_size在DPDK中默认最大是250，理论上来说cache应该是尽可能的大，所以一般也将此值设为250（有的例程是32可能是出于DPDK应用所占用的内存考虑？）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/cache_size.jpg" alt="">  </p>
+<p>针对priv_size和data_room_size，结合l2fwd的例程和以下mempool/mbuf结构图，可以看出priv_size是算作mbuf中的一部分（猜测应该是修改mbuf结构后，需要加入的size大小？在二层加密例程中有使用，一般转发应该不用这个变量）。data_room_size参考例程填写即可<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/mempool.jpg" alt="">      </p>
+<h3 id="配置网口"><a href="#配置网口" class="headerlink" title="配置网口"></a>配置网口</h3><p>接下来说下rte_eth_dev_configure配置网口这个API，首先强调一下，调用此API，需要网口处于stop状态  </p>
+<pre><code>int rte_eth_dev_configure(uint16_t port_id, uint16_t nb_rx_q, uint16_t nb_tx_q,
+              const struct rte_eth_conf *dev_conf)  
+
+port_id：网口id  
+
+nb_rx_q：收包队列数（有几个转发核就需要有几个队列）  
+
+nb_tx_q：发包队列数（有几个转发核就需要有几个队列）  
+
+dev_conf：网口需要使能的offload特性、max_pkg_len等配置信息  
+</code></pre><p>简单说一下：<br>1、这个API里头会调用rte_eth_dev_rx_queue_config和rte_eth_dev_tx_queue_config，去初始化一个可以存放queue结构的指针数组，而此指针数组被填充（queue被初始化）是在setup阶段，并且queue中填充desc(mbuf)，则是在dev_start中<br>2、dev_conf这个结构需要对网卡特性有一定了解，才能把控好它（必要时，需要结合各款网卡的datasheet）。另外，在此API中，会通过rte_eth_dev_info_get（ops-&gt;dev_infos_get）获取不同网卡所支持的特性，并比较用户下发的conf，若用户下发了该网卡不支持的特性，将抛出错误。网卡特性是否使能，在DPDK中有点恶心的是，不同厂家维护的PMD并不统一。比如，Intel可能由于你配置的包过大，会在设备start的时候再去config一次网卡(开启scattert特性)，自动设置一些特性。而Mellanox就并不会这样，一切特性都需要你自己去配置，并不会帮你自动关联开启某特性。这点就导致，若上层框架直接调用DPDK的API，就有可能会出现比较凌乱的代码结构。比较合理的做法，应该是针对必要的APi，想办法再封装一层适配层  </p>
+<h3 id="初始化-配置网口收包队列"><a href="#初始化-配置网口收包队列" class="headerlink" title="初始化/配置网口收包队列"></a>初始化/配置网口收包队列</h3><p>下面再说下，用于初始化网口收包队列的rte_eth_rx_queue_setup API吧  </p>
+<pre><code>int rte_eth_tx_queue_setup(uint16_t port_id, uint16_t tx_queue_id,
+               uint16_t nb_tx_desc, unsigned int socket_id,
+               const struct rte_eth_txconf *tx_conf)  
+
+port_id：网口id  
+
+rx_queue_id：需要配置的收包队列id（nb_rx_q是几，就从0到几）  
+
+nb_rx_desc：配置收包队列描述符个数（收包队列的大小）  
+
+socket_id：指明收包队列以及sw_ring等数据结构，从哪个socket上申请（一般和mempool来源的cpu物理插槽id相同）  
+
+rx_conf：需要生效的收包队列的配置  
+
+mp：指定收包队列中，mbuf来源的mempool  
+</code></pre><p>这个API的话，比较关键的就是会将mempool和rx_queue进行关联，后面调用start的时候，就会从这里关联的mempool中获取空间，填充rx_queue的收包描述符了（其实如果要深入的话，还可以探究下它sw_ring的玩法）   </p>
+<h3 id="初始化-配置网口发包队列"><a href="#初始化-配置网口发包队列" class="headerlink" title="初始化/配置网口发包队列"></a>初始化/配置网口发包队列</h3><p>rte_eth_tx_queue_setup API用于初始化/配置网口发包队列，这个API，跟上面介绍的rte_eth_rx_queue_setup，大同小异，理论上来说它比收包还更简单，因为它无需和mempool关联  </p>
+<pre><code>int rte_eth_tx_queue_setup(uint16_t port_id, uint16_t tx_queue_id,
+               uint16_t nb_tx_desc, unsigned int socket_id,
+               const struct rte_eth_txconf *tx_conf)  
+
+port_id：网口id    
+
+tx_queue_id：需要配置的发包队列id（nb_tx_q是几，就从0到几）  
+
+nb_tx_desc：配置发包队列描述符个数（发包队列的大小）  
+
+socket_id：指明发包队列数据结构所占内存，从哪个socket上申请（填写和收包队列相同的socket_id，性能最优）  
+
+tx_conf：需要生效的发包队列的配置  
+</code></pre><h3 id="启动网口-设备"><a href="#启动网口-设备" class="headerlink" title="启动网口/设备"></a>启动网口/设备</h3><p>rte_eth_dev_start用于启动网口/设备，这个API主要干的活，就是根据之前config和setup所下发的配置，去start网口，会进行rx/tx queue的init和start。并且一般是在xxx_alloc_rx_queue_mbufs里，从mempool获取desc，填充到queue中  </p>
+<pre><code>int rte_eth_dev_start(uint16_t port_id)  
+
+port_id：网口id  
+</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>DPDK提供的网口操作API远不止这些，rte_ethdev.c下定义的函数，均是其对外提供的，网口操作API接口。本文只是选出了一个DPDK APP所必须要存在的网口操作API，进行简单说明（若有出入，还请指正，谢谢）</p>
 
       
     </div>
@@ -303,7 +354,7 @@ socket_id：指明该mempool要从哪个cpu插槽申请（一般是找到转发c
  
   <section id="comments">
 <!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="探究DPDK网口操作必用API"></div>
+<div id="SOHUCS" sid="DPDK网口操作必用API"></div>
 <script>
   (function(){
     var appid = 'cyto4sUr6',

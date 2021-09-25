@@ -12,10 +12,14 @@
 <meta property="og:url" content="http://avalonlz.github.io/2021/09/12/Tools-ftrace/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
 <meta property="og:description" content="本文用于记录Linux工具ftrace的使用">
-<meta property="og:updated_time" content="2021-09-12T13:12:23.334Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/menuconfig.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/file.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/dict.jpg">
+<meta property="og:updated_time" content="2021-09-25T08:39:17.826Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux必学工具之ftrace">
 <meta name="twitter:description" content="本文用于记录Linux工具ftrace的使用">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/menuconfig.jpg">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -214,10 +218,103 @@
 <li><a href="#简介">简介</a></li>
 <li><a href="#使用要求">使用要求</a></li>
 <li><a href="#使用说明">使用说明</a></li>
+<li><a href="#举例">举例</a></li>
 </ul>
 <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>ftrace是Linux内核提供的，可动态捕获内核函数调用栈的工具，排查内核相关问题，必备良药  </p>
-<h1 id="使用要求"><a href="#使用要求" class="headerlink" title="使用要求"></a>使用要求</h1><p>想要使用ftrace，对内核版本及其编译选项均有如下要求：<br>1.内核版本2.6.27及以上<br>2.编译内核时需要使能所你需要的trace类型  </p>
-<h1 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h1><p>目录结构如下：  </p>
+<h1 id="使用要求"><a href="#使用要求" class="headerlink" title="使用要求"></a>使用要求</h1><p>想要使用ftrace，对内核版本及其编译选项均有如下要求：<br>1.内核版本2.6.27及以上<br>2.编译内核时，需要使能所你需要的trace类型（3.10的话本质只提供的几个可选项）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/menuconfig.jpg" alt="">  </p>
+<h1 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h1><p>当你已经编译完成并替换好内核后，便可以使用ftrace对某一操作的内核行为进行分析了，ftrace所涉及的文件结构如下图所示：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/file.jpg" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/dict.jpg" alt=""><br>下面对常用的文件进行说明：    </p>
+<pre><code>/* 所有跟踪器，常用公共配置文件： */
+[root@localhost tracing]# cat available_tracers #内核目前所支持的追踪类型 
+hwlat blk function_graph wakeup_dl wakeup_rt wakeup function nop
+
+
+[root@localhost tracing]# cat tracing_on #开/关追踪功能
+1
+
+[root@localhost tracing]# cat current_tracer #设置当前追踪类型，nop表示啥也不追踪
+nop
+
+[root@localhost tracing]# cat available_filter_functions #ftrace可支持的内核函数名称，位于该文件内的函数，写入set_ftrace_filter才有效
+
+/* function跟踪器常用配置文件： */
+[root@localhost tracing]# cat set_ftrace_filter #需要跟踪的函数名称
+#### all functions enabled ####  
+
+[root@localhost tracing]# cat options/func_stack_trace #开/关函数调用栈追踪功能
+1
+
+[root@localhost tracing]# cat trace_options #显示出当前所选择的跟踪器的option配置（function跟踪器内容如下）
+
+/* function_graph跟踪器，常用配置文件（3.10.0上无法配置跟踪函数调用栈所以一般还是用function）： */
+[root@localhost tracing]# cat set_graph_function #指定function_graph跟踪器需要跟踪的函数
+#### all functions enabled ####
+
+[root@localhost tracing]# cat max_graph_depth #设置function_graph跟踪函数嵌套的最大深度
+10  
+</code></pre><h1 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h1><p>下面采用Centos7，3.10.0内核版本，以设置中断为例子,演示如何使用function跟踪器实现内核函数调用栈的跟踪（此内核版本对function_graph跟踪器的功能有限，遂尚不用此举例）  </p>
+<p>1.配置当前跟踪器为function:    </p>
+<pre><code>[root@localhost tracing]# echo function &gt; current_tracer   
+</code></pre><p>2.设定所跟踪的内核函数为irq_do_set_affinity：   </p>
+<pre><code>[root@localhost tracing]# echo irq_do_set_affinity &gt; set_ftrace_filter  
+</code></pre><p>3.检查下option里是否开启了函数调用栈跟踪：    </p>
+<pre><code>[root@localhost tracing]# cat trace_options 
+print-parent
+nosym-offset
+nosym-addr
+noverbose
+noraw
+nohex
+nobin
+noblock
+nostacktrace
+trace_printk
+noftrace_preempt
+nobranch
+annotate
+nouserstacktrace
+nosym-userobj
+noprintk-msg-only
+context-info
+nolatency-format
+sleep-time
+graph-time
+record-cmd
+overwrite
+nodisable_on_free
+irq-info
+markers
+function-trace
+func_stack_trace#启用了函数调用栈跟踪  
+</code></pre><p>4.开启跟踪：    </p>
+<pre><code>[root@localhost tracing]# echo 1 &gt; tracing_on  
+</code></pre><p>5.先清空一下trace中现有的内容：  </p>
+<pre><code>[root@localhost tracing]# echo &gt; trace  
+</code></pre><p>6.配置一个中断号的中断亲和性：  </p>
+<pre><code>[root@localhost Desktop]# echo 0 &gt; /proc/irq/16/smp_affinity_list  
+</code></pre><p>7.查看trace中的内容：  </p>
+<pre><code>[root@localhost tracing]# cat trace
+# tracer: function
+#
+# entries-in-buffer/entries-written: 2/2   #P:1
+#
+#                              _-----=&gt; irqs-off
+#                             / _----=&gt; need-resched
+#                            | / _---=&gt; hardirq/softirq
+#                            || / _--=&gt; preempt-depth
+#                            ||| /     delay
+#           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
+#              | |       |   ||||       |         |
+        kworker/0:1-25    [000] d.h.   738.204946: irq_do_set_affinity &lt;-irq_move_masked_irq
+        kworker/0:1-25    [000] d.h.   738.204955: &lt;stack trace&gt;
+    =&gt; handle_fasteoi_irq
+    =&gt; handle_irq
+    =&gt; do_IRQ
+    =&gt; ret_from_intr
+    =&gt; process_one_work
+    =&gt; worker_thread
+    =&gt; kthread
+    =&gt; ret_from_fork_nospec_end
+</code></pre><p>可以看到内核函数的调用栈情况  </p>
 
       
     </div>
@@ -226,6 +323,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2021/09/25/Tools-ftrace/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
   
   
     <a href="/2021/04/16/Kubernetes-study-1/" id="article-nav-older" class="article-nav-link-wrap">

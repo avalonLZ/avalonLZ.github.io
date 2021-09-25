@@ -6,15 +6,29 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
+  <meta name="description" content="&amp;#x7B80;&amp;#x4ECB;
+        
+/* From extension vscode.markdown-math */
+@font-face{font-family:KaTeX_AMS;src:url(fonts/KaTeX_AMS-Regular.woff2) format(&quot;woff2&quot;),url(fonts/KaTeX_">
+<meta property="og:type" content="article">
 <meta property="og:title" content="人人人's 藏经阁">
-<meta property="og:url" content="http://avalonlz.github.io/index.html">
+<meta property="og:url" content="http://avalonlz.github.io/2021/09/25/Tools-ftrace/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
-<meta property="og:description">
+<meta property="og:description" content="&amp;#x7B80;&amp;#x4ECB;
+        
+/* From extension vscode.markdown-math */
+@font-face{font-family:KaTeX_AMS;src:url(fonts/KaTeX_AMS-Regular.woff2) format(&quot;woff2&quot;),url(fonts/KaTeX_">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/menuconfig.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/file.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/dict.jpg">
+<meta property="og:updated_time" content="2021-09-25T08:34:42.016Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="人人人's 藏经阁">
-<meta name="twitter:description">
+<meta name="twitter:description" content="&amp;#x7B80;&amp;#x4ECB;
+        
+/* From extension vscode.markdown-math */
+@font-face{font-family:KaTeX_AMS;src:url(fonts/KaTeX_AMS-Regular.woff2) format(&quot;woff2&quot;),url(fonts/KaTeX_">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/menuconfig.jpg">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -166,9 +180,7 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
-  
-    <article id="post-Tools-ftrace" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Tools-ftrace" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2021/09/25/Tools-ftrace/" class="article-date">
@@ -224,95 +236,160 @@
 <h2 id="title-linux必学工具之ftracedate-2021-09-12-203935tags-linux工具">title: Linux必学工具之ftrace
 date: 2021-09-12 20:39:35
 tags: Linux工具</h2>
-<p>本文用于记录Linux工具ftrace的使用
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
+<p>本文用于记录Linux工具ftrace的使用<a id="more"></a></p>
+<h1 id="简介">简介</h1>
+<p>ftrace是Linux内核提供的，可动态捕获内核函数调用栈的工具，排查内核相关问题，必备良药</p>
+<h1 id="使用要求">使用要求</h1>
+<p>想要使用ftrace，对内核版本及其编译选项均有如下要求：<br>
+1.内核版本2.6.27及以上<br>
+2.编译内核时，需要使能所你需要的trace类型（3.10的话本质只提供的几个可选项）<br>
+<img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/menuconfig.jpg" alt=""></p>
+<h1 id="使用说明">使用说明</h1>
+<p>当你已经编译完成并替换好内核后，便可以使用ftrace对某一操作的内核行为进行分析了，ftrace所涉及的文件结构如下图所示：<br>
+<img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/file.jpg" alt=""><br>
+<img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ftrace/dict.jpg" alt=""><br>
+下面对常用的文件进行说明：</p>
+<pre><code>/* 所有跟踪器，常用公共配置文件： */
+[root@localhost tracing]# cat available_tracers #内核目前所支持的追踪类型 
+hwlat blk function_graph wakeup_dl wakeup_rt wakeup function nop
 
+
+[root@localhost tracing]# cat tracing_on #开/关追踪功能
+1
+
+[root@localhost tracing]# cat current_tracer #设置当前追踪类型，nop表示啥也不追踪
+nop
+
+[root@localhost tracing]# cat available_filter_functions #ftrace可支持的内核函数名称，位于该文件内的函数，写入set_ftrace_filter才有效
+
+/* function跟踪器常用配置文件： */
+[root@localhost tracing]# cat set_ftrace_filter #需要跟踪的函数名称
+#### all functions enabled ####  
+
+[root@localhost tracing]# cat options/func_stack_trace #开/关函数调用栈追踪功能
+1
+
+[root@localhost tracing]# cat trace_options #显示出当前所选择的跟踪器的option配置（function跟踪器内容如下）
+
+/* function_graph跟踪器，常用配置文件（3.10.0上无法配置跟踪函数调用栈所以一般还是用function）： */
+[root@localhost tracing]# cat set_graph_function #指定function_graph跟踪器需要跟踪的函数
+#### all functions enabled ####
+
+[root@localhost tracing]# cat max_graph_depth #设置function_graph跟踪函数嵌套的最大深度
+10  
+</code></pre>
+<h1 id="举例">举例</h1>
+<p>下面采用Centos7，3.10.0内核版本，以设置中断为例子,演示如何使用function跟踪器实现内核函数调用栈的跟踪（此内核版本对function_graph跟踪器的功能有限，遂尚不用此举例）</p>
+<p>1.配置当前跟踪器为function:</p>
+<pre><code>[root@localhost tracing]# echo function &gt; current_tracer   
+</code></pre>
+<p>2.设定所跟踪的内核函数为irq_do_set_affinity：</p>
+<pre><code>[root@localhost tracing]# echo irq_do_set_affinity &gt; set_ftrace_filter  
+</code></pre>
+<p>3.检查下option里是否开启了函数调用栈跟踪：</p>
+<pre><code>[root@localhost tracing]# cat trace_options 
+print-parent
+nosym-offset
+nosym-addr
+noverbose
+noraw
+nohex
+nobin
+noblock
+nostacktrace
+trace_printk
+noftrace_preempt
+nobranch
+annotate
+nouserstacktrace
+nosym-userobj
+noprintk-msg-only
+context-info
+nolatency-format
+sleep-time
+graph-time
+record-cmd
+overwrite
+nodisable_on_free
+irq-info
+markers
+function-trace
+func_stack_trace#启用了函数调用栈跟踪  
+</code></pre>
+<p>4.开启跟踪：</p>
+<pre><code>[root@localhost tracing]# echo 1 &gt; tracing_on  
+</code></pre>
+<p>5.先清空一下trace中现有的内容：</p>
+<pre><code>[root@localhost tracing]# echo &gt; trace  
+</code></pre>
+<p>6.配置一个中断号的中断亲和性：</p>
+<pre><code>[root@localhost Desktop]# echo 0 &gt; /proc/irq/16/smp_affinity_list  
+</code></pre>
+<p>7.查看trace中的内容：</p>
+<pre><code>[root@localhost tracing]# cat trace
+# tracer: function
+#
+# entries-in-buffer/entries-written: 2/2   #P:1
+#
+#                              _-----=&gt; irqs-off
+#                             / _----=&gt; need-resched
+#                            | / _---=&gt; hardirq/softirq
+#                            || / _--=&gt; preempt-depth
+#                            ||| /     delay
+#           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
+#              | |       |   ||||       |         |
+     kworker/0:1-25    [000] d.h.   738.204946: irq_do_set_affinity &lt;-irq_move_masked_irq
+     kworker/0:1-25    [000] d.h.   738.204955: &lt;stack trace&gt;
+ =&gt; handle_fasteoi_irq
+ =&gt; handle_irq
+ =&gt; do_IRQ
+ =&gt; ret_from_intr
+ =&gt; process_one_work
+ =&gt; worker_thread
+ =&gt; kthread
+ =&gt; ret_from_fork_nospec_end
+</code></pre>
+<p>可以看到内核函数的调用栈情况</p>
+
+    </body>
+    </html>
       
-        <p class="article-more-link">
-          <a  href="/2021/09/25/Tools-ftrace/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
     </div>
     
   </div>
   
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/09/12/Tools-ftrace/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux必学工具之ftrace</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
 </article>
 
 
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-    <article id="post-Tools-ftrace" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/09/12/Tools-ftrace/" class="article-date">
-  	<time datetime="2021-09-12T12:39:35.000Z" itemprop="datePublished">2021-09-12</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/09/12/Tools-ftrace/">Linux必学工具之ftrace</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文用于记录Linux工具ftrace的使用
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux工具/">Linux工具</a></li></ul>
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2021/09/12/Tools-ftrace/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
@@ -330,564 +407,24 @@ tags: Linux工具</h2>
   //-->
  
  
-
-  
-    <article id="post-Kubernetes-study-1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/04/16/Kubernetes-study-1/" class="article-date">
-  	<time datetime="2021-04-16T15:09:12.000Z" itemprop="datePublished">2021-04-16</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/16/Kubernetes-study-1/">Kubernetes(K8s)入门-1</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Kubernetes(K8s)入门-1，最近参加了关于K8s的培训，为提升学习效果，所以想做个课程主要内容的回顾总结。本文主要会介绍下K8s必用的组件和对象，主要是些概念性的东西
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/云计算/">云计算</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2021/04/16/Kubernetes-study-1/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-    <article id="post-Articles-pengranxindong" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/03/06/Articles-pengranxindong/" class="article-date">
-  	<time datetime="2021-03-06T14:21:55.000Z" itemprop="datePublished">2021-03-06</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/06/Articles-pengranxindong/">《怦然心动》</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>读文德琳·范·德拉安南的《怦然心动》小记
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闲书小记/">闲书小记</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2021/03/06/Articles-pengranxindong/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-    <article id="post-Articles-ganluren-renjianzhide" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/02/05/Articles-ganluren-renjianzhide/" class="article-date">
-  	<time datetime="2021-02-05T14:21:55.000Z" itemprop="datePublished">2021-02-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/05/Articles-ganluren-renjianzhide/">《赶路人》&amp;&amp;《人间值得》</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>读李小晓的《赶路人》，中村恒子的《人间值得》小记
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闲书小记/">闲书小记</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2021/02/05/Articles-ganluren-renjianzhide/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-    <article id="post-Articles-zengguopan-xin" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2021/02/05/Articles-zengguopan-xin/" class="article-date">
-  	<time datetime="2021-02-05T13:43:31.000Z" itemprop="datePublished">2021-02-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/05/Articles-zengguopan-xin/">《曾国潘：又笨又慢平天下》&amp;&amp;《心》</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>读度阴山的《曾国潘：又笨又慢平天下》，稻盛和夫的《心》小记
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闲书小记/">闲书小记</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2021/02/05/Articles-zengguopan-xin/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-    <article id="post-DPDK_API_Port" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/12/13/DPDK_API_Port/" class="article-date">
-  	<time datetime="2020-12-13T13:16:35.000Z" itemprop="datePublished">2020-12-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/12/13/DPDK_API_Port/">DPDK网口操作必用API</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文主要想简单记录下，一个DPDK应用必须要使用的，一些网口操作API<br>首先会先介绍下，DPDK应用启动，必须要做的一些事情（参照l2fwd例程）
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DPDK/">DPDK</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2020/12/13/DPDK_API_Port/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-    <article id="post-DockerNotes" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/11/15/DockerNotes/" class="article-date">
-  	<time datetime="2020-11-15T03:13:18.000Z" itemprop="datePublished">2020-11-15</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/15/DockerNotes/">Docker使用笔记</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>记录下Docker的一些常用命令
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2020/11/15/DockerNotes/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-    <article id="post-DPDK_Driver_Frame" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/09/19/DPDK_Driver_Frame/" class="article-date">
-  	<time datetime="2020-09-19T13:24:43.000Z" itemprop="datePublished">2020-09-19</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/19/DPDK_Driver_Frame/">DPDK驱动框架</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>从源码说明下DPDK驱动框架
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DPDK/">DPDK</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2020/09/19/DPDK_Driver_Frame/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-    <article id="post-LLDP" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2020/02/08/LLDP/" class="article-date">
-  	<time datetime="2020-02-08T15:23:27.000Z" itemprop="datePublished">2020-02-08</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/08/LLDP/">LLDP</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>LLDP用于发现该局域网内所有网络设备，探测网络拓扑。下面将简要介绍下LLDP协议，以及针对目前主流存在的LLDP开源软件进行分析
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/百科-网络/">百科_网络</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2020/02/08/LLDP/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
+  <section id="comments">
+<!--高速版，加载速度快，使用前需测试页面的兼容性-->
+<div id="SOHUCS" sid=""></div>
+<script>
+  (function(){
+    var appid = 'cyto4sUr6',
+    conf = '5531a21399d22997758da7915e34b8fe';
+    var doc = document,
+    s = doc.createElement('script'),
+    h = doc.getElementsByTagName('head')[0] || doc.head || doc.documentElement;
+    s.type = 'text/javascript';
+    s.charset = 'utf-8';
+    s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&appid=' + appid;
+    h.insertBefore(s,h.firstChild);
+    window.SCS_NO_IFRAME = true;
+  })()
+</script>
+  </section>
   
 </div>
       <!--
@@ -939,8 +476,8 @@ tags: Linux工具</h2>
 		fancybox: true,
 		mathjax: true,
 		animate: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

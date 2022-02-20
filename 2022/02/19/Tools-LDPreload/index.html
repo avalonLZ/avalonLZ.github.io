@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload3.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload5.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload4.png">
-<meta property="og:updated_time" content="2022-02-20T09:03:44.886Z">
+<meta property="og:updated_time" content="2022-02-20T09:17:29.874Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux必学工具之LD_PRELOAD">
 <meta name="twitter:description" content="本文用于记录Linux工具LD_PRELOAD的使用">
@@ -217,6 +217,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>本文用于记录Linux工具LD_PRELOAD的使用<a id="more"></a>    </p>
+<ul>
+<li><a href="#简介">简介</a></li>
+<li><a href="#ld_preload机制两种使用方式及区别">LD_PRELOAD机制两种使用方式及区别</a></li>
+<li><a href="#其他">其他</a></li>
+</ul>
 <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>LD_PRELOAD工具，更合理的称呼应该是LD_PRELOAD机制。它是Linux程序加载的一套机制：简单来说，就是可以将动态编译的程序（ldd有显示动态链接库的，都是动态编译的程序，且gcc编译时，如果未加-static参数，则就是使用动态编译程序），在加载其下所有需要的动态链接库前，先加载你所指定的动态链接库。并且LD_PRELOAD机制是每个Linux上所有动态编译的程序必走的流程，所以在Linux上，动态链接库的加载顺序应该是：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload6.png" alt="">  </p>
 <p>通过该机制，就可以实现动态链接库函数的劫持(即动态的实现hook函数)。该机制大大加快了排查问题的效率，原先需要修改内核，在系统调用处加入打印日志的排查方式，基本都可以用该机制平替。  </p>
 <h1 id="LD-PRELOAD机制两种使用方式及区别"><a href="#LD-PRELOAD机制两种使用方式及区别" class="headerlink" title="LD_PRELOAD机制两种使用方式及区别"></a>LD_PRELOAD机制两种使用方式及区别</h1><p>●使用LD_PRELOAD环境变量<br>一般使用LD_PRELOAD环境变量跑LD_PRELOAD有两种方式，其中一种是直接设置环境变量，如下所示：<br>    export LD_PRELOAD=/xxx/libxxx.so#绝对路径<br>但此种方式意义不大，因为如果是想要截获某些系统命令，若该命令是bash中的内置命令（help命令可以列出bash所有内置命令，或使用type xxx（命令）查看是否是bash内置命令），由于bash启动时，无法设置该环境变量（环境变量的设置，总是要在bash启动后，才可设置），所以此种方式无法截获bash内置命令。<br>但此方式可用于简单测试自己编写的动态链接库中，需要替换的函数符号，是否和原动态链接库（一般是glic库）的函数符号相同（一定要编译出的函数符号相同，才可成功劫持）<br>下面以kill命令为例，演示下使用这个环境变量的效果：    </p>
@@ -329,7 +334,7 @@ out:
 }
 </code></pre><p>●想要更多的了解linux动态链接器，可参考其源码以及如下文章：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload4.png" alt="">  </p>
 <p>1.动态链接库的装载过程（动态链接器的工作流程）：<br><a href="https://blog.csdn.net/xiaofei0859/article/details/50588387?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7" title="动态链接库的装载过程（动态链接器的工作流程）" target="_blank" rel="external">https://blog.csdn.net/xiaofei0859/article/details/50588387?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7  </a>    </p>
-<p>2.动态链接库的装载顺序：<br><a href="https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20" title="动态链接库的装载顺序" target="_blank" rel="external">https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20</a>    </p>
+<p>2.动态链接库的装载顺序：<br><a href="https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20" title="动态链接库的装载顺序" target="_blank" rel="external">https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20</a>  </p>
 
       
     </div>

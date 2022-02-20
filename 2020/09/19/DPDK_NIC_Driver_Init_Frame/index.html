@@ -4,18 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Docker使用笔记 | 人人人&#39;s 藏经阁</title>
+  <title>DPDK网卡驱动初始化框架 | 人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录下Docker的一些常用命令">
+  <meta name="description" content="从源码说明下DPDK网卡驱动初始化框架">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker使用笔记">
-<meta property="og:url" content="http://avalonlz.github.io/2020/11/15/DockerNotes/index.html">
+<meta property="og:title" content="DPDK网卡驱动初始化框架">
+<meta property="og:url" content="http://avalonlz.github.io/2020/09/19/DPDK_NIC_Driver_Init_Frame/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
-<meta property="og:description" content="记录下Docker的一些常用命令">
-<meta property="og:updated_time" content="2020-11-15T04:07:17.159Z">
+<meta property="og:description" content="从源码说明下DPDK网卡驱动初始化框架">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_bus_scan.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg">
+<meta property="og:updated_time" content="2022-02-20T09:14:41.708Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker使用笔记">
-<meta name="twitter:description" content="记录下Docker的一些常用命令">
+<meta name="twitter:title" content="DPDK网卡驱动初始化框架">
+<meta name="twitter:description" content="从源码说明下DPDK网卡驱动初始化框架">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_bus_scan.jpg">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -167,11 +170,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-DockerNotes" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-DPDK_NIC_Driver_Init_Frame" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2020/11/15/DockerNotes/" class="article-date">
-  	<time datetime="2020-11-15T03:13:18.000Z" itemprop="datePublished">2020-11-15</time>
+      <a href="/2020/09/19/DPDK_NIC_Driver_Init_Frame/" class="article-date">
+  	<time datetime="2020-09-19T13:24:43.000Z" itemprop="datePublished">2020-09-19</time>
 </a>
     </div>
   
@@ -184,7 +187,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Docker使用笔记
+      DPDK网卡驱动初始化框架
     </h1>
   
 
@@ -193,7 +196,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DPDK/">DPDK</a></li></ul>
 	</div>
 
         
@@ -209,16 +212,46 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>记录下Docker的一些常用命令<a id="more"></a>  </p>
-<h6 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h6><p>docker images  </p>
-<h5 id="查看所有容器"><a href="#查看所有容器" class="headerlink" title="查看所有容器"></a>查看所有容器</h5><p>docker ps -a  </p>
-<h5 id="查看运行中的容器"><a href="#查看运行中的容器" class="headerlink" title="查看运行中的容器"></a>查看运行中的容器</h5><p>docker ps  </p>
-<h5 id="开始-停止-重启容器"><a href="#开始-停止-重启容器" class="headerlink" title="开始/停止/重启容器"></a>开始/停止/重启容器</h5><p>docker start/stop/restart [容器名称]  </p>
-<h5 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h5><p>docker rm -f [容器名称]  </p>
-<h5 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h5><p>docker exec -it [容器名称] /bin/bash  </p>
-<h5 id="容器外执行容器内的命令"><a href="#容器外执行容器内的命令" class="headerlink" title="容器外执行容器内的命令"></a>容器外执行容器内的命令</h5><p>docker exec [容器名称] /bin/bash -c ‘xxx;xxx;’  </p>
-<h5 id="创建一个新容器，并运行"><a href="#创建一个新容器，并运行" class="headerlink" title="创建一个新容器，并运行"></a>创建一个新容器，并运行</h5><p>docker run -it –privileged=true -u root –name lz（容器名称） -v /alz:/home/alz（映射路径） registry.me/lz-ci/compiler（镜像名称） /bin/bash  </p>
-<h5 id="查看容器的挂载目录"><a href="#查看容器的挂载目录" class="headerlink" title="查看容器的挂载目录"></a>查看容器的挂载目录</h5><p>docker inspect [容器名称] | grep Mounts -A 20  </p>
+        <p>从源码说明下DPDK网卡驱动初始化框架<a id="more"></a><br>最近有些个人时间了，那就写写东西吧。  </p>
+<h3 id="DPDK网卡驱动初始化框架"><a href="#DPDK网卡驱动初始化框架" class="headerlink" title="DPDK网卡驱动初始化框架"></a>DPDK网卡驱动初始化框架</h3><p>先找下DPDK环境初始化中，与网卡驱动初始化相关的几个函数，以这几个函数为入口，再进行深入分析<br>● rte_bus_scan<br>● rte_bus_probe  </p>
+<h3 id="rte-bus-scan"><a href="#rte-bus-scan" class="headerlink" title="rte_bus_scan"></a>rte_bus_scan</h3><p>先来看下rte_bus_scan这个函数：    </p>
+<pre><code>int
+rte_bus_scan(void)
+{
+    int ret;
+    struct rte_bus *bus = NULL;
+
+    TAILQ_FOREACH(bus, &amp;rte_bus_list, next) {
+        ret = bus-&gt;scan();
+        if (ret)
+            RTE_LOG(ERR, EAL, &quot;Scan for (%s) bus failed.\n&quot;,
+                bus-&gt;name);
+    }
+
+    return 0;
+}  
+</code></pre><p>可以看到它是再遍历rte_bus_list这个链表，再分别各个bus的scan函数，这样的话就有三个疑问了<br>● rte_bus_list这里面放了什么东西？<br>● 元素是如何被放到rte_bus_list中的？<br>● scan做了什么？  </p>
+<p>先来看下rte_bus_list放了什么东西<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_bus_scan.jpg" alt=""><br>分析代码可以看到，注册了各种不同总线上的ops函数，包含：<br>dpaa、fslmc、ifpga、pci、vdev以及vmbus，这里我们就重点关注pci吧  </p>
+<p>那么这一个个元素是如何被注册进rte_bus_list的呢，可以看到每个bus，都会调用RTE_REGISTER_BUS宏，而这个宏的定义就是调用了rte_bus_register函数，将不同bus注册到list上的。并且我们还可以看到RTE_REGISTER_BUS宏中使用的RTE_INIT_PRIO，其定义是如下：  </p>
+<pre><code>#define RTE_INIT_PRIO(func, prio) \
+static void __attribute__((constructor(RTE_PRIO(prio)), used)) func(void)  
+</code></pre><p>所以在main函数执行前，便会将rte_bus_list初始化完成  </p>
+<p>最后我们以pci scan为例，看下都做了些什么：    </p>
+<pre><code>-&gt;rte_pci_scan//遍历/sys/bus/pci/devices路径下的内容，并格式化路径名称  
+ -&gt;pci_scan_one //获得该pci总线下，设备的vendor id、device_id以及当前所使用的驱动，并放入rte_pci_bus.device_list链表中，rte_pci_bus.device_list链表在RTE_REGISTER_BUS宏中就已经被初始化了，直接插入即可  
+</code></pre><h3 id="rte-bus-probe"><a href="#rte-bus-probe" class="headerlink" title="rte_bus_probe"></a>rte_bus_probe</h3><p>rte_bus_scan看完了，再看下rte_bus_probe，大概也就知道是调用不同bus的probe函数了，我们看下pci的probe做了些什么？    </p>
+<pre><code>-&gt;rte_pci_probe  
+ -&gt;FOREACH_DEVICE_ON_PCIBUS(dev)//遍历rte_pci_bus.device_list链表中的dev    
+  -&gt;pci_probe_all_drivers  
+   -&gt;FOREACH_DRIVER_ON_PCIBUS(dr)//遍历rte_pci_bus.driver_list（我们好像还不知道这个list是做什么的，在哪被初始化的，跟一下看看）      
+</code></pre><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg" alt=""><br>可以看到这个list里放了各种dpdk pmd驱动的信息，并且用RTE_PMD_REGISTER_PCI宏，在main函数执行前，将dpdk的pmd driver信息，放入rte_pci_bus.driver_list中     </p>
+<pre><code>-&gt;rte_pci_probe_one_driver  
+ -&gt;rte_pci_match//判断当前dev是否支持dpdk的pmd驱动，若不支持,则直接返回尝试下一个dpdk pmd  
+ -&gt;dr-&gt;probe//调用匹配到的dpdk pmd driver的probe函数  
+  -&gt;rte_eth_dev_create//创建一个dpdk pmd driver
+   -&gt;rte_eth_dev_allocate//从rte_eth_devices[RTE_MAX_ETHPORTS]链表里申请一个坑位，并填充一些信息
+   -&gt;ethdev_init//调用当前驱动的ini函数进行初始化
+</code></pre><p>以上大概就是DPDK网卡驱动初始化框架的内容了，总的来说就是3个链表、1个数组，需要掌握：<br>1、rte_bus_list<br>2、device_list<br>3、driver_list<br>4、rte_eth_devices  </p>
 
       
     </div>
@@ -228,18 +261,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2020/12/13/DPDK_API_Port/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/11/15/DockerNotes/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          DPDK网口操作必用API
+          Docker使用笔记
         
       </div>
     </a>
   
   
-    <a href="/2020/09/19/DPDK_NIC_Driver_Init_Frame/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">DPDK网卡驱动初始化框架</div>
+    <a href="/2020/02/08/LLDP/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">LLDP</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -285,7 +318,7 @@
  
   <section id="comments">
 <!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="Docker使用笔记"></div>
+<div id="SOHUCS" sid="DPDK网卡驱动初始化框架"></div>
 <script>
   (function(){
     var appid = 'cyto4sUr6',

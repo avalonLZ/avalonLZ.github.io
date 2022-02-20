@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Linux必学工具之LD_PRELOAD | 人人人&#39;s 藏经阁</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文用于记录Linux工具LD_PRELOAD的使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux必学工具之LD_PRELOAD">
+<meta property="og:url" content="http://avalonlz.github.io/2022/02/19/Tools-LDPreload/index.html">
+<meta property="og:site_name" content="人人人's 藏经阁">
+<meta property="og:description" content="本文用于记录Linux工具LD_PRELOAD的使用">
+<meta property="og:updated_time" content="2022-02-20T07:27:03.486Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux必学工具之LD_PRELOAD">
+<meta name="twitter:description" content="本文用于记录Linux工具LD_PRELOAD的使用">
+  
+    <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">人人人</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">积跬步 至千里</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/DPDK/" style="font-size: 12px;">DPDK</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Linux多线程编程/" style="font-size: 12px;">Linux多线程编程</a> <a href="/tags/Linux多进程编程/" style="font-size: 10px;">Linux多进程编程</a> <a href="/tags/Linux工具/" style="font-size: 12px;">Linux工具</a> <a href="/tags/Linux网络编程/" style="font-size: 20px;">Linux网络编程</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 12px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 12px;">Raspberry Pi</a> <a href="/tags/云计算/" style="font-size: 16px;">云计算</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-Linux/" style="font-size: 12px;">嵌入式_Linux</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 18px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 16px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/应用软件-Supervisor/" style="font-size: 10px;">应用软件_Supervisor</a> <a href="/tags/服务器-Django/" style="font-size: 12px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏编程/" style="font-size: 10px;">游戏编程</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-Linux/" style="font-size: 16px;">百科_Linux</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/百科-网络/" style="font-size: 12px;">百科_网络</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/计算机语言-Shell/" style="font-size: 10px;">计算机语言_Shell</a> <a href="/tags/轮子-C/" style="font-size: 10px;">轮子_C</a> <a href="/tags/软件工程-DesignPatterns/" style="font-size: 10px;">软件工程_DesignPatterns</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/闲书小记/" style="font-size: 14px;">闲书小记</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">各类文章，欢迎留言交流，谢谢</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">人人人</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/profile_imageQQ%E6%88%AA%E5%9B%BE20160327215851.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">人人人</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">积跬步 至千里</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="mail" target="_blank" href="https://mail.qq.com/" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/ren.li.16100" title="facebook">facebook</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Tools-LDPreload" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2022/02/19/Tools-LDPreload/" class="article-date">
+  	<time datetime="2022-02-19T05:04:35.000Z" itemprop="datePublished">2022-02-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux必学工具之LD_PRELOAD
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux工具/">Linux工具</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+		
+		<!--
+		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
+		//-->
+      
+	  </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文用于记录Linux工具LD_PRELOAD的使用<a id="more"></a>    </p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>LD_PRELOAD工具，更合理的称呼应该是LD_PRELOAD机制。它是Linux提供的一套机制：简单来说，就是可以将动态编译的程序（ldd有显示动态链接库的，都是动态编译的程序，且gcc编译时，如果未加-static参数，则就是使用动态编译程序），在加载其下所有需要的动态链接库前，先加载你所指定的动态链接库。使用LD_PRELOAD机制后，动态链接库的加载操作将变为如下图所示。<br>通过该机制，就可以实现动态链接库函数的劫持(即动态的实现hook函数)。该机制大大加快了排查问题的效率，原先需要修改内核，在系统调用处加入打印日志的排查方式，基本都可以用该机制平替。  </p>
+<h1 id="LD-PRELOAD机制两种使用方式及区别"><a href="#LD-PRELOAD机制两种使用方式及区别" class="headerlink" title="LD_PRELOAD机制两种使用方式及区别"></a>LD_PRELOAD机制两种使用方式及区别</h1><p>●使用LD_PRELOAD环境变量<br>一般使用LD_PRELOAD环境变量跑LD_PRELOAD有两种方式，其中一种是直接设置环境变量，如下所示：<br>    export LD_PRELOAD=/xxx/libxxx.so#绝对路径<br>但此种方式意义不大，因为如果是想要截获某些系统命令，若该命令是bash中的内置命令（help命令可以列出bash所有内置命令，或使用type xxx（命令）查看是否是bash内置命令），由于bash启动时，无法设置该环境变量（环境变量的设置，总是要在bash启动后，才可设置），所以此种方式无法截获bash内置命令。<br>但此方式可用于简单测试自己编写的动态链接库中，需要替换的函数符号，是否和原动态链接库（一般是glic库）的函数符号相同（一定要编译出的函数符号相同，才可成功劫持）<br>下面以kill命令为例，演示下使用这个环境变量的效果：    </p>
+<p>1.查看kill命令用了哪个库函数（一般bash内置命令和非内置命令，所使用的库函数都是相同的）  </p>
+<p>2.重新定义该库函数，并将其编译成一个动态链接库  </p>
+<pre><code>#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;math.h&gt;
+#include&lt;dlfcn.h&gt;
+
+//在glibc中查看kill原本的定义为int kill (pid_t pid, int sig)  
+//但其实只要定义的函数名称，也就是函数符号相同，则可被成功劫持
+//所有这就不管参数了
+int kill ()
+{
+    printf(&quot;******lz*******\n&quot;);
+    return 0;
+}  
+</code></pre><p>再将以上程序编译成动态链接库：  </p>
+<pre><code>gcc -shared -fPIC hook_kill.c -o libhook_kill.so
+</code></pre><p>3.在需要执行/bin/kill命令的bash中，设置环境变量  </p>
+<pre><code>export LD_PRELOAD=/xxx/libhook_kill.so  
+</code></pre><p>4.执行/bin/kill命令，结果如下图所示，说明已被成功劫持</p>
+<p>另：如果不想设置环境变量，还可通过以下方式执行命令，控制影响范围  </p>
+<pre><code>LD_PRELOAD=`pwd`/libhook_kill.so /bin/kill `pidof top`  
+</code></pre><p>●使用配置文件<br>由以上可知，如果想bash中的内置命令也生效，则至少需要在bash启动时，就能识别到所替换的动态链接库，LD_PRELOAD机制则提供了/etc/ld.so.preload配置文件     </p>
+<p>1.将想要在程序启动时，就加载的动态链接库，写入该配置文件<br>    echo “/home/lz/Desktop/ld_preload/libhook_kill.so.0” &gt; /etc/ld.so.preload</p>
+<p>2.新开一个bash，再直接执行kill命令（bash内置），可以发现已成功被拦截  </p>
+<p>注意：<br>/etc/ld.so.preload配置文件中的动态链接库的加载，是在程序启动的时候就已经加载完毕了（静态加载，而非懒加载），也就是说，在程序运行过程中，如果修改了/etc/ld.so.preload文件中的内容，也并不会影响当前已经启动了的bash内置程序的执行结果（因为修改前的函数符号及其指令，在该bash启动时就已经被识别到，并加载到内存中了），只会影响到在其修改操作之后，启动的应用程序或命令的执行结果  </p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>●hook_kill模板（学习该模板中的主要流程，即可编写出其他功能的hook工具）：  </p>
+<p>●想要更多的了解linux动态链接器，可参考其源码以及如下文章：   </p>
+<p><a href="https://blog.csdn.net/xiaofei0859/article/details/50588387?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7" title="动态链接库的装载过程（动态链接器的工作流程）" target="_blank" rel="external">https://blog.csdn.net/xiaofei0859/article/details/50588387?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7  </a>    </p>
+<p><a href="https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20" title="动态链接库的装载顺序" target="_blank" rel="external">https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20</a>  </p>
+<p>1.<a href="https://blog.csdn.net/xiaofei0859/article/details/50588387?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7" target="_blank" rel="external">https://blog.csdn.net/xiaofei0859/article/details/50588387?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7</a><br>2.<a href="https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20" target="_blank" rel="external">https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/09/12/Tools-ftrace/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux必学工具之ftrace</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+<!--
+
+//-->
+
+ <!--以下为使用畅言的代码
+  && post.comments
+  style="padding: 0px 30px 0px 46px;">
+  //-->
+ 
+ 
+  <section id="comments">
+<!--高速版，加载速度快，使用前需测试页面的兼容性-->
+<div id="SOHUCS" sid="Linux必学工具之LD_PRELOAD"></div>
+<script>
+  (function(){
+    var appid = 'cyto4sUr6',
+    conf = '5531a21399d22997758da7915e34b8fe';
+    var doc = document,
+    s = doc.createElement('script'),
+    h = doc.getElementsByTagName('head')[0] || doc.head || doc.documentElement;
+    s.type = 'text/javascript';
+    s.charset = 'utf-8';
+    s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&appid=' + appid;
+    h.insertBefore(s,h.firstChild);
+    window.SCS_NO_IFRAME = true;
+  })()
+</script>
+  </section>
+  
+</div>
+      <!--
+注释：用卜算子来统计网页访问量
+//-->
+<!--
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+//-->
+
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    	<!--	&copy; 2022 人人人 -->
+    	</div>
+      	<div class="footer-right">
+      	<!--	<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten -->
+		
+		<!--
+		<span id="busuanzi_container_site_uv"></span>
+		Total visited <span id="busuanzi_value_site_uv"></span> times
+		//-->
+		
+		
+		<script>
+		(function(){
+			var bp = document.createElement('script');
+			bp.src = '//push.zhanzhang.baidu.com/push.js';
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(bp, s);
+		})();
+		</script>
+		
+		
+      	</div>
+    </div>
+  </div>
+</footer>
+
+
+
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

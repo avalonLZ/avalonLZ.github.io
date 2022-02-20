@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload3.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload5.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload4.png">
-<meta property="og:updated_time" content="2022-02-20T08:55:46.941Z">
+<meta property="og:updated_time" content="2022-02-20T09:03:44.886Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux必学工具之LD_PRELOAD">
 <meta name="twitter:description" content="本文用于记录Linux工具LD_PRELOAD的使用">
@@ -247,8 +247,87 @@ int kill ()
 <p>1.将想要在程序启动时，就加载的动态链接库，写入该配置文件<br>    echo “/home/lz/Desktop/ld_preload/libhook_kill.so.0” &gt; /etc/ld.so.preload</p>
 <p>2.新开一个bash，再直接执行kill命令（bash内置），可以发现已成功被拦截<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload5.png" alt="">  </p>
 <p>注意：<br>/etc/ld.so.preload配置文件中的动态链接库的加载，是在程序启动的时候就已经加载完毕了（静态加载，而非懒加载），也就是说，在程序运行过程中，如果修改了/etc/ld.so.preload文件中的内容，也并不会影响当前已经启动了的bash内置程序的执行结果（因为修改前的函数符号及其指令，在该bash启动时就已经被识别到，并加载到内存中了），只会影响到在其修改操作之后，启动的应用程序或命令的执行结果  </p>
-<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>●hook_kill模板（学习该模板中的主要流程，即可编写出其他功能的hook工具）：  </p>
-<p>●想要更多的了解linux动态链接器，可参考其源码以及如下文章：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload4.png" alt="">  </p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>●hook_kill模板（摘抄自网络），学习该模板中的主要流程，即可编写出其他功能的hook工具： </p>
+<pre><code>#define _GNU_SOURCE
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;dlfcn.h&gt;
+
+typedef int(*KILL)(pid_t pid, int sig);
+
+#define TMP_BUF_SIZE 256
+
+/* 获取进程命令行参数 */
+void get_cmd_by_pid(pid_t pid, char *cmd)
+{
+    char buf[TMP_BUF_SIZE];
+    int i = 0;
+
+    snprintf(buf, TMP_BUF_SIZE, &quot;/proc/%d/cmdline&quot;, pid);
+    FILE* fp = fopen(buf, &quot;r&quot;);
+    if(fp == NULL)
+    {
+        return;
+    }
+
+    memset(buf, 0, TMP_BUF_SIZE);
+    size_t ret = fread(cmd, 1, TMP_BUF_SIZE - 1, fp);
+
+    /*
+    *需要下面for循环的原因是
+    *man手册资料
+    *This  holds  the  complete command line for the process, unless the process is a zombie.  
+    *In the latter case,there is nothing in this file: that is, a read on this file will return 0 
+    *characters.  The command-line arguments appear in this file as a set of strings separated by 
+    *null bytes (&apos;\0&apos;), with a further null byte after the last string.
+    */
+
+    for (i = 0; ret != 0 &amp;&amp; i &lt; ret - 1; i++)
+    {
+        if (cmd[i] == &apos;\0&apos;)
+        {
+            cmd[i] = &apos; &apos;;
+        }
+    }
+
+    fclose(fp);
+    cmd[TMP_BUF_SIZE - 1] = &apos;\0&apos;;
+}
+
+//重新定义kill函数
+int kill(pid_t pid, int sig)
+{
+    static KILL orign_kill = NULL;
+
+    //接收kill命令的进程信息
+    char buf_des[TMP_BUF_SIZE] = {0};
+    get_cmd_by_pid(pid, buf_des);
+
+    //获取当前进程信息
+    char buf_org[TMP_BUF_SIZE] = {0};
+    get_cmd_by_pid(getpid(), buf_org);
+
+    //获取父进程信息
+    char buf_porg[TMP_BUF_SIZE] = {0};
+    get_cmd_by_pid(getppid(), buf_porg);
+
+    printf(&quot;hook kill(sig:%d): [%s(%d) -&gt; %s(%d)] -&gt; [%s(%d)]\n&quot;,
+           sig, buf_porg, getppid(), buf_org, getpid(), buf_des, pid);
+out:
+    if(!orign_kill){
+        //获取下一个kill的函数指针
+        //这里如果下一次加载的是glibc中的kill
+        //则就可获取到原本的kill函数指针
+        orign_kill = (KILL)dlsym(RTLD_NEXT, &quot;kill&quot;);
+    }
+    //调用原本的kill方法
+    return orign_kill(pid, sig);
+}
+</code></pre><p>●想要更多的了解linux动态链接器，可参考其源码以及如下文章：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload4.png" alt="">  </p>
 <p>1.动态链接库的装载过程（动态链接器的工作流程）：<br><a href="https://blog.csdn.net/xiaofei0859/article/details/50588387?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7" title="动态链接库的装载过程（动态链接器的工作流程）" target="_blank" rel="external">https://blog.csdn.net/xiaofei0859/article/details/50588387?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7  </a>    </p>
 <p>2.动态链接库的装载顺序：<br><a href="https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20" title="动态链接库的装载顺序" target="_blank" rel="external">https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20</a>    </p>
 

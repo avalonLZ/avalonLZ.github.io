@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload3.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload5.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload4.png">
-<meta property="og:updated_time" content="2022-02-20T09:17:29.874Z">
+<meta property="og:updated_time" content="2022-02-20T09:22:58.221Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux必学工具之LD_PRELOAD">
 <meta name="twitter:description" content="本文用于记录Linux工具LD_PRELOAD的使用">
@@ -332,6 +332,10 @@ out:
     //调用原本的kill方法
     return orign_kill(pid, sig);
 }
+</code></pre><p>生成动态链接库：    </p>
+<pre><code>#程序中有使用dlopen、dlsym、dlclose、dlerror，显示加载动态库时，
+#需要加入-ldl编译选项，才能在启动时，为动态库分配内存空间
+gcc -shared -fPIC -o hook_kill.so hook_kill.c -ldl
 </code></pre><p>●想要更多的了解linux动态链接器，可参考其源码以及如下文章：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_tools_ld_preload%2Fld-preload4.png" alt="">  </p>
 <p>1.动态链接库的装载过程（动态链接器的工作流程）：<br><a href="https://blog.csdn.net/xiaofei0859/article/details/50588387?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7" title="动态链接库的装载过程（动态链接器的工作流程）" target="_blank" rel="external">https://blog.csdn.net/xiaofei0859/article/details/50588387?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-5.pc_relevant_paycolumn_v3&amp;spm=1001.2101.3001.4242.4&amp;utm_relevant_index=7  </a>    </p>
 <p>2.动态链接库的装载顺序：<br><a href="https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20" title="动态链接库的装载顺序" target="_blank" rel="external">https://blog.csdn.net/whatday/article/details/108890018?spm=1001.2101.3001.6650.15&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7EHighlightScore-15.queryctrv2&amp;utm_relevant_index=20</a>  </p>

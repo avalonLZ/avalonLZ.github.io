@@ -4,20 +4,17 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Vxlan | 人人人&#39;s 藏经阁</title>
+  <title>Tag: Kernel | 人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="深入学习下vxlan的玩法">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Vxlan">
-<meta property="og:url" content="http://avalonlz.github.io/2019/09/08/Vxlan/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="人人人's 藏经阁">
+<meta property="og:url" content="http://avalonlz.github.io/tags/Kernel/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
-<meta property="og:description" content="深入学习下vxlan的玩法">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Vxlan/vxlan%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F.jpg">
-<meta property="og:updated_time" content="2019-09-08T14:49:53.913Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Vxlan">
-<meta name="twitter:description" content="深入学习下vxlan的玩法">
-<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Vxlan/vxlan%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F.jpg">
+<meta name="twitter:title" content="人人人's 藏经阁">
+<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -169,140 +166,54 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-Vxlan" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap">
   
-    <div class="article-meta">
-      <a href="/2019/09/08/Vxlan/" class="article-date">
-  	<time datetime="2019-09-08T13:00:03.000Z" itemprop="datePublished">2019-09-08</time>
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2022" class="archive-year">2022</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2022/04/10/Kernel-driver-nic-rx-tx/" class="archive-article-date">
+  	<time datetime="2022-04-10T02:34:19.000Z" itemprop="datePublished">Apr 10</time>
 </a>
-    </div>
+        </div>
+    	 
   
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Vxlan
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2022/04/10/Kernel-driver-nic-rx-tx/">网卡内核驱动收发包流程</a>
     </h1>
   
 
-      </header>
-      
-      <div class="article-info article-info-post">
-        
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/百科-网络/">百科_网络</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kernel/">Kernel</a></li></ul>
 	</div>
 
-        
+          
 
+        </div>
         <div class="clearfix"></div>
-		
-		<!--
-		<p><font size="1px"><span id="busuanzi_container_page_pv">This article has been read <span id="busuanzi_value_page_pv"></span> times</span></font></p>
-		//-->
-      
-	  </div>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>深入学习下vxlan的玩法<a id="more"></a>  </p>
-<h3 id="VTEP"><a href="#VTEP" class="headerlink" title="VTEP"></a>VTEP</h3><p>VTEP，即Vxlan隧道端点，可以是单独的硬件设备，也可以集合在软件中，主要作用就是封装、解封vxlan报文。VTEP成员需要知道自己下连所有终端（vm）的MAC地址，同时需要知道其他所有VTEP成员下所有终端的MAC地址表，其他终端MAC地址表是通过底层物理网络组播进行传播，一个VXLAN网络一个组播地址  </p>
-<h3 id="VNI"><a href="#VNI" class="headerlink" title="VNI"></a>VNI</h3><p>VNI（3个字节），即vxlan报文的网络标识符，用于隔离不同的网络（租户），不同的VNI网络间，不能直接进行源二层的通信（因为一个VNI对应了一个Vxlan的组播组）  </p>
-<h3 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Vxlan/vxlan%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F.jpg" alt=""><br>由上图可知，vxlan报文，是在主机报文的UDP载荷字段中再嵌套一个Vxlan Header和其真实报文（两端VTEP通信的报文）实现的。其中Vxlan Header占了8个字节<br>注：上图的UDP Header中的VXLAN Port指的就是UDP传输中的目的端口号，只不过在VXLAN报文中，又被称为VXLAN Port，一般为默认值4789（可以修改）  </p>
-<h3 id="vm-arp请求及回应流程"><a href="#vm-arp请求及回应流程" class="headerlink" title="vm arp请求及回应流程"></a>vm arp请求及回应流程</h3><p>首先，明确一点，在传输过程中，将先以组播报文进行传输，对端收到后，再由对端VTEP进行其下联vm的广播，而回复数据包则是以单播的形式在underlay网络中进行传输  </p>
-<p>VM1——VTEP1——物理交换机——VTEP2——VM2<br>1、VM1使用广播发送ARP请求查找VM2的MAC地址<br>2、VTEP1收到VM1的广播后，查找自己的MAC地址表，如果下联vm没有此mac地址，则将封装报文为VXLAN，内层VNI为100，外层目的地址为此VNI对应的组播地址，外层源IP为VTEP1地址。<br>3、通过组播VTEP2接受到VTEP1的报文，解封装后。记录报文的内层VNI、外层源VTEP1的IP、内层MAC地址<br>4、VTEP2通过广播将数据包广播到自己连接的vm<br>5、VM2接受到ARP请求后，做出回应<br>6、VTEP2接受到VM2的回应后，查找流表，发现需要发送给VTEP1，重新把数据包进行封装为VXLAN并以单播的形式发送给VTEP1<br>7、VTEP1收到回应后，记录内层VNI、外层源VTEP2的IP、内层VM2的MAC地址<br>8、VTEP1解封装后转发给VM1。至此VM1收到了VM2的MAC地址  </p>
-<h3 id="vm-TCP-UDP数据传输流程"><a href="#vm-TCP-UDP数据传输流程" class="headerlink" title="vm TCP/UDP数据传输流程"></a>vm TCP/UDP数据传输流程</h3><p>vm间正常的数据传输，在underlay网络中都将以单播的形式进行  </p>
-<p>VM1——VTEP1——物理交换机——VTEP2——VM2<br>1、VM1给VM2发送了一个TCP/UDP报文<br>2、VTEP1收到报文后检查VM1和VM2是否属于同一个VNI，（如果不属于将转发给VXLAN网关）检查后属于一个VNI，需要转发给VTEP2<br>3、VTEP1封装VXLAN报文以单播的形式发送给VTEP2<br>4、VTEP2收到报文后解封装，查找流表，找到vm2对应的端口，进行发送<br>5、VTEP2单播的形式发送给VM2，至此一个报文发送完毕    </p>
-<p>注意：若不存在VXLAN网关设备，则此VXLAN网络中，只存在一个VNI和一个组播组</p>
-
-      
-    </div>
-    
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2019/09/22/mempool/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          内存池实现
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/09/01/ioctrl_test/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">ioctl实验</div>
-      <strong class="article-nav-caption">></strong>
-    </a>
-  
-</nav>
-
-  
 </article>
-
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">分享到: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-    <a class="jiathis_button_twitter"></a>
-    <a class="jiathis_button_plus"></a> 
-    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
-
-
-
-
-
-
-
-<!--
-
-//-->
-
- <!--以下为使用畅言的代码
-  && post.comments
-  style="padding: 0px 30px 0px 46px;">
-  //-->
- 
- 
-  <section id="comments">
-<!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="Vxlan"></div>
-<script>
-  (function(){
-    var appid = 'cyto4sUr6',
-    conf = '5531a21399d22997758da7915e34b8fe';
-    var doc = document,
-    s = doc.createElement('script'),
-    h = doc.getElementsByTagName('head')[0] || doc.head || doc.documentElement;
-    s.type = 'text/javascript';
-    s.charset = 'utf-8';
-    s.src =  'http://assets.changyan.sohu.com/upload/changyan.js?conf='+ conf +'&appid=' + appid;
-    h.insertBefore(s,h.firstChild);
-    window.SCS_NO_IFRAME = true;
-  })()
-</script>
-  </section>
   
+  
+    </div></section>
+  
+
+    
+
 </div>
       <!--
 注释：用卜算子来统计网页访问量
@@ -354,9 +265,9 @@
 		mathjax: true,
 		animate: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false
 	}

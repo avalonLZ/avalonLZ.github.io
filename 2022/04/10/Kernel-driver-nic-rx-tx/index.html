@@ -4,18 +4,22 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>kernel_driver_nic_rx_tx | 人人人&#39;s 藏经阁</title>
+  <title>网卡内核驱动收发包流程 | 人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
+  <meta name="description" content="总结下网卡内核驱动收发包流程，并且记录一些网卡的驱动兼容性列表">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kernel_driver_nic_rx_tx">
+<meta property="og:title" content="网卡内核驱动收发包流程">
 <meta property="og:url" content="http://avalonlz.github.io/2022/04/10/Kernel-driver-nic-rx-tx/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
-<meta property="og:description">
-<meta property="og:updated_time" content="2022-04-10T02:34:19.650Z">
+<meta property="og:description" content="总结下网卡内核驱动收发包流程，并且记录一些网卡的驱动兼容性列表">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/KernelDriverNicRxTx/rx.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/KernelDriverNicRxTx/rx_ring.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/KernelDriverNicRxTx/tx.png">
+<meta property="og:updated_time" content="2022-04-17T07:02:19.432Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kernel_driver_nic_rx_tx">
-<meta name="twitter:description">
+<meta name="twitter:title" content="网卡内核驱动收发包流程">
+<meta name="twitter:description" content="总结下网卡内核驱动收发包流程，并且记录一些网卡的驱动兼容性列表">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/KernelDriverNicRxTx/rx.png">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -106,7 +110,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/DPDK/" style="font-size: 12.5px;">DPDK</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Linux多线程编程/" style="font-size: 12.5px;">Linux多线程编程</a> <a href="/tags/Linux多进程编程/" style="font-size: 10px;">Linux多进程编程</a> <a href="/tags/Linux工具/" style="font-size: 12.5px;">Linux工具</a> <a href="/tags/Linux网络编程/" style="font-size: 20px;">Linux网络编程</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 12.5px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 12.5px;">Raspberry Pi</a> <a href="/tags/云计算/" style="font-size: 15px;">云计算</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-Linux/" style="font-size: 12.5px;">嵌入式_Linux</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 17.5px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 15px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/应用软件-Supervisor/" style="font-size: 10px;">应用软件_Supervisor</a> <a href="/tags/服务器-Django/" style="font-size: 12.5px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏编程/" style="font-size: 10px;">游戏编程</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-Linux/" style="font-size: 15px;">百科_Linux</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/百科-网络/" style="font-size: 12.5px;">百科_网络</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/计算机语言-Shell/" style="font-size: 10px;">计算机语言_Shell</a> <a href="/tags/轮子-C/" style="font-size: 10px;">轮子_C</a> <a href="/tags/软件工程-DesignPatterns/" style="font-size: 10px;">软件工程_DesignPatterns</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
+						<a href="/tags/DPDK/" style="font-size: 12.5px;">DPDK</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux多线程编程/" style="font-size: 12.5px;">Linux多线程编程</a> <a href="/tags/Linux多进程编程/" style="font-size: 10px;">Linux多进程编程</a> <a href="/tags/Linux工具/" style="font-size: 12.5px;">Linux工具</a> <a href="/tags/Linux网络编程/" style="font-size: 20px;">Linux网络编程</a> <a href="/tags/RTOS-UCOSII/" style="font-size: 12.5px;">RTOS_UCOSII</a> <a href="/tags/Raspberry-Pi/" style="font-size: 12.5px;">Raspberry Pi</a> <a href="/tags/云计算/" style="font-size: 15px;">云计算</a> <a href="/tags/协议解析-MQTT/" style="font-size: 10px;">协议解析_MQTT</a> <a href="/tags/协议解析-定位/" style="font-size: 10px;">协议解析_定位</a> <a href="/tags/嵌入式-Linux/" style="font-size: 12.5px;">嵌入式_Linux</a> <a href="/tags/嵌入式-MTK/" style="font-size: 10px;">嵌入式_MTK</a> <a href="/tags/嵌入式-STM32/" style="font-size: 17.5px;">嵌入式_STM32</a> <a href="/tags/应用软件-PyQt/" style="font-size: 15px;">应用软件_PyQt</a> <a href="/tags/应用软件-Qt/" style="font-size: 10px;">应用软件_Qt</a> <a href="/tags/应用软件-Supervisor/" style="font-size: 10px;">应用软件_Supervisor</a> <a href="/tags/服务器-Django/" style="font-size: 12.5px;">服务器_Django</a> <a href="/tags/服务器-MySQL/" style="font-size: 10px;">服务器_MySQL</a> <a href="/tags/服务器-Tinyhttpd/" style="font-size: 10px;">服务器_Tinyhttpd</a> <a href="/tags/游戏编程/" style="font-size: 10px;">游戏编程</a> <a href="/tags/百科-DNSpod/" style="font-size: 10px;">百科_DNSpod</a> <a href="/tags/百科-Git/" style="font-size: 10px;">百科_Git</a> <a href="/tags/百科-Linux/" style="font-size: 15px;">百科_Linux</a> <a href="/tags/百科-双系统安装/" style="font-size: 10px;">百科_双系统安装</a> <a href="/tags/百科-存储/" style="font-size: 10px;">百科_存储</a> <a href="/tags/百科-网络/" style="font-size: 12.5px;">百科_网络</a> <a href="/tags/算法-Sort/" style="font-size: 10px;">算法_Sort</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C</a> <a href="/tags/计算机语言-C/" style="font-size: 10px;">计算机语言_C++</a> <a href="/tags/计算机语言-Lua/" style="font-size: 10px;">计算机语言_Lua</a> <a href="/tags/计算机语言-Python/" style="font-size: 10px;">计算机语言_Python</a> <a href="/tags/计算机语言-Shell/" style="font-size: 10px;">计算机语言_Shell</a> <a href="/tags/轮子-C/" style="font-size: 10px;">轮子_C</a> <a href="/tags/软件工程-DesignPatterns/" style="font-size: 10px;">软件工程_DesignPatterns</a> <a href="/tags/软件工程-FrameWork/" style="font-size: 10px;">软件工程_FrameWork</a> <a href="/tags/软件工程-UML/" style="font-size: 10px;">软件工程_UML</a> <a href="/tags/飞思卡尔/" style="font-size: 10px;">飞思卡尔</a>
 					</div>
 				</section>
 				
@@ -184,7 +188,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      kernel_driver_nic_rx_tx
+      网卡内核驱动收发包流程
     </h1>
   
 
@@ -192,6 +196,10 @@
       
       <div class="article-info article-info-post">
         
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kernel/">Kernel</a></li></ul>
+	</div>
+
         
 
         <div class="clearfix"></div>
@@ -205,7 +213,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>总结下网卡内核驱动收发包流程，并且记录一些网卡的驱动兼容性列表<a id="more"></a>  </p>
+<h1 id="网卡驱动-amp-amp-固件兼容性列表"><a href="#网卡驱动-amp-amp-固件兼容性列表" class="headerlink" title="网卡驱动&amp;&amp;固件兼容性列表"></a>网卡驱动&amp;&amp;固件兼容性列表</h1><p>首先明确一点，对于计算机来说，网卡属于外设，既然是外设，其必然会有自身硬件，而在外设自身硬件上运行的程序，就被称为固件。计算机想要控制外设，就需要使用驱动，利用驱动程序与外设固件配合，进而控制外设。所以某一版本的驱动，往往有其对应的固件版本，以下就列举下比较常见的网卡驱动和固件兼容性列表的获取方式。  </p>
+<h1 id="网卡收包"><a href="#网卡收包" class="headerlink" title="网卡收包"></a>网卡收包</h1><p>●Intel网卡<br>1.Network Adapter Device Feature Support Matrix PDF（需要从网络适配器的发布文档上获取，例如：332191_X710-XXV710-XL710 Feature Summary Rev4.8.pdf）<br>2.DPDK官方文档：<a href="https://doc.dpdk.org/guides/nics/i40e.html（DPDK官网上会列举一些测试过的网卡驱动和固件）" target="_blank" rel="external">https://doc.dpdk.org/guides/nics/i40e.html（DPDK官网上会列举一些测试过的网卡驱动和固件）</a>  </p>
+<p>●Mellanox网卡<br><a href="https://docs.mellanox.com/display/OFEDv512580/General+Support+in+MLNX_OFED（驱动发布文档）" target="_blank" rel="external">https://docs.mellanox.com/display/OFEDv512580/General+Support+in+MLNX_OFED（驱动发布文档）</a>  </p>
+<p>●Broadcom网卡<br>联系服务器厂商获取（一般是戴尔的服务器）  </p>
+<p>●Qlogic网卡<br>1.<a href="https://driverdownloads.qlogic.com/QLogicDriverDownloads_UI/SearchByProduct.aspx?ProductCategory=325&amp;Product=1296&amp;Os=175#49（推荐用最新的固件+驱动，老版本的固件，Qlogic可能就直接不支持了）" target="_blank" rel="external">https://driverdownloads.qlogic.com/QLogicDriverDownloads_UI/SearchByProduct.aspx?ProductCategory=325&amp;Product=1296&amp;Os=175#49（推荐用最新的固件+驱动，老版本的固件，Qlogic可能就直接不支持了）</a><br>2.2.DPDK官方文档：<a href="https://doc.dpdk.org/guides/nics/qede.html" target="_blank" rel="external">https://doc.dpdk.org/guides/nics/qede.html</a> (有说明DPDK驱动需要搭配的固件版本)  </p>
+<h1 id="名词解析"><a href="#名词解析" class="headerlink" title="名词解析"></a>名词解析</h1><p>●DMA控制器：DMA（Direct Memory Access）控制器是一种在系统内部转移数据的独特外设（一般会集成在芯片内部），DMA控制器可将外设I/O数据搬运到某处（有的DMA控制器也能支持内存间内存的互拷），且搬运全程无需计算机的CPU参与，从而提高了CPU的处理效率。<br>●中断上半部：在网络收包流程分为中断上半部和中断下半部，其中硬中断部分被称为中断上半部（kernel无法嵌套同种硬中断，所以外设硬中断的处理逻辑，往往需要足够短小，才能避免丢中断的问题）。<br>●中断下半部：软中断部分，则被称为中断下半部。  </p>
+<h1 id="网卡收包-1"><a href="#网卡收包-1" class="headerlink" title="网卡收包"></a>网卡收包</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/KernelDriverNicRxTx/rx.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/KernelDriverNicRxTx/rx_ring.png" alt=""><br>●收包大致流程如上图所示：<br>1.在网卡PCIe和网卡初始化时，会初始化DMA控制器，将网卡和DMA通道进行绑定等操作（判断一款网卡硬件层面是否支持DMA操作，可查看其datasheet或发布的特性文档）。<br>2.当包到达网卡后，网卡会发起DMA传输请求，DMA控制器便会进行报文拷贝。<br>3.当DMA单元将网卡收到的报文，拷贝到DMA环形缓冲区后，会产生一个DMA硬中断，此中断将被kernel所感知，从而绑定了该中断的CPU，将进入到硬中断处理函数do_IRQ中（中断上半部开始）。<br>4.在硬中断处理函数中，会调用网卡驱动所注册的硬中断处理函数xxx_intr，处理一些网卡自身需要的短小的处理逻辑。<br>5.在xxx_intr函数准备结束时，会在当前CPU上，挂起一个软中断，为软中断（中断下半部）做准备。<br>6.当xxx_intr函数结束后，继续回到do_IRQ中，此后do_IRQ会调用irq_exit（中断上半部基本已结束），在此函数中，将唤醒该CPU上的ksoftirqd线程（软中断处理线程），此后报文的处理，便被ksoftirqd线程所接管（中断下半部开始）。<br>7.在ksoftirqd中将调用驱动实现的xxx_poll函数，将缓冲区中的报文取出，调用netif_receive_skb将报文送入协议栈处理，并补充收包描述符。  </p>
+<p>●关键函数调用关系（已ixgbe+PCIe支持MSIX特性+NAPI为例）<br>硬中断入口函数：<br>do_IRQ<br>硬中断：<br>do_IRQ-&gt;ixgbe_msix_clean_rings-&gt;napi_schedule-&gt;<strong>napi_schedule-&gt;__</strong>napi_schedule-&gt;__raise_softirq_irqoff//挂起软中断（PCIe支持MSIX特性的前提下，ixgbe的硬中断中，啥都没干，直接挂起了软中断）<br>软中断：<br>do_IRQ-&gt;irq_exit-&gt;invoke_softirq//唤醒ksoftirqd/[cpu号]软中断处理线程<br>ksoftirqd/[cpu号]线程：<br>net_rx_action-&gt;ixgbe_poll-&gt;ixgbe_clean_rx_irq-&gt;ixgbe_rx_skb-&gt;napi_gro_receive-&gt;napi_gro_complete-&gt;netif_receive_skb//进入内核协议栈处理  </p>
+<p>●收包流程中需要注意的点<br>1.ksoftirq线程处理软中断。<br>2.硬中断绑定到了哪个CPU上，则软中断也会被与该CPU所绑定的ksoftirqd线程处理（cat /proc/irq/19/smp_affinity_list）。<br>3.两个命令mpstat -P ALL 1（查看CPU负载情况，%soft打满时，及达到了内核收包极限）和sar -I xxx -n DEV 1（查看网卡收发包数量以及中断数量）（可用于判断是否达到了某处的性能瓶颈）。<br>4.xxx_poll软中断收包函数和xxx_intr硬中断处理函数，都是由网卡驱动维护的（由网卡驱动所维护的函数，及其大致功能需要特别关注，可用于判断是否是驱动版本所引发的问题）。  </p>
+<h1 id="网卡发包"><a href="#网卡发包" class="headerlink" title="网卡发包"></a>网卡发包</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/KernelDriverNicRxTx/tx.png" alt=""><br>●发包大致流程如上图所示：<br>1.报文在走完内核协议栈后，将调用dev_hard_start_xmit进入网卡驱动的发包函数中。<br>2.使用网卡驱动所注册的ndo_start_xmit函数，触发DMA拷贝，拷贝报文至网卡。<br>3.当DMA完成后，将会再次发送DMA硬中断，此后便再次走了一遍收包流程，只是在此次软中断中，是去回收tx描述符。    </p>
+<p>●关键函数调用关系（已ixgbe+PCIe支持MSIX特性+NAPI为例）<br>硬中断入口函数：<br>do_IRQ<br>硬中断：<br>do_IRQ-&gt;ixgbe_msix_clean_rings-&gt;napi_schedule-&gt;<strong>napi_schedule-&gt;__</strong>napi_schedule→__raise_softirq_irqoff//挂起软中断（PCIe支持MSIX特性的前提下，ixgbe的硬中断中，啥都没干，直接挂起了软中断）<br>软中断：<br>do_IRQ-&gt;irq_exit-&gt;invoke_softirq//唤醒ksoftirqd/[cpu号]软中断处理线程<br>ksoftirqd/[cpu号]线程：<br>net_rx_action-&gt;ixgbe_poll-&gt;ixgbe_clean_tx_irq//回收tx描述符    </p>
+<p>●发包流程中需要注意的点<br>1.包发给网卡后，依然会触发再次触发硬中断和软中断，所以当发包后，依然会消耗些许设备的CPU资源，需要留意。  </p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>以上便是网卡内核驱动大致的收发包流程，可以看出其涉及了内核中断、NAPI框架、网卡驱动实现、以及网卡固件三方面的协同工作，所以当遇到问题时，也应该从这三方面去排查处理。    </p>
+<h1 id="尚存疑问"><a href="#尚存疑问" class="headerlink" title="尚存疑问"></a>尚存疑问</h1><p>应用程序系统调用，CPU时间片用完后（一般用完前都能发出去），是本CPU所绑定的软中断内核线程继续处理，还是随机一个ksoftirqd继续处理？  </p>
+
       
     </div>
     
@@ -262,7 +285,7 @@
  
   <section id="comments">
 <!--高速版，加载速度快，使用前需测试页面的兼容性-->
-<div id="SOHUCS" sid="kernel_driver_nic_rx_tx"></div>
+<div id="SOHUCS" sid="网卡内核驱动收发包流程"></div>
 <script>
   (function(){
     var appid = 'cyto4sUr6',

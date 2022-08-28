@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/lacp_timeout_to_ab.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/team_slb.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/ovs_slb.jpg">
-<meta property="og:updated_time" content="2022-08-28T13:39:08.173Z">
+<meta property="og:updated_time" content="2022-08-28T13:47:20.568Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux team链路聚合">
 <meta name="twitter:description" content="探究Linux team链路聚合">
@@ -179,7 +179,7 @@
 <li><a href="#链路聚合方案大对比">链路聚合方案大对比</a></li>
 <li><a href="#linux-team-lacp超时切ab-runner实现思路">Linux team lacp超时切ab runner实现思路</a></li>
 <li><a href="#linux-team-加入ovs桥后对端交换机免配实现思路">Linux team 加入OVS桥后，对端交换机免配实现思路</a></li>
-<li><a href="#linux-team尚存问题">Linux team尚存问题</a></li>
+<li><a href="#linux-team-尚存问题">Linux team 尚存问题</a></li>
 <li><a href="#其他linux-team部分功能实现分析">其他（Linux team部分功能实现分析）</a></li>
 </ul>
 <h1 id="链路聚合的目的"><a href="#链路聚合的目的" class="headerlink" title="链路聚合的目的"></a>链路聚合的目的</h1><p>链路聚合及建立聚合口，其目的是为了提高网络底层容错能力，实现网络冗余部署。当然某些链路聚合方式，也可在一定程度上，实现网络流量的负载均衡。  </p>
@@ -220,7 +220,7 @@ teamnl team0 options
 <p>本方案思路，参考ovs slb的实现：<br>设置一个活动口成员网口<br>活动成员网口收到组播、广播报文，通过查fdb表（因为ovs都是bridge，所以直接查br的fdb表在判断对应的port就能判断是否是本地发出的了），判断是否是本地发出的，若为本地发出的且非免费arp报文（vm迁移等操作会发免费arp，需要放通），则丢弃。非本地发出的组播、广播报文，则正常接收。非活动成员口，丢弃一切组播、广播报文  </p>
 <p>ovs loadbalance-slb normal表项发包：<br>正常hash选口发包，无特殊处理  </p>
 <p>ovs loadbalance-slb normal表项收包：<br>ofproto-dpif-xlate.c<br>do_xlate_actions-&gt;xlate_output_action-&gt;xlate_normal→is_admissible→bond_check_admissibility<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/ovs_slb.jpg" alt>    </p>
-<h1 id="Linux-team尚存问题"><a href="#Linux-team尚存问题" class="headerlink" title="Linux team尚存问题"></a>Linux team尚存问题</h1><p>Linux team在teamd出core退出后，主备、loadbalance模式下报文的转发均不会受影响，但在lacp模式下，会影响到转发，具体表现为，用带-o参数，相同team配置，重新拉起teamd，过一段时间后网络中断，目前推测应该是lacp协商方面引发的问题，针对该问题，还需要深入研究  </p>
+<h1 id="Linux-team-尚存问题"><a href="#Linux-team-尚存问题" class="headerlink" title="Linux team 尚存问题"></a>Linux team 尚存问题</h1><p>Linux team在teamd出core退出后，主备、loadbalance模式下报文的转发均不会受影响，但在lacp模式下，会影响到转发，具体表现为，用带-o参数，相同team配置，重新拉起teamd，过一段时间后网络中断，目前推测应该是lacp协商方面引发的问题，针对该问题，还需要深入研究  </p>
 <h1 id="其他（Linux-team部分功能实现分析）"><a href="#其他（Linux-team部分功能实现分析）" class="headerlink" title="其他（Linux team部分功能实现分析）"></a>其他（Linux team部分功能实现分析）</h1><p>ab（主备模式）如何设置活动口：<br>是在team用户态设置的，ab_link_watch_handler和ab_state_active_port_set（cli）配置主口（活动口）<br>通过netlink下发到内核ab_active_port_set处理（理论上lacp失败切ab，此时的ab选路，也就可以通过用户态下发不同的hash算法控制选择发包的tx port实现，lacp_runner中的lacp_event_watch_port_changed函数稍作改造应该也具备ab_runner中ab_event_watch_port_link_changed函数的功能）  </p>
 <p>team内核模块接收netlink配置：<br>team_nl_ops-&gt;team_nl_cmd_options_set-&gt;team_option_set→lb_options//使用不同的聚合模式，会挂不同的option    </p>
 <p>lacp配置bpf_hash_func（内核）：<br>lb_bpf_func_set-&gt;bpf_prog_create<br>bpf代码由用户态teamd_bpf_desc_compile中的bpf_create_code生成，再通过sock_fprog传入（重要）  </p>
@@ -472,11 +472,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">计算机语言_C++</a>
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color5">计算机语言_C++</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -516,15 +516,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -560,19 +560,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">应用软件_Qt</a>
+                <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
+                <a href="javascript:void(0)" class="js-tag color3">应用软件_Qt</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -584,7 +580,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">软件工程_UML</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -616,15 +612,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">软件工程_UML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">百科_存储</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">百科_双系统安装</a>
+                <a href="javascript:void(0)" class="js-tag color5">百科_DNSpod</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">百科_DNSpod</a>
+                <a href="javascript:void(0)" class="js-tag color4">百科_双系统安装</a>
               </li>
             
             <div class="clearfix"></div>

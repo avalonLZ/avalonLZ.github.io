@@ -6,21 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://avalonlz.github.io">
-  <title>stm32-USART+DMA配置 | 人人人&#39;s 藏经阁</title>
+  <title>Tag: Linux网络 | 人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="stm32-USART+DMA配置">
-<meta property="og:url" content="http://avalonlz.github.io/2016/02/29/stm32-USART_DMA/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="人人人's 藏经阁">
+<meta property="og:url" content="http://avalonlz.github.io/tags/Linux网络/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
-<meta property="og:description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png">
-<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="stm32-USART+DMA配置">
-<meta name="twitter:description" content="介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。">
-<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png">
+<meta name="twitter:title" content="人人人's 藏经阁">
+<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -134,248 +130,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-stm32-USART_DMA" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      stm32-USART+DMA配置
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2022" class="archive-year">2022</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2022/08/28/Linuxux-team/" class="archive-article-date">
+  	<time datetime="2022-08-28T06:50:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-08-28</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2022/08/28/Linuxux-team/">Linux team链路聚合</a>
     </h1>
   
 
-        
-        <a href="/2016/02/29/stm32-USART_DMA/" class="archive-article-date">
-  	<time datetime="2016-02-29T03:16:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-02-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>介绍stm32F103zet6各功能可以请求的DMA通道，以及对USART2+DMA进行配置。<a id="more"></a>  </p>
-<h1 id="DMA通道"><a href="#DMA通道" class="headerlink" title="DMA通道"></a><strong>DMA通道</strong></h1><p>各功能可以请求的DMA通道<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122211.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160323122300.png" alt="">    </p>
-<h1 id="USART-DMA配置"><a href="#USART-DMA配置" class="headerlink" title="USART+DMA配置"></a><strong>USART+DMA配置</strong></h1><p>main函数，采用寄存器方式配置DMA：</p>
-<pre><code>int main(void)
-{
-    uint8_t tx[10]={0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x10};
-    SysTick_Init();
-    UART_Initone();
-//////////////////////////////////////////DMA
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE); 
-    DMA1_Channel7-&gt;CNDTR=sizeof(tx);
-    DMA1_Channel7-&gt;CPAR=(uint32_t)(&amp;USART2-&gt;DR);//目的地址
-    DMA1_Channel7-&gt;CMAR=(uint32_t)tx;
-    DMA1_Channel7-&gt;CCR=(uint32_t)0x1090;//对CCR寄存器配置为非存储器到存储器模式等其他
-    DMA1_Channel7-&gt;CCR|=(uint32_t)0x0001;
-//////////////////////////////////////////
-    LED2_ON;
-    LED3_ON;
-while(1)
- {
-
- } 
-}
-</code></pre><p>USART2初始化函数UART_Initone:</p>
-<pre><code>void UART_Initone(void)
-{
-    GPIO_InitTypeDef GPIO_InitStructureuart;
-    USART_InitTypeDef usartone;
-
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-    //TX_GPIO
-    GPIO_InitStructureuart.GPIO_Pin = GPIO_Pin_2;
-    GPIO_InitStructureuart.GPIO_Mode=GPIO_Mode_AF_PP;
-    GPIO_InitStructureuart.GPIO_Speed=GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &amp;GPIO_InitStructureuart);
-    //RX_GPIO
-    GPIO_InitStructureuart.GPIO_Pin = GPIO_Pin_3;
-    GPIO_InitStructureuart.GPIO_Mode=GPIO_Mode_IN_FLOATING;
-    GPIO_Init(GPIOA, &amp;GPIO_InitStructureuart);
-
-    usartone.USART_BaudRate=9600;
-    usartone.USART_WordLength=USART_WordLength_8b;
-    usartone.USART_StopBits=USART_StopBits_1;
-    usartone.USART_Parity=USART_Parity_No;
-    usartone.USART_HardwareFlowControl=USART_HardwareFlowControl_None;
-    usartone.USART_Mode=USART_Mode_Rx | USART_Mode_Tx;
-    USART_Init(USART2, &amp;usartone);
-    USART_DMACmd( USART2, USART_DMAReq_Tx, ENABLE);/////使能USART2的DMA请求
-    USART_Cmd(USART2, ENABLE);//使能USART
-}  
-</code></pre><p>不开中断就不需要配置NVIC。</p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/alipay.jpg">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">嵌入式_STM32</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Linux网络</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://avalonlz.github.io/2016/02/29/stm32-USART_DMA/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2016/02/29/stm32-gpio-function-configure/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          stm32-总线结构、引脚功能及其配置
-        
-      </div>
-    </a>
   
   
-    <a href="/2016/01/31/two-system/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Win7下安装Linux双系统</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
-  <div id="gitment-ctn"></div> 
-<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
-<script src="https://jjeejj.github.io/js/gitment.js"></script>
-<script>
-var gitment = new Gitment({
-  id: "http://avalonlz.github.io/2016/02/29/stm32-USART_DMA/",
-  owner: 'avalonLZ',
-  repo: 'avalonLZ.github.io',
-  oauth: {
-    client_id: '1084a943f964349347aa',
-    client_secret: 'b24b6fb91d21d0786613aeaf42d800db497587e0',
-  },
-})
-gitment.render('gitment-ctn')
-</script>
-  
+    
 
 
           </div>
@@ -395,9 +203,9 @@ gitment.render('gitment-ctn')
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

@@ -161,13 +161,13 @@
       
         <p>本科毕业设计，当时利用Raspberry Pi做的家庭监控系统，其中用了Python中的Flask框架。当时只是想把底层到Web的一条技术栈打通，就做了这么个东东，写个简单的小教程吧<a id="more"></a>  </p>
 <h4 id="项目地址："><a href="#项目地址：" class="headerlink" title="项目地址："></a>项目地址：</h4><p><a href="https://github.com/avalonLZ/Flash_HomeMonitorSys" target="_blank" rel="external">https://github.com/avalonLZ/Flash_HomeMonitorSys</a>  </p>
-<h4 id="实物图："><a href="#实物图：" class="headerlink" title="实物图："></a>实物图：</h4><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_Design%E5%9B%BE%E7%89%872.jpg" alt="">  </p>
-<h4 id="登录界面及控制界面："><a href="#登录界面及控制界面：" class="headerlink" title="登录界面及控制界面："></a>登录界面及控制界面：</h4><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_Design%E5%9B%BE%E7%89%874.jpg" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_Design%E5%9B%BE%E7%89%873.jpg" alt="">  </p>
+<h4 id="实物图："><a href="#实物图：" class="headerlink" title="实物图："></a>实物图：</h4><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_Design%E5%9B%BE%E7%89%872.jpg" alt>  </p>
+<h4 id="登录界面及控制界面："><a href="#登录界面及控制界面：" class="headerlink" title="登录界面及控制界面："></a>登录界面及控制界面：</h4><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_Design%E5%9B%BE%E7%89%874.jpg" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_Design%E5%9B%BE%E7%89%873.jpg" alt>  </p>
 <h4 id="硬件开发环境："><a href="#硬件开发环境：" class="headerlink" title="硬件开发环境："></a>硬件开发环境：</h4><p>Raspberry Pi + usb免驱摄像头 + usb免驱无线网卡（Pi 3中集成了无线网卡） + 两个LED灯 + DHT11温湿度传感器 + ULN2003步进电机驱动板 + 一个步进电机 + USB-TTL串口调试工具（非必须）  </p>
 <h4 id="软件开发环境："><a href="#软件开发环境：" class="headerlink" title="软件开发环境："></a>软件开发环境：</h4><p>Debain系统 + motion开源库 + fswebcam抓图软件 + Flask框架    </p>
-<h4 id="硬件连接示意图"><a href="#硬件连接示意图" class="headerlink" title="硬件连接示意图"></a>硬件连接示意图</h4><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_DesignQQ%E6%88%AA%E5%9B%BE20170219195230.png" alt=""><br>按照以上硬件连接示意图将硬件设备接入树莓派，接下来就可以进行软件开发平台的搭建工作。  </p>
+<h4 id="硬件连接示意图"><a href="#硬件连接示意图" class="headerlink" title="硬件连接示意图"></a>硬件连接示意图</h4><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_DesignQQ%E6%88%AA%E5%9B%BE20170219195230.png" alt><br>按照以上硬件连接示意图将硬件设备接入树莓派，接下来就可以进行软件开发平台的搭建工作。  </p>
 <h4 id="软件开发平台的搭建"><a href="#软件开发平台的搭建" class="headerlink" title="软件开发平台的搭建"></a>软件开发平台的搭建</h4><h5 id="1、首先是Debain系统的安装："><a href="#1、首先是Debain系统的安装：" class="headerlink" title="1、首先是Debain系统的安装："></a>1、首先是Debain系统的安装：</h5><p>Raspberry Pi的Bootloader首先访问的是GPU内的Flash区域，Raspberry Pi出厂时将挂载TF卡的程序烧写进GPU的Flash中，所以想要让Raspberry Pi运行Debian Linux操作系统就需先将Debian烧写入TF卡中。此处建议使用Class10 TF卡，因为Class10相对读写速度较快，有利于程序在Raspberry Pi上的运行。<br>本次开发使用Win32diskimager对从Raspberry Pi官网下在的Debian系统进行TF卡烧写，本设计使用的是内核版本为4.1.13的Debian系统。烧写完成后将TF卡插入Raspberry Pi底部的MicroSD卡槽，启动Raspberry Pi。  </p>
-<h5 id="2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）"><a href="#2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）" class="headerlink" title="2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）"></a>2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）</h5><p>USB-TTL CH340串口调试工具和树莓连接图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/2.png" alt=""><br>在开发计算机上下载Putty软件。将CH340模块插入电脑USB口，安装驱动程序。<br>打开Putty软件，在Connection type选项中选择Serial（串口模式），在Serial line文本框中修改COM口，修改为设备管理器中所显示COM口。在Speed文本框中输入通讯波特率115200。点击Putty右下角的Open开始通讯并将Raspberry Pi上电。等待树莓启动后，在Raspberrypi login：的光标后输入默认用户名pi并回车输入密码raspberry。之后便成功登入了系统。  </p>
+<h5 id="2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）"><a href="#2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）" class="headerlink" title="2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）"></a>2、利用USB-TTL串口调试工具进行开发（可以用SSH通讯代替，第三版的树莓串口和蓝牙的固件有冲突，所以不可用串口调试工具）</h5><p>USB-TTL CH340串口调试工具和树莓连接图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/2.png" alt><br>在开发计算机上下载Putty软件。将CH340模块插入电脑USB口，安装驱动程序。<br>打开Putty软件，在Connection type选项中选择Serial（串口模式），在Serial line文本框中修改COM口，修改为设备管理器中所显示COM口。在Speed文本框中输入通讯波特率115200。点击Putty右下角的Open开始通讯并将Raspberry Pi上电。等待树莓启动后，在Raspberrypi login：的光标后输入默认用户名pi并回车输入密码raspberry。之后便成功登入了系统。  </p>
 <h5 id="3、WiFi模块的配置"><a href="#3、WiFi模块的配置" class="headerlink" title="3、WiFi模块的配置"></a>3、WiFi模块的配置</h5><p>接下来配置Raspberry Pi的WiFi模块。将WiFi模块插入USB口，在CLI界面输入命令：lsusb，出现所有采用USB协议通讯的设备。找到RTL8188CUS 802.11n WLAN Adapter设备，说明此时WiFi模块已被正确识别。接下来输入sudo iwlist wlan0 scan命令，将会列出附近所有WiFi信号的详细信息。在各个信号的SSID中找到家庭网络所命名的SSID，本次开发使用SSID为lz1。在确定可以检测到家庭网络后输入wpa_passphrase lz1(SSID用户名) 581218147（密码）并回车。出现下回显信息：    </p>
 <pre><code>network={
         ssid=&quot;lz1&quot;
@@ -191,7 +191,7 @@ def hello_world():
     return &apos;Hello World!&apos;
 if __name__ == &apos;__main__&apos;:
     app.run(&quot;192.168.191.2&quot;)  
-</code></pre><p>如此创建一个简单的Flask工程，测试Flask环境是否已经搭建完成。在同一网段终端设备的浏览器地址栏输入<a href="http://192.168.191.2:5000/并回车，出现下图所示画面则说明Flask应用框架开发平台搭建完成。" target="_blank" rel="external">http://192.168.191.2:5000/并回车，出现下图所示画面则说明Flask应用框架开发平台搭建完成。</a><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_Design1.png" alt=""><br>接下来开始使用摄像头部分的环境搭建。首先将USB摄像头接入Raspberry Pi的USB口，输入lsusb命令，回显出现Z-Star Microelectronics Corp. Venus USB2.0 Camera字样，则说明系统可以识别出该USB摄像头。再输入ls /dev/vid*查看是否有对应驱动程序，当回显/dev/video0时说明Linux已经有了USB摄像头的驱动程序。接下来便可以开始开源软件Motion的安装以及配置工作。  </p>
+</code></pre><p>如此创建一个简单的Flask工程，测试Flask环境是否已经搭建完成。在同一网段终端设备的浏览器地址栏输入<a href="http://192.168.191.2:5000/并回车，出现下图所示画面则说明Flask应用框架开发平台搭建完成。" target="_blank" rel="external">http://192.168.191.2:5000/并回车，出现下图所示画面则说明Flask应用框架开发平台搭建完成。</a><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_Design1.png" alt><br>接下来开始使用摄像头部分的环境搭建。首先将USB摄像头接入Raspberry Pi的USB口，输入lsusb命令，回显出现Z-Star Microelectronics Corp. Venus USB2.0 Camera字样，则说明系统可以识别出该USB摄像头。再输入ls /dev/vid*查看是否有对应驱动程序，当回显/dev/video0时说明Linux已经有了USB摄像头的驱动程序。接下来便可以开始开源软件Motion的安装以及配置工作。  </p>
 <h5 id="5、Motion的安装及其配置"><a href="#5、Motion的安装及其配置" class="headerlink" title="5、Motion的安装及其配置"></a>5、Motion的安装及其配置</h5><p>在CLI中输入sudo apt-get install motion安装Motion，安装完成后输入sudo nano /etc/default/motion在该文件内，将start_motion_daemon=no，改为start_motion_daemon=yes表示允许后台运行，保存并退出。之后进入sudo nano /etc/motion/motion.conf 进行Motion的详细配置。在此次开发中配置如下：  </p>
 <pre><code>daemon off #关闭Motion的守护进程（后台运行）功能。
 videodevice /dev/video0 #使用video0库驱动摄像头。
@@ -218,7 +218,7 @@ target_dir /home/lz/motion-images #设置照片存放路径，需要将此路径
 #; thread /usr/local/etc/thread2.conf
 #; thread /usr/local/etc/thread3.conf
 #; thread /usr/local/etc/thread4.conf #以上四条设置是否开启多个摄像头采集画面，由于本次设计只采用一个摄像头，所以只启用了一条配置线程。其他的配置选项都可以按Motion的默认参数来配置。最后保存并退出配置文件，执行update-rc.d -f motion remove命令删除Motion开启启动项。  
-</code></pre><p>以上所配置的只是Motion众多配置中的冰山一角，Motion还支持很多强大的功能，如有需要还可以随时进行更改。至此，完成了Motion的配置，下面进行简单测试。退出配置文件后在终端窗口中输入sudo service motion start命令启动Motion，之后通过同一网段终端浏览器访问Raspberry Pi的8081端口，出现下图所示画面则说明配置成功，可以进行下一步开发。<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_Design3.png" alt="">  </p>
+</code></pre><p>以上所配置的只是Motion众多配置中的冰山一角，Motion还支持很多强大的功能，如有需要还可以随时进行更改。至此，完成了Motion的配置，下面进行简单测试。退出配置文件后在终端窗口中输入sudo service motion start命令启动Motion，之后通过同一网段终端浏览器访问Raspberry Pi的8081端口，出现下图所示画面则说明配置成功，可以进行下一步开发。<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Graduation_Design3.png" alt>  </p>
 <h5 id="6、外围模块设计-DHT11"><a href="#6、外围模块设计-DHT11" class="headerlink" title="6、外围模块设计-DHT11"></a>6、外围模块设计-DHT11</h5><p>根据DHT11的DataSheet编写相应的Python程序对模块进行驱动，具体实现函数见：<br><a href="https://github.com/avalonLZ/Project/tree/master/Python/Python_Flask/Flask_HomeMonitorSystem-master/dht11.py" target="_blank" rel="external">https://github.com/avalonLZ/Project/tree/master/Python/Python_Flask/Flask_HomeMonitorSystem-master/dht11.py</a></p>
 <h5 id="7、外围模块设计-驱动步进电机"><a href="#7、外围模块设计-驱动步进电机" class="headerlink" title="7、外围模块设计-驱动步进电机"></a>7、外围模块设计-驱动步进电机</h5><p>在步进电机的驱动方面，是采用UNL2003高耐压、大电流复合晶体管阵列对28BYJ-48五线四相步进电机进行驱动。06号GPIO口作为INT1口的输入，13号GPIO口作为INT2的输入，19号GPIO口作为INT3的输入26号GPIO口作为INT4的输入。暂时使用了单四拍设计。具体实现函数见：<br><a href="https://github.com/avalonLZ/Project/tree/master/Python/Python_Flask/Flask_HomeMonitorSystem-master/motor.py" target="_blank" rel="external">https://github.com/avalonLZ/Project/tree/master/Python/Python_Flask/Flask_HomeMonitorSystem-master/motor.py</a>  </p>
 <h5 id="8、Web前端设计"><a href="#8、Web前端设计" class="headerlink" title="8、Web前端设计"></a>8、Web前端设计</h5><p>Web界面当时做的比较随意，并没有花很多时间去深入学习各种前端技术，简单的做了几个界面，Html及CSS见：<br><a href="https://github.com/avalonLZ/Project/tree/master/Python/Python_Flask/Flask_HomeMonitorSystem-master/templates" target="_blank" rel="external">https://github.com/avalonLZ/Project/tree/master/Python/Python_Flask/Flask_HomeMonitorSystem-master/templates</a>  </p>
@@ -483,6 +483,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -515,7 +519,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -543,10 +551,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -559,19 +563,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -607,10 +607,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -620,6 +616,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

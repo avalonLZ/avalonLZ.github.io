@@ -158,11 +158,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>给手上这个即将完工的项目做个配置软件（下位机都全包了，上位机也自己写了，也方便测试和出厂配置）。玩QT最主要的就是信号和槽了，即使是多线程也是QT封装过的。写了几个软件后，积累了不少自己做的功能库，以后PC端的开发就很方便了<a id="more"></a>  </p>
-<p>打开界面：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Bridge_mainwin.png" alt="">   </p>
-<p>菜单界面：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Bridge_menu1.png" alt="">   </p>
-<p>配置界面：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Bridge_menu2.png" alt="">  </p>
-<p>配置1主界面：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Bridge_ohde.png" alt="">  </p>
-<p>配置2主界面：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Bridge_brtl.png" alt="">  </p>
+<p>打开界面：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Bridge_mainwin.png" alt>   </p>
+<p>菜单界面：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Bridge_menu1.png" alt>   </p>
+<p>配置界面：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Bridge_menu2.png" alt>  </p>
+<p>配置1主界面：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Bridge_ohde.png" alt>  </p>
+<p>配置2主界面：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Bridge_brtl.png" alt>  </p>
 <p>简单说下线程方面的设计：  </p>
 <p>首先单独开了一个线程给串口扫描，从UI初始化那一个线程就一直进行串口的扫描工作。若有某时刻串口列表与旧时不同。则发送新的串口列表信号到主线程，主线程操作UI更新串口列表  </p>
 <p>再来就是TextEdit控件负责显示下位机发来的数据，这里也单独开了一个线程专门进行串口数据的读取。当取到数据后，利用信号发送将数据发送给主线程，主线程操作UI将新数据更新到Text Edit控件上  </p>
@@ -429,6 +429,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -461,7 +465,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -489,10 +497,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -505,19 +509,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -553,10 +553,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -566,6 +562,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

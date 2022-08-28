@@ -160,9 +160,9 @@
                                                --&gt;控制面：ODL、ONOS等  
 </code></pre><p>大概就是这么个关系  </p>
 <p>接下来用图说明下Openstack架构（主要模块），以及Neutron与SDN  </p>
-<h3 id="Openstack架构（主要模块）"><a href="#Openstack架构（主要模块）" class="headerlink" title="Openstack架构（主要模块）"></a>Openstack架构（主要模块）</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Openstack%E4%B8%8ESDN/Openstack%E4%B8%BB%E8%A6%81%E6%A8%A1%E5%9D%97%E5%8F%8A%E7%AE%80%E5%8D%95%E6%9E%B6%E6%9E%84.jpg" alt="">    </p>
-<h3 id="Neutron与SDN"><a href="#Neutron与SDN" class="headerlink" title="Neutron与SDN"></a>Neutron与SDN</h3><p>Neutron和SDN的关系，我觉得应该是这样：SDN是Neutron的一种实现思想/框架（当然，只要你能管理虚拟机的网络，不用SDN的思想当然也没问题）。可以用于构建Neutron的SDN开源组件，则是OVS数据面+ODL、ONOS等控制面软件，具体关系如下图<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Openstack%E4%B8%8ESDN/Neutron%E4%B8%8ESDN.jpg" alt="">  </p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>由以上两图就可以总结出，最上层的云计算，到最底层的SDN控制面或数据面的关系了<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Openstack%E4%B8%8ESDN/%E6%80%BB%E7%BB%93.jpg" alt="">  </p>
+<h3 id="Openstack架构（主要模块）"><a href="#Openstack架构（主要模块）" class="headerlink" title="Openstack架构（主要模块）"></a>Openstack架构（主要模块）</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Openstack%E4%B8%8ESDN/Openstack%E4%B8%BB%E8%A6%81%E6%A8%A1%E5%9D%97%E5%8F%8A%E7%AE%80%E5%8D%95%E6%9E%B6%E6%9E%84.jpg" alt>    </p>
+<h3 id="Neutron与SDN"><a href="#Neutron与SDN" class="headerlink" title="Neutron与SDN"></a>Neutron与SDN</h3><p>Neutron和SDN的关系，我觉得应该是这样：SDN是Neutron的一种实现思想/框架（当然，只要你能管理虚拟机的网络，不用SDN的思想当然也没问题）。可以用于构建Neutron的SDN开源组件，则是OVS数据面+ODL、ONOS等控制面软件，具体关系如下图<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Openstack%E4%B8%8ESDN/Neutron%E4%B8%8ESDN.jpg" alt>  </p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>由以上两图就可以总结出，最上层的云计算，到最底层的SDN控制面或数据面的关系了<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Openstack%E4%B8%8ESDN/%E6%80%BB%E7%BB%93.jpg" alt>  </p>
 <p>因为主要是做Neutron这部分，所以Openstack中的其他模块，在此图就简略了下</p>
 
       
@@ -423,6 +423,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -455,7 +459,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -483,10 +491,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -499,19 +503,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -547,10 +547,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -560,6 +556,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -159,23 +159,23 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>C语言中易遗忘的知识点，不定期更新。<a id="more"></a>  </p>
-<h1 id="指针数组与数组指针"><a href="#指针数组与数组指针" class="headerlink" title="指针数组与数组指针"></a><strong>指针数组与数组指针</strong></h1><p>  <img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notes09C0E21F4D2542E5AFE997D0C5250E40.jpg" alt="">    </p>
+<h1 id="指针数组与数组指针"><a href="#指针数组与数组指针" class="headerlink" title="指针数组与数组指针"></a><strong>指针数组与数组指针</strong></h1><p>  <img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notes09C0E21F4D2542E5AFE997D0C5250E40.jpg" alt>    </p>
 <ul>
-<li><p>指针数组：存放指针的数组，即数组内存放的都是地址。常用于将两个一维数组组成一个二维数组：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notesCD2FAD54EEEC4D9E924F0A2C507269F0.jpg" alt="">  </p>
+<li><p>指针数组：存放指针的数组，即数组内存放的都是地址。常用于将两个一维数组组成一个二维数组：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notesCD2FAD54EEEC4D9E924F0A2C507269F0.jpg" alt>  </p>
 </li>
-<li><p>数组指针：指向一个数组的指针，即定义一个指针并且将它指向了一个相同类型的数组，该指针就叫数组指针。若要直接指向一个二维数组则需采用数组指针或数组：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notesB19B419ABB56461191E5AB60AF1019B9.jpg" alt=""></p>
+<li><p>数组指针：指向一个数组的指针，即定义一个指针并且将它指向了一个相同类型的数组，该指针就叫数组指针。若要直接指向一个二维数组则需采用数组指针或数组：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notesB19B419ABB56461191E5AB60AF1019B9.jpg" alt></p>
 </li>
 </ul>
 <h1 id="给已知地址赋值"><a href="#给已知地址赋值" class="headerlink" title="给已知地址赋值"></a><strong>给已知地址赋值</strong></h1><pre><code>int32_t *addressone=(int32_t*)0xAAAAAAAA; 
 *addressone=99;  
-</code></pre><h1 id="指向函数的指针"><a href="#指向函数的指针" class="headerlink" title="指向函数的指针"></a><strong>指向函数的指针</strong></h1><p>在C语言中,函数名就是函数所在地址,跟数组名一样<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notes0BC4A0D7547742B7A468F2188D0D6DB7.jpg" alt="">  </p>
+</code></pre><h1 id="指向函数的指针"><a href="#指向函数的指针" class="headerlink" title="指向函数的指针"></a><strong>指向函数的指针</strong></h1><p>在C语言中,函数名就是函数所在地址,跟数组名一样<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notes0BC4A0D7547742B7A468F2188D0D6DB7.jpg" alt>  </p>
 <h1 id="const常量声明关键字"><a href="#const常量声明关键字" class="headerlink" title="const常量声明关键字"></a><strong>const常量声明关键字</strong></h1><ul>
 <li>作用域随变量声明处变化，并不跟static一样放在静态存储区</li>
 <li>const int k=10;等价于int const k=10;：k初始化后值将不可再改变</li>
 <li>const int *k;：表示指向地址的内容不可改变</li>
 <li>int *const k=&a;：表示k所指向的地址不可再发生改变，但是该地址的内容可以改变（初始化时必须有指向）  </li>
 </ul>
-<h1 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a><strong>宏定义</strong></h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notesFB279ED4F2524358AD91BC04D1AAC6A8.jpg" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notes5E11CEF9C6924591A4C271F5A3018067.jpg" alt=""></p>
+<h1 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a><strong>宏定义</strong></h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notesFB279ED4F2524358AD91BC04D1AAC6A8.jpg" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/c_notes5E11CEF9C6924591A4C271F5A3018067.jpg" alt></p>
 
       
 
@@ -435,6 +435,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -467,7 +471,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -495,10 +503,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -511,19 +515,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -559,10 +559,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -572,6 +568,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

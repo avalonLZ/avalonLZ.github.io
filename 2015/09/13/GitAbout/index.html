@@ -171,12 +171,12 @@
 <p>7、更新并合并本地分支<br>git pull：当只需要更新分支，而不需要在新分支开发后再合并，这时候可以用git pull  </p>
 <p>8、将本地分支更新到远程分支上<br>git push:将当前的本地分支更新到远程分支上<br>例：git push &lt;远程主机名&gt; &lt;远程分支名&gt;<br>git push origin master//假设当前本地分支为tem,则将tem分支更新到远程分支master上  </p>
 <p>9、克隆代码<br>git clone:远程操作的第一步，通常是从远程主机克隆一个版本库<br>例：git clone <a href="https://github.com/jquery/jquery.git" target="_blank" rel="external">https://github.com/jquery/jquery.git</a></p>
-<h3 id="创建本地仓库并建立连接（一个新的项目必须走这步）"><a href="#创建本地仓库并建立连接（一个新的项目必须走这步）" class="headerlink" title="创建本地仓库并建立连接（一个新的项目必须走这步）"></a>创建本地仓库并建立连接（一个新的项目必须走这步）</h3><p>1、git init//初始化git<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_1init_git.png" alt="">  </p>
-<p>2、git remote add origin git@github.com:……//创建远程主机<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_2remote_origin.png" alt="">  </p>
-<p>3、git fetch origin//更新远程主机<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_3fetch_origin.png" alt="">  </p>
-<p>4、git merge origin/master//将远程主机的master分支更新到本地master分支(本地master分支自动创建)<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_4merge_origin.png" alt="">   </p>
-<p>至此可以在该master分支上进行开发，或者用git branch新建一个分支，并用git checkout切换到该分支上进行开发。最后可以将新分支合并到master上，再git push到远程仓库的master分支上，或者直接git push到远程仓库的新分支上<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_5push_tesst.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_6checkout_master.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_7merge_master.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_8push_master.png" alt="">    </p>
-<p>参加开源项目流程图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_opensource.png" alt=""></p>
+<h3 id="创建本地仓库并建立连接（一个新的项目必须走这步）"><a href="#创建本地仓库并建立连接（一个新的项目必须走这步）" class="headerlink" title="创建本地仓库并建立连接（一个新的项目必须走这步）"></a>创建本地仓库并建立连接（一个新的项目必须走这步）</h3><p>1、git init//初始化git<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_1init_git.png" alt>  </p>
+<p>2、git remote add origin git@github.com:……//创建远程主机<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_2remote_origin.png" alt>  </p>
+<p>3、git fetch origin//更新远程主机<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_3fetch_origin.png" alt>  </p>
+<p>4、git merge origin/master//将远程主机的master分支更新到本地master分支(本地master分支自动创建)<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_4merge_origin.png" alt>   </p>
+<p>至此可以在该master分支上进行开发，或者用git branch新建一个分支，并用git checkout切换到该分支上进行开发。最后可以将新分支合并到master上，再git push到远程仓库的master分支上，或者直接git push到远程仓库的新分支上<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_5push_tesst.png" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_6checkout_master.png" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_7merge_master.png" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_8push_master.png" alt>    </p>
+<p>参加开源项目流程图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Git_opensource.png" alt></p>
 
       
 
@@ -431,6 +431,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -463,7 +467,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -491,10 +499,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -507,19 +511,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -555,10 +555,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -568,6 +564,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

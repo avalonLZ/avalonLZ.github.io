@@ -196,8 +196,8 @@
     SPI_Init(SPI2, &amp;SPI2_InitStructure);
     SPI_Cmd(SPI2, ENABLE);
 }  
-</code></pre><p>SPI2_InitStructure.SPI_CPOL=SPI_CPOL_Low;和SPI2_InitStructure.SPI_CPHA=SPI_CPHA_1Edge;是分别对SPI的时钟极性和时钟相位进行配置，主要有4种模式（0，0），（0，1），（1，0），（1，1）这四种模式要根据从器件的采集时序（时钟）来配置，需要和从设备相同（例如从设备只支持(0,0)模式那这里就需要配置为（0，0））。下图对这四种模式做详细介绍：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160331114759.jpg" alt="">  </p>
-<h1 id="写入数据"><a href="#写入数据" class="headerlink" title="写入数据"></a><strong>写入数据</strong></h1><p>根据STM32参考手册SPI部分可以知道硬件SPI需要检测的标志位相对于硬件I2C来说少了很多，所以以32作为主机做硬件SPI的编码会更需要从器件的事件发生时序入手，下面是一个写入操作，配DATESHEET事件图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160331122200.png" alt="">  </p>
+</code></pre><p>SPI2_InitStructure.SPI_CPOL=SPI_CPOL_Low;和SPI2_InitStructure.SPI_CPHA=SPI_CPHA_1Edge;是分别对SPI的时钟极性和时钟相位进行配置，主要有4种模式（0，0），（0，1），（1，0），（1，1）这四种模式要根据从器件的采集时序（时钟）来配置，需要和从设备相同（例如从设备只支持(0,0)模式那这里就需要配置为（0，0））。下图对这四种模式做详细介绍：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160331114759.jpg" alt>  </p>
+<h1 id="写入数据"><a href="#写入数据" class="headerlink" title="写入数据"></a><strong>写入数据</strong></h1><p>根据STM32参考手册SPI部分可以知道硬件SPI需要检测的标志位相对于硬件I2C来说少了很多，所以以32作为主机做硬件SPI的编码会更需要从器件的事件发生时序入手，下面是一个写入操作，配DATESHEET事件图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160331122200.png" alt>  </p>
 <pre><code>void SPI_Flash_Write_Page(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 {
      u16 i;  
@@ -211,7 +211,7 @@
     SPI_FLASH_CS_SET;                           
     SPI_Flash_Wait_Busy();                     
 }   
-</code></pre><p>因为nor flash写入前必须擦除，根据DATESHEET描述在擦除操作前需要先写使能，所以先执行写使能函数，再发送一个0x02擦除4K存储地址命令，接下来发送由三个8位数据组成的地址，最后发送写入的数据，关片选，忙检测。<br>基本写入函数（可以看出根据32的手册分别做了标志位检测）：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160331130727.png" alt="">  </p>
+</code></pre><p>因为nor flash写入前必须擦除，根据DATESHEET描述在擦除操作前需要先写使能，所以先执行写使能函数，再发送一个0x02擦除4K存储地址命令，接下来发送由三个8位数据组成的地址，最后发送写入的数据，关片选，忙检测。<br>基本写入函数（可以看出根据32的手册分别做了标志位检测）：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160331130727.png" alt>  </p>
 <pre><code> u8 SPI2_ReadWriteByte(u8 TxData)
 {        
     u8 retry=0;                     
@@ -229,7 +229,7 @@
         }                                  
     return SPI_I2S_ReceiveData(SPI2);                     
 } 
-</code></pre><p>写使能函数：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160331122541.png" alt="">  </p>
+</code></pre><p>写使能函数：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160331122541.png" alt>  </p>
 <pre><code>void SPI_FLASH_Write_Enable(void)   
 {
     SPI_FLASH_CS_CLR;                           
@@ -253,7 +253,7 @@ u8 SPI_Flash_ReadSR(void)
 }  
 </code></pre><font color="red">这里有个发送0XFF数据，这里必须的。必须向从器件发送一个无关的数据，以便产生SCLK时钟。硬件SPI发送时才会产生SCLK时钟，所以在读取时要同时发送一个数据。这也是硬件SPI和模拟SPI差别最大的地方。</font>  
 
-<h1 id="读取数据"><a href="#读取数据" class="headerlink" title="读取数据"></a><strong>读取数据</strong></h1><p>数据的读取也是依据DATESHEET上的事件产生时间来操作，需要注意的依然是读取数据时还需要写入无关数据<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160331131333.png" alt="">  </p>
+<h1 id="读取数据"><a href="#读取数据" class="headerlink" title="读取数据"></a><strong>读取数据</strong></h1><p>数据的读取也是依据DATESHEET上的事件产生时间来操作，需要注意的依然是读取数据时还需要写入无关数据<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160331131333.png" alt>  </p>
 <pre><code>void SPI_Flash_Read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 { 
      u16 i;                                                        
@@ -528,6 +528,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -560,7 +564,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -588,10 +596,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -604,19 +608,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -652,10 +652,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -665,6 +661,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

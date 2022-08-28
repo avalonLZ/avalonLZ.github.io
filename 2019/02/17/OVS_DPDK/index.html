@@ -156,10 +156,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>做个学习笔记，也算一只脚进了云计算的大门了<a id="more"></a><br>OVS是什么就不在说明了（软交换机），我学习的思路还是从整体到细节，从大到小。  </p>
-<h3 id="未使用DPDK"><a href="#未使用DPDK" class="headerlink" title="未使用DPDK"></a>未使用DPDK</h3><p>首先说下未使用DPDK时，OVS是怎样的一个东西吧。<br>大概画了下OVS在单台云主机上的模型，如下图：<br> <img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg" alt=""><br>在单台主机上的众多虚拟机中，起着软交换的作用（想想你买的VPS，就能明白为啥需要OVS了）  </p>
-<p>然后是关于OVS内部的模块关系，以及未使用DPDK时的走包流程<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_flow.jpg" alt=""><br>总的来说，组件还是很多的。刚接触，感觉有些组件的部分功能存在重叠。不过还没怎么玩过，所以不吐槽了，既然存在那一定有他的道理，只是“功力”不到，无法领会到罢了  </p>
+<h3 id="未使用DPDK"><a href="#未使用DPDK" class="headerlink" title="未使用DPDK"></a>未使用DPDK</h3><p>首先说下未使用DPDK时，OVS是怎样的一个东西吧。<br>大概画了下OVS在单台云主机上的模型，如下图：<br> <img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module.jpg" alt><br>在单台主机上的众多虚拟机中，起着软交换的作用（想想你买的VPS，就能明白为啥需要OVS了）  </p>
+<p>然后是关于OVS内部的模块关系，以及未使用DPDK时的走包流程<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_flow.jpg" alt><br>总的来说，组件还是很多的。刚接触，感觉有些组件的部分功能存在重叠。不过还没怎么玩过，所以不吐槽了，既然存在那一定有他的道理，只是“功力”不到，无法领会到罢了  </p>
 <p>下面还有一张主要模块，vswitchd和DataPath模块，未使用DPDK时的模块内部详细架构  </p>
-<h3 id="使用DPDK"><a href="#使用DPDK" class="headerlink" title="使用DPDK"></a>使用DPDK</h3><p>当使用DPDK时，单台云主机上的OVS模型则变成下图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module_with_dpdk.jpg" alt=""><br>图中宿主机上的NIC网卡被DPDK托管，收到的包经过OVS，再被DPDK的vhost-user模块，发送至虚拟机上的DPDK的virtio-user模块。虚拟机上的回复包则相反<br>（其中虚拟机上的virtio-user模块，可以替换成虚拟机内核原本就支持的virtio-net模块，这样的话在虚拟机中，数据包依然可以走内核协议栈）<br>特别说明一点：在linux内核中已经实现了vhost-net和virtio-net，且DPDK的vhost-user可以和linux实现的virtio-net进行交互。相对于内核的vhost-net/virtio-net全面的功能，DPDK的vhost-user/virtio-user则更加注重性能</p>
+<h3 id="使用DPDK"><a href="#使用DPDK" class="headerlink" title="使用DPDK"></a>使用DPDK</h3><p>当使用DPDK时，单台云主机上的OVS模型则变成下图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/SDN/ovs_signal_pc_module_with_dpdk.jpg" alt><br>图中宿主机上的NIC网卡被DPDK托管，收到的包经过OVS，再被DPDK的vhost-user模块，发送至虚拟机上的DPDK的virtio-user模块。虚拟机上的回复包则相反<br>（其中虚拟机上的virtio-user模块，可以替换成虚拟机内核原本就支持的virtio-net模块，这样的话在虚拟机中，数据包依然可以走内核协议栈）<br>特别说明一点：在linux内核中已经实现了vhost-net和virtio-net，且DPDK的vhost-user可以和linux实现的virtio-net进行交互。相对于内核的vhost-net/virtio-net全面的功能，DPDK的vhost-user/virtio-user则更加注重性能</p>
 
       
 
@@ -419,6 +419,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -451,7 +455,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -479,10 +487,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -495,19 +499,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -543,10 +543,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -556,6 +552,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

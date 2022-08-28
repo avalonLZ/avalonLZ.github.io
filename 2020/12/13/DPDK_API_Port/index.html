@@ -185,8 +185,8 @@ priv_size：mempool的私有数据结构长度（正常收发包一般不用，�
 data_room_size：指明一个rte_mbuf的大小    
 
 socket_id：指明该mempool要从哪个cpu插槽申请（一般是找到转发core所在的cpu插槽）
-</code></pre><p>其中比较有疑问的参数是cache_size，DPDK的mempool针对不同core,所做的软件cache（并非一个core内部的cache）。目的，是为了减少不同core访问mempool时的上锁操作（原理大致如下图所示）。cache_size在DPDK中默认最大是250，理论上来说cache应该是尽可能的大，所以一般也将此值设为250（有的例程是32可能是出于DPDK应用所占用的内存考虑？）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/cache_size.jpg" alt="">  </p>
-<p>针对priv_size和data_room_size，结合l2fwd的例程和以下mempool/mbuf结构图，可以看出priv_size是算作mbuf中的一部分（猜测应该是修改mbuf结构后，需要加入的size大小？在二层加密例程中有使用，一般转发应该不用这个变量）。data_room_size参考例程填写即可<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/mempool.jpg" alt="">      </p>
+</code></pre><p>其中比较有疑问的参数是cache_size，DPDK的mempool针对不同core,所做的软件cache（并非一个core内部的cache）。目的，是为了减少不同core访问mempool时的上锁操作（原理大致如下图所示）。cache_size在DPDK中默认最大是250，理论上来说cache应该是尽可能的大，所以一般也将此值设为250（有的例程是32可能是出于DPDK应用所占用的内存考虑？）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/cache_size.jpg" alt>  </p>
+<p>针对priv_size和data_room_size，结合l2fwd的例程和以下mempool/mbuf结构图，可以看出priv_size是算作mbuf中的一部分（猜测应该是修改mbuf结构后，需要加入的size大小？在二层加密例程中有使用，一般转发应该不用这个变量）。data_room_size参考例程填写即可<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_API_Port/mempool.jpg" alt>      </p>
 <h3 id="配置网口"><a href="#配置网口" class="headerlink" title="配置网口"></a>配置网口</h3><p>接下来说下rte_eth_dev_configure配置网口这个API，首先强调一下，调用此API，需要网口处于stop状态  </p>
 <pre><code>int rte_eth_dev_configure(uint16_t port_id, uint16_t nb_rx_q, uint16_t nb_tx_q,
               const struct rte_eth_conf *dev_conf)  
@@ -494,6 +494,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -526,7 +530,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -554,10 +562,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -570,19 +574,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -618,10 +618,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -631,6 +627,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

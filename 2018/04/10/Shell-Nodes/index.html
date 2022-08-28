@@ -210,7 +210,7 @@ BLOCK
 <li><p>双引号：<br>1、双引号中可以读取变量<br>2、双引号中可以存在转义字符  </p>
 <p>  <code>name=&#39;lz&#39;</code><br>  <code>namestr1=&quot;hello,${name}!&quot;</code><br>  <code>namestr2=&quot;hello,&quot;${name}&quot;!&quot;</code><br>  <code>namestr3=&quot;hello,&quot;$name&quot;!&quot;</code><br>  <code>echo $namestr1 $namestr2 $namestr3</code><br>  <code>&gt;&gt;hello,lz! hello,lz! hello,lz!</code>   </p>
 </li>
-<li><p>获取字符串长度：<br>可以使用‘#’字符来获取字符串长度<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Shell_strlen.jpg" alt="">    </p>
+<li><p>获取字符串长度：<br>可以使用‘#’字符来获取字符串长度<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Shell_strlen.jpg" alt>    </p>
 <pre><code>lz=&apos;yyy&apos;  
 echo ${#lz}  
 &gt;&gt;3
@@ -252,7 +252,7 @@ arrayone[3]=&apos;lz&apos;
 echo ${arrayone[@]}  
 &gt;&gt;1 lz  
 </code></pre><ul>
-<li><p>获取数组长度<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Shell_arraylen1.jpg" alt="">  </p>
+<li><p>获取数组长度<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Shell_arraylen1.jpg" alt>  </p>
 <pre><code>lz=(1 2 3)  
 echo ${#lz[@]}  
 &gt;&gt;3
@@ -261,7 +261,7 @@ echo ${#lz[@]}
 <h1 id="或"><a href="#或" class="headerlink" title="或"></a>或</h1><p>  <code>l1+=(${l2[@]})</code>  </p>
 </li>
 </ul>
-<h3 id="从命令行向shell脚本传递参数"><a href="#从命令行向shell脚本传递参数" class="headerlink" title="从命令行向shell脚本传递参数"></a>从命令行向shell脚本传递参数</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Shell_fromshell1.jpg" alt="">  </p>
+<h3 id="从命令行向shell脚本传递参数"><a href="#从命令行向shell脚本传递参数" class="headerlink" title="从命令行向shell脚本传递参数"></a>从命令行向shell脚本传递参数</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Shell_fromshell1.jpg" alt>  </p>
 <p>还有些常用参数：<br>$$：脚本运行的当前进程ID号<br>$!：后台运行的最后一个进程的ID号<br>$-：显示Shell使用的当前选项，与set命令功能相同（没理解）</p>
 <p>$?：显示最后命令的退出状态，0表示没有错误，其他任何值表名有错误，例：  </p>
 <pre><code>#若编译成功则提示&quot;compile successfully&quot;  
@@ -273,7 +273,7 @@ then
 else 
     echo &quot;compile fail&quot;
 fi 
-</code></pre><h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Shell_sum.jpg" alt="">      </p>
+</code></pre><h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Shell_sum.jpg" alt>      </p>
 <p>其他运算符和其他语言一样<br>需要注意的地方：<br>1、乘号(*)前需要加反斜杠(\)才能作为乘号使用<br>2、mac中的shell的expr语法是$((表达式))，此处表达式中的 “<em>“ 不需要转义符号 “\”<br>    `lz=expr $((2</em>3))<code>`echo ${lz}</code><br>    <code>&gt;&gt;6</code>  </p>
 <h3 id="关系运算符（重要）"><a href="#关系运算符（重要）" class="headerlink" title="关系运算符（重要）"></a>关系运算符（重要）</h3><p>-eq：检测两数是否相等，相等返回true，与shell运算符中的==号一样<br>-ne：检测两数是否不等，不等返回true，与shell运算符中的!=号一样<br>-gt：检测左边的数是否大于右边的，如果是，返回true<br>-lt：检测左边的数是否小于右边的，如果是，返回true<br>-ge：检测左边的数是否大于等于右边的，如果是，返回true<br>-le：检测左边的数是否小于等于右边的，如果是，返回true<br>例：  </p>
 <pre><code>val=${1} +${2}
@@ -792,6 +792,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -824,7 +828,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -852,10 +860,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -868,19 +872,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -916,10 +916,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -929,6 +925,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

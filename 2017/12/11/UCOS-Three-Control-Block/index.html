@@ -156,8 +156,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>前面总结了UCOSII下的任务调度以及任务间的同步与通信机制，这篇文章简单总结下UCOSII下的三大控制块：TCB（任务控制块）、ECB（事件控制块）以及MCB（内存控制块）<a id="more"></a><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/UCOSII_ucosii_threecontrolblock.png" alt="">    </p>
-<p>UCOSII初始化时建立的五大缓冲区（以单链表的形式存在）：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/UCOSII_5bufferList.png" alt=""><br>若当使用相应控制块时则向缓冲区申请，不使用时释放回缓冲区，若缓冲区中的相应控制块使用完了，则不能再分配相应控制块。在初始化时可配置缓冲区大小  </p>
+        <p>前面总结了UCOSII下的任务调度以及任务间的同步与通信机制，这篇文章简单总结下UCOSII下的三大控制块：TCB（任务控制块）、ECB（事件控制块）以及MCB（内存控制块）<a id="more"></a><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/UCOSII_ucosii_threecontrolblock.png" alt>    </p>
+<p>UCOSII初始化时建立的五大缓冲区（以单链表的形式存在）：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/UCOSII_5bufferList.png" alt><br>若当使用相应控制块时则向缓冲区申请，不使用时释放回缓冲区，若缓冲区中的相应控制块使用完了，则不能再分配相应控制块。在初始化时可配置缓冲区大小  </p>
 <h3 id="TCB-Task-Control-Block-任务控制块："><a href="#TCB-Task-Control-Block-任务控制块：" class="headerlink" title="TCB(Task_Control_Block)任务控制块："></a>TCB(Task_Control_Block)任务控制块：</h3><pre><code>/*
 *********************************************************************************************************
 *                                          TASK CONTROL BLOCK
@@ -228,7 +228,7 @@ typedef struct os_tcb {
     INT8U            OSTCBTaskName[OS_TASK_NAME_SIZE];/* 该任务的名称 */
 #endif
 } OS_TCB;  
-</code></pre><h3 id="ECB-Event-Control-Block-事件控制块："><a href="#ECB-Event-Control-Block-事件控制块：" class="headerlink" title="ECB(Event_Control_Block)事件控制块："></a>ECB(Event_Control_Block)事件控制块：</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/UCOSII_ECB.png" alt=""></p>
+</code></pre><h3 id="ECB-Event-Control-Block-事件控制块："><a href="#ECB-Event-Control-Block-事件控制块：" class="headerlink" title="ECB(Event_Control_Block)事件控制块："></a>ECB(Event_Control_Block)事件控制块：</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/UCOSII_ECB.png" alt></p>
 <pre><code>/*
 *********************************************************************************************************
 *                                          EVENT CONTROL BLOCK
@@ -253,7 +253,7 @@ typedef struct os_event {
 #endif
 } OS_EVENT;
 #endif  
-</code></pre><h3 id="MCB-Memory-Control-Block-事件控制块："><a href="#MCB-Memory-Control-Block-事件控制块：" class="headerlink" title="MCB(Memory_Control_Block)事件控制块："></a>MCB(Memory_Control_Block)事件控制块：</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/UCOSII_MCB.jpg" alt=""></p>
+</code></pre><h3 id="MCB-Memory-Control-Block-事件控制块："><a href="#MCB-Memory-Control-Block-事件控制块：" class="headerlink" title="MCB(Memory_Control_Block)事件控制块："></a>MCB(Memory_Control_Block)事件控制块：</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/UCOSII_MCB.jpg" alt></p>
 <pre><code>/*
 *********************************************************************************************************
 *                                     MEMORY PARTITION DATA STRUCTURES
@@ -541,6 +541,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -573,7 +577,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -601,10 +609,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -617,19 +621,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -665,10 +665,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -678,6 +674,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

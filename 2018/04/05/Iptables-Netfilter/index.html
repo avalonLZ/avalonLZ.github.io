@@ -155,8 +155,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>iptables/netfilter，WF开发、家用路由开发的重中之重。网络方面之前都是自己瞎鼓捣，没多深入。入职一星期，就俩字“狂补”，这文章就总结下近期对iptables的学习吧<a id="more"></a><br>iptables/netfilter是啥？概念就不多说了，网上一搜一大片，“开胃菜”就不吃了，直接上干货 </p>
-<h3 id="iptables-netfilter的四表五链结构："><a href="#iptables-netfilter的四表五链结构：" class="headerlink" title="iptables/netfilter的四表五链结构："></a>iptables/netfilter的四表五链结构：</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Iptables_image_18_11_26.png" alt=""><br>注意：如果想要数据包走非转发路径，则本机必须含有此数据包的目的IP，而非同一网段</p>
-<h3 id="iptables规则相关语句结构："><a href="#iptables规则相关语句结构：" class="headerlink" title="iptables规则相关语句结构："></a>iptables规则相关语句结构：</h3><p>用分块的形式总结，比较直观<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Iptables_cm.jpg" alt="">  </p>
+<h3 id="iptables-netfilter的四表五链结构："><a href="#iptables-netfilter的四表五链结构：" class="headerlink" title="iptables/netfilter的四表五链结构："></a>iptables/netfilter的四表五链结构：</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Iptables_image_18_11_26.png" alt><br>注意：如果想要数据包走非转发路径，则本机必须含有此数据包的目的IP，而非同一网段</p>
+<h3 id="iptables规则相关语句结构："><a href="#iptables规则相关语句结构：" class="headerlink" title="iptables规则相关语句结构："></a>iptables规则相关语句结构：</h3><p>用分块的形式总结，比较直观<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Iptables_cm.jpg" alt>  </p>
 <h3 id="iptables常用查看语句："><a href="#iptables常用查看语句：" class="headerlink" title="iptables常用查看语句："></a>iptables常用查看语句：</h3><pre><code>iptables -t filter -L -n -v//显示filter表的详细信息
 iptables -t filter -L --line-numbers//显示filter表的规则编号  
 </code></pre><h3 id="iptables-L-n-v主要字段解释"><a href="#iptables-L-n-v主要字段解释" class="headerlink" title="iptables -L -n -v主要字段解释:"></a>iptables -L -n -v主要字段解释:</h3><p>pkts：由规则或链匹配到的报文个数<br>bytes：由规则或链匹配到的所有报文大小之和</p>
@@ -419,6 +419,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -451,7 +455,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -479,10 +487,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -495,19 +499,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -543,10 +543,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -556,6 +552,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

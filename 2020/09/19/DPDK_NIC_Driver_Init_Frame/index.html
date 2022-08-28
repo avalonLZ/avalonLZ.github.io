@@ -173,7 +173,7 @@ rte_bus_scan(void)
     return 0;
 }  
 </code></pre><p>可以看到它是再遍历rte_bus_list这个链表，再分别各个bus的scan函数，这样的话就有三个疑问了<br>● rte_bus_list这里面放了什么东西？<br>● 元素是如何被放到rte_bus_list中的？<br>● scan做了什么？  </p>
-<p>先来看下rte_bus_list放了什么东西<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_bus_scan.jpg" alt=""><br>分析代码可以看到，注册了各种不同总线上的ops函数，包含：<br>dpaa、fslmc、ifpga、pci、vdev以及vmbus，这里我们就重点关注pci吧  </p>
+<p>先来看下rte_bus_list放了什么东西<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_bus_scan.jpg" alt><br>分析代码可以看到，注册了各种不同总线上的ops函数，包含：<br>dpaa、fslmc、ifpga、pci、vdev以及vmbus，这里我们就重点关注pci吧  </p>
 <p>那么这一个个元素是如何被注册进rte_bus_list的呢，可以看到每个bus，都会调用RTE_REGISTER_BUS宏，而这个宏的定义就是调用了rte_bus_register函数，将不同bus注册到list上的。并且我们还可以看到RTE_REGISTER_BUS宏中使用的RTE_INIT_PRIO，其定义是如下：  </p>
 <pre><code>#define RTE_INIT_PRIO(func, prio) \
 static void __attribute__((constructor(RTE_PRIO(prio)), used)) func(void)  
@@ -186,7 +186,7 @@ static void __attribute__((constructor(RTE_PRIO(prio)), used)) func(void)
  -&gt;FOREACH_DEVICE_ON_PCIBUS(dev)//遍历rte_pci_bus.device_list链表中的dev    
   -&gt;pci_probe_all_drivers  
    -&gt;FOREACH_DRIVER_ON_PCIBUS(dr)//遍历rte_pci_bus.driver_list（我们好像还不知道这个list是做什么的，在哪被初始化的，跟一下看看）      
-</code></pre><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg" alt=""><br>可以看到这个list里放了各种dpdk pmd驱动的信息，并且用RTE_PMD_REGISTER_PCI宏，在main函数执行前，将dpdk的pmd driver信息，放入rte_pci_bus.driver_list中     </p>
+</code></pre><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK_Driver_Frame/pci_driver.jpg" alt><br>可以看到这个list里放了各种dpdk pmd驱动的信息，并且用RTE_PMD_REGISTER_PCI宏，在main函数执行前，将dpdk的pmd driver信息，放入rte_pci_bus.driver_list中     </p>
 <pre><code>-&gt;rte_pci_probe_one_driver  
  -&gt;rte_pci_match//判断当前dev是否支持dpdk的pmd驱动，若不支持,则直接返回尝试下一个dpdk pmd  
  -&gt;dr-&gt;probe//调用匹配到的dpdk pmd driver的probe函数  
@@ -453,6 +453,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -485,7 +489,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -513,10 +521,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -529,19 +533,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -577,10 +577,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -590,6 +586,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

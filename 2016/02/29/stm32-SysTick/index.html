@@ -155,8 +155,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>由stm32F103zet6嘀嗒定时器引申出的系统中断和外设中断问题。<a id="more"></a>  </p>
-<h1 id="嘀嗒定时器（SysTick）"><a href="#嘀嗒定时器（SysTick）" class="headerlink" title="嘀嗒定时器（SysTick）"></a><strong>嘀嗒定时器（SysTick）</strong></h1><p>在外部中断里使用滴答定时器延时（理论上中断里不可以延时，此处只做研究嘀嗒的工作方式用）,直接调用void SysTick_Init(void)函数后在中断中使用延时发现不起作用。（中断配置为只有抢占优先级模式，并且外部中断优先级设为1）<br>后找到SysTick_Init、SysTick_Config、NVIC_SetPriority函数，最后在NVIC_SetPriority函数中发现写了SCB系统控制寄存器组中SHP系统操作优先级寄存器的第11位（SHP[11]），默认SysTick初始化后是7。之后将该位写0（SCB-&gt;SHP[11]=0;），即把嘀嗒的优先级调到了0（最高）。开启后可行。<br>通过查看NVIC_SetPriority函数发现，配置32的中断优先级有两个寄存器，分别是配置配置系统中断和外设中断的，这二者的中断关系通过查看M3的权威手册<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32ccc.jpg" alt=""><br>发现是同级的关系，SO在有理论依据的基础上就可以大胆配置了。  </p>
-<p><font color="red"><strong>外部中断的IO口映像图：</strong><font><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160328171647.png" alt="">  </font></font></p>
+<h1 id="嘀嗒定时器（SysTick）"><a href="#嘀嗒定时器（SysTick）" class="headerlink" title="嘀嗒定时器（SysTick）"></a><strong>嘀嗒定时器（SysTick）</strong></h1><p>在外部中断里使用滴答定时器延时（理论上中断里不可以延时，此处只做研究嘀嗒的工作方式用）,直接调用void SysTick_Init(void)函数后在中断中使用延时发现不起作用。（中断配置为只有抢占优先级模式，并且外部中断优先级设为1）<br>后找到SysTick_Init、SysTick_Config、NVIC_SetPriority函数，最后在NVIC_SetPriority函数中发现写了SCB系统控制寄存器组中SHP系统操作优先级寄存器的第11位（SHP[11]），默认SysTick初始化后是7。之后将该位写0（SCB-&gt;SHP[11]=0;），即把嘀嗒的优先级调到了0（最高）。开启后可行。<br>通过查看NVIC_SetPriority函数发现，配置32的中断优先级有两个寄存器，分别是配置配置系统中断和外设中断的，这二者的中断关系通过查看M3的权威手册<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32ccc.jpg" alt><br>发现是同级的关系，SO在有理论依据的基础上就可以大胆配置了。  </p>
+<p><font color="red"><strong>外部中断的IO口映像图：</strong><font><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160328171647.png" alt>  </font></font></p>
 
       
 
@@ -416,6 +416,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -448,7 +452,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -476,10 +484,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -492,19 +496,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -540,10 +540,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -553,6 +549,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -157,7 +157,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>看寄存器文档写了一天硬件I2C，写了好几遍都不对，最后还是用库了。。。。。。。。<a id="more"></a>看了下火哥的代码，发现其实stm32固件库已经把每一步需要检测的标志位封装好了，我们要做的只是根据文档来检测这些标志，并采取下一步动作。下面是STM32和AT24C02的硬件I2C分析  </p>
-<h1 id="硬件I2C主发送"><a href="#硬件I2C主发送" class="headerlink" title="硬件I2C主发送"></a><strong>硬件I2C主发送</strong></h1><p>下图是stm32主发送时序图和AT24C02的写字节操作流程图，其中EV5、EV6、EV8_1、EV8、EV8_2、EV9这些事件标志在stm32的官方固件库都有详细编写出来（stm32f10x_i2c.h），我们只需调用检测即可。野火的硬件I2C也就是在这两个图和官方固件库的基础上编写的。<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115610.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160330220040.png" alt=""><br>有详细的英文注释，很好理解  </p>
+<h1 id="硬件I2C主发送"><a href="#硬件I2C主发送" class="headerlink" title="硬件I2C主发送"></a><strong>硬件I2C主发送</strong></h1><p>下图是stm32主发送时序图和AT24C02的写字节操作流程图，其中EV5、EV6、EV8_1、EV8、EV8_2、EV9这些事件标志在stm32的官方固件库都有详细编写出来（stm32f10x_i2c.h），我们只需调用检测即可。野火的硬件I2C也就是在这两个图和官方固件库的基础上编写的。<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115610.png" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160330220040.png" alt><br>有详细的英文注释，很好理解  </p>
 <pre><code>void I2C_EE_ByteWrite(u8* pBuffer, u8 WriteAddr)//将pBuffer地址内的数据写入AT24C02的指定地址中
 {
   /* Send STRAT condition */
@@ -187,7 +187,7 @@
   /* Send STOP condition */
   I2C_GenerateSTOP(I2C2, ENABLE);
 }  
-</code></pre><h1 id="硬件I2C主接收"><a href="#硬件I2C主接收" class="headerlink" title="硬件I2C主接收"></a><strong>硬件I2C主接收</strong></h1><p>和发送一样，这些事件标志在官方库中都有写出，但是需要注意由于是操作AT24C02所以根据它的要求在读之前会需要先写入需要读出的数据所在地址，所以接收数据前还需要先写数据。<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115813.png" alt=""><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160330220025.png" alt=""><br>以下是野火的AT2402读操作函数：  </p>
+</code></pre><h1 id="硬件I2C主接收"><a href="#硬件I2C主接收" class="headerlink" title="硬件I2C主接收"></a><strong>硬件I2C主接收</strong></h1><p>和发送一样，这些事件标志在官方库中都有写出，但是需要注意由于是操作AT24C02所以根据它的要求在读之前会需要先写入需要读出的数据所在地址，所以接收数据前还需要先写数据。<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160327115813.png" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32QQ%E6%88%AA%E5%9B%BE20160330220025.png" alt><br>以下是野火的AT2402读操作函数：  </p>
 <pre><code>void I2C_EE_BufferRead(u8* pBuffer, u8 ReadAddr, u16 NumByteToRead)//从ReadAddr处读出
 {  
   //*((u8 *)0x4001080c) |=0x80; 
@@ -545,6 +545,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -577,7 +581,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -605,10 +613,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -621,19 +625,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -669,10 +669,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -682,6 +678,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

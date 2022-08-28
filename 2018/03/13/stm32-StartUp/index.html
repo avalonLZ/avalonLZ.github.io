@@ -154,7 +154,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>马上要暂时告别MCU的开发了（进入Linux），趁着闲时，就整理着大学以来在MCU开发过程中的种种笔记，看到启动这块，回想下好像有些遗忘，就随手记录下吧，东西不多，但也写下，防止遗忘<a id="more"></a>  </p>
-<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>stm32的启动主要依赖BOOT0，BOOT1的引脚电平，以及它的启动文件（也就是正宗的Bootload）,那么在MCU上，启动文件做了哪些操作呢，见下图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png" alt=""><br>在多说一句，UCOS这类的实时操作系统，也是依赖MCU自带的启动文件的，实时操作系统的任务堆栈初始化，也都是在MCU跳转到main后所做的操作。远程升级所说的“Bootload”也是在跳转到main后，自己写的一个判断引导程序</p>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>stm32的启动主要依赖BOOT0，BOOT1的引脚电平，以及它的启动文件（也就是正宗的Bootload）,那么在MCU上，启动文件做了哪些操作呢，见下图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png" alt><br>在多说一句，UCOS这类的实时操作系统，也是依赖MCU自带的启动文件的，实时操作系统的任务堆栈初始化，也都是在MCU跳转到main后所做的操作。远程升级所说的“Bootload”也是在跳转到main后，自己写的一个判断引导程序</p>
 
       
 
@@ -414,6 +414,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -446,7 +450,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -474,10 +482,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -490,19 +494,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -538,10 +538,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -551,6 +547,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

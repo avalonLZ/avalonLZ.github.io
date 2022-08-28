@@ -152,7 +152,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>好久没写代码了，弄个内存池找下想法（没加锁，暂不支持多线程）
+        <p>好久没写代码了，弄个内存池找下想法（没加锁，暂不支持多线程）</p>
         
           <a class="article-more-a" href="/2019/09/22/mempool/#more">more >></a>
         
@@ -228,7 +228,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>深入学习下vxlan的玩法
+        <p>深入学习下vxlan的玩法</p>
         
           <a class="article-more-a" href="/2019/09/08/Vxlan/#more">more >></a>
         
@@ -304,7 +304,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近遇到比较多的问题同样的ioctl命令，对于有些网卡，执行此命令可以被up起来，对于某些网卡却无法被up起来，于是就研究了下ioctl命令
+        <p>最近遇到比较多的问题同样的ioctl命令，对于有些网卡，执行此命令可以被up起来，对于某些网卡却无法被up起来，于是就研究了下ioctl命令</p>
         
           <a class="article-more-a" href="/2019/09/01/ioctrl_test/#more">more >></a>
         
@@ -380,7 +380,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近又开始了疯狂的学习模式，为了方便学习、开发、测试，有一套SDN仿真环境，就显得很重要了。如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN仿真环境，注意，以下的操作都在普通用户权限下进行
+        <p>最近又开始了疯狂的学习模式，为了方便学习、开发、测试，有一套SDN仿真环境，就显得很重要了。如果是控制面的开发，不涉及性能问题，完全可以先在Mininet的环境下，写几个Deamon。本文，就记录下，使用Ubuntu如何搭建一套Mininet+OVS+ONOS的SDN仿真环境，注意，以下的操作都在普通用户权限下进行</p>
         
           <a class="article-more-a" href="/2019/03/05/Mininet-OVS-ONOS/#more">more >></a>
         
@@ -456,7 +456,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>之前写过《OVS与DPDK》，这一篇可以看做是其更外层的框架图吧（假设使用的是Openstack开源云框架）
+        <p>之前写过《OVS与DPDK》，这一篇可以看做是其更外层的框架图吧（假设使用的是Openstack开源云框架）</p>
         
           <a class="article-more-a" href="/2019/03/03/Openstack_SDN/#more">more >></a>
         
@@ -532,7 +532,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>做个学习笔记，也算一只脚进了云计算的大门了
+        <p>做个学习笔记，也算一只脚进了云计算的大门了</p>
         
           <a class="article-more-a" href="/2019/02/17/OVS_DPDK/#more">more >></a>
         
@@ -608,7 +608,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>物理层、网络层、传输层、应用层，对这四层常见的协议，做一个关于报文格式的总结
+        <p>物理层、网络层、传输层、应用层，对这四层常见的协议，做一个关于报文格式的总结</p>
         
           <a class="article-more-a" href="/2018/12/30/Net-Protocol-Summed/#more">more >></a>
         
@@ -684,7 +684,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>断断续续的研究了一段时间的Linux内存管理，大概能理出个框架。不过Cache那部分还是有点不太确定了（手头这三本书，只有《深入浅出DPDK》对Cache有提及），所以若有不正确的地方，还需大家提醒纠正
+        <p>断断续续的研究了一段时间的Linux内存管理，大概能理出个框架。不过Cache那部分还是有点不太确定了（手头这三本书，只有《深入浅出DPDK》对Cache有提及），所以若有不正确的地方，还需大家提醒纠正</p>
         
           <a class="article-more-a" href="/2018/12/10/Linux_Memory_Manage/#more">more >></a>
         
@@ -760,7 +760,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>今天填了个CPU假死的大BUG（其实本质还是违背了spin_lock的设计原则），赶快写篇相关的文章，记录下。先说下结论吧：在各种锁中，只有自旋锁处于busy-wait状态时，自旋着的线程/进程将获得大量时间片，占用大量cpu资源，从而引发该CPU假死状态（理论场景中其实还有可能获得锁（上锁的线程以龟速处理完逻辑，释放锁），所以在理论场景中，不能算是死锁（此时死锁条件=CPU假死+获得spin锁的线程需要处理实时的大流量任务））
+        <p>今天填了个CPU假死的大BUG（其实本质还是违背了spin_lock的设计原则），赶快写篇相关的文章，记录下。先说下结论吧：在各种锁中，只有自旋锁处于busy-wait状态时，自旋着的线程/进程将获得大量时间片，占用大量cpu资源，从而引发该CPU假死状态（理论场景中其实还有可能获得锁（上锁的线程以龟速处理完逻辑，释放锁），所以在理论场景中，不能算是死锁（此时死锁条件=CPU假死+获得spin锁的线程需要处理实时的大流量任务））</p>
         
           <a class="article-more-a" href="/2018/08/02/spin-clock/#more">more >></a>
         
@@ -836,7 +836,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>此篇文章只为研究OpenVPN，不为其他目的
+        <p>此篇文章只为研究OpenVPN，不为其他目的</p>
         
           <a class="article-more-a" href="/2018/07/09/OpenVPN-Ladder/#more">more >></a>
         
@@ -986,6 +986,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -1018,7 +1022,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1046,10 +1054,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -1062,19 +1066,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1110,10 +1110,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -1123,6 +1119,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

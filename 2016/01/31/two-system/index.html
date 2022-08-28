@@ -155,7 +155,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Win7系统下安装Fedora/Centos。<a id="more"></a>  </p>
-<p><strong> 一、</strong>用磁碟通将Linux镜像写入U盘，使用USB-HDD+即可：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/two_system70442F4A65504CDF8329268CDDFFD022.jpg" alt="">  </p>
+<p><strong> 一、</strong>用磁碟通将Linux镜像写入U盘，使用USB-HDD+即可：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/two_system70442F4A65504CDF8329268CDDFFD022.jpg" alt>  </p>
 <p><strong> 二、</strong>U盘引导启动，按e进入路径编辑界面，修改：hd:/dev/sdc4(U盘路径，根据硬盘数和gurb中cat命令的自动补全获得hd号和mosed号)quiet(redhat类的Linux的都是在:后进行修改，修改到or前为止)  </p>
 <p><strong> 三、</strong>之后会引导入安装界面：  </p>
 <ul>
@@ -163,7 +163,7 @@
 <li>软件选择可以选择需要安装的桌面，常见有GNOME和KDE。  </li>
 <li>分区使用标准分区，分/swap（2G）和/（剩余空间）两个区，并且选择无需添加引导。（一定要记下/分区获得的sdb9此类设备名称，稍后配置引导要用）  </li>
 </ul>
-<p><strong> 四、</strong><br>进入windows使用easyBCD添加GRUB2启动项<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/two_system02E5FCFEB6D643FEBD31EBDA146F3696.jpg" alt=""><br>重启进入GRUB2中输入命令cat（hd1（第二块硬盘），按次tab找到/分区所在位置并记入。<br>再输入：</p>
+<p><strong> 四、</strong><br>进入windows使用easyBCD添加GRUB2启动项<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/two_system02E5FCFEB6D643FEBD31EBDA146F3696.jpg" alt><br>重启进入GRUB2中输入命令cat（hd1（第二块硬盘），按次tab找到/分区所在位置并记入。<br>再输入：</p>
 <ul>
 <li>kernel (hd1,8)  （hd1,8 cat命令查出的路径）/boot/vm …….按tab查找…… root=/dev/sdb9 (boot所在处因为此处未单独创建/boot分区所以使用/分区的路径) quiet vga=791//引导启动Linux内核</li>
 <li>initrd (hd1,8)/boot/ini…..按tab……. .img  //引导启动图像界面</li>
@@ -437,6 +437,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
@@ -469,7 +473,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -497,10 +505,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
@@ -513,19 +517,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -561,10 +561,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
@@ -574,6 +570,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2022/08/28/Linuxux-team/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
 <meta property="og:description" content="探究Linux team链路聚合">
-<meta property="og:updated_time" content="2022-08-28T08:58:50.031Z">
+<meta property="og:updated_time" content="2022-08-28T10:30:50.438Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux team链路聚合">
 <meta name="twitter:description" content="探究Linux team链路聚合">
@@ -153,6 +153,8 @@
       
         <p>探究Linux team链路聚合<a id="more"></a>    </p>
 <h1 id="链路聚合的目的"><a href="#链路聚合的目的" class="headerlink" title="链路聚合的目的"></a>链路聚合的目的</h1><p>链路聚合及建立聚合口，其目的是为了提高网络底层容错能力，实现网络冗余部署。当然某些链路聚合方式，也可在一定程度上，实现网络流量的负载均衡。  </p>
+<h1 id="Linux-team架构"><a href="#Linux-team架构" class="headerlink" title="Linux team架构"></a>Linux team架构</h1><p>Linux team采用管控面和数据面分离的方案实现，及用户态运行管控面程序teamd（由libteam封装开发而来），内核态则通过加载team.ko、 team_mode_activebackup、team_mode_loadbalance、team_mode_roundrobin模块实现数据面的team口收发包逻辑。<br>除此之外，Linux team还提供了teamdctl以及teamnl两个cli工具，用于配置/管理Linux team（这两个工具需要在teamd正常运行情况下，才可正常使用）。  </p>
+<h1 id="Linux-team常用操作"><a href="#Linux-team常用操作" class="headerlink" title="Linux team常用操作"></a>Linux team常用操作</h1><p>需要注意的是，一个用户态的teamd对应一个内核team口。若在teamd启动时不加-N参数，teamd收到SIGINT、SIGQUIT以及SIGTERM信号退出时，均会在team_fini逻辑中将内核team口destroy掉（加了-N参数，虽然收到信号后，内核team口不会被destroy，但由于在teamd_run_loop_run中执行了teamd_flush_ports，也会将所有成员网口disable掉，导致网络中断）</p>
 <h1 id="Linux-bond、Linux-team、OVS-bond链路聚合功能对比"><a href="#Linux-bond、Linux-team、OVS-bond链路聚合功能对比" class="headerlink" title="Linux bond、Linux team、OVS bond链路聚合功能对比"></a>Linux bond、Linux team、OVS bond链路聚合功能对比</h1><p>对于目前常用的三大类链路聚合方案进行对比分析<br>| 序号     | 链路聚合类型     |       |       |       |<br>|——    |————–    |—    |—    |—    |<br>| 1        | Linux bond       |       |       |       |<br>| 2        | Linux team       |       |       |       |<br>| 3        | OVS bond         |       |       |       |</p>
 
       
@@ -171,7 +173,7 @@
                   <div class="reward-box">
                     
                     <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/alipay.jpg">
+                      <img class="reward-img" src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/pay/alipay.jpg">
                       <span class="reward-type">支付宝</span>
                     </div>
                     
@@ -448,11 +450,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
+                <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
+                <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
               </li>
              
               <li class="article-tag-list-item">

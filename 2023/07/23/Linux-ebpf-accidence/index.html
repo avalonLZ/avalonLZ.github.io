@@ -25,7 +25,7 @@
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/xdp_hook2.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/tc_sk_buff.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/tc_add_ingress.jpg">
-<meta property="og:updated_time" content="2023-07-23T14:27:12.697Z">
+<meta property="og:updated_time" content="2023-07-23T14:40:08.385Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux kernel ebpf入门（网络方向）">
 <meta name="twitter:description" content="由于网络上ebpf相关的文章零散且杂乱，所以便编写了本文，用于指导入门Linux kernel ebpf开发（网络方向）">
@@ -191,12 +191,12 @@
 <h1 id="ebpf的程序类型"><a href="#ebpf的程序类型" class="headerlink" title="ebpf的程序类型"></a>ebpf的程序类型</h1><p>ebpf的程序类型，即内核哪几种类型的ebpf程序，如下图所示（以4.18内核为例）：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/bpf_prog_type.png" alt><br>其中在二三层网络主要会使用到的是BPF_PROG_TYPE_XDP以及BPF_PROG_TYPE_SCHED_CLS（tc）两类程序（目前只有这两类程序可实现drop网络报文）</p>
 <h1 id="ebpf程序的编译"><a href="#ebpf程序的编译" class="headerlink" title="ebpf程序的编译"></a>ebpf程序的编译</h1><p>对于ebpf用户态应用程序的编译，选择gcc编译器即可<br>对于kernel eBPF程序的编译，目前推荐使用Clang/LLVM编译器进行编译，其编译流程如下图所示：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/ebpf_kernel_compile1.png" alt>  </p>
 <p>Clang/LLVM编译器架构如下图所示：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/ebpf_kernel_compile2.png" alt>  </p>
-<h1 id="ebpf程序开发方式的选择"><a href="#ebpf程序开发方式的选择" class="headerlink" title="ebpf程序开发方式的选择"></a>ebpf程序开发方式的选择</h1><p>由于ebpf程序需要分为用户态ebpf应用和内核态ebpf程序，根据以上编译原理可知，这两者在一定程度上是可以做到各自独立开发的，如此以来便需要根据实际情况，选择一个合适的开发方式，介绍目前主流的3种开发方式：<br>1.bcc：运行和编译强绑定，每次运行前都需要编译，且内存占用大（不推荐）<br>2.原生libbpf：因为是原生libbpf，所以其API的封装更偏灵活，如此它便更适已有用户态app，但需要加入ebpf程序的开发场景（API docs:<a href="https://libbpf.readthedocs.io/en/latest/api.html）" target="_blank" rel="external">https://libbpf.readthedocs.io/en/latest/api.html）</a><br>3.libbpf-bootstrap（参考资料：<a href="https://nakryiko.com/posts/libbpf-bootstrap/）" target="_blank" rel="external">https://nakryiko.com/posts/libbpf-bootstrap/）</a><br>libbpf-bootstrap是基于libbpf和BPF CO-RE的开发框架，推荐从零开始开发全新ebpf用户态以及内核态程序时使用，因为开发较便捷（封装了一些内容），并且可以利用btf实现不依赖内核版本运行bpf程序，且性能优于bcc<br>其框架工作流程如下：<br>1.clang编译出ebpf字节码elf文件（xxx.bpf.o）<br>2.bpftools利用上诉字节码生成骨架文件（xxx.skel.h），其中会嵌入xxx.bpf.o（static inline const void <em>xxx_bpf__elf_bytes(size_t </em>sz)）<br>3.用户态程序则需要include上诉骨架文件，进行开发，最后使用gcc编译<br>同时使用xdp和egress的ebpf例程：<br><code>https://github.com/avalonLZ/Practices/tree/master/ebpf/xdp_and_tc</code><br>替换libbpf-bootstrap，examples/c路径下的tc，再执行make tc即可编译出tc用户态和内核态ebpf程序<br>4.eunomia-bpf：可以自动生成用户态程序，从零开始开发，且对用户态应用程序定制化要求不高的，可尝试使用此种开发方式  </p>
+<h1 id="ebpf程序开发方式的选择"><a href="#ebpf程序开发方式的选择" class="headerlink" title="ebpf程序开发方式的选择"></a>ebpf程序开发方式的选择</h1><p>由于ebpf程序需要分为用户态ebpf应用和内核态ebpf程序，根据以上编译原理可知，这两者在一定程度上是可以做到各自独立开发的，如此以来便需要根据实际情况，选择一个合适的开发方式，介绍目前主流的4种开发方式：<br>1.bcc：运行和编译强绑定，每次运行前都需要编译，且内存占用大（不推荐）<br>2.原生libbpf：因为是原生libbpf，所以其API的封装更偏灵活，如此它便更适已有用户态app，但需要加入ebpf程序的开发场景（API_docs:<a href="https://libbpf.readthedocs.io/en/latest/api.html）" target="_blank" rel="external">https://libbpf.readthedocs.io/en/latest/api.html）</a><br>3.libbpf-bootstrap（参考资料：<a href="https://nakryiko.com/posts/libbpf-bootstrap/）" target="_blank" rel="external">https://nakryiko.com/posts/libbpf-bootstrap/）</a><br>libbpf-bootstrap是基于libbpf和BPF CO-RE的开发框架，推荐从零开始开发全新ebpf用户态以及内核态程序时使用，因为开发较便捷（封装了一些内容），并且可以利用btf实现不依赖内核版本运行bpf程序，且性能优于bcc<br>其框架工作流程如下：<br>(1)clang编译出ebpf字节码elf文件（xxx.bpf.o）<br>(2)bpftools利用上诉字节码生成骨架文件（xxx.skel.h），其中会嵌入xxx.bpf.o（static inline const void <em>xxx_bpf__elf_bytes(size_t </em>sz)）<br>(3)用户态程序则需要include上诉骨架文件，进行开发，最后使用gcc编译<br>同时使用xdp和egress的ebpf例程：<br><a href="https://github.com/avalonLZ/Practices/tree/master/ebpf/xdp_and_tc" target="_blank" rel="external">https://github.com/avalonLZ/Practices/tree/master/ebpf/xdp_and_tc</a><br>替换libbpf-bootstrap，examples/c路径下的tc，再执行make tc即可编译出tc用户态和内核态ebpf程序<br>4.eunomia-bpf：可以自动生成用户态程序，从零开始开发，且对用户态应用程序定制化要求不高的，可尝试使用此种开发方式  </p>
 <h1 id="map"><a href="#map" class="headerlink" title="map"></a>map</h1><p>map在ebpf程序中起到了数据共享的作用，它是用户态与内核态ebpf程序，以及内核态ebpf程序相互之间数据交互的唯一通道，其类型如下图所示：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/bpf_map_type.png" alt><br>其常用map及其使用场景如下（参考资料：<a href="https://arthurchiao.art/blog/bpf-advanced-notes-2-zh/）：" target="_blank" rel="external">https://arthurchiao.art/blog/bpf-advanced-notes-2-zh/）：</a><br>BPF_MAP_TYPE_HASH//ebpf间共享数据可用（链表实现，省空间）<br>BPF_MAP_TYPE_ARRAY//用户态下发配置给ebpf可用（数组实现，key只能是数组索引）  </p>
-<h1 id="xdp"><a href="#xdp" class="headerlink" title="xdp"></a>xdp</h1><p>下面将更为详细的介绍xdp类型的ebpf程序<br>注意：xdp只有ingress方向的hook点  </p>
+<h1 id="xdp"><a href="#xdp" class="headerlink" title="xdp"></a>xdp</h1><p>着重说明下xdp类型的ebpf程序需要关注的点<br>注意：xdp只有ingress方向的hook点  </p>
 <h2 id="入参数据结构"><a href="#入参数据结构" class="headerlink" title="入参数据结构"></a>入参数据结构</h2><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/xdp_md_struct.png" alt>  </p>
 <h2 id="ingress-hook点"><a href="#ingress-hook点" class="headerlink" title="ingress hook点"></a>ingress hook点</h2><p>使用bpf_xdp_attach挂载的hook点（内核根据bpf_xdp_attach下发的flags，去选择挂载ebpf的hook点，在kernel dev_change_xdp_fd函数中处理）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/xdp_hook1.png" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/xdp_hook2.png" alt><br>XDP_FLAGS_UPDATE_IF_NOEXIST//驱动不支持xdp时，退化使用generic hook点，否则使用dev hook点<br>XDP_FLAGS_SKB_MODE//强制使用generic hook点<br>XDP_FLAGS_DRV_MODE//强制使用dev hook点<br>XDP_FLAGS_HW_MODE//hw offload时使用  </p>
-<h1 id="tc"><a href="#tc" class="headerlink" title="tc"></a>tc</h1><p>下面将更为详细的介绍tc类型的ebpf程序<br>参考资料：<br><a href="https://cloud.tencent.com/developer/article/1802121" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1802121</a><br><a href="https://docs.cilium.io/en/latest/bpf/progtypes/#tc-traffic-control" target="_blank" rel="external">https://docs.cilium.io/en/latest/bpf/progtypes/#tc-traffic-control</a><br>用tc da模式实现，需要有个clsact qdisc，该clasct qdisc支持在egress和ingress两个方向上attach ebpf程序  </p>
+<h1 id="tc"><a href="#tc" class="headerlink" title="tc"></a>tc</h1><p>着重说明下tc类型的ebpf程序需要关注的点<br>参考资料：<br><a href="https://cloud.tencent.com/developer/article/1802121" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1802121</a><br><a href="https://docs.cilium.io/en/latest/bpf/progtypes/#tc-traffic-control" target="_blank" rel="external">https://docs.cilium.io/en/latest/bpf/progtypes/#tc-traffic-control</a><br>用tc da模式实现，需要有个clsact qdisc，该clasct qdisc支持在egress和ingress两个方向上attach ebpf程序  </p>
 <h2 id="入参数据结构-1"><a href="#入参数据结构-1" class="headerlink" title="入参数据结构"></a>入参数据结构</h2><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/tc_sk_buff.png" alt></p>
 <h2 id="ingress-hook点-1"><a href="#ingress-hook点-1" class="headerlink" title="ingress hook点"></a>ingress hook点</h2><p>hook点：sch_handle_ingress<br>注意：添加clsact类型的qdisc后，无法再添加ingress方向的限速，clsact qdisc和ingress qdisc没法共存（egree方向的限速不受影响）<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/ebpf-accidence/tc_add_ingress.jpg" alt>    </p>
 <h2 id="egress-hook点"><a href="#egress-hook点" class="headerlink" title="egress hook点"></a>egress hook点</h2><p>hook点：sch_handle_egress（在qos前执行）  </p>
@@ -444,19 +444,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">应用软件_PyQt</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
+                <a href="javascript:void(0)" class="js-tag color5">计算机语言_C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">计算机语言_C++</a>
+                <a href="javascript:void(0)" class="js-tag color5">应用软件_PyQt</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -472,7 +472,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">百科_Git</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -480,11 +480,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Kernel</a>
+                <a href="javascript:void(0)" class="js-tag color2">百科_Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">Kernel</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -492,7 +492,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -500,11 +500,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Linux工具</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux多进程编程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux多进程编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -512,7 +512,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
+                <a href="javascript:void(0)" class="js-tag color3">Linux工具</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,11 +536,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -548,7 +548,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
+                <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -572,11 +572,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">协议解析_MQTT</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
+                <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -585,10 +589,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
               <li class="article-tag-list-item">

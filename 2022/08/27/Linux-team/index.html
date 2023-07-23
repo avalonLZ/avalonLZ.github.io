@@ -23,7 +23,7 @@
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/lacp_timeout_to_ab.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/team_slb.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/ovs_slb.jpg">
-<meta property="og:updated_time" content="2023-07-23T10:07:27.942Z">
+<meta property="og:updated_time" content="2023-07-23T10:29:38.027Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux team链路聚合">
 <meta name="twitter:description" content="探究Linux team链路聚合">
@@ -184,7 +184,7 @@
 <li><a href="#其他linux-team部分功能实现分析">其他（Linux team部分功能实现分析）</a></li>
 </ul>
 <h1 id="链路聚合的目的"><a href="#链路聚合的目的" class="headerlink" title="链路聚合的目的"></a>链路聚合的目的</h1><p>链路聚合及建立聚合口，其目的是为了提高网络底层容错能力，实现网络冗余部署。当然某些链路聚合方式，也可在一定程度上，实现网络流量的负载均衡。  </p>
-<h1 id="Linux-team架构"><a href="#Linux-team架构" class="headerlink" title="Linux team架构"></a>Linux team架构</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/architechture.png" alt><br>Linux team整体架构如上图所示，其采用管控面和数据面分离的方案实现，及用户态运行管控面程序teamd（由libteam封装开发而来），teamd中根据加载不同的runner，以实现不同功能的聚合模式。内核态则通过加载team.ko、 team_mode_activebackup、team_mode_loadbalance、team_mode_roundrobin模块实现数据面的team口收发包逻辑（需要注意的是，用户态的teamd程序，和内核team口是一一对应的关系，及一个用户态的teamd进程，对应一个内核team口）<br>除此之外，Linux team还提供了teamdctl以及teamnl两个cli工具，用于配置/管理Linux team（这两个工具则需要在teamd正常运行的情况下，才可正常使用）    </p>
+<h1 id="Linux-team架构"><a href="#Linux-team架构" class="headerlink" title="Linux team架构"></a>Linux team架构</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/architechture.png" alt><br>Linux team整体架构如上图所示，其采用管控面和数据面分离的方案实现，及用户态运行管控面程序teamd（由libteam封装开发而来），teamd中根据加载不同的runner，以实现不同功能的聚合模式。内核态则通过加载team.ko、 team_mode_activebackup、team_mode_loadbalance、team_mode_roundrobin模块实现数据面的team口收发包逻辑（需要注意的是，用户态的teamd程序，和内核team口是一一对应的关系，及一个用户态的teamd进程，对应一个内核team口）<br>除此之外，Linux team还提供了teamdctl以及teamnl两个teamdctl工具，用于配置/管理Linux team。其中teamnl主要是利用libteam库（netlink）直接与内核模块交互（只能获取一些内核模块中存在的信息）。teamdctl则是通过socket等方式与先与用户态的teamd交互，若有需要的话，teamd再间接通过libteam库（netlink）与内核模块进行通信，其能获取用户态teamd中如runner、lacp状态等大量有用信息    </p>
 <h1 id="Linux-team现有的聚合模式"><a href="#Linux-team现有的聚合模式" class="headerlink" title="Linux team现有的聚合模式"></a>Linux team现有的聚合模式</h1><p>Linux team可支持的聚合模式如下图所示：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/team_mode.jpg" alt><br>可以看到，目前team支持：activebackup、broadcast、lacp、loadbalance、random、roundrobin   </p>
 <p>在loadbalance和lacp模式下，tx hash所实现的类型：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/tx_hash.jpg" alt>    </p>
 <h1 id="Linux-team常用操作"><a href="#Linux-team常用操作" class="headerlink" title="Linux team常用操作"></a>Linux team常用操作</h1><h2 id="创建一个team口"><a href="#创建一个team口" class="headerlink" title="创建一个team口"></a>创建一个team口</h2><p>方式一：  </p>
@@ -569,11 +569,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">

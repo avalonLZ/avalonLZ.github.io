@@ -14,19 +14,20 @@
 <meta property="og:url" content="http://avalonlz.github.io/2022/08/27/Linux-team/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
 <meta property="og:description" content="探究Linux team链路聚合">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/architechture.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/team_mode.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/tx_hash.jpg">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_1.jpg">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_2.jpg">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_3.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_1.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_2.png">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_3.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/lacp_timeout_to_ab.jpg">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/team_slb.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/team_slb.png">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/ovs_slb.jpg">
-<meta property="og:updated_time" content="2022-08-28T13:47:20.568Z">
+<meta property="og:updated_time" content="2023-07-23T10:07:27.942Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux team链路聚合">
 <meta name="twitter:description" content="探究Linux team链路聚合">
-<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/team_mode.jpg">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/architechture.png">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -183,8 +184,7 @@
 <li><a href="#其他linux-team部分功能实现分析">其他（Linux team部分功能实现分析）</a></li>
 </ul>
 <h1 id="链路聚合的目的"><a href="#链路聚合的目的" class="headerlink" title="链路聚合的目的"></a>链路聚合的目的</h1><p>链路聚合及建立聚合口，其目的是为了提高网络底层容错能力，实现网络冗余部署。当然某些链路聚合方式，也可在一定程度上，实现网络流量的负载均衡。  </p>
-<h1 id="Linux-team架构"><a href="#Linux-team架构" class="headerlink" title="Linux team架构"></a>Linux team架构</h1><p>Linux team采用管控面和数据面分离的方案实现，及用户态运行管控面程序teamd（由libteam封装开发而来），teamd中根据加载不同的runner，以实现不同功能的聚合模式。内核态则通过加载team.ko、 team_mode_activebackup、team_mode_loadbalance、team_mode_roundrobin模块实现数据面的team口收发包逻辑（需要注意的是，用户态的teamd程序，和内核team口是一一对应的关系，及一个用户态的teamd进程，对应一个内核team口）  </p>
-<p>除此之外，Linux team还提供了teamdctl以及teamnl两个cli工具，用于配置/管理Linux team（这两个工具则需要在teamd正常运行的情况下，才可正常使用）    </p>
+<h1 id="Linux-team架构"><a href="#Linux-team架构" class="headerlink" title="Linux team架构"></a>Linux team架构</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/architechture.png" alt><br>Linux team整体架构如上图所示，其采用管控面和数据面分离的方案实现，及用户态运行管控面程序teamd（由libteam封装开发而来），teamd中根据加载不同的runner，以实现不同功能的聚合模式。内核态则通过加载team.ko、 team_mode_activebackup、team_mode_loadbalance、team_mode_roundrobin模块实现数据面的team口收发包逻辑（需要注意的是，用户态的teamd程序，和内核team口是一一对应的关系，及一个用户态的teamd进程，对应一个内核team口）<br>除此之外，Linux team还提供了teamdctl以及teamnl两个cli工具，用于配置/管理Linux team（这两个工具则需要在teamd正常运行的情况下，才可正常使用）    </p>
 <h1 id="Linux-team现有的聚合模式"><a href="#Linux-team现有的聚合模式" class="headerlink" title="Linux team现有的聚合模式"></a>Linux team现有的聚合模式</h1><p>Linux team可支持的聚合模式如下图所示：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/team_mode.jpg" alt><br>可以看到，目前team支持：activebackup、broadcast、lacp、loadbalance、random、roundrobin   </p>
 <p>在loadbalance和lacp模式下，tx hash所实现的类型：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/tx_hash.jpg" alt>    </p>
 <h1 id="Linux-team常用操作"><a href="#Linux-team常用操作" class="headerlink" title="Linux team常用操作"></a>Linux team常用操作</h1><h2 id="创建一个team口"><a href="#创建一个team口" class="headerlink" title="创建一个team口"></a>创建一个team口</h2><p>方式一：  </p>
@@ -207,13 +207,13 @@ teamnl team0 options
 </code></pre><h2 id="删除成员网口"><a href="#删除成员网口" class="headerlink" title="删除成员网口"></a>删除成员网口</h2><pre><code>teamdctl team0 port remove eno1  
 </code></pre><h2 id="添加成员网口"><a href="#添加成员网口" class="headerlink" title="添加成员网口"></a>添加成员网口</h2><pre><code>teamdctl team0 port add eno1
 </code></pre><h1 id="用户态进程teamd启动参数解读"><a href="#用户态进程teamd启动参数解读" class="headerlink" title="用户态进程teamd启动参数解读"></a>用户态进程teamd启动参数解读</h1><p>teamd包含许多启动参数，这里挑选几个重要的启动参数进行解读：<br>-o：带有该参数启动teamd时，会先去判断需要创建的内核team口是否存在（根据team口的名称）。若存在，则不再创建team口，直接takeover该team口<br>-N：teamd在收到SIGINT、SIGQUIT以及SIGTERM信号正常退出时，均会在team_fini逻辑中将内核team口destroy掉，若加了-N参数，则在正常退出时，内核team口不会被destroy（需要注意的是，由于在teamd_run_loop_run中执行了teamd_flush_ports，所以收到信号正常退出时，即使内核team口依然存在，但还是会将所有成员网口都disable掉，导致网络中断）<br>-r：此参数表示若内核team口存在时，是否要强行重建内核team口该参数的优先级低于-o，即若存在-o参数，该参数无效（需要注意的是，若使用-r参数，则team口上的tc、mtu等配置均会被清空或重置）  </p>
-<h1 id="链路聚合方案大对比"><a href="#链路聚合方案大对比" class="headerlink" title="链路聚合方案大对比"></a>链路聚合方案大对比</h1><p>对于目前常见的Linux bond、Linux team以及OVS bond三大类链路聚合方案，进行功能对比：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_1.jpg" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_2.jpg" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_3.jpg" alt>  </p>
+<h1 id="链路聚合方案大对比"><a href="#链路聚合方案大对比" class="headerlink" title="链路聚合方案大对比"></a>链路聚合方案大对比</h1><p>对于目前常见的Linux bond、Linux team以及OVS bond三大类链路聚合方案，进行功能对比：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_1.png" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_2.png" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/feature_3.png" alt>  </p>
 <p>总的来说原生Linux team对比原生Linux bond，在聚合功能上并没有多大的优势，但team由于控制逻辑都在用户态，所以team的扩展性，相对于bond会优秀很多 </p>
 <h1 id="Linux-team-lacp超时切ab-runner实现思路"><a href="#Linux-team-lacp超时切ab-runner实现思路" class="headerlink" title="Linux team lacp超时切ab runner实现思路"></a>Linux team lacp超时切ab runner实现思路</h1><p>从上图的对比中可知原生的Linux team并不支持，OVS的lacp超时切主备功能。研究发现，在不修改内核模块的前提下，其可在teamd上通过扩展runner的方式实现，现给出实现思路：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/lacp_timeout_to_ab.jpg" alt>  </p>
 <p>如上图所示，增加状态机2，并在状态机2中主要实现以下内容，以满足上图所示的功能：<br>1.选择一个link状态up的team成员网口，并将其enable（通过team_set_port_enabled，enable一个成员网口）<br>2.让ovs转发到team的业务报文，能正常收发（通过调用lacp_carrier_fini，启用team）<br>3.改造lacp_event_watch_port_changed，若为状态机2，且1中选取的tx port down了，则需要重新选取port口，重新走一遍1、2流程  </p>
 <p>在状态机3中主要实现以下内容，以满足上图所示的功能：<br>1.disable掉状态机2中所enable的成员网口      </p>
 <p>lacp超时切ab，基本功能已跑通：<br>1.team成员口均lacp超时时，进入ab状态，选择一个成员口进行业务报文的收发<br>2.在ab状态下down了正在进行业务报文收发包的成员口，可自动切换到另一个成员口//1s ping未出现丢包<br>3.在ab状态下，后续所有成员口lacp协商成功，可变为聚合口正常收发包//lacp协商过程1s ping会丢3-5个包（同场景下OVS丢3个包）<br>参考代码：<a href="https://github.com/avalonLZ/Linux_teamd" target="_blank" rel="external">https://github.com/avalonLZ/Linux_teamd</a>    </p>
-<h1 id="Linux-team-加入OVS桥后，对端交换机免配实现思路"><a href="#Linux-team-加入OVS桥后，对端交换机免配实现思路" class="headerlink" title="Linux team 加入OVS桥后，对端交换机免配实现思路"></a>Linux team 加入OVS桥后，对端交换机免配实现思路</h1><p>当Linux team口加入OVS桥后，三层口便退化为了二层口，也就失去了对端sw免聚合的功能，team原生的loadbalance模式则退化为了xor静态聚合。所以想在team上弥补这一缺陷，在不修改内核模块的前提下，具体实现思路如下：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/team_slb.jpg" alt>      </p>
+<h1 id="Linux-team-加入OVS桥后，对端交换机免配实现思路"><a href="#Linux-team-加入OVS桥后，对端交换机免配实现思路" class="headerlink" title="Linux team 加入OVS桥后，对端交换机免配实现思路"></a>Linux team 加入OVS桥后，对端交换机免配实现思路</h1><p>当Linux team口加入OVS桥后，三层口便退化为了二层口，也就失去了对端sw免聚合的功能，team原生的loadbalance模式则退化为了xor静态聚合。所以想在team上弥补这一缺陷，在不修改内核模块的前提下，具体实现思路如下：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Linux_team/team_slb.png" alt>      </p>
 <p>方案总结（方案思路参考ovs slb的实现）：<br>用active/salve策略，保证只收取一份广播、组播、未知单播报文，<br>在整个聚合口，只收取的一份广播、组播、未知单播报文的前提下，再通过src mac过滤掉由本地发出的报文</p>
 <p>本方案细化：<br>tx方向，必须是src mac hash，因为dst mac会变动，所以算出的hash值也会变动，sw的fdb表也就会乱，并且不可以用3/4层的hash，多ip绑一个mac，不同ip很可能会hash到两个口上，sw回包会有问题<br>1.active和slave的选择，在teamd的lb_event_watch_port_link_changed中进行选取，在各个slave口的rx路径上，选择一个bpf hook点（可以是generic xdp），下发丢弃所有组播、广播报文的bpf策略（保证所有广播、组播、未知单播报文均只从active口收取一次）<br>2.在team口rx路径上，选择一个bpf hook点（可以是generic xdp），提取所有报文的src mac，并判断是否已在发送src mac map中（保证接收的广播、组播报文、未知单播，均是外部发出的），若在则drop，否则pass<br>3.team tx bpf hook（bpf_create_code）修改为只做src hash（或者选择tc egree ebpf hook点），并且update src mac map  </p>
 <p>风险点：<br>1.team rx上是否有generic xdp—&gt;存在<br>2.ebpf之间，如何实现src hash map的共享—&gt;可以共享，将map的定义和不同hook的ebpf程序，写在同一个C文件中即可<br>3.ebpf程序维护的src mac hash map是否能定时老化—&gt;这个可能要将老化逻辑挂到能访问系统时钟的ebpf hook点上（perf的ebpf点上应该有此功能），是否需要挂在perf的ebpf hook点上实现老化，可以再考虑<br>4.操作src mac hash map需要锁—&gt;可以使用BPF_FUNC_spin_lock和BPF_FUNC_spin_unlock<br>5.igmp snooping开启，ovs bond在normal表项下的行为—&gt;看运气，由ovs-bond发出的加入组播组的报文，刚好hash到active-member，在外部sw开igmp snooping才可以正常进行组播通讯<br>6.存在比normal更高优先级的流表项时，normal的行为—&gt;<br>分三种情况<br>①更高优先级的流表项action不是output action，也不是修改src/dst mac、vlan等action，这样对低优先级output normal的行为无影响<br>②更高优先级的流表项action不是output action，但是修改src/dst mac、vlan等action，这样会间接影响优先级output normal的行为（可能导致tx hash数值改变等间接影响）<br>③更高优先级的流表项action是output action，则不会走到xlate_output_action中normal（xlate_normal）的逻辑里，即不会去更新改br的fdb表，对output normal的行为有直接影响（失效）<br>7.team用户态程序teamd升级能否不断网—&gt;可以直接替换用户态的二进制程序，做切换模式等操作时，自动更新为最新版teamd，若不做任何操作，则会一直使用内存中的老的teamd程序  </p>
@@ -493,15 +493,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">软件工程_DesignPatterns</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">服务器_Django</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">软件工程_DesignPatterns</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -509,15 +505,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">飞思卡尔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">百科_Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Kernel</a>
+                <a href="javascript:void(0)" class="js-tag color5">飞思卡尔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -525,15 +521,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Kernel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -541,11 +537,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Linux网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux多线程编程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Linux网络</a>
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -557,23 +557,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">服务器_MySQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">服务器_Tinyhttpd</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+                <a href="javascript:void(0)" class="js-tag color5">服务器_MySQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -585,7 +573,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Linux工具</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -593,19 +593,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">软件工程_UML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">协议解析_定位</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">计算机语言_C</a>
+                <a href="javascript:void(0)" class="js-tag color4">软件工程_UML</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
+                <a href="javascript:void(0)" class="js-tag color3">计算机语言_C</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -625,15 +621,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">百科_存储</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">百科_双系统安装</a>
+                <a href="javascript:void(0)" class="js-tag color5">百科_DNSpod</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">百科_DNSpod</a>
+                <a href="javascript:void(0)" class="js-tag color4">百科_双系统安装</a>
               </li>
             
             <div class="clearfix"></div>

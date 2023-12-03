@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2023/12/02/ComplicatedProblem-MicroSuddenFlow/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
 <meta property="og:description" content="之前查的一些疑难杂症问题，挑一些比较有意义的记录下，先分享个“客户业务存在微突发流量，物理网口出现偶发性丢包”的问题">
-<meta property="og:updated_time" content="2023-12-03T04:21:28.739Z">
+<meta property="og:updated_time" content="2023-12-03T04:27:05.554Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="疑难杂症之微突发流量">
 <meta name="twitter:description" content="之前查的一些疑难杂症问题，挑一些比较有意义的记录下，先分享个“客户业务存在微突发流量，物理网口出现偶发性丢包”的问题">
@@ -171,7 +171,7 @@
 </ul>
 <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><h2 id="云网络数据面简介"><a href="#云网络数据面简介" class="headerlink" title="云网络数据面简介"></a>云网络数据面简介</h2><p>先简单介绍下云网络数据面APP的大致架构，采用DPDK PMD轮询收发物理网口报文，RTC模型，数据面每loop一次，需要做的内容大致有：<br>1.物理网卡收发包（业务口和vxlan口）<br>2.vhost_user网口收发包（vm收发包）<br>3.内核vhost_net收发包（与kernel协议栈交互，exception path方案）<br>4.分布式交换机处理逻辑（可简单看做就是交换机的处理逻辑，需要维护fdb表）<br>6.分布式防火墙（可简单看做就是简单的防火墙处理逻辑）<br>5.集中式路由器处理逻辑（可简单看做就是路由器的处理逻辑，需要维护session表）<br>6.bond（针对物理网口的链路聚合功能）<br>7.qos（流量控制/整型功能）<br>以上大致就是一个DPDK转发core一次loop需要执行的代码（可以出转发core一次loop需要执行不少代码）    </p>
 <h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>客户反馈部署了业务的vm，存在丢包，上环境上看，发现业务口，通过DPDK接口获取的网口drop pkg数量在整点或半点时便会出现一定数量的增长  </p>
-<h1 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h1><p>针对以上问题进行如下分析：<br>1.首先先咨询客户发现vm丢包的时间点是否是整点或半点<br>//回复是的，那么就和网口drop pkg增长时间点对应了，大概率也就是在网口丢包而导致的vm丢包<br>2.网口为什么会丢包？<br>//可能是硬件问题，也可能是数据面收包不及时导致。因为是mellanox CX4网卡，mellanox都是原厂卡，所以大概率来说硬件还是可靠的，如果是第三方OEM Intel的卡，那就需要画个问号了。硬件基本认为可靠，那么就需要往“数据面收包不及时”这一软件方向去查了<br>3.后台用脚本每秒获取转发core busy情况（数据面依据1秒内，每次loop是否有处理报文，统计出这1s内CPU的busy的百分比）<br>//发现转发core很闲，存在大量idle的loop，并且当物理网口drop pkg增长时，core busy依然没到100%<br>//基本陷入僵局…硬件没问题，转发core也很idle…但是网口就是丢包了…就非常奇怪<br>//便开始在内部尝试复现<br>4.需要先采集信息：pps，包大小，流数量等信息（包大小只能算个均值，大概是1KB）<br>5.内部复现（云性能场景一般用vm直接打，没上思博伦），发现单流TCP可以打满网口吞吐不是问题，但是多流场景（50-100条）下，网口drop pkg就会增长。最后保证吞吐不变的情况下，去增加流数量，发现多流场景下，网口确实很容易丢包，看来还是数据面出的问题<br>6.这个问题思考了几天，最后在计算网口线速时来了灵感，发现如果按网口线速发包来看，其实对于收包方上层数据面的单次loop时间是有一定要求的（如“10G网口线速”所列）<br>7.于是就顺着这个思路去统计了数据面一段时间内单次loop的最大耗时时间，最后发现确实是存在耗时不满足网口线速收发包的问题<br>8.最后上了些手段验证下猜想，放大rx queue，单次loop保证把包都收完，bypass大部分的处理逻辑，发现能保证每次loop耗时都低于线速的情况下，网口drop pkg不再增长了，也就实锤了该问题：本质还是数据面转发性能不足，转发稳定性也有所欠缺，导致存在某次或某几次loop耗时大于网卡线速能接受的处理时间，从而引发了网口丢包    </p>
+<h1 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h1><p>针对以上问题进行如下分析：<br>1.首先先咨询客户发现vm丢包的时间点是否是整点或半点<br>//回复是的，那么就和网口drop pkg增长时间点对应了，大概率也就是在网口丢包而导致的vm丢包<br>2.网口为什么会丢包？<br>//可能是硬件问题，也可能是数据面收包不及时导致。因为是mellanox CX4网卡，mellanox都是原厂卡，所以大概率来说硬件还是可靠的，如果是第三方OEM Intel的卡，那就需要画个问号了。硬件基本认为可靠，那么就需要往“数据面收包不及时”这一软件方向去查了<br>3.后台用脚本每秒获取转发core busy情况（数据面依据1秒内，每次loop是否有处理报文，统计出这1s内CPU的busy的百分比）<br>//发现转发core很闲，存在大量idle的loop，并且当物理网口drop pkg增长时，core busy依然没到100%<br>//基本陷入僵局…硬件没问题，转发core也很idle…但是网口就是丢包了…就非常奇怪<br>//便开始在内部尝试复现<br>4.需要先采集信息：pps，包大小，流数量等信息（包大小只能算个均值，大概是1.5KB，pps算出来也不是特别高，流数量比较多，达到了w级别）<br>5.内部复现（云性能场景一般用vm直接打，没上思博伦），发现单流TCP可以打满网口吞吐不是问题，但是多流场景（50-100条）下，网口drop pkg就会增长。最后保证吞吐不变的情况下，去增加流数量，发现多流场景下，网口确实很容易丢包，看来还是数据面出的问题<br>6.这个问题思考了几天，最后在计算网口线速时来了灵感，发现如果按网口线速发包来看，其实对于收包方上层数据面的单次loop时间是有一定要求的（如“10G网口线速”所列）<br>7.于是就顺着这个思路去统计了数据面一段时间内单次loop的最大耗时时间（客户1.5K的包，最好情况也就能待1.2ms左右），最后发现确实是存在耗时不满足网口线速收发包的问题<br>8.最后上了些手段验证下猜想，放大rx queue，单次loop保证把包都收完，bypass大部分的处理逻辑，发现能保证每次loop耗时都低于线速的情况下，网口drop pkg不再增长了，也就实锤了该问题：本质还是数据面转发性能不足，转发稳定性也有所欠缺，导致存在某次或某几次loop耗时大于网卡线速能接受的处理时间，从而引发了网口丢包    </p>
 <h2 id="10G网口线速"><a href="#10G网口线速" class="headerlink" title="10G网口线速"></a>10G网口线速</h2><h3 id="64Byte"><a href="#64Byte" class="headerlink" title="64Byte"></a>64Byte</h3><p>以64Byte为包大小，10G网口线速的包速率为：10<em>1000Mbps/((64+12+8)</em>8)=14.88Mpps，零丢包要求下，上层对每个包处理时间应小于1/14.48Mpps=69ns，若网口rx队列描述符个数为1024，即使数据面一次loop就能把rx queue的包收完，这次loop处理耗时也不可超过1024*69=70718ns=70us，否则网卡rx queue在下次被收包前，也会被打满，出现网口丢包    </p>
 <h3 id="1514Byte"><a href="#1514Byte" class="headerlink" title="1514Byte"></a>1514Byte</h3><p>以1524Byte为包大小，10G网口，每个包处理时间则应小于(((1514+12+8)<em>8)bit/(10</em>1000<em>1000</em>1000)bps)<em>(1000</em>1000)us=1.2us，1.2*1024(rx queue配置的大小)=1.2ms，也就是说，即使数据面一次loop就能把网口rx queue的包收完，那么这次loop的处理耗时也不可超过1.2ms，否则网卡rx queue在下次被收包前，也将会被打满，出现网口丢包</p>
 <p>注意：如果数据面需要承载多个网口的流量，那么它就需要能抗住多个网口的线速，单次loop耗时就需要相应的减少，否则在网口都达到线速的场景下，就会出现网口丢包的问题</p>
@@ -467,15 +467,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -527,15 +527,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">应用软件_Qt</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">RTOS_UCOSII</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -555,11 +555,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">协议解析_MQTT</a>
+                <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
+                <a href="javascript:void(0)" class="js-tag color5">协议解析_MQTT</a>
               </li>
              
               <li class="article-tag-list-item">

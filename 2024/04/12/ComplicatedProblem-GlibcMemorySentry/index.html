@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/6.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/7.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/8.jpg">
-<meta property="og:updated_time" content="2024-04-12T11:08:08.583Z">
+<meta property="og:updated_time" content="2024-04-12T14:35:52.912Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="疑难杂症之glibc内存站岗">
 <meta name="twitter:description" content="分享个先前查的“glibc内存站岗”问题">
@@ -263,8 +263,9 @@ int main(){
     free(p1);
     free(p3);
 }  
-</code></pre><p>2.使用tcmalloc替换glibc：<br>    LD_LIBRARY_PATH=”/usr/lib/libtcmalloc.so:/sf/sdn/lib/:/sf/vn/lib/:/sf/lib/“ /sf/sdn/bin/cfgdbd -V &gt;&gt; /sf/log/sdn/cfgdbd.out 2&gt;&amp;1  </p>
-<p>发现现象变成了非必现，于是往内存池实现方向上去思考。  </p>
+</code></pre><p>2.使用tcmalloc替换glibc：      </p>
+<pre><code>LD_LIBRARY_PATH=&quot;/usr/lib/libtcmalloc.so:/sf/sdn/lib/:/sf/vn/lib/:/sf/lib/&quot; /sf/sdn/bin/cfgdbd -V &gt;&gt; /sf/log/sdn/cfgdbd.out 2&gt;&amp;1  
+</code></pre><p>发现现象变成了非必现，于是往内存池实现方向上去思考。  </p>
 <p>3.使用malloc_trim(0)手动回收内存：<br>通过查阅资料，发现glibc实现的ptmalloc在某些场景下存在内存站岗问题（简单来说就是小块内存采用堆栈结构从低地址到高地址申请，若free时，高地址的内存并未被free，则低地址即使free后也不会被归还给系统，而是被glibc缓存了起来）：<br><a href="https://cloud.tencent.com/developer/article/1138651" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1138651</a><br><a href="https://wenfh2020.com/2021/04/08/glibc-memory-leak/" target="_blank" rel="external">https://wenfh2020.com/2021/04/08/glibc-memory-leak/</a><br><a href="https://blog.csdn.net/u013259321/article/details/112031002" target="_blank" rel="external">https://blog.csdn.net/u013259321/article/details/112031002</a><br>在环境上验证，全同步树是否站岗：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/2.jpg" alt><br>再验证配置树是否也站岗了：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/3.jpg" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/4.png" alt><br>至此确认了该问题原因：cfgdbd直接申请堆内存构建树形结构存放配置，此种做法本就与glibc的内存池实现不可完美兼容。  </p>
 <h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>1.尝试修改glibc malloc可配置的参数（默认未调用mallopt，glibc的参数会动态改变 ）：<br>将M_TRIM_THRESHOLD直接调整成1K，M_MMAP_THRESHOLD不做修改<br>//全同步结束后，也还是有站岗，调malloc_trim(0)还能回收10个G  </p>
 <p>M_TRIM_THRESHOLD和M_MMAP_THRESHOLD都修改成1K<br>//全同步内存不站岗，但配置内存还会站岗  </p>

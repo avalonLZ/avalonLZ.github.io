@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://avalonlz.github.io/2023/12/02/ComplicatedProblem-MicroSuddenFlow/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
 <meta property="og:description" content="之前查的一些疑难杂症问题，挑一些比较有意义的记录下，先分享个“客户业务存在微突发流量，物理网口出现偶发性丢包”的问题">
-<meta property="og:updated_time" content="2024-04-12T09:59:21.723Z">
+<meta property="og:updated_time" content="2024-04-12T10:13:40.722Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="疑难杂症之网络微突发流量">
 <meta name="twitter:description" content="之前查的一些疑难杂症问题，挑一些比较有意义的记录下，先分享个“客户业务存在微突发流量，物理网口出现偶发性丢包”的问题">
@@ -176,7 +176,7 @@
 <h3 id="1514Byte"><a href="#1514Byte" class="headerlink" title="1514Byte"></a>1514Byte</h3><p>以1524Byte为包大小，10G网口，每个包处理时间则应小于(((1514+12+8)<em>8)bit/(10</em>1000<em>1000</em>1000)bps)<em>(1000</em>1000)us=1.2us，1.2*1024(rx queue配置的大小)=1.2ms，也就是说，即使数据面一次loop就能把网口rx queue的包收完，那么这次loop的处理耗时也不可超过1.2ms，否则网卡rx queue在下次被收包前，也将会被打满，出现网口丢包。</p>
 <p>注意：如果数据面需要承载多个网口的流量，那么它就需要能抗住多个网口的线速，单次loop耗时就需要相应的减少，否则在网口都达到线速的场景下，就会出现网口丢包的问题。</p>
 <h1 id="遗留问题思考"><a href="#遗留问题思考" class="headerlink" title="遗留问题思考"></a>遗留问题思考</h1><p>为什么单流测试时发现不了，多流就能发现问题，应该是因为只是使用vm发包，单流TCP场景下vm协议栈发包方就无法达到网卡线速，所以没发现问题。当流数量上来后，发包方总的流速率能达到网卡线速了，也就暴露了该问题。    </p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>该问题的排查给日后性能问题排查，提供了一个思路和方向：<br>网络性能目前有用pps作为指标，但单纯的关注pps，也还是不够的，因为以秒为单位对于网络来说已经存在一定变数了。就像该问题，极短时间(ms、us)级别达到了线速，但后面又迅速下降，这将导致计算出的pps并没达到线速，从而误导了后续排查的思路。<br>总的来说，网络数据面的性能需要要保证单次loop，且队列中所有包都收完处理完的时间，最大一定不能超过网口线速允许的时间（整体转发模型设计时就需要考虑到这点），否则便会有此丢包隐患。  </p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>该问题的排查给日后性能问题排查，提供了一个思路：<br>网络性能目前有用pps作为指标，但单纯的关注pps，也还是不够的，因为以秒为单位对于网络来说已经存在一定变数了。就像该问题，极短时间(ms、us)级别达到了线速，但后面又迅速下降，这将导致计算出的pps并没达到线速，从而误导了后续排查的思路。<br>总的来说，网络数据面的性能需要要保证单次loop，且队列中所有包都收完处理完的时间，最大一定不能超过网口线速允许的时间（整体转发模型设计时就需要考虑到这点），否则便会有此丢包隐患。  </p>
 
       
 
@@ -432,15 +432,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">疑难杂症</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">计算机语言_C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
+                <a href="javascript:void(0)" class="js-tag color5">疑难杂症</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -448,11 +444,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">服务器_Django</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Raspberry Pi</a>
+                <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -460,7 +452,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">飞思卡尔</a>
+                <a href="javascript:void(0)" class="js-tag color1">服务器_Django</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -468,7 +460,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
+                <a href="javascript:void(0)" class="js-tag color3">Raspberry Pi</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">飞思卡尔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">百科_Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -476,15 +476,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">云计算</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">百科_Git</a>
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -504,10 +508,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">计算机语言_Lua</a>
               </li>
              
@@ -524,7 +524,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">应用软件_Qt</a>
+                <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -532,11 +536,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">RTOS_UCOSII</a>
+                <a href="javascript:void(0)" class="js-tag color3">应用软件_Qt</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -544,7 +544,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
+                <a href="javascript:void(0)" class="js-tag color2">RTOS_UCOSII</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -556,15 +556,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">协议解析_MQTT</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">软件工程_FrameWork</a>
+                <a href="javascript:void(0)" class="js-tag color3">计算机语言_C</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -572,11 +564,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+                <a href="javascript:void(0)" class="js-tag color5">协议解析_MQTT</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">计算机语言_C</a>
+                <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">软件工程_FrameWork</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -584,11 +584,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">百科_双系统安装</a>
+                <a href="javascript:void(0)" class="js-tag color5">百科_DNSpod</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">百科_DNSpod</a>
+                <a href="javascript:void(0)" class="js-tag color4">百科_双系统安装</a>
               </li>
             
             <div class="clearfix"></div>

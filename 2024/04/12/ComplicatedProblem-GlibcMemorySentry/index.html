@@ -8,12 +8,12 @@
   <link rel="dns-prefetch" href="http://avalonlz.github.io">
   <title>疑难杂症之glibc内存站岗 | 人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="分享个先前查的“glibc内存站岗”的问题">
+  <meta name="description" content="分享个先前查的“glibc内存站岗”问题">
 <meta property="og:type" content="article">
 <meta property="og:title" content="疑难杂症之glibc内存站岗">
 <meta property="og:url" content="http://avalonlz.github.io/2024/04/12/ComplicatedProblem-GlibcMemorySentry/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
-<meta property="og:description" content="分享个先前查的“glibc内存站岗”的问题">
+<meta property="og:description" content="分享个先前查的“glibc内存站岗”问题">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/1.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/2.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/3.jpg">
@@ -22,10 +22,10 @@
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/6.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/7.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/8.jpg">
-<meta property="og:updated_time" content="2024-04-12T10:15:29.752Z">
+<meta property="og:updated_time" content="2024-04-12T11:08:08.583Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="疑难杂症之glibc内存站岗">
-<meta name="twitter:description" content="分享个先前查的“glibc内存站岗”的问题">
+<meta name="twitter:description" content="分享个先前查的“glibc内存站岗”问题">
 <meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
@@ -160,7 +160,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>分享个先前查的“glibc内存站岗”的问题<a id="more"></a>  </p>
+        <p>分享个先前查的“glibc内存站岗”问题<a id="more"></a>  </p>
 <ul>
 <li><a href="#背景">背景</a></li>
 <li><a href="#问题">问题</a></li>
@@ -171,67 +171,100 @@
 <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>glibc是linux下默认使用的标准C库。用户态程序，一般默认会使用其中的malloc/free接口进行内存的动态申请和释放，而其malloc使用的内存池管理方式则为ptmalloc，其他常见的开源内存池实现还有tcmalloc和jemalloc（相比于glibc ptmalloc，tcmalloc和jemalloc是提供了粒度更细小的内存池）。  </p>
 <p>数据面存在进程cfgdbd和dp,其中cfgdbd用于接收控制面配置，并将其存于堆内存中，再下发给转发面dp。当数据面进程重启时，控制面进程将会把所有配置再推送一遍到cfgdbd上（全同步），cfgdbd会生成一棵树形结构保存配置（全同步配置树），待控制面所有进程下完配置（全同步配置树构建完成），cfgdbd便会将这些配置再推送到dp，同时生成一棵配置树，等所有配置都下发完成，将释放全同步配置树。      </p>
 <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>这天发现cfgdbd进程内存占用一直处于很高，将页面上的配置基本都删除后（配置树基本清空），cfgdbd内存占用依然很大。<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/1.jpg" alt>  </p>
-<h1 id="排查过程"><a href="#排查过程" class="headerlink" title="排查过程"></a>排查过程</h1><p>1.怀疑存在内存泄漏：<br>使用valgrind、<strong>libc_malloc/</strong>libc_free hook等方式复现检查，发现可以必现问题，但均未发现可疑的泄漏点<br>hook代码栗子如下：<br>`<br>// gcc -o fun2 fun2.c -ldl -g</p>
-<p>#define _GNU_SOURCE</p>
-<p>#include <dlfcn.h></dlfcn.h></p>
-<p>#include <stdio.h></stdio.h></p>
-<p>#include <stdlib.h></stdlib.h></p>
-<p>#include <unistd.h></unistd.h></p>
-<p>#include <link.h></link.h></p>
-<p>typedef void <em>(</em>malloc_t)(size_t size);<br>malloc_t malloc_f = NULL;</p>
-<p>typedef void (<em>free_t)(void </em>ptr);<br>free_t free_f = NULL;</p>
-<p>int enable_malloc_hook = 1;<br>int enable_free_hook = 1;</p>
-<p>//解析地址<br>void<em> converToELF(void </em>addr) {<br>    Dl_info info;<br>    struct link_map <em>link;<br>    dladdr1(addr, &amp;info, (void **)&amp;link, RTLD_DL_LINKMAP);<br>    // printf(“%p\n”, (void </em>)(size_t)addr - link-&gt;l_addr);</p>
-<pre><code>return (void *)((size_t)addr - link-&gt;l_addr);
-</code></pre><p>}</p>
-<p>void <em>malloc(size_t size){<br>    void </em>ptr = NULL;<br>    char buffer[128] = {0};</p>
-<pre><code>if (enable_malloc_hook ){
-    enable_malloc_hook = 0; 
+<h1 id="排查过程"><a href="#排查过程" class="headerlink" title="排查过程"></a>排查过程</h1><p>1.怀疑存在内存泄漏：<br>使用valgrind、<strong>libc_malloc/</strong>libc_free hook等方式复现检查，发现可以必现问题，但均未发现可疑的泄漏点<br>hook代码栗子如下：      </p>
+<pre><code>// gcc -o fun2 fun2.c -ldl -g
+#define _GNU_SOURCE
+#include &lt;dlfcn.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;link.h&gt;
 
-    ptr = malloc_f(size);
-    void *caller = __builtin_return_address(0);
-    sprintf(buffer, &quot;./memory/%p.memory&quot;, ptr);
+typedef void *(*malloc_t)(size_t size);
+malloc_t malloc_f = NULL;
 
-    FILE *fp = fopen(buffer, &quot;w&quot;);
-    // converToELF(caller)
-    fprintf(fp, &quot;[+] caller: %p, addr: %p, size: %ld\n&quot;, converToELF(caller), ptr, size);
-    fflush(fp);
-    fclose(fp);
+typedef void (*free_t)(void *ptr);
+free_t free_f = NULL;
 
-    enable_malloc_hook = 1;
+int enable_malloc_hook = 1;
+int enable_free_hook = 1;
+
+//解析地址
+void* converToELF(void *addr) {
+    Dl_info info;
+    struct link_map *link;
+    dladdr1(addr, &amp;info, (void **)&amp;link, RTLD_DL_LINKMAP);
+    // printf(&quot;%p\n&quot;, (void *)(size_t)addr - link-&gt;l_addr);
+
+    return (void *)((size_t)addr - link-&gt;l_addr);
 }
-else {
-    ptr = malloc_f(size);
+
+void *malloc(size_t size){
+    void *ptr = NULL;
+    char buffer[128] = {0};
+
+    if (enable_malloc_hook ){
+        enable_malloc_hook = 0; 
+
+        ptr = malloc_f(size);
+        void *caller = __builtin_return_address(0);
+        sprintf(buffer, &quot;./memory/%p.memory&quot;, ptr);
+
+        FILE *fp = fopen(buffer, &quot;w&quot;);
+        // converToELF(caller)
+        fprintf(fp, &quot;[+] caller: %p, addr: %p, size: %ld\n&quot;, converToELF(caller), ptr, size);
+        fflush(fp);
+        fclose(fp);
+
+        enable_malloc_hook = 1;
+    }
+    else {
+        ptr = malloc_f(size);
+    }
+    return ptr;
 }
-return ptr;
-</code></pre><p>}</p>
-<p>void free(void *ptr){<br>    if (enable_free_hook ){<br>        enable_free_hook = 0;<br>        char buffer[128] = {0};<br>        sprintf(buffer, “./memory/%p.memory”, ptr);</p>
-<pre><code>    if (unlink(buffer) &lt; 0){
-        printf(&quot;double free: %p\n&quot;, ptr);
-        return;
+
+void free(void *ptr){
+    if (enable_free_hook ){
+        enable_free_hook = 0;
+        char buffer[128] = {0};
+        sprintf(buffer, &quot;./memory/%p.memory&quot;, ptr);
+
+        if (unlink(buffer) &lt; 0){
+            printf(&quot;double free: %p\n&quot;, ptr);
+            return;
+        }
+
+        free_f(ptr);
+        enable_free_hook = 1;
+    }
+    else {
+        free_f(ptr);
+    }
+}
+
+void init_hook(){
+    if (!malloc_f){
+        malloc_f = dlsym(RTLD_NEXT, &quot;malloc&quot;);
     }
 
-    free_f(ptr);
-    enable_free_hook = 1;
+    if (!free_f){
+        free_f = dlsym(RTLD_NEXT, &quot;free&quot;);
+    }
 }
-else {
-    free_f(ptr);
-}
-</code></pre><p>}</p>
-<p>void init_hook(){<br>    if (!malloc_f){<br>        malloc_f = dlsym(RTLD_NEXT, “malloc”);<br>    }</p>
-<pre><code>if (!free_f){
-    free_f = dlsym(RTLD_NEXT, &quot;free&quot;);
-}
-</code></pre><p>}</p>
-<p>int main(){<br>    init_hook();</p>
-<pre><code>void *p1 = malloc(5);
-void *p2 = malloc(18);
-void *p3 = malloc(15);
 
-free(p1);
-free(p3);
-</code></pre><p>}<br>`   </p>
-<p>2.使用tcmalloc替换glibc：<br><code>LD_LIBRARY_PATH=&quot;/usr/lib/libtcmalloc.so:/sf/sdn/lib/:/sf/vn/lib/:/sf/lib/&quot; /sf/sdn/bin/cfgdbd -V &gt;&gt; /sf/log/sdn/cfgdbd.out 2&gt;&amp;1</code><br>发现现象变成了非必现，于是往内存池实现方向上去思考。  </p>
+int main(){
+    init_hook();
+
+    void *p1 = malloc(5);
+    void *p2 = malloc(18);
+    void *p3 = malloc(15);
+
+    free(p1);
+    free(p3);
+}  
+</code></pre><p>2.使用tcmalloc替换glibc：<br>    LD_LIBRARY_PATH=”/usr/lib/libtcmalloc.so:/sf/sdn/lib/:/sf/vn/lib/:/sf/lib/“ /sf/sdn/bin/cfgdbd -V &gt;&gt; /sf/log/sdn/cfgdbd.out 2&gt;&amp;1  </p>
+<p>发现现象变成了非必现，于是往内存池实现方向上去思考。  </p>
 <p>3.使用malloc_trim(0)手动回收内存：<br>通过查阅资料，发现glibc实现的ptmalloc在某些场景下存在内存站岗问题（简单来说就是小块内存采用堆栈结构从低地址到高地址申请，若free时，高地址的内存并未被free，则低地址即使free后也不会被归还给系统，而是被glibc缓存了起来）：<br><a href="https://cloud.tencent.com/developer/article/1138651" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1138651</a><br><a href="https://wenfh2020.com/2021/04/08/glibc-memory-leak/" target="_blank" rel="external">https://wenfh2020.com/2021/04/08/glibc-memory-leak/</a><br><a href="https://blog.csdn.net/u013259321/article/details/112031002" target="_blank" rel="external">https://blog.csdn.net/u013259321/article/details/112031002</a><br>在环境上验证，全同步树是否站岗：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/2.jpg" alt><br>再验证配置树是否也站岗了：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/3.jpg" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/4.png" alt><br>至此确认了该问题原因：cfgdbd直接申请堆内存构建树形结构存放配置，此种做法本就与glibc的内存池实现不可完美兼容。  </p>
 <h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>1.尝试修改glibc malloc可配置的参数（默认未调用mallopt，glibc的参数会动态改变 ）：<br>将M_TRIM_THRESHOLD直接调整成1K，M_MMAP_THRESHOLD不做修改<br>//全同步结束后，也还是有站岗，调malloc_trim(0)还能回收10个G  </p>
 <p>M_TRIM_THRESHOLD和M_MMAP_THRESHOLD都修改成1K<br>//全同步内存不站岗，但配置内存还会站岗  </p>
@@ -240,7 +273,7 @@ free(p3);
 <p>2.换tcmalloc配合修改些参数，看是否能彻底解决该问题：<br>只是直接替换成tcmalloc<br>//存在站岗<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/GlibcMemorySentry/8.jpg" alt>  </p>
 <p>配置下下tcmalloc的FLAGS_tcmalloc_release_rate<br>//无效，也没看到tcmalloc cpp实现哪里有跟它关联上  </p>
 <p>再试下tcmalloc的aggressive_memory_decommit<br>//有效，但有点激进了，相当于完全没有缓存（几乎可以等价于glibc每次free调用malloc_trim(0)），频繁申请/释放可能会引发其他问题（目前dp转发进程也用了tcmalloc，且其pageheap向系统申请/释放内存均需要等锁，怕影响到转发）：<a href="https://www.infoq.cn/article/xwijC1Afv3CN5zNj2sDi" target="_blank" rel="external">https://www.infoq.cn/article/xwijC1Afv3CN5zNj2sDi</a>  </p>
-<p>3.综上所述，还是考虑定时/定点malloc_trim(0)的效果<br>最终采用代码里定点+阈值直接调malloc_trim(0)回收内存（归还时需上互斥锁，且需要进行系统调用，太频繁将大量浪费CPU资源）<br>//如果需要再做优雅点，就弄个free hook，free次数达到阈值，就调一次malloc_trim(0)，且阈值可通过cli接口修改  </p>
+<p>3.综上所述，还是考虑定时/定点调用malloc_trim(0)<br>最终采用代码里定点+阈值直接调malloc_trim(0)回收内存（归还时需上互斥锁，且需要进行系统调用，太频繁将大量浪费CPU资源）<br>//如果需要再做优雅点，就弄个free hook，free次数达到阈值，就调一次malloc_trim(0)，且阈值可通过cli接口修改  </p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>该问题的排查给日后内存异常占用问题的排查，提供了一个方向：<br>有此类内存占用异常的问题，可以先在现场gdb获取下malloc_state()，再使用malloc_trim(0)手动回收下内存，通过此操作优先排除glibc内存站岗问题，提高排查效率。<br>设计中同样需要考虑到该问题，如果使用非自研的内存池，则需要做好内存回收框架。</p>
 
       
@@ -588,15 +621,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">应用软件_Qt</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">

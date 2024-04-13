@@ -6,18 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://avalonlz.github.io">
-  <title>Linux多线程编程之线程初始化 | 人人人&#39;s 藏经阁</title>
+  <title>DPDK Mellanox CX4L/CX5网卡适配 | 人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Linux多线程(用户态线程)编程之线程初始化相关知识点">
+  <meta name="description" content="前两天在一个技术群里，解答了几个关于Mellanox CX4L/CX5网卡DPDK PMD适配方面的问题，说明还是有同学有这方面需求的，遂简单写下这方面的东西">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux多线程编程之线程初始化">
-<meta property="og:url" content="http://avalonlz.github.io/2017/10/10/Linux-MultiThreadInit/index.html">
+<meta property="og:title" content="DPDK Mellanox CX4L/CX5网卡适配">
+<meta property="og:url" content="http://avalonlz.github.io/2024/04/13/DPDK-mellanox-suitable/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
-<meta property="og:description" content="Linux多线程(用户态线程)编程之线程初始化相关知识点">
-<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
+<meta property="og:description" content="前两天在一个技术群里，解答了几个关于Mellanox CX4L/CX5网卡DPDK PMD适配方面的问题，说明还是有同学有这方面需求的，遂简单写下这方面的东西">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/1.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/2.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/3.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/4.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/5.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/6.jpg">
+<meta property="og:updated_time" content="2024-04-13T11:27:05.656Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux多线程编程之线程初始化">
-<meta name="twitter:description" content="Linux多线程(用户态线程)编程之线程初始化相关知识点">
+<meta name="twitter:title" content="DPDK Mellanox CX4L/CX5网卡适配">
+<meta name="twitter:description" content="前两天在一个技术群里，解答了几个关于Mellanox CX4L/CX5网卡DPDK PMD适配方面的问题，说明还是有同学有这方面需求的，遂简单写下这方面的东西">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -131,34 +138,67 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Linux-MultiThreadInit" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-DPDK-mellanox-suitable" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Linux多线程编程之线程初始化
+      DPDK Mellanox CX4L/CX5网卡适配
     </h1>
   
 
         
-        <a href="/2017/10/10/Linux-MultiThreadInit/" class="archive-article-date">
-  	<time datetime="2017-10-10T00:49:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-10</time>
+        <a href="/2024/04/13/DPDK-mellanox-suitable/" class="archive-article-date">
+  	<time datetime="2024-04-13T15:48:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-04-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Linux多线程(用户态线程)编程之线程初始化相关知识点<a id="more"></a>  </p>
-<h3 id="调度策略"><a href="#调度策略" class="headerlink" title="调度策略"></a>调度策略</h3><p>在Linux中，创建一个用户进程的同时也必然创建了一个用户线程，同时在内核中也就创建了一个LWP和一个内核线程。若再创建一个用户线程，则同时在内核中又会创建一个LWP和一个内核线程。于是在这个进程执行时，Linux调度系统就会对这两个用户线程进行调度，调度的方式就是对这两个用户线程对应的内核线程进行调度（默认采用SCHED_OTHER方式进行调度）<br>内核态线程调度（实时调度，即支持高优先级抢占运行）：    </p>
-<p>SCHED_OTHER//分时调度,它的特点是即使是最低优先级，他也能获得一定的时间片.  </p>
-<p>SCHED_FIFO//实时调度，先到先服务。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起；对于同等优先级，先运行的进程会一直占据cpu, 只有等到先运行的线程挂起后，后续线程才能得到时间片。  </p>
-<p>SCHED_RR//实时调度，时间片轮转。高优先级会抢占低优先级，高优先级运行期间，低优先级没法抢占，只能等到高优先级挂起, ；对于同等优先级的线程，各个线程会轮流运行一定的时间片（Linux是100ms）。     </p>
-<p>可以使用以下API改变线程调度算法:<br>int pthread_attr_init(pthread_attr_t<em>attr);//初始化线程属性<br>int pthread_attr_setschedpolicy(pthread_attr_t </em>attr, int policy);//改变内核态线程的调度算法   </p>
-<p>Linux内核态线程调度算法中的SCHED_RR和大部分RTOS的线程调度算法类似。即具有高优先级抢占特性，也就是在多线程中，高优先级的线程是无条件抢占CPU的，如果高优先级线程未挂起，则低优先级线程将一直不会被执行。若多个线程处于相同优先级时则会对这几个同优先级的线程采用时间片轮转算法，但在一些RTOS(ucos)中并不支持时间片轮转算法，只支持优先级抢占任务调度，在这种RTOS中的任务必须有不同的优先级   </p>
-<p>未完…</p>
+        <p>前两天在一个技术群里，解答了几个关于Mellanox CX4L/CX5网卡DPDK PMD适配方面的问题，说明还是有同学有这方面需求的，遂简单写下这方面的东西<a id="more"></a>  </p>
+<ul>
+<li><a href="#mellanox网卡驱动版本的选择">Mellanox网卡驱动版本的选择</a></li>
+<li><a href="#mellanox官方url地址驱动固件驱动固件兼容性表格">Mellanox官方URL地址（驱动、固件、驱动固件兼容性表格）</a></li>
+<li><a href="#mellanox网卡驱动的编译">Mellanox网卡驱动的编译</a><ul>
+<li><a href="#网卡操作工具">网卡操作工具</a><ul>
+<li><a href="#mstflint">mstflint</a></li>
+</ul>
+</li>
+<li><a href="#rdma动态链接库ib库">RDMA动态链接库(ib库)</a><ul>
+<li><a href="#rmda-core">rmda-core</a></li>
+</ul>
+</li>
+<li><a href="#内核驱动ko文件">内核驱动KO文件</a><ul>
+<li><a href="#kernel-mft">kernel-mft</a></li>
+<li><a href="#mlnx-ofa_kernel">mlnx-ofa_kernel</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#mellanox网卡驱动的安装">Mellanox网卡驱动的安装</a></li>
+</ul>
+<h1 id="Mellanox网卡驱动版本的选择"><a href="#Mellanox网卡驱动版本的选择" class="headerlink" title="Mellanox网卡驱动版本的选择"></a>Mellanox网卡驱动版本的选择</h1><p>1.正常来说，网卡驱动版本的选择应该在网卡固件许可的范围内，选择尽可能高的版本（因为高版本的驱动往往是解决了一些驱动bug）。<br>2.但对于Mellanox网卡，并且是有使用DPDK Mellanox PMD的场景，就不可盲目选择高版本，因为其DPDK PMD，使用的是差分驱动模型，无需卸载内核驱动，而是利用ib uverbs API实现的用户态PMD驱动，所以其依赖了mlx的ib动态链接库，而ib的版本又与Mellanox网卡的内核驱动版本强相关，所以在DPDK Mellanox PMD需求的场景下，Mellanox DPDK PMD、ib动态链接库（RDMA）、Mellanox内核驱动以及Mellanox网卡固件版本，这四者就产生了一定的关联性。一般来说DPDK版本不会随意更换，所以将其作为锚定，Mellanox内核驱动和DPDK驱动大致的对应关系，可见Mellanox各个版本的发行说明：<a href="https://docs.mellanox.com/display/OFEDv512580/Release+Notes" target="_blank" rel="external">https://docs.mellanox.com/display/OFEDv512580/Release+Notes</a><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/1.jpg" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/2.jpg" alt>  </p>
+<h1 id="Mellanox官方URL地址（驱动、固件、驱动固件兼容性表格）"><a href="#Mellanox官方URL地址（驱动、固件、驱动固件兼容性表格）" class="headerlink" title="Mellanox官方URL地址（驱动、固件、驱动固件兼容性表格）"></a>Mellanox官方URL地址（驱动、固件、驱动固件兼容性表格）</h1><p>驱动（相同的驱动版本，对于不同的OS，其源码均相同）：<br><a href="https://www.mellanox.com/products/infiniband-drivers/linux/mlnx_ofed" target="_blank" rel="external">https://www.mellanox.com/products/infiniband-drivers/linux/mlnx_ofed</a><br>注意需要下ofed包，ofed包中才有包含ib相关的东西<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/3.jpg" alt>  </p>
+<p>固件：<br><a href="https://www.mellanox.com/support/firmware/connectx4lxen" target="_blank" rel="external">https://www.mellanox.com/support/firmware/connectx4lxen</a><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/4.jpg" alt>  </p>
+<p>驱动&amp;&amp;固件兼容性表格：<br><a href="https://docs.mellanox.com/display/OFEDv512580/General+Support+in+MLNX_OFED" target="_blank" rel="external">https://docs.mellanox.com/display/OFEDv512580/General+Support+in+MLNX_OFED</a><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/5.jpg" alt>  </p>
+<h1 id="Mellanox网卡驱动的编译"><a href="#Mellanox网卡驱动的编译" class="headerlink" title="Mellanox网卡驱动的编译"></a>Mellanox网卡驱动的编译</h1><p>Mellanox网卡驱动，目前只使用其DPDK PMD，需要的内容，可以分为三块：<br>1.网卡操作工具<br>2.RDMA动态链接库(ib库)<br>3.内核驱动KO文件<br>对应驱动源码包中的以下rpm文件，且这三部分的编译无依赖性，无编译顺序要求。<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/6.jpg" alt>    </p>
+<h2 id="网卡操作工具"><a href="#网卡操作工具" class="headerlink" title="网卡操作工具"></a>网卡操作工具</h2><h3 id="mstflint"><a href="#mstflint" class="headerlink" title="mstflint"></a>mstflint</h3><p>若需在容器中执行，则需要在容器环境下编译    </p>
+<pre><code>./configure --disable-inband --prefix=/usr/local CPPFLAGS=  
+make
+</code></pre><h2 id="RDMA动态链接库-ib库"><a href="#RDMA动态链接库-ib库" class="headerlink" title="RDMA动态链接库(ib库)"></a>RDMA动态链接库(ib库)</h2><h3 id="rmda-core"><a href="#rmda-core" class="headerlink" title="rmda-core"></a>rmda-core</h3><p>若DPDK应用位于容器中运行，则需要在容器环境下编译    </p>
+<pre><code>按其目录下的README build即可  
+</code></pre><h2 id="内核驱动KO文件"><a href="#内核驱动KO文件" class="headerlink" title="内核驱动KO文件"></a>内核驱动KO文件</h2><p>无论何种使用场景，都是在宿主机的环境下编译   </p>
+<h3 id="kernel-mft"><a href="#kernel-mft" class="headerlink" title="kernel-mft"></a>kernel-mft</h3><pre><code>make  
+</code></pre><h3 id="mlnx-ofa-kernel"><a href="#mlnx-ofa-kernel" class="headerlink" title="mlnx-ofa_kernel"></a>mlnx-ofa_kernel</h3><pre><code># 配置一些需要编译的模块
+./configure -j8 --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlx4-mod --with-mlx4_en-mod --without-mlx4_debug-mod --with-mlx5-mod --without-mlx5_debug-mod --with-ipoib-mod --with-srp-mod --with-iser-mod --with-isert-mod --with-nfsrdma-mod  
+
+make  
+</code></pre><h1 id="Mellanox网卡驱动的安装"><a href="#Mellanox网卡驱动的安装" class="headerlink" title="Mellanox网卡驱动的安装"></a>Mellanox网卡驱动的安装</h1><p>mlnx-ofa_kernel、kernel-mft(内核KO文件)可在编译环境虚拟机中，执行make install，通过观察输出日志，获取到对应的安装位置，再从对应的位置，获取相关文件，平行替换到宿主机上，此种方法替换文件后还需要执行depmod -a和dracut –force以及还需要内核编译选项CONFIG_MODULE_SIG_FORCE处于关闭状态（更新modules.dep、initramfs镜像，以及避免加载内核模块需要签名），否则系统启动无法正常加载驱动。  </p>
+<p>rmda-core需在编译环境容器中install后，利用脚本获取相关文件，再平行替换到设备上（从安装路径打包一份，再放到设备对应的路径上）。  </p>
+<p>mstflint与rmda-core类似，容器中执行make install，通过观察输出日志，获取到对应的安装位置，再从对应的位置，获取相关文件，再放到设备对应的路径上。</p>
 
       
 
@@ -198,7 +238,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux多线程编程</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DPDK</a>
         		</li>
       		
 		</ul>
@@ -254,7 +294,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://avalonlz.github.io/2017/10/10/Linux-MultiThreadInit/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://avalonlz.github.io/2024/04/13/DPDK-mellanox-suitable/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -268,18 +308,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/10/29/0183Protocol_Produce/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          0183协议生成器
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/08/15/Lua-Notes/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Lua_Notes</div>
+    <a href="/2024/04/12/ComplicatedProblem-GlibcMemorySentry/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">疑难杂症之glibc内存站岗</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -318,7 +349,7 @@
 <script src="https://jjeejj.github.io/js/gitment.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "http://avalonlz.github.io/2017/10/10/Linux-MultiThreadInit/",
+  id: "http://avalonlz.github.io/2024/04/13/DPDK-mellanox-suitable/",
   owner: 'avalonLZ',
   repo: 'avalonLZ.github.io',
   oauth: {

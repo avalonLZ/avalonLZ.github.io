@@ -15,7 +15,8 @@
 <meta property="og:site_name" content="人人人's 藏经阁">
 <meta property="og:description" content="深入学习下vxlan的玩法">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Vxlan/vxlan%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F.jpg">
-<meta property="og:updated_time" content="2019-09-08T14:49:53.913Z">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Vxlan/1.jpg">
+<meta property="og:updated_time" content="2024-04-16T07:27:01.629Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vxlan">
 <meta name="twitter:description" content="深入学习下vxlan的玩法">
@@ -153,15 +154,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>深入学习下vxlan的玩法<a id="more"></a>  </p>
-<h3 id="VTEP"><a href="#VTEP" class="headerlink" title="VTEP"></a>VTEP</h3><p>VTEP，即Vxlan隧道端点，可以是单独的硬件设备，也可以集合在软件中，主要作用就是封装、解封vxlan报文。VTEP成员需要知道自己下连所有终端（vm）的MAC地址，同时需要知道其他所有VTEP成员下所有终端的MAC地址表，其他终端MAC地址表是通过底层物理网络组播进行传播，一个VXLAN网络一个组播地址  </p>
-<h3 id="VNI"><a href="#VNI" class="headerlink" title="VNI"></a>VNI</h3><p>VNI（3个字节），即vxlan报文的网络标识符，用于隔离不同的网络（租户），不同的VNI网络间，不能直接进行源二层的通信（因为一个VNI对应了一个Vxlan的组播组）  </p>
-<h3 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h3><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Vxlan/vxlan%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F.jpg" alt><br>由上图可知，vxlan报文，是在主机报文的UDP载荷字段中再嵌套一个Vxlan Header和其真实报文（两端VTEP通信的报文）实现的。其中Vxlan Header占了8个字节<br>注：上图的UDP Header中的VXLAN Port指的就是UDP传输中的目的端口号，只不过在VXLAN报文中，又被称为VXLAN Port，一般为默认值4789（可以修改）  </p>
-<h3 id="vm-arp请求及回应流程"><a href="#vm-arp请求及回应流程" class="headerlink" title="vm arp请求及回应流程"></a>vm arp请求及回应流程</h3><p>首先，明确一点，在传输过程中，将先以组播报文进行传输，对端收到后，再由对端VTEP进行其下联vm的广播，而回复数据包则是以单播的形式在underlay网络中进行传输  </p>
-<p>VM1——VTEP1——物理交换机——VTEP2——VM2<br>1、VM1使用广播发送ARP请求查找VM2的MAC地址<br>2、VTEP1收到VM1的广播后，查找自己的MAC地址表，如果下联vm没有此mac地址，则将封装报文为VXLAN，内层VNI为100，外层目的地址为此VNI对应的组播地址，外层源IP为VTEP1地址。<br>3、通过组播VTEP2接受到VTEP1的报文，解封装后。记录报文的内层VNI、外层源VTEP1的IP、内层MAC地址<br>4、VTEP2通过广播将数据包广播到自己连接的vm<br>5、VM2接受到ARP请求后，做出回应<br>6、VTEP2接受到VM2的回应后，查找流表，发现需要发送给VTEP1，重新把数据包进行封装为VXLAN并以单播的形式发送给VTEP1<br>7、VTEP1收到回应后，记录内层VNI、外层源VTEP2的IP、内层VM2的MAC地址<br>8、VTEP1解封装后转发给VM1。至此VM1收到了VM2的MAC地址  </p>
-<h3 id="vm-TCP-UDP数据传输流程"><a href="#vm-TCP-UDP数据传输流程" class="headerlink" title="vm TCP/UDP数据传输流程"></a>vm TCP/UDP数据传输流程</h3><p>vm间正常的数据传输，在underlay网络中都将以单播的形式进行  </p>
-<p>VM1——VTEP1——物理交换机——VTEP2——VM2<br>1、VM1给VM2发送了一个TCP/UDP报文<br>2、VTEP1收到报文后检查VM1和VM2是否属于同一个VNI，（如果不属于将转发给VXLAN网关）检查后属于一个VNI，需要转发给VTEP2<br>3、VTEP1封装VXLAN报文以单播的形式发送给VTEP2<br>4、VTEP2收到报文后解封装，查找流表，找到vm2对应的端口，进行发送<br>5、VTEP2单播的形式发送给VM2，至此一个报文发送完毕    </p>
-<p>注意：若不存在VXLAN网关设备，则此VXLAN网络中，只存在一个VNI和一个组播组</p>
+        <p>深入学习下vxlan的玩法<a id="more"></a>    </p>
+<ul>
+<li><a href="#vtep">VTEP</a></li>
+<li><a href="#vni">VNI</a></li>
+<li><a href="#报文格式">报文格式</a></li>
+<li><a href="#vtep表内容">VTEP表内容</a></li>
+<li><a href="#利用组播维护vtep表的方式下vm的通信流程">利用组播维护VTEP表的方式下,vm的通信流程</a><ul>
+<li><a href="#vm-arp请求及回应流程">vm arp请求及回应流程</a></li>
+<li><a href="#vm-tcpudp数据传输流程">vm TCP/UDP数据传输流程</a></li>
+</ul>
+</li>
+<li><a href="#利用sdn控制器下发vm-macip的方式下vm的通信流程">利用SDN控制器下发vm mac\&amp;\&amp;ip的方式下,vm的通信流程</a></li>
+<li><a href="#其他">其他</a></li>
+</ul>
+<h1 id="VTEP"><a href="#VTEP" class="headerlink" title="VTEP"></a>VTEP</h1><p>VTEP，即Vxlan隧道端点，可以是单独的硬件设备，也可以集合在软SW中，主要作用就是封装、解封vxlan报文。VTEP成员需要知道自己下连所有终端（vm）的MAC地址，同时需要知道其他所有VTEP成员下所有终端的MAC地址表，其他终端MAC地址表是通过底层物理网络组播（一般不用单播）进行传播，一个VXLAN网络一个组播地址  </p>
+<h1 id="VNI"><a href="#VNI" class="headerlink" title="VNI"></a>VNI</h1><p>VNI（3个字节），即vxlan报文的网络标识符，用于隔离不同的网络（租户），不同的VNI网络间，不能直接进行源二层的通信（因为一个VNI对应了一个Vxlan的组播组）  </p>
+<h1 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Vxlan/vxlan%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F.jpg" alt><br>由上图可知，vxlan报文，是在主机报文的UDP载荷字段中再嵌套一个Vxlan Header和其真实报文（两端VTEP通信的报文）实现的。其中Vxlan Header占了8个字节<br>注：上图的UDP Header中的VXLAN Port指的就是UDP传输中的目的端口号，只不过在VXLAN报文中，又被称为VXLAN Port，一般为默认值4789（可以修改）    </p>
+<h1 id="VTEP表内容"><a href="#VTEP表内容" class="headerlink" title="VTEP表内容"></a>VTEP表内容</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Vxlan/1.jpg" alt><br>VTEP表项其大致内容如上图所示，其中VNI是配置的，其余则是通过学习，或者控制器下发而获得</p>
+<h1 id="利用组播维护VTEP表的方式下-vm的通信流程"><a href="#利用组播维护VTEP表的方式下-vm的通信流程" class="headerlink" title="利用组播维护VTEP表的方式下,vm的通信流程"></a>利用组播维护VTEP表的方式下,vm的通信流程</h1><p>SDN控制器不感知VTEP节点内vm的mac和ip，则需要VXLAN自身通过组播方式（一般不用单播），去维护VTEP，该使用方式下，通信流程如下：  </p>
+<h2 id="vm-arp请求及回应流程"><a href="#vm-arp请求及回应流程" class="headerlink" title="vm arp请求及回应流程"></a>vm arp请求及回应流程</h2><p>首先，明确一点，在传输过程中，将先以组播报文进行传输，对端收到后，再由对端VTEP进行其下联vm的广播，而回复数据包则是以单播的形式在underlay网络中进行传输  </p>
+<p>VM1——VTEP1——物理交换机——VTEP2——VM2<br>1、VM1使用广播发送ARP请求查找VM2的MAC地址<br>2、VTEP1收到VM1的广播后，查找自己的MAC地址表，如果下联vm没有此mac地址，则将封装报文为VXLAN，内层VNI为100（可在vtep上配置），外层目的地址为此VNI对应的组播地址，外层源IP为VTEP1地址。<br>3、通过组播VTEP2接受到VTEP1的报文，解封装后。对比报文的内层VNI相同，则再记录外层源VTEP1的IP、内层MAC地址（维护本端VTEP表），若VNI不同则丢弃。<br>4、VTEP2通过广播将数据包广播到自己连接的vm<br>5、VM2接受到ARP请求后，做出回应<br>6、VTEP2接受到VM2的回应后，查找流表，发现需要发送给VTEP1，重新把数据包进行封装为VXLAN并以单播的形式发送给VTEP1<br>7、VTEP1收到回应后，对比报文的内层VNI相同，则再记录外层源VTEP2的IP、内层VM2的MAC地址（维护本端VTEP表），若VNI不同则丢弃。<br>8、VTEP1解封装后转发给VM1。至此VM1收到了VM2的MAC地址  </p>
+<h2 id="vm-TCP-UDP数据传输流程"><a href="#vm-TCP-UDP数据传输流程" class="headerlink" title="vm TCP/UDP数据传输流程"></a>vm TCP/UDP数据传输流程</h2><p>vm间正常的数据传输，在underlay网络中都将以单播的形式进行  </p>
+<p>VM1——VTEP1——物理交换机——VTEP2——VM2<br>1、VM1给VM2发送了一个TCP/UDP报文<br>2、VTEP1收到报文后检查VM1和VM2是否属于同一个VNI，（如果不属于将转发给VXLAN网关）检查后属于一个VNI，需要转发给VTEP2<br>3、VTEP1封装VXLAN报文以单播的形式发送给VTEP2<br>4、VTEP2收到报文后解封装，查找流表，找到vm2对应的端口，进行发送<br>5、VTEP2单播的形式发送给VM2，至此一个报文发送完毕      </p>
+<h1 id="利用SDN控制器下发vm-mac-amp-amp-ip的方式下-vm的通信流程"><a href="#利用SDN控制器下发vm-mac-amp-amp-ip的方式下-vm的通信流程" class="headerlink" title="利用SDN控制器下发vm mac&amp;&amp;ip的方式下,vm的通信流程"></a>利用SDN控制器下发vm mac&amp;&amp;ip的方式下,vm的通信流程</h1><p>若SDN控制器支持下发本端的vm mac和ip至其他Vxlan节点，即无需Vxlan自身在去维护VTEP表，则本端vm发起arp请求走Vxlan后，会被VTEP节点优先用控制器下发的对端ip做代答，若VTEP节点没找到此ip的表项，则在发起组播进行学习    </p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>一般超融合厂商，一个超融合集群就只有一个vni  </p>
 
       
 
@@ -417,15 +434,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">计算机语言_C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">疑难杂症</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color5">计算机语言_C++</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -433,7 +446,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">软件工程_DesignPatterns</a>
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -441,7 +454,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">软件工程_DesignPatterns</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -449,15 +462,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">飞思卡尔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">百科_Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Kernel</a>
+                <a href="javascript:void(0)" class="js-tag color5">飞思卡尔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -465,15 +478,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
+                <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Kernel</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -493,6 +506,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">计算机语言_Lua</a>
               </li>
              
@@ -509,7 +526,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
+                <a href="javascript:void(0)" class="js-tag color3">应用软件_Qt</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -521,11 +542,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">应用软件_Qt</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
+                <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -545,15 +562,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">协议解析_MQTT</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
+                <a href="javascript:void(0)" class="js-tag color5">轮子_C</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -561,11 +574,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
+                <a href="javascript:void(0)" class="js-tag color3">计算机语言_Python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_存储</a>
+                <a href="javascript:void(0)" class="js-tag color5">嵌入式_STM32</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -574,6 +587,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">百科_DNSpod</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_存储</a>
               </li>
             
             <div class="clearfix"></div>

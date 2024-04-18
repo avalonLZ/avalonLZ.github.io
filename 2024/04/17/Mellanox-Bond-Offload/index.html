@@ -8,16 +8,19 @@
   <link rel="dns-prefetch" href="http://avalonlz.github.io">
   <title>Mellanox Bond Offload | 人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录下之前研究过的OVS-Kernel和OVS-DPDK在Mellanox SmartNIC上的聚合卸载功能（编写中…）">
+  <meta name="description" content="记录下之前研究过的OVS-Kernel和OVS-DPDK在Mellanox SmartNIC上的聚合卸载功能">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mellanox Bond Offload">
 <meta property="og:url" content="http://avalonlz.github.io/2024/04/17/Mellanox-Bond-Offload/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
-<meta property="og:description" content="记录下之前研究过的OVS-Kernel和OVS-DPDK在Mellanox SmartNIC上的聚合卸载功能（编写中…）">
-<meta property="og:updated_time" content="2024-04-18T05:46:16.343Z">
+<meta property="og:description" content="记录下之前研究过的OVS-Kernel和OVS-DPDK在Mellanox SmartNIC上的聚合卸载功能">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Mellanox-Bond-Offload/1.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Mellanox-Bond-Offload/2.jpg">
+<meta property="og:updated_time" content="2024-04-18T15:16:06.737Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mellanox Bond Offload">
-<meta name="twitter:description" content="记录下之前研究过的OVS-Kernel和OVS-DPDK在Mellanox SmartNIC上的聚合卸载功能（编写中…）">
+<meta name="twitter:description" content="记录下之前研究过的OVS-Kernel和OVS-DPDK在Mellanox SmartNIC上的聚合卸载功能">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Mellanox-Bond-Offload/1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -151,8 +154,93 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>记录下之前研究过的OVS-Kernel和OVS-DPDK在Mellanox SmartNIC上的聚合卸载功能（编写中…）<a id="more"></a>    </p>
-<h1 id="OVS-Kernel"><a href="#OVS-Kernel" class="headerlink" title="OVS-Kernel"></a>OVS-Kernel</h1><h1 id="OVS-DPDK"><a href="#OVS-DPDK" class="headerlink" title="OVS-DPDK"></a>OVS-DPDK</h1><h1 id="相关网页"><a href="#相关网页" class="headerlink" title="相关网页"></a>相关网页</h1>
+        <p>记录下之前研究过的OVS-Kernel和OVS-DPDK在Mellanox SmartNIC上的聚合卸载功能<a id="more"></a>    </p>
+<ul>
+<li><a href="#环境">环境</a></li>
+<li><a href="#ovs-kernel">OVS-Kernel</a><ul>
+<li><a href="#支持offload的聚合模式">支持offload的聚合模式</a></li>
+<li><a href="#配置步骤">配置步骤</a></li>
+<li><a href="#验证结果">验证结果</a></li>
+<li><a href="#注意">注意</a></li>
+</ul>
+</li>
+<li><a href="#ovs-dpdk">OVS-DPDK</a><ul>
+<li><a href="#支持offload的聚合模式-1">支持offload的聚合模式</a></li>
+<li><a href="#配置步骤-1">配置步骤</a></li>
+<li><a href="#验证结果-1">验证结果</a></li>
+<li><a href="#注意-1">注意</a></li>
+</ul>
+</li>
+<li><a href="#注意-2">注意</a></li>
+</ul>
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Mellanox-Bond-Offload/1.jpg" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/Mellanox-Bond-Offload/2.jpg" alt>  </p>
+<h1 id="OVS-Kernel"><a href="#OVS-Kernel" class="headerlink" title="OVS-Kernel"></a>OVS-Kernel</h1><p>参考页面：<a href="https://docs.nvidia.com/networking/display/ofed510660/ovs+offload+using+asap%C2%B2+direct，OVS-Kernel" target="_blank" rel="external">https://docs.nvidia.com/networking/display/ofed510660/ovs+offload+using+asap%C2%B2+direct，OVS-Kernel</a> Hardware Offloads SR-IOV VF LAG 章节    </p>
+<h2 id="支持offload的聚合模式"><a href="#支持offload的聚合模式" class="headerlink" title="支持offload的聚合模式"></a>支持offload的聚合模式</h2><p>Active-Backup<br>XOR<br>LACP  </p>
+<h2 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h2><p>1.OVS-Kernel启动参数    </p>
+<pre><code>ovs-vsctl set Open_vSwitch . other_config:hw-offload=true
+//硬件流表老化时间20s
+ovs-vsctl set Open_vSwitch . other_config:hwoff-max-idle=20000    
+
+//查询流表是否卸载到了网卡
+//ovs-appctl dpctl/dump-flows system@ovs-system type=offloaded
+</code></pre><p>2.创建Linux Bond并将pf加入其中  </p>
+<pre><code>//加载聚合口模块
+modprobe bonding   
+
+//创建bond_lz1聚合口
+echo +bond_lz1 &gt; /sys/class/net/bonding_masters
+
+//修改聚合模式
+echo 2 &gt; /sys/class/net/bond_lz1/bonding/mode
+
+//修改xor聚合tx hash(layer3+4)
+echo 1 &gt; /sys/class/net/bond_lz1/bonding/xmit_hash_policy
+
+//修改链路状态检测时间
+echo 100 &gt; /sys/class/net/bond_lz1/bonding/miimon
+
+//添加bond_lz1聚合口的成员网口：
+echo +enp4s0f0 &gt; /sys/class/net/bond_lz1/bonding/slaves
+echo +enp4s0f1 &gt; /sys/class/net/bond_lz1/bonding/slaves  
+
+//ifconfig up聚合口及其成员网口
+</code></pre><p>3.将Bond和vf rep口加入ovs br，并将其up  </p>
+<pre><code>ovs-vsctl add-port ovs-sriov bond0  
+ovs-vsctl add-port ovs-sriov enp4s0f0_0  
+ovs-vsctl add-port ovs-sriov enp4s0f1_0  
+
+ifconfig...up  
+</code></pre><h2 id="验证结果"><a href="#验证结果" class="headerlink" title="验证结果"></a>验证结果</h2><p>1.ab主备聚合功能正常<br>2.xor静态聚合，二层和三+四层hash正常（其余hash未测）<br>3.lacp聚合，二层和三+四层hash正常（其余hash未测）<br>4.以上聚合方式成员网口down后，流量均可从另一成员网口发出（链路冗余功能正常）<br>其他：无法像Linux bond一样直接剔除成员网口</p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>1.只有vf口上的流量可卸载，ovs br上其他口的流量，无法卸载<br>2.所有需要卸载的vf口，都需要将其rep口加入ovs br</p>
+<h1 id="OVS-DPDK"><a href="#OVS-DPDK" class="headerlink" title="OVS-DPDK"></a>OVS-DPDK</h1><p>参考页面：<a href="https://docs.nvidia.com/networking/display/ofed510660/ovs+offload+using+asap%C2%B2+direct，OVS-DPDK" target="_blank" rel="external">https://docs.nvidia.com/networking/display/ofed510660/ovs+offload+using+asap%C2%B2+direct，OVS-DPDK</a> Hardware Offloads SR-IOV VF LAG 章节  </p>
+<h2 id="支持offload的聚合模式-1"><a href="#支持offload的聚合模式-1" class="headerlink" title="支持offload的聚合模式"></a>支持offload的聚合模式</h2><p>无特别说明，推测和OVS-Kernel offload相同：<br>Active-Backup<br>XOR<br>LACP  </p>
+<h2 id="配置步骤-1"><a href="#配置步骤-1" class="headerlink" title="配置步骤"></a>配置步骤</h2><p>1.开启sr-iov  </p>
+<pre><code>mlxconfig -d set SRIOV_EN=1  
+</code></pre><p>2.开启vf口  </p>
+<pre><code>echo 1 &gt; /sys/class/net/ens4f0/device/sriov_numvfs  
+</code></pre><p>3.解绑vf驱动  </p>
+<pre><code>echo 0000:5e:00.2 &gt; /sys/bus/pci/drivers/mlx5_core/unbind
+</code></pre><p>4.修改为eswitch模式（两个pf都需要配置）  </p>
+<pre><code>devlink dev eswitch set pci/0000:5e:00.0 mode switchdev
+devlink dev eswitch set pci/0000:5e:00.1 mode switchdev
+</code></pre><p>5.重绑vf驱动  </p>
+<pre><code>echo 0000:5e:00.2 &gt; /sys/bus/pci/drivers/mlx5_core/bind  
+</code></pre><p>6.创建内核聚合口    </p>
+<pre><code>modprobe bonding mode= &lt;xxx&gt;
+</code></pre><p>7.down掉所有pf和vf口  </p>
+<pre><code>ip link set &lt;pf/vf&gt; down
+</code></pre><p>8.将2个pf口加入bond  </p>
+<pre><code>ip link set &lt;pf&gt; master bond0
+</code></pre><p>9.创建ovs-dpdk br  </p>
+<pre><code>ovs-vsctl add-br br-phy -- set bridge br-phy datapath_type=netdev  
+</code></pre><p>10.添加pci地址在前的pf口到 ovs-dpdk br  </p>
+<pre><code>ovs-vsctl add-port br0 p0 -- set Interface p0 type=dpdk options:dpdk-devargs=0000:88:00.0  
+</code></pre><p>11.添加rep口（有几个vf需要通信就添加几个）到ovs-dpdk br  </p>
+<pre><code>ovs-vsctl add-port br0 rep0 -- set Interface rep0 type=dpdk options:dpdk-devargs=0000:88:00.0,representor=[0]
+</code></pre><h2 id="验证结果-1"><a href="#验证结果-1" class="headerlink" title="验证结果"></a>验证结果</h2><p>XOR和LACP tx hash与所配置的Linux bond tx hash并不相同，相关资料：<br><a href="https://enterprise-support.nvidia.com/s/article/Debugging-VF-LAG-issues-with-ASAP2" target="_blank" rel="external">https://enterprise-support.nvidia.com/s/article/Debugging-VF-LAG-issues-with-ASAP2</a><br>vf口的tx queue被做了map，关联了不同的pf口，通过此来实现tx hash，与OVS-Kernel场景下的卸载实现不同</p>
+<h2 id="注意-1"><a href="#注意-1" class="headerlink" title="注意"></a>注意</h2><p>1.只有vf口上的流量可卸载，ovs br上其他口的流量，无法卸载<br>2.第二个pci地址的pf口无需加入ovs br，Mellanox能自行感知到<br>3.操作流程一不对将无法恢复（内核mlx驱动会有些许错误打出），只能重启设备恢复</p>
+<h1 id="注意-2"><a href="#注意-2" class="headerlink" title="注意"></a>注意</h1><p>Mellanox bond offload只可支持卸载Linux bond，对于OVS bond、Linux team以及DPDK bond均不支持卸载  </p>
+
       
 
       
@@ -422,7 +510,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">飞思卡尔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -430,11 +518,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">飞思卡尔</a>
+                <a href="javascript:void(0)" class="js-tag color2">百科_Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">百科_Git</a>
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -442,19 +530,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">百科_Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -502,15 +590,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">应用软件_Qt</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -6,18 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://avalonlz.github.io">
-  <title>Raspberry Pi-Commands | 人人人&#39;s 藏经阁</title>
+  <title>DPDK Mellanox CX4L/CX5网卡适配 | 人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="玩Raspberry Pi常用的Linux命令">
+  <meta name="description" content="前两天在一个技术群里，解答了几个关于Mellanox CX4L/CX5网卡DPDK PMD适配方面的问题，说明还是有同学有这方面需求的，遂简单写下这方面的东西">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Raspberry Pi-Commands">
-<meta property="og:url" content="http://avalonlz.github.io/2016/04/01/raspberry-pi-commands/index.html">
+<meta property="og:title" content="DPDK Mellanox CX4L/CX5网卡适配">
+<meta property="og:url" content="http://avalonlz.github.io/2024/04/13/DPDK-mellanox-suitable/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
-<meta property="og:description" content="玩Raspberry Pi常用的Linux命令">
-<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
+<meta property="og:description" content="前两天在一个技术群里，解答了几个关于Mellanox CX4L/CX5网卡DPDK PMD适配方面的问题，说明还是有同学有这方面需求的，遂简单写下这方面的东西">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/1.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/2.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/3.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/4.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/5.jpg">
+<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/6.jpg">
+<meta property="og:updated_time" content="2024-04-15T10:13:40.029Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Raspberry Pi-Commands">
-<meta name="twitter:description" content="玩Raspberry Pi常用的Linux命令">
+<meta name="twitter:title" content="DPDK Mellanox CX4L/CX5网卡适配">
+<meta name="twitter:description" content="前两天在一个技术群里，解答了几个关于Mellanox CX4L/CX5网卡DPDK PMD适配方面的问题，说明还是有同学有这方面需求的，遂简单写下这方面的东西">
+<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -131,40 +138,68 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-raspberry-pi-commands" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-DPDK-mellanox-suitable" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Raspberry Pi-Commands
+      DPDK Mellanox CX4L/CX5网卡适配
     </h1>
   
 
         
-        <a href="/2016/04/01/raspberry-pi-commands/" class="archive-article-date">
-  	<time datetime="2016-04-01T03:58:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-04-01</time>
+        <a href="/2024/04/13/DPDK-mellanox-suitable/" class="archive-article-date">
+  	<time datetime="2024-04-13T15:48:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-04-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>玩Raspberry Pi常用的Linux命令<a id="more"></a>  </p>
-<p><strong>目录相关</strong><br>cd [文件夹路径] ：进入文件夹（如cd /home/pi，进入pi文件夹）<br>cd .. :返回该目录下的上级目录<br>cd - ：返回进入该目录前所在目录  </p>
-<p><strong>列出文件夹内容命令</strong><br>ls ：列出该目录下文件和文件夹（不包括隐含文件）<br>ls -l ：列出该目录下文件、文件夹详细信息（包括隐含文件）  </p>
-<p><strong>移动命令</strong><br>mv -i [需要移动的文件路径，需要选择文件本身] [文件新路径，不需要选择文件本身] ：移动文件到新目录，若有同名文件则询问是否需要覆盖。（例如，mv -i /home/pi/Desktop/test/testone.c /home/pi/ 将testone.c文件移动到pi文件夹下）<br>可以使用mv命令进行重命名 ：例如，mv /home/pi/Desktop/test/testone.c /home/pi/Desktop/test/testtwo.c    </p>
-<p><strong>复制文件</strong><br>cp -i [要复制的文件所在路径，包括文件本身] [文件新路径，不包括文件本身] ：复制文件到新目录，若新目录有同名文件则询问是否需要覆盖。(例如，cp -i /home/pi/Desktop/test/testone.c /home/pi/)<br>个人喜欢使用cp -Rf，不提示直接覆盖同名文件  </p>
-<p><strong>删除</strong><br>rm -r [目录路径]：删除整个目录（目录路径换为文件路径即可删除文件）  </p>
-<p><strong>权限</strong><br>在Debain中主要使用是chmod命令<br>chmod [who] [+或-或=] [mode] [文件名]：<br>who是指需要指定的用户，包括：u文件所有者。g同组用户。o其他用户。a所有用户（系统默认是a）<br>+是指添加某个权限，-是取消某权限，=是给指定的权限<br>mode表示权限，包括：r可读。w可写。x可执行（这几个常用）等其他<br>一般使用chmod 777 [文件名]：所有用户拥有可读可写可执行权限  </p>
-<p><strong>压缩和解压</strong><br>tar [主选项+辅选项] 文件或者目录   </p>
-<p>压缩例：<br>tar -cf xxx.tar xxx </p>
-<p><strong>U盘挂（卸）载</strong><br>mount -t vfat /dev/sdb1/ /mnt/<br>/dev/sdb1/ ：是在dev文件下显示的驱动，需要自己查找，可以进入dev中查看，也可以用fdisk -l命令查看<br>/mnt/ ：挂载点，即需要将U盘挂载在何处  </p>
-<p>umount /mnt/ ：卸载U盘 </p>
-<p><strong>查看所有进程</strong><br>ps -A  </p>
-<p><strong>查看当前路径下的所有文件</strong><br>ls –all   </p>
-<p>（未完） </p>
+        <p>前两天在一个技术群里，解答了几个关于Mellanox CX4L/CX5网卡DPDK PMD适配方面的问题，说明还是有同学有这方面需求的，遂简单写下这方面的东西<a id="more"></a>  </p>
+<ul>
+<li><a href="#mellanox网卡驱动版本的选择">Mellanox网卡驱动版本的选择</a></li>
+<li><a href="#mellanox官方url地址驱动固件驱动固件兼容性表格">Mellanox官方URL地址（驱动、固件、驱动固件兼容性表格）</a></li>
+<li><a href="#mellanox网卡驱动的编译">Mellanox网卡驱动的编译</a><ul>
+<li><a href="#网卡操作工具">网卡操作工具</a><ul>
+<li><a href="#mstflint">mstflint</a></li>
+</ul>
+</li>
+<li><a href="#rdma动态链接库ib库">RDMA动态链接库(ib库)</a><ul>
+<li><a href="#rmda-core">rmda-core</a></li>
+</ul>
+</li>
+<li><a href="#内核驱动ko文件">内核驱动ko文件</a><ul>
+<li><a href="#kernel-mft">kernel-mft</a></li>
+<li><a href="#mlnx-ofa_kernel">mlnx-ofa_kernel</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#mellanox网卡驱动的安装">Mellanox网卡驱动的安装</a></li>
+</ul>
+<h1 id="Mellanox网卡驱动版本的选择"><a href="#Mellanox网卡驱动版本的选择" class="headerlink" title="Mellanox网卡驱动版本的选择"></a>Mellanox网卡驱动版本的选择</h1><p>1.正常来说，网卡驱动版本的选择应该在网卡固件许可的范围内，选择尽可能高的版本（因为高版本的驱动往往是解决了一些驱动bug）。<br>2.但对于Mellanox网卡，并且是有使用DPDK Mellanox PMD的场景，就不可盲目选择高版本，因为其DPDK PMD，使用的是差分驱动模型，无需卸载内核驱动，而是利用ib uverbs API实现的用户态PMD驱动，所以其依赖了mlx的ib动态链接库，而ib的版本又与Mellanox网卡的内核驱动版本强相关，所以在DPDK Mellanox PMD需求的场景下，Mellanox DPDK PMD、ib动态链接库（RDMA）、Mellanox内核驱动以及Mellanox网卡固件版本，这四者就产生了一定的关联性。一般来说DPDK版本不会随意更换，所以将其作为锚定，Mellanox内核驱动和DPDK驱动大致的对应关系，可见Mellanox各个版本的发行说明：<a href="https://docs.mellanox.com/display/OFEDv512580/Release+Notes" target="_blank" rel="external">https://docs.mellanox.com/display/OFEDv512580/Release+Notes</a><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/1.jpg" alt><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/2.jpg" alt>  </p>
+<h1 id="Mellanox官方URL地址（驱动、固件、驱动固件兼容性表格）"><a href="#Mellanox官方URL地址（驱动、固件、驱动固件兼容性表格）" class="headerlink" title="Mellanox官方URL地址（驱动、固件、驱动固件兼容性表格）"></a>Mellanox官方URL地址（驱动、固件、驱动固件兼容性表格）</h1><p>驱动（相同的驱动版本，对于不同的OS，其源码均相同）：<br><a href="https://www.mellanox.com/products/infiniband-drivers/linux/mlnx_ofed" target="_blank" rel="external">https://www.mellanox.com/products/infiniband-drivers/linux/mlnx_ofed</a><br>注意需要下ofed包，ofed包中才有包含ib相关的东西<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/3.jpg" alt>  </p>
+<p>固件：<br><a href="https://www.mellanox.com/support/firmware/connectx4lxen" target="_blank" rel="external">https://www.mellanox.com/support/firmware/connectx4lxen</a><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/4.jpg" alt>  </p>
+<p>驱动&amp;&amp;固件兼容性表格：<br><a href="https://docs.mellanox.com/display/OFEDv512580/General+Support+in+MLNX_OFED" target="_blank" rel="external">https://docs.mellanox.com/display/OFEDv512580/General+Support+in+MLNX_OFED</a><br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/5.jpg" alt>  </p>
+<h1 id="Mellanox网卡驱动的编译"><a href="#Mellanox网卡驱动的编译" class="headerlink" title="Mellanox网卡驱动的编译"></a>Mellanox网卡驱动的编译</h1><p>Mellanox网卡驱动，目前只使用其DPDK PMD，需要的内容，可以分为三块：<br>1.网卡操作工具<br>2.RDMA动态链接库(ib库)<br>3.内核驱动KO文件<br>对应驱动源码包中的以下rpm文件，且这三部分的编译无依赖性，无编译顺序要求。<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/DPDK-Mellanox-Suitable/6.jpg" alt>    </p>
+<h2 id="网卡操作工具"><a href="#网卡操作工具" class="headerlink" title="网卡操作工具"></a>网卡操作工具</h2><h3 id="mstflint"><a href="#mstflint" class="headerlink" title="mstflint"></a>mstflint</h3><p>若需在容器中执行，则需要在容器环境下编译    </p>
+<pre><code>./configure --disable-inband --prefix=/usr/local CPPFLAGS=  
+make
+</code></pre><h2 id="RDMA动态链接库-ib库"><a href="#RDMA动态链接库-ib库" class="headerlink" title="RDMA动态链接库(ib库)"></a>RDMA动态链接库(ib库)</h2><h3 id="rmda-core"><a href="#rmda-core" class="headerlink" title="rmda-core"></a>rmda-core</h3><p>若DPDK应用位于容器中运行，则需要在容器环境下编译    </p>
+<pre><code>按其目录下的README，安装cmake和ninja，并且将buid.sh里的D_INPLACE修改为0（表示支持ninja安装）
+buid.sh结束后，进build目录下再执行ninja install，安装所编译出的动态库  
+</code></pre><h2 id="内核驱动ko文件"><a href="#内核驱动ko文件" class="headerlink" title="内核驱动ko文件"></a>内核驱动ko文件</h2><p>无论何种使用场景，都是在宿主机的环境下编译   </p>
+<h3 id="kernel-mft"><a href="#kernel-mft" class="headerlink" title="kernel-mft"></a>kernel-mft</h3><pre><code>make  
+</code></pre><h3 id="mlnx-ofa-kernel"><a href="#mlnx-ofa-kernel" class="headerlink" title="mlnx-ofa_kernel"></a>mlnx-ofa_kernel</h3><pre><code># 配置一些需要编译的模块
+./configure -j8 --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlx4-mod --with-mlx4_en-mod --without-mlx4_debug-mod --with-mlx5-mod --without-mlx5_debug-mod --with-ipoib-mod --with-srp-mod --with-iser-mod --with-isert-mod --with-nfsrdma-mod  
+
+make  
+</code></pre><h1 id="Mellanox网卡驱动的安装"><a href="#Mellanox网卡驱动的安装" class="headerlink" title="Mellanox网卡驱动的安装"></a>Mellanox网卡驱动的安装</h1><p>mlnx-ofa_kernel、kernel-mft(内核KO文件)可在编译环境虚拟机中，执行make install，通过观察输出日志，获取到对应的安装位置，再从对应的位置，获取相关文件，平行替换到宿主机上，此种方法替换文件后还需要执行depmod -a和dracut –force以及还需要内核编译选项CONFIG_MODULE_SIG_FORCE处于关闭状态（更新modules.dep、initramfs镜像，以及避免加载内核模块需要签名），否则系统启动无法正常加载驱动。  </p>
+<p>rmda-core需在编译环境容器中install后，利用脚本获取相关文件，再平行替换到设备上（从安装路径打包一份，再放到设备对应的路径上）。  </p>
+<p>mstflint与rmda-core类似，容器中执行make install，通过观察输出日志，获取到对应的安装位置，再从对应的位置，获取相关文件，再放到设备对应的路径上。    </p>
 
       
 
@@ -204,7 +239,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Raspberry Pi</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DPDK</a>
         		</li>
       		
 		</ul>
@@ -260,7 +295,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://avalonlz.github.io/2016/04/01/raspberry-pi-commands/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://avalonlz.github.io/2024/04/13/DPDK-mellanox-suitable/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -274,18 +309,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2016/10/19/about-position/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2024/04/17/Mellanox-Bond-Offload/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          定位
+          Mellanox Bond Offload
         
       </div>
     </a>
   
   
-    <a href="/2016/03/30/stm32-spi/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">stm32-SPI</div>
+    <a href="/2024/04/12/ComplicatedProblem-GlibcMemorySentry/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">疑难杂症之glibc内存站岗</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -324,7 +359,7 @@
 <script src="https://jjeejj.github.io/js/gitment.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "http://avalonlz.github.io/2016/04/01/raspberry-pi-commands/",
+  id: "http://avalonlz.github.io/2024/04/13/DPDK-mellanox-suitable/",
   owner: 'avalonLZ',
   repo: 'avalonLZ.github.io',
   oauth: {

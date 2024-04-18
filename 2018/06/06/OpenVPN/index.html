@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/OpenVPN/1.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/OpenVPN/2.jpg">
 <meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/OpenVPN/3.jpg">
-<meta property="og:updated_time" content="2024-04-17T14:59:44.908Z">
+<meta property="og:updated_time" content="2024-04-18T02:38:13.256Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="强大的OpenVPN">
 <meta name="twitter:description" content="一探究竟之OpenVPN">
@@ -158,7 +158,6 @@
       
         <p>一探究竟之OpenVPN<a id="more"></a>    </p>
 <ul>
-<li><a href="#openetteamviewershadowsocks三者实现区别">Openet、Teamviewer、Shadowsocks三者实现区别</a></li>
 <li><a href="#openvpn流量路径协商流程及报文格式">OpenVPN流量路径、协商流程及报文格式</a><ul>
 <li><a href="#流量路径">流量路径</a></li>
 <li><a href="#协商流程">协商流程</a></li>
@@ -170,7 +169,7 @@
 <li><a href="#openvpn的使用">OpenVPN的使用</a></li>
 <li><a href="#注意">注意</a></li>
 </ul>
-<h1 id="Openet、Teamviewer、Shadowsocks三者实现区别"><a href="#Openet、Teamviewer、Shadowsocks三者实现区别" class="headerlink" title="Openet、Teamviewer、Shadowsocks三者实现区别"></a>Openet、Teamviewer、Shadowsocks三者实现区别</h1><h1 id="OpenVPN流量路径、协商流程及报文格式"><a href="#OpenVPN流量路径、协商流程及报文格式" class="headerlink" title="OpenVPN流量路径、协商流程及报文格式"></a>OpenVPN流量路径、协商流程及报文格式</h1><h2 id="流量路径"><a href="#流量路径" class="headerlink" title="流量路径"></a>流量路径</h2><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/OpenVPN/0.PNG" alt>  </p>
+<h1 id="OpenVPN流量路径、协商流程及报文格式"><a href="#OpenVPN流量路径、协商流程及报文格式" class="headerlink" title="OpenVPN流量路径、协商流程及报文格式"></a>OpenVPN流量路径、协商流程及报文格式</h1><h2 id="流量路径"><a href="#流量路径" class="headerlink" title="流量路径"></a>流量路径</h2><p><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/OpenVPN/0.PNG" alt>  </p>
 <h2 id="协商流程"><a href="#协商流程" class="headerlink" title="协商流程"></a>协商流程</h2><p>首先明确一点，OpenVPN是标准的SSL VPN，其协商流程较为复杂，可参考以下网站：<br><a href="https://www.iteye.com/blog/totoxian-1219612" target="_blank" rel="external">https://www.iteye.com/blog/totoxian-1219612</a>  </p>
 <h2 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h2><p>握手协商时（控制协议）：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/OpenVPN/1.jpg" alt><br>控制协议中还包含了握手协议和密钥协议  </p>
 <p>传输数据时（记录协议）：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/OpenVPN/2.jpg" alt>  </p>
@@ -535,15 +534,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DPDK</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">软件工程_DesignPatterns</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -551,11 +542,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">软件工程_DesignPatterns</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Raspberry Pi</a>
+                <a href="javascript:void(0)" class="js-tag color5">Linux网络编程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -567,19 +558,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Raspberry Pi</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Kernel</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -587,11 +570,39 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">嵌入式_MTK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux多进程编程</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux多线程编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">百科_网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">SmartNic/DPU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">计算机语言_Lua</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -603,15 +614,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">计算机语言_Lua</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">SmartNic/DPU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">嵌入式_Linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">服务器_Tinyhttpd</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -619,19 +622,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">服务器_Tinyhttpd</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法_Sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -640,6 +631,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">游戏编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">计算机语言_Shell</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">应用软件_Supervisor</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -679,7 +678,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">百科_存储</a>
+                <a href="javascript:void(0)" class="js-tag color5">百科_DNSpod</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -687,7 +686,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">百科_DNSpod</a>
+                <a href="javascript:void(0)" class="js-tag color1">百科_存储</a>
               </li>
             
             <div class="clearfix"></div>

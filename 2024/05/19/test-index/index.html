@@ -6,20 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://avalonlz.github.io">
-  <title>stm32-启动文件 | 人人人&#39;s 藏经阁</title>
+  <title>人人人&#39;s 藏经阁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="马上要暂时告别MCU的开发了（进入Linux），趁着闲时，就整理着大学以来在MCU开发过程中的种种笔记，看到启动这块，回想下好像有些遗忘，就随手记录下吧，东西不多，但也写下，防止遗忘">
+  <meta name="description" content="423810942@qq.com">
 <meta property="og:type" content="article">
-<meta property="og:title" content="stm32-启动文件">
-<meta property="og:url" content="http://avalonlz.github.io/2018/03/13/stm32-StartUp/index.html">
+<meta property="og:title" content="人人人's 藏经阁">
+<meta property="og:url" content="http://avalonlz.github.io/2024/05/19/test-index/index.html">
 <meta property="og:site_name" content="人人人's 藏经阁">
-<meta property="og:description" content="马上要暂时告别MCU的开发了（进入Linux），趁着闲时，就整理着大学以来在MCU开发过程中的种种笔记，看到启动这块，回想下好像有些遗忘，就随手记录下吧，东西不多，但也写下，防止遗忘">
-<meta property="og:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png">
-<meta property="og:updated_time" content="2018-11-24T04:10:01.000Z">
+<meta property="og:description" content="423810942@qq.com">
+<meta property="og:updated_time" content="2024-05-19T11:14:46.739Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="stm32-启动文件">
-<meta name="twitter:description" content="马上要暂时告别MCU的开发了（进入Linux），趁着闲时，就整理着大学以来在MCU开发过程中的种种笔记，看到启动这块，回想下好像有些遗忘，就随手记录下吧，东西不多，但也写下，防止遗忘">
-<meta name="twitter:image" content="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png">
+<meta name="twitter:title" content="人人人's 藏经阁">
+<meta name="twitter:description" content="423810942@qq.com">
   
     <link rel="alternative" href="/atom.xml" title="人人人&#39;s 藏经阁" type="application/atom+xml">
   
@@ -137,28 +135,12 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-stm32-StartUp" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-test-index" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      stm32-启动文件
-    </h1>
-  
-
-        
-        <a href="/2018/03/13/stm32-StartUp/" class="archive-article-date">
-  	<time datetime="2018-03-13T06:01:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-13</time>
-</a>
-        
-      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>马上要暂时告别MCU的开发了（进入Linux），趁着闲时，就整理着大学以来在MCU开发过程中的种种笔记，看到启动这块，回想下好像有些遗忘，就随手记录下吧，东西不多，但也写下，防止遗忘<a id="more"></a>  </p>
-<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>stm32的启动主要依赖BOOT0，BOOT1的引脚电平，以及它的启动文件（也就是正宗的Bootload）,那么在MCU上，启动文件做了哪些操作呢，见下图：<br><img src="https://lizhong-blog-image-1253513411.cos.ap-guangzhou.myqcloud.com/stm32_%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6.png" alt><br>在多说一句，UCOS这类的实时操作系统，也是依赖MCU自带的启动文件的，实时操作系统的任务堆栈初始化，也都是在MCU跳转到main后所做的操作。远程升级所说的“Bootload”也是在跳转到main后，自己写的一个判断引导程序</p>
+        <p>423810942@qq.com</p>
 
       
 
@@ -193,17 +175,6 @@
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">嵌入式_STM32</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -254,7 +225,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://avalonlz.github.io/2018/03/13/stm32-StartUp/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://avalonlz.github.io/2024/05/19/test-index/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -268,18 +239,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/03/23/Win-Linux-NFS/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          利用NFS建立Linux共享文件夹
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/03/06/OSI-TCP-IP/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">OSI与TCP/IP</div>
+    <a href="/2024/05/19/OVS-DPDK-Lcore-Hot-Expand/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">OVS-DPDK之转发核热扩容</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -318,7 +280,7 @@
 <script src="https://jjeejj.github.io/js/gitment.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "http://avalonlz.github.io/2018/03/13/stm32-StartUp/",
+  id: "http://avalonlz.github.io/2024/05/19/test-index/",
   owner: 'avalonLZ',
   repo: 'avalonLZ.github.io',
   oauth: {
